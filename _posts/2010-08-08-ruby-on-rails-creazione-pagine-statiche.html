@@ -1,0 +1,46 @@
+--- 
+layout: post
+title: Ruby on Rails, creazione pagine statiche
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+tags: 
+- ruby on rails
+- static pages
+type: post
+status: publish
+---
+Supponiamo di avere delle pagine che non richiedono interazioni con il databasa, per esempio 'info', 'terms' e 'contact'.
+creiamo le views per le pagine statiche così:
+[shell]
+cd app/views
+mkdir pages
+touch pages/info.html.erb
+touch pages/terms.html.erb
+touch pages/contact.html.erb
+[/shell]
+
+Creiamo un controller chiamato pages_controller.rb
+[ruby]
+class PagesController < ApplicationController
+  def show
+    page = params[:id]
+    render :template => "pages/#{params[:id]}"
+  end
+end
+[/ruby]
+
+in routes.rb aggiungiamo questa regola
+[ruby]
+  map.page ':id', :controller => 'pages',
+                  :action => 'show', 
+                  :requirements => { :id => /info|terms|contact/ }
+[/ruby]
+
+nel nostro layout, aggiungiamo il menu con le voci appena create:
+[ruby]
+<%= link_to 'Info', page_path('info') %>
+<%= link_to 'Terms', page_path('terms') %>
+<%= link_to 'Contact', page_path('contact') %>
+[/ruby] 

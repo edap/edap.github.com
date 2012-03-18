@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Stesso progetto in rails, due versioni di ruby e due gemset diversi</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Stesso progetto in rails, due versioni di ruby e due gemset diversi <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    Supponiamo di avere un progetto in rails che usa rails 3.0.0 e ruby 1.8.7, ma di voler sviluppare parallelamente a questo, lo stesso progetto ma con ruby 1.9.3 e rails 3.2.2, per prepararci in tempo qual'ora verra' il momento di passare in produzione. Per fare questo creeremo un <a href="/blog/2011/09/20/git_branch/">branch</a> "develop" che useremo per portare avanti la nostra applicazione sull'ultima release disponibile.
+Per prima cosa, installiamo rvm come spiegato nel <a href="/blog/2012/02/26/installare-ruby-rvm-ovvero-come-avere-differenti-versioni-di-ruby-sulla-stessa-macchina/">post precedente</a> e ripassiamo come creare dei branch in git, e switchare tra l'uno e l'altro. Poi spostiamoci nella cartella del nostro progetto, nel branch master.
+creiamo il file .rvmrc contenente "ruby.1.8.7@progetto". usciamo dalla cartella e rientriamo, apparira' un messaggio. "Gemset 'progetto' does not exist, rvm gemset create 'progetto' first.". Facciamo quanto dice:
+[bash]
+gemset create progetto
+gemset use progetto
+gem install bundler
+[/bash]
+I primi due comandi dicono a ruby che per questo progetto esiste il gemset 'progetto' per la versione 1.8.7 e che quella va usata. se da linea di comando digitiamo "rvm gemset list", verranno elencati tutti i gemset per la versione di ruby selezionata, e con un asterisco verra' contrassegnata la versione corrente.
+L'ultimo comando installa bundler, onde evitare questo errore che potremmo avere al primo avvio di rails nel caso ce ne fossimo dimenticati:
+[bash]
+/usr/local/lib/site_ruby/1.8/rubygems/dependency.rb:247:in `to_specs': Could not find rails (>= 0) amongst [bundler-1.0.22] (Gem::LoadError)
+[/bash]
+Bene, passiamo al branch develop, creaiamo il branch "develop", e modifichiamo il file .rvmrc mettendo come valore ruby1.9.3@progetto. Come prima, creiamo il gemset per questa versione di ruby in questo progetto e diciamo a ruby di usare questa.
+[bash]
+gemset create progetto
+gemset use progetto
+gem install bundler
+[/bash]
+Dopo aver aggiornato il nostro Gemfile, aggiornando le gemme ad una versione piu' recente, lanciamo bundle.
+
+Ricapitolando, abbiamo due branch, ognuno con una differente versione di ruby ed un diverso gemset.
+master ruby 1.8.7, gemset 'progetto' per la versione 1.8.7
+develop ruby 1.9.3, gemset 'progetto' per la versione 1.9.3
+Per muoversi da un branch all'altro usare 'branch checkout'.
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2012/02/26/installare-ruby-rvm-ovvero-come-avere-differenti-versioni-di-ruby-sulla-stessa-macchina" title="Installare Ruby RVM, ovvero come avere differenti versioni di ruby sulla stessa macchina">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2012/03/03/cakephp-2-0-comments-spam-datasource" title="CakePHP 2.0 Comments Spam Datasource">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>02 March 2012</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#allday-ref">allday <span>7</span></a></li>
+     
+    	<li><a href="/tags.html#git-ref">git <span>5</span></a></li>
+     
+    	<li><a href="/tags.html#ruby-ref">ruby <span>7</span></a></li>
+     
+    	<li><a href="/tags.html#ruby on rails-ref">ruby on rails <span>8</span></a></li>
+     
+    	<li><a href="/tags.html#RVM-ref">RVM <span>2</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

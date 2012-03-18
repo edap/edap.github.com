@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>CakePHP check the owner</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>CakePHP check the owner <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    <strong>update cake 2.0</strong>: $this->request->is('ajax') invece del vecchio RequestHandler. 
+Capita spesso di dover verificar il proprietario di un item prima di modificarlo.
+In cakePHP non esiste (per ora) un metodo dedicato a tale scopo. Cosa abbastanza strana, visto che la convenzione di associare lo User Model ad un altro Model tramite il campo user_id e' esiste da parecchio tempo.
+Ho scritto un metodo da inserire nell'app_controller che permette di verificare che l'utente che modifica un iteme sia effettivamente il proprietario. Il metodo e' flessibile e puo' essere utilizzato con qualunque modello sia associato alla tabella Users tramite il campo user_id.
+
+[php]
+    function _isOwner($data, $options = array()){
+	    if (empty($options['message'])) {
+			$flash_message = "You are not allowed to access to this area";
+	    }
+	    else {
+			$flash_message = $options['message'];
+	    }
+
+	    if (empty($options['scope'])) {
+			$scope = $this->modelClass;
+	    }
+	    else {
+			$scope = $options['scope'];
+	    }
+
+	    if (empty($options['redirect'])) {
+			$redirect = false;
+	    }
+	    else {
+			$redirect = $options['redirect'];
+	    }
+
+	    if ($scope == 'User') {
+			$user_field = "id";
+	    }
+	    else {
+			$user_field = "user_id";
+	    }
+	    $current_user = $this->Session->read('Auth.User.id');
+	    if ($data[$scope][$user_field] == $current_user) {
+		    return true;
+	    }
+	    else {
+		    if ($redirect) {
+			    $this->Session->setFlash($flash_message, 'error');
+				//RequestHandler->isAjax() is buggy
+			    if($this->request->is('ajax')) {
+			    	$this->set('success', false);
+			    	$this->set('error', $flash_message);
+			    }
+			    else {
+			    	$this->redirect($redirect);
+			    }
+		    }
+		    return false;
+	    }
+    }
+[/php]
+
+Qualche esempio pratico:
+[php]
+$post = $this-&gt;Post-&gt;findById($post_id);
+$this-&gt;_isOwner($post, array('redirect'=&gt;'/'));
+[/php]
+Se l'utente loggato non e' il proprietario del post esso verra reindirizzato alla root.
+Se invece un utente vuole modificare il proprio profilo all'indirizzo sito.com/users/edit/3 il campo da verificar enon sara' piu' 'user_id' ma l'id del modello 'User'. Per fare questo dobbiamo solo aggiungere impostare il parametro 'scope'.
+[php]
+$user = $this-&gt;-&gt;User-&gt;findById($id);
+$this-&gt;_isOwner($user, array('scope'=&gt; 'User'))
+[/php]
+Oltre a scope, gi altri parametri che si possono passare a questa funzione sono:
+<strong>message</strong> = Il messaggio che vogliamo mostrare dopo il redirect nel caso non ci vada bene quello di default
+<strong>redirect = </strong>L'url alla quale vogliamo reindirizzare l'utente. Se questo falore non e' impostato, la funzione restituira' solo TRUE o FALSE senza effettuare il redirect.
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2011/04/19/contare-caratteri-con-umlaut-con-php" title="contare caratteri con umlaut con php">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2011/05/12/cakephp-email-non-visualizzate-correttemente-in-squirrelmail-o-roundcube" title="CakePHP emails non visualizzate correttemente in Squirrelmail o Roundcube">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>12 May 2011</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#check the owner-ref">check the owner <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

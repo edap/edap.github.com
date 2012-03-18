@@ -1,0 +1,23 @@
+--- 
+layout: post
+title: contare caratteri con umlaut con php
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+tags: 
+- myday
+- php
+type: post
+status: publish
+---
+Non riuscivo a capire come mai uno stesso calcolo che comprendeva la misurazione dei caratteri componenti una stringa desse risultati diversi se eseguito in php o javascript. Dopo aver perso un sacco di tempo a verificare dove fosse l'incongruenza, scopro che strlen si prendeva gioco di me.
+[php]
+$string = "ÄÄüü";
+echo strlen($string); //8!!
+[/php]
+La umalut (e in generale tutti i caratteri multibyte) non viene letta come ci si aspetta.
+Per ovviare a questo, usiamo utf8_decode
+[php]
+echo strlen(utf8_decode($string)); //4 
+[/php] 

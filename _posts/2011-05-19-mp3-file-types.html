@@ -1,0 +1,34 @@
+--- 
+layout: post
+title: Mp3 file types
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+tags: 
+- cakephp
+- mp3
+type: post
+status: publish
+---
+Ho dovuto realizzare un uploader utlizzando questo <a href="http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin">plugin </a> nel quale si possono specificare quali tipi di file e' possibile caricare. L'applicazione si concentra sui file audio, da qui la necessita' di elencare i filetypes consentiti. Non ho ancora trovato una lista completa, non pensavo fossero cosi' tanti e ogni giorno un utente me ne segnala uno nuovo. Ecco l'elenco, spero possa risparmiare tempo a qualcuno.
+[php]
+'allowedTypes' => array('mp3' => array('audio/mp3',
+										'audio/mpeg',
+										'audio/mpg',
+										'audio/x-amzaudio',
+										'audio/x-mp3',
+										'audio/mpeg3',
+										'audio/x-mpeg3',
+										'audio/x-mpeg',
+										'audio/x-mpg',
+										'audio/mpeg3',
+										'audio/x-mpegaudio'
+									),
+						'ogg' => array('audio/x-vorbis+ogg',
+										'audio/x-ogg',
+										'application/x-ogg',
+										'application/ogg'
+										)
+),
+[/php] 

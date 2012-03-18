@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Aggiungere una action ad un controller in rails3</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Aggiungere una action ad un controller in rails3 <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    Rails3 cread i default <a href="http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions">sette azioni</a> per ogni controller generato dinamicamente.
+Se vogliamo aggiungere un azione, che ne so, per aggiornare un solo valore nel database, per una nuova view, o per quasiasi altra cosa, dobbiamo:
+1)Scrivere la nostra azione nel controller, in questo esempio scrivero' un azione per disapprovare un commento, settando a "0" il valore del campo "approved".
+[ruby]
+def disapprove
+	@comment = Comment.find(params[:id])
+	if ( @comment.update_attribute(:approved, "0"))
+		respond_to do |format|
+			format.html { redirect_to(admin_comment_url(@comment), 
+					:notice => 'Comment was unapproved.') }
+			format.xml  { head:ok }
+		end
+	else
+		respond_to do |format|
+			format.html { render :action => "edit" }
+			format.xml  {render:xml=>@comment.errors, :status => :unprocessable_entity }
+		end	
+	end		
+end
+[/ruby]
+Nel mio file routes.rb, dovro' dire alla mia app che oltre alle 7 azioni canoniche ce ne' un altra, disapprove. E dovro' specifivare che tipo di http request e', tra post, get, put e delete. Nel mio caso ho messo post, piu' dettagli <a href="http://guides.rubyonrails.org/routing.html#adding-more-restful-actions">qui</a>
+[ruby]
+resources :comment do
+	post 'disapprove',:on=>:member
+end
+[/ruby]
+Lanciando "rake routes" nella cartella della mia app, posso vedere la nuova route creata, e vedere quale e' l'url da utlizzare nell'helper. Nel mio caso l'approvazione dei commenti si trova nell'admin area.
+[ruby]
+disapprove_admin_comment POST   /admin/comments/:id/disapprove(.:format)              {:controller=>"admin/comments", :action=>"disapprove"}
+[/ruby]
+Ora creaimo un link all'azione
+[ruby]
+<%= link_to 'Disapprove', disapprove_admin_comment_path(@comment)%>
+[/ruby]
+Dopo aver generato questo link, ottenevo un errore "No route matches..." la mia azione.
+Errore risolto<a href="http://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to"> specificando</a> nel link il tipo di http verb
+[ruby]
+<%= link_to 'Disapprove', disapprove_admin_comment_path(@comment), :method=>'post' %>
+[/ruby]
+ 
+Consiglio questi screencast, per capire come vengono generate le routes, <a href="http://railscasts.com/episodes/231-routing-walkthrough">1</a> e <a href="http://railscasts.com/episodes/232-routing-walkthrough-part-2">2</a>
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2011/11/17/creare-un-admin-area-in-rails3-usando-lautenticazione-scritta-in-devise" title="Creare un admin area in rails3 usando l'autenticazione scritta in devise">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2011/12/09/contare-child-rows-per-un-determinato-record" title="Contare child rows per un determinato record.">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>02 December 2011</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#routes-ref">routes <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#ruby-ref">ruby <span>7</span></a></li>
+     
+    	<li><a href="/tags.html#ruby on rails-ref">ruby on rails <span>8</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,166 @@
+--- 
+layout: post
+title: come integrare twitter@anywhere nell'autenticazione di cakePHP
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+tags: 
+- auth
+- cakephp
+- twitter @anywhere
+type: post
+status: publish
+---
+Twitter @anywhere è l'API di twitter che vi permette di integrare la funzionalità di twitter nel vostro sito con poco codice javascript.
+Registrare la vostra application, richiedere le API e cominciare ad usarle sul vostro sito è una cosa che si fa <a href="http://dev.twitter.com/anywhere">velocemente</a> e che non spiego qui.
+La cosa che mi interessa è l'integrazione di twitter anywhere nella mia application...ovvero:
+Come faccio a far si che se un utente si logga su twitter viene registrato nel mio database ed automaticamente loggato?
+
+Dovrò gestire l'output di twitter anywhere e tramite ajax passarlo ad un handler nel nostro controller che loggherà l'utente in caso sia andato tutto bene, restituirà un errore in caso contrario.
+
+Per prima cosa includiamo questi 2 file js nell'header del nostro template.
+[php]
+echo $html->script("jquery.js");
+echo $html->script("checkTwitterUsername.js");
+[/php]
+
+Jquery,js lo trovate sul sito di jquery, lo script checkTwitterUsername.js è una funzione che prende l'output di twitter@anywhere e lo passa all'handler ajax che si occuperà di loggare l'utente.
+
+[javascript]
+/*place a <div id = "reply"></div> if you want to check te response */
+function checkTwitterUsername (twitterusername) {
+   if (twitterusername == undefined) {
+       alert('twitterusername not setted');
+   }else{
+        $.ajax({
+            type : "POST",
+            url : "/users/handleTwitterUser",
+            data : {name : twitterusername},
+            success : function (response) {
+                $("#reply").append(response);
+                window.location.reload();
+            },
+            error : function (response) {
+                $("#reply").append(response);
+            }
+        });
+    }
+}
+[/javascript]
+includiamo anche l'element twitter_login.ctp, che fa uso di twitter @anywhere, che trovate qui sotto
+[php]
+<? echo $this->element("twitter_login")?>
+[/php]
+
+twitter_login.ctp
+[php]
+<?php
+$id = 'twitter-login-button-'.rand(1000,9999);
+echo '<span id="'.$id.'"></span>';
+echo $html->scriptBlock("
+    twttr.anywhere(function (T) {
+        var currentUser,
+            screenName,
+            profileImage,
+            profileImageTag;
+
+        if (T.isConnected()) {
+            currentUser = T.currentUser;
+            screenName = currentUser.data('screen_name');
+            profileImage = currentUser.data('profile_image_url');
+            profileImageTag = \"<img src='\" + profileImage + \"'/>\";
+            $('#{$id}').append(\"Logged in as \" + profileImageTag + \" \" + screenName );
+            $('#signout').bind(\"click\", function () {
+                twttr.anywhere.signOut();
+                window.location.reload();
+            });
+
+        } else {
+            T('#{$id}').connectButton();
+            T.bind(\"authComplete\", function () {
+                if (T.isConnected()) {
+                    currentUser = T.currentUser;
+                    screenName = currentUser.data('screen_name');
+                    checkTwitterUsername(screenName);
+                }
+            });
+
+        };
+
+    });
+
+    ");
+?>
+
+[/php]
+
+Nella vostra tabelle Users aggiungete un campo twitter_username, nel controller users aggiungete questo metodo
+[php]
+/**
+ * It's called by checkTwitterUsername.js
+ * Once a user is logged in twitter:
+ * 1)if it's not logged in your application and there is no twitter_username as the twitter user logged,
+ * create and log the user in your application.
+ * If a user with the same twittername exists, log the user.
+ * 2)If the user is logged, check if he has a twitter_username, if not, update the value "twitter username"
+ *
+ * @return string
+ * @access public
+ **/
+function handleTwitterUser(){
+	$this->autoRender = false;
+	$msg = "";
+	if(!empty($_POST['name'])){
+		$name = $_POST['name'];
+		if(!$this->Auth->user()){
+			$user = $this->User->findByTwitterUsername($name);
+			if(!$user){
+				//generate passowrd
+				srand ((double) microtime( )*1000000);
+				$random_number = rand(0,10);
+				$user['username'] = $name;
+				$user['twitter_username'] = $name;
+				$user['password'] = $this->Auth->password($random_number);
+				$user['is_active'] = 1;
+				$user['is_verified'] = 1;
+				$this->User->create();
+				$this->User->save($user);
+				$msg = "User saved and ";
+			}
+			$this->Auth->login($user);
+			if($this->Session->check('Auth.User')) {
+				App::import('Model', 'User');
+				$User = new User;
+				$User->store($this->Session->read('Auth'));
+				$User->store(array('User' => array('is_loggedin' => true)));
+
+			}
+			$msg.= "User logged";
+			return $msg;
+		}else{
+			$user = $this->User->findByTwitterUsername($name);
+			if(!$user){
+				$this->User->id = User::get('User.id');
+				$this->data['User']['twitter_username']=$name;
+				$this->User->store(array('User' => array('twitter_username' => $name)));
+				$this->User->save($this->data);
+				$msg = "your twitter username is now associated with yours profile";
+				return $msg;
+			}
+		}
+	}else{
+		$error = "Error, we could not associate your twitter username with your profile";
+		return $error;
+	}
+}
+[/php]
+In questa porzione di codice faccio uso di "$User = new User;" per salvare e recuperare in ogni parte della mia applicazione informazioni relative all'utente. Questa tecnica è spiegata bene, con esempi pratici nel libro gratis scaricabile online http://www.pseudocoder.com/free-cakephp-book/
+
+Per poter sloggare l'utente automaticaente sia da twitter che dalla vostra applicazione, dovete far si che il link a logout abbia l'id "signout".
+[php]
+echo $this->Html->link('logout', array('controller' => 'users', 'action' => 'logout' ),
+                            array('id'=>'signout')
+                );
+[/php]
+

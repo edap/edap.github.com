@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Creare un admin area in rails3 usando l'autenticazione scritta in devise</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Creare un admin area in rails3 usando l'autenticazione scritta in devise <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    <strong>1)</strong>aggiungere il namespace "admin" in routes.rb, ed abbinarlo ai controller per i quali vogliamo l'autenticazione, in questo esempio "questions".
+[ruby]
+namespace :admin do
+	match '/' => 'questions#index'
+	resources :questions
+end
+[/ruby]
+<strong>2</strong>In views/layout creare il layout admin.html.erb specificando le parti che vogliamo mostrare nella sezione admin.
+<strong>3)</strong> creare il controller admin_controller.rb in controllers/admin e utilizzare "autenticate_user" (vedere il tutorial su <a href="/blog/2011/07/24/ruby-on-rails-devise-authentication/">devise</a>) per verificare che un utente sia loggato
+[ruby]
+class Admin::AdminController &lt; ApplicationController
+	layout "admin"
+	before_filter :authenticate_user!
+end
+[/ruby]
+
+<strong>4)</strong> Sempre in controllers/admin, creare il file questions_controller.rb
+[ruby]
+class Admin::QuestionsController < Admin::AdminController
+  def index
+    @questions = Question.all
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+end
+[/ruby]
+<strong>5)</strong>in views/admin creaimo la cartella "questions" e inderiamo tutte le views richieste dal controller controllers/admin/questions_controller.rb, in questo caso, solo il file index.html.rb
+<strong>6</strong>
+Le action dei form all'interno delle views in views/admin/questions devono rimandare ai controllers in controllers/admin/question controller. Quindi, sempre tenendo "question" come esempio da:
+[ruby]
+<%= form_for(@answer) do |f| %>
+[/ruby]
+dobbiamo passare a 
+[ruby]
+<%= form_for(:admin, @answer) do |f| %>
+[/ruby]
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2011/10/15/creare-un-fork-da-un-plugin-su-github-e-svilupparlo-come-submodule" title="creare un fork da un plugin su Github e svilupparlo come submodule">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2011/12/02/aggiungere-una-action-ad-un-controller-in-rails3" title="Aggiungere una action ad un controller in rails3">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>17 November 2011</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#admin-ref">admin <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#authentication-ref">authentication <span>5</span></a></li>
+     
+    	<li><a href="/tags.html#devise-ref">devise <span>2</span></a></li>
+     
+    	<li><a href="/tags.html#ruby on rails-ref">ruby on rails <span>8</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

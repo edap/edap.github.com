@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>cakePHP youtube datasource</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>cakePHP youtube datasource <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    I've seen in google analytics that mosts visitors of this blog speak english. I've thought that the italians can understand what i'm writing, so, here we are, i've switched language.
+I've just pushed on github a <a href="https://github.com/edap/cakePHP-youtube-datasource">cakePHP youtube datasource</a>, to retrieve information (all the metatags) regarding a video. It's still incomplete, I would like to add some others functionality, like retrieve the standard feed for a given category, or retrieve a video with more than X views. Ecc, anyway, Fork Me.
+Here I provide a solution that I've adopted to save in the database the fields "video_title", "video_thumb" and "video_id" for a given youtube video link associated to a model, for example an Article model containing a video, or a Submission Model containing a youtube video for a video contest. This code validates the video URL and, if valid, add the videos metatags to the data model to save, in this example, the Article model.
+1)Follow the instruction on the github page and install the datasource
+2) Add this rule to your $validate array in the model where you would like to save the video information
+[php]
+'video' => array(
+    'rule' => 'validYoutube',
+    'message' => 'the given videos link is incorrect',
+    'allowEmpty' => true,
+),
+[/php]
+3)Add this functions in the Model, that checks if the video is valid, and add the metatags to the $data array
+[php]
+<? 
+    public function validYoutube(array $data ){
+        $url = current($data);
+        $video_info = $this->getVideo($url);
+        if ($video_info) {
+            $this->setVideoValues($video_info);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function getVideo($id){
+	$this->Youtube = ConnectionManager::getDataSource('Youtube');	
+        $video = $this->Youtube->findById($id);
+        if (!$video) {
+            return false;
+        }
+        $info = $this->Youtube->formatData($video);
+        return $info;
+    }
+
+    public function setVideoValues($info){
+        if (empty($info)) {
+            return false;
+        }
+        $this->data['Article']['video'] = $info['id'];
+        $this->data['Article']['video_thumb'] = $info['default_thumb'];
+	$this->data['Article']['video_title'] = $info['title'];
+    }
+?>
+[/php] 
+Thanks <a href="http://debuggable.com/posts/datasources,-models,-components,-behaviors:48bd3025-2c44-40b6-a6e7-35674834cda3">debuggable for this article</a> on datasources in CakePHP
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2012/03/03/cakephp-2-0-comments-spam-datasource" title="CakePHP 2.0 Comments Spam Datasource">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next disabled"><a>Next &rarr;</a>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>12 March 2012</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#datasource-ref">datasource <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#youtube-ref">youtube <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

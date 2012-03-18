@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>CakePHP 2.0 Comments Spam Datasource</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>CakePHP 2.0 Comments Spam Datasource <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    Ho trovato questo <a href="http://www.thelittlebakery.org/2011/06/admin-panel-development-akismet-product-review/">post</a> che spiega come implementare akismet per verificare i commenti sul nostro sito.Mi e' sembrata davvero la soluzione piu' semplice fra le tante disponibili. I commenti vengono salvati nel nostro database, e dopo il salvataggio verifichiamo tramite akismet se il commento e' spam o meno. Ecco qui i passaggi:
+1) Scaricarsi il datasource <a href="https://github.com/alexdd55/thelittlebakery/blob/master/app/Model/Datasource/akismet.php">akismet.php</a> ed metterlo in app/Model/Datasource.
+1)Creare una api key sul sito di akisemt, ed aggiungere queste linee al file database.php
+[php]
+public $Akismet = array(
+    'datasource' => 'Akismet',
+    'blog' => 'http://yourblog/',
+    'key' => 'your_akismet_key'
+);
+[/php] 
+2)Nella nostra tabella destinanata ai commenti, aggiungere i campi spam e checked
+3)Aggiungere al model Comment.php la seguente funzione.
+[php]
+public function checkForSpam($id) {
+	$comment = $this->read(null, $id);
+	App::uses('HttpSocket', 'Network/Http');
+	$this->Http = new HttpSocket();
+	$this->Akismet = ConnectionManager::getDataSource('Akismet');	
+	$data = array(
+	      'user_ip' => $comment['Comment']['ip'],
+	      'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+	      'referrer' => 'http://www.google.com',
+	      'permalink' => '/comments/view/'.$comment['Comment']['id'],
+	      'comment_type' => 'comment',
+	      'comment_author' => $comment['Comment']['name'],
+	      'comment_author_email' => $comment['Comment']['email'],
+	      'comment_author_url' => '',
+	      'comment_content' => $comment['Comment']['text']
+		);
+	$check = $this->Akismet->checkSpam($data);
+	if($check == 'true') {
+		$spam = array(
+			'id' => $comment['Comment']['id'],
+			'checked' => 1,
+			'spam' => 1
+		);
+	} else {
+		$spam = array(
+			'id' => $comment['Comment']['id'],
+			'checked' => 1,
+			'spam' => 0
+		);
+	};
+	return $this->save($spam, false);
+}
+[/php]
+4) Nel vostro CommentsController file, dopo aver salvato il commento richiamate la funzione appena creata. Es
+[php]
+public function add() {
+	if ($this->request->is('post')) {
+		$this->Comment->create();
+		if ($this->Comment->save($this->request->data)) {
+			$this->Comment->checkForSpam($this->Comment->getInsertID());
+			$this->Session->setFlash(__('The comment has been saved'));
+			$this->redirect(array('action' => 'index'));
+		} else {
+			$this->Session->setFlash(__('The comment could not be saved. Please, try again.'));
+		}
+	}
+	$articles = $this->Comment->Article->find('list');
+	$this->set(compact('articles'));
+}
+[/php]
+5)Nella vostra sezione amministrativa, elencate tutti i commenti, e verificate i falsi positivi, in caso ce ne siano
+6)Sul vostro sito, mostrate solo i commmenti con il valore di "spam" = 0
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2012/03/02/stesso-progetto-in-rails-due-versioni-di-ruby-e-due-gemset-diversi" title="Stesso progetto in rails, due versioni di ruby e due gemset diversi">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2012/03/12/cakephp-youtube-datasource" title="cakePHP youtube datasource">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>03 March 2012</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#spam-ref">spam <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

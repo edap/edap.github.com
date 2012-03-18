@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Git Branches</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Git Branches <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    Per lo sviluppo di un progetto sto utilizzando git in locale con due branches. Un branch master/origin, dove risiede il lavoro pronto per essere caricato in produzione, e uno develop, su cui effettuo i commits, sviluppo nuove featurse, e, quando tutto va bene, implemento nel branch master/origin. Qui sotto un breve tutorial su come cominciare. Diamo per scontato di avere un repo inizializzato, con il branch master/origin. Per creare il nuovo branch 'develop'
+[bash]
+git branch develop
+[/bash]
+per vedere i vari branches
+[bash]
+git branch
+[/bash]
+l'asterisco indica il branch attualmente selezionato
+per passare da un branch all'altro
+[bash]
+git checkout master
+git checkout develop
+[/bash]
+Per portare avanti il codice su develop, selezioniamo il branch develop
+[bash]
+git checkout develop
+[/bash]
+andiamo avanti con i nostri commit che verranno eseguiti SOLO sul branch develop.
+Difatti, se torniamo sul branch master e cerchiamo le modifiche appena fatte, non le troveremo perche' sono solo su develop.
+quando le modifiche sono pronte per essere messe nel branch 'master', selezioniamolo
+git checkout master
+e diciamo al branch master di prendere le modifiche fatte su develop
+[bash]
+git merge develop
+[/bash]
+Una volta che le nuove modifiche sono state implementate, possiamo taggare il branch master con il corrente numero di versione
+[bash]
+git tag 0.1
+[/bash]
+se un giorno decidessimo che il branch develop non ci serve più, cancelliamolo 
+[bash]
+git branch -d develop
+[/bash]
+
+<strong>Differenze tra i due branches</strong>
+Può capitare che alcune modifiche fatte su 'develop' differiscano dal codice presente su master. Puoà darsi che abbiate innavertitamente lavorato su master per delle modifiche che dovevano essere effettuate su develop, o altri scenari simili. Quando, dal branch master lanciamo
+[bash]
+git merge develop
+[/bash]
+Le modifiche fatte su master vengono fuse alle modifiche fatte su develop. Se alcune di queste modifiche riguardano la stessa porzione di codice, al primo commit git ci segnalerà che dobbiamo risolvere un conflitto prima di proseguire.
+[bash]
+file_config.txt: needs merge
+[/bash]
+Apriamo il file incriminato, sistemiamolo e poi git add e git commit.
+[bash]
+git add file_config.txt
+git commit
+[/bash]
+<strong>Il control-Z dell'ultimo merge</strong>
+Se avete appena fatto il merge sul branch master di una bizzarra feature che avevate sviluppato su develop, che credevate pronta e superefficiente ma in realtà ha scatenato un turbine di email di protesta da parte degli utenti che rivogliono indietro il loro vecchio sistema, dove "tutto funzionava", dove "tutto era più semplice" e sentite che sta per arrivare la email "si stava meglio quando si stava peggio", beh, allora, forse è meglio tornare indietro, e levare l'ultima feature aggiunta.
+[bash]
+git reset --hard ORIG_HEAD
+[/bash]
+Qui il <a href="http://book.git-scm.com/3_basic_branching_and_merging.html">tutorial completo</a>
+Per vedere tutti i commit fatti nei minimi dettagli, installate <a href="http://lwn.net/Articles/140350/">gitk</a> e lanciatelo da console nella directory dove avete un progetto versionato
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2011/09/20/cakephp-2-0-authentication" title="CakePHP 2.0 Authentication">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2011/10/11/jquery-screensaver" title="Jquery screensaver">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>20 September 2011</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#git-ref">git <span>5</span></a></li>
+     
+    	<li><a href="/tags.html#git branch-ref">git branch <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

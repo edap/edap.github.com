@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Implementare Security Component e SSL con CakePHP</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Implementare Security Component e SSL con CakePHP <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    CakePHP mette a disposizione un component che permette di rendere la nostra applicazione sicura, per quanto possa essere sicura un applicazione accesibile dal browser, chiaro.
+Vediamo come far sì che il nostro sito sia accessibile solo da https:// e non da http://, e come rendere i nostri form sicuri, non editabili con firebug.
+
+Il security component è già nella core di cakePHP, quindi per abilitarlo non dobbiamo fare altro che aggiungere i components necessari in app_controller.php
+[php]
+var $components = array(
+	'Security',
+	'RequestHandler'
+);
+[/php]
+ e mettere questa funzione, sempre nel nostro app_controller.php
+[php]
+	function beforeFilter(){
+		$this->Security->requireSecure();
+		$this->Security->blackHoleCallback = 'invalid';
+	}
+[/php]
+La funzione requireSecure() obbliga il client ad utilizzare ssl, la proprietà validatePost invece dice che i nostri form vanno validati prima di essere processati, infine blackHoleCallback raccoglie tutte le richieste sporche, quelle che non soddisfano le nostre esigenze di sicurezza. Vediamo nel dettaglio la funzione invalid e forceSSL, entrambe all'interno dell'app_controller.php
+[php]
+	function invalid() {
+		if(!$this->RequestHandler->isSSL()) {
+			$this->forceSSL();
+		}else{
+			$this->cakeError('accessDenied');
+		}	
+	}
+
+	function forceSSL() {
+		$this->redirect('https://' . env('SERVER_NAME') . $this->here);
+	}
+[/php]
+La funzione invalid separa le richieste, quelle che non sono su ssl vengono passate a forceSSL, che provvede
+ad indirizzare tutte le richieste su https://, quelle che invece provengono da https:// ma presentano dati alterati maliziosamente, vengono inviate a cakeError('accessDenied'). QUesta funzione presenta un messaggio d'errore personalizzabile. Vediamo come.
+Nostra cartella app/ creaiamo un file app_error.php
+[php]
+<?php
+class AppError extends ErrorHandler {	
+	public function accessDenied(){
+		$name = array('name' => __('Your are a really bad guy...stay away from my app!', TRUE));
+		$this->controller->set($name);
+		$this->_outputMessage('goaway');
+	}	
+}
+?>
+[/php]
+Poi, nella cartella app/views/errors creaiamo il nostro template goaway.ctp
+[php]
+<h2><?php echo $name ?></h2>
+[/php]
+
+Abbiamo quindi predisposto la nostra applicazione ad essere accessibile solo su https:// e ad inviare le cattive richieste alla tal pagina. Per escludere un campo dal controllo del form da parte del Security component, dovremo disabilitarlo. Nell'esempio qui sotto, disabilito il confirm pwd in users_controller.php
+[php]
+function beforeFilter() {
+	parent::beforeFilter();
+		$this->Security->blackHoleCallback = 'invalid';
+		$this->Security->disabledFields = array('User.confirmpassword');
+}
+[/php]
+
+
+Ultima cosa, per utilizzare ssl, dovete modificare la configurazione del vostro server. Nel caso utilizziate apache2+linux, <a href="http://www.howtoforge.com/how-to-set-up-an-ssl-vhost-under-apache2-on-ubuntu-9.10-debian-lenny">questa</a> è la guida giusta.
+Se volete che il vostro sito sia raggiungibile sia da http che da https(come nel mio caso), ricordatevi che dovete avere due file nella vostra cartella sites-available, uno "miosito" e uno "miosito-ssl", quest'ultimo con "SSLEngine on", come ben descritto nella guida linkata. 
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2010/11/17/cakephp-e-acl" title="CakePHP e ACL">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2010/12/28/cakephp-e-mongodb" title="CakePHP e MongoDB">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>09 December 2010</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#security component-ref">security component <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#ssl-ref">ssl <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

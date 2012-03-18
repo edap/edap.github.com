@@ -1,0 +1,54 @@
+--- 
+layout: post
+title: Aggiungere una action ad un controller in rails3
+published: true
+meta: 
+  _edit_last: "1"
+tags: 
+- routes
+- ruby
+- ruby on rails
+type: post
+status: publish
+---
+Rails3 cread i default <a href="http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions">sette azioni</a> per ogni controller generato dinamicamente.
+Se vogliamo aggiungere un azione, che ne so, per aggiornare un solo valore nel database, per una nuova view, o per quasiasi altra cosa, dobbiamo:
+1)Scrivere la nostra azione nel controller, in questo esempio scrivero' un azione per disapprovare un commento, settando a "0" il valore del campo "approved".
+[ruby]
+def disapprove
+	@comment = Comment.find(params[:id])
+	if ( @comment.update_attribute(:approved, "0"))
+		respond_to do |format|
+			format.html { redirect_to(admin_comment_url(@comment), 
+					:notice => 'Comment was unapproved.') }
+			format.xml  { head:ok }
+		end
+	else
+		respond_to do |format|
+			format.html { render :action => "edit" }
+			format.xml  {render:xml=>@comment.errors, :status => :unprocessable_entity }
+		end	
+	end		
+end
+[/ruby]
+Nel mio file routes.rb, dovro' dire alla mia app che oltre alle 7 azioni canoniche ce ne' un altra, disapprove. E dovro' specifivare che tipo di http request e', tra post, get, put e delete. Nel mio caso ho messo post, piu' dettagli <a href="http://guides.rubyonrails.org/routing.html#adding-more-restful-actions">qui</a>
+[ruby]
+resources :comment do
+	post 'disapprove',:on=>:member
+end
+[/ruby]
+Lanciando "rake routes" nella cartella della mia app, posso vedere la nuova route creata, e vedere quale e' l'url da utlizzare nell'helper. Nel mio caso l'approvazione dei commenti si trova nell'admin area.
+[ruby]
+disapprove_admin_comment POST   /admin/comments/:id/disapprove(.:format)              {:controller=>"admin/comments", :action=>"disapprove"}
+[/ruby]
+Ora creaimo un link all'azione
+[ruby]
+<%= link_to 'Disapprove', disapprove_admin_comment_path(@comment)%>
+[/ruby]
+Dopo aver generato questo link, ottenevo un errore "No route matches..." la mia azione.
+Errore risolto<a href="http://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to"> specificando</a> nel link il tipo di http verb
+[ruby]
+<%= link_to 'Disapprove', disapprove_admin_comment_path(@comment), :method=>'post' %>
+[/ruby]
+ 
+Consiglio questi screencast, per capire come vengono generate le routes, <a href="http://railscasts.com/episodes/231-routing-walkthrough">1</a> e <a href="http://railscasts.com/episodes/232-routing-walkthrough-part-2">2</a>

@@ -1,0 +1,22 @@
+--- 
+layout: post
+title: debian spacca
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+tags: 
+- aggiornare debian alla nuova testing release
+type: post
+status: publish
+---
+sempre.
+aprire sources.list con vim, e da li
+[bash]
+%s/squeeze/wheezy/g
+[/bash]
+poi
+[bash]
+aptitude update
+aptitude safe-upgrade
+[/bash] 

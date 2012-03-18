@@ -1,0 +1,62 @@
+--- 
+layout: post
+title: script per rimuovere commenti da files php ricorsivamente
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+tags: 
+- bash
+- php
+- remove comments
+type: post
+status: publish
+---
+Capita che un cliente vi commisioni un progetto, ve ne faccia fare 3/4 e poi decida di non pagarvi l'ultima parte dello sviluppo, quando ormai il grosso e' fatto e le cose da refinire sono poche.
+Dovete comunque consegnare il codice ma volete per lo meno togliere i commenti.
+Allora piazzate questi due script nella direcotry dove risiedono i file che volete "spurgare":
+rm-phpcomments.sh e strip_comments.php.
+rm-phpcomments.sh trova i file php da ripulire e li passa in input a strip_comments.php.
+[bash]
+#!bin/bash
+find . -name "*.php" | while read file
+do
+	php strip_comments.php $file
+done
+[/bash]
+strip_comments.php li riscrive levando i commenti
+[php]
+<?php
+	$source = $argv[1];
+	$fileStr = file_get_contents($source);
+	$newStr  = '';
+
+	$commentTokens = array(T_COMMENT);
+
+	if (defined('T_DOC_COMMENT'))
+	    $commentTokens[] = T_DOC_COMMENT; 	if (defined('T_ML_COMMENT'))
+	    $commentTokens[] = T_ML_COMMENT;  
+	$tokens = token_get_all($fileStr);
+
+	foreach ($tokens as $token) {    
+	    if (is_array($token)) {
+		if (in_array($token[0], $commentTokens))
+		    continue;
+
+		$token = $token[1];
+	    }
+
+	    $newStr .= $token;
+	}
+
+	$handle = fopen($source, "w");
+	if($handle){
+		fwrite($handle, $newStr);
+		fclose($handle);
+		//echo "open";
+	}else{
+		echo "no fucking handle!!";
+	}
+?>
+[/php]
+Se il cliente era particolarmente antipatico, se siete troppo affezionati al vostro codice, o  se non avete nessun tipo di spirito solidale verso la persona che dovra' finire il vostro lavoro, potete modificare strip_comments.php inserendo questa simpatica <a href="http://www.raizlabs.com/software/phpobfuscator/">libreria</a>

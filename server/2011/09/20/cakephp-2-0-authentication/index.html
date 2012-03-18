@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>CakePHP 2.0 Authentication</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>CakePHP 2.0 Authentication <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    Con CakePHP 2.0 ci sono tante novità. In questo post spiegherò come realizzare una semplice sistema di <a href="http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html">autenticazione</a> per l'admin area, in cui abbiamo differenti users che possono accedervi, ma solo uno e' l'admin, gli altri sono amministratori con funzioni limitate. Per un piccolo sistema, con pochi utenti, ho deciso di non usare ACL, troppo ingombrante e dispendiosa, ma di scrivere un metodo apposito, allowedGroups da richiamare nelle azioni in cui voglio verificare che solo un determinato gruppo di utenti possa accedere a determinate funzioni. Alcune note sulle novità che influiscono sull'autenticazione.
+<ul>
+	<li>Sono supporati diversi tipi di autenticazione, configurabili tramite degli handlers, quello usato in questo articolo è il FormAuthenticate handler di default.</li>
+	<li>Nelle versioni precedenti di CakePHP 2.0 bastava aggiungere l'Auth Component e chiamare la funzione login nello user controller,  nella nuova versione, nella nostra function login, dovremo chiamare manualmente "$this-&gt;Auth-&gt;login()"</li>
+	<li>La password non viene più crittata di default, il metodo va chiamato manualmente</li>
+</ul>
+Creiamo un database per gli users e uno per i groups<br>
+<pre>
+CREATE TABLE IF NOT EXISTS `groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(70) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `name` varchar(70) NOT NULL,
+  `email` varchar(70) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `description` text NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+</pre><br>
+Creiamo i relativi controllers, models e views usando "cake bake".
+Andiamo ad eliminare tutte le action e tutte le view che non saranno accessibili al di fuori dell'admin area. Rimuoviamo quindi,per esempio, dallo UserController le action delete, add, edit. Aggiungiamo i metodi per il login ed il logout dello user in app/Controllers/UsersController.php
+[php]
+/**
+ * Users Controller
+ *
+ * @property User $User
+ */
+class UsersController extends AppController {
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow('admin_login');
+	}
+/**
+ * login method
+ *
+ * @return void
+ */
+	public function admin_login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				$user_id = $this->Auth->user('id');
+				$group_id = $this->Auth->user('group_id');
+				$group = $this->User->getGroup($group_id);
+				$this->Session->write('Auth.User.group', $group);		
+				$this->redirect(array('action' => 'profile', $user_id, 
+										'admin' => true));
+			} else {
+				$this->Session->setFlash(__('email o password errata'), 
+											'default', array(), 'auth');
+			}
+		}
+	}
+/**
+ * logout method
+ *
+ * @return void
+ */
+	public function admin_logout() {
+        $this->Session->setFlash('Sei ora sloggato dal sistema');
+		$this->Session->destroy();
+		$this->redirect($this->Auth->logout());
+	}
+[/php]
+Come vedete ho utilizzato il metodo getGroup, che dovro' scrivere nel mio App/Model/User.php
+[php]
+function getGroup($group_id){
+	$conditions = array('id' => $group_id);		
+	$group = $this->Group->field('nome', $conditions);		
+	if ($group) {
+		return $group;
+	}
+	else {
+		return false;
+	}		
+}
+[/php]
+
+Passiamo ora all'AppController.php, richiediamo l'autenticazione per chiunque voglia accedere all'admin area, e creiamo in App/Views/Layouts il file admin.ctp che conterrà il layout specifico per l'admin. Inoltre, andiamo a scrivere nella sessione il nome del gruppo, in modo da poterlo sempre leggere nella variabile $current_user, e da poterlo utilizzare sia per decidere quali elementi nelle view mostrare, sia per verificare che il nome del gruppo sia nell'elenco delle funzioni che vogliamo restringere solo ad alcuni gruppi.
+[php]
+class AppController extends Controller {
+	var $components = array('Auth','Session');
+	var $helpers = array('Session','Form','Html');
+    var $current_user = false;
+
+    function beforeFilter() {
+		if (isset($this->request->params['admin'])) {
+            $this->layout = 'admin';
+			$this->Auth->logoutRedirect = '/';		
+			$this->Auth->authenticate = array(
+				AuthComponent::ALL => array(
+					'fields' => array(
+						'username' => 'email',
+						'password' => 'password'),
+					'userModel' => 'Users.User'
+				), 'Form'
+			);
+        } else {
+            $this->Auth->allow();
+        }		
+        $this->current_user = $this->Auth->user();
+    }
+
+    function beforeRender() {
+        $this->set('current_user',$this->current_user );
+    }
+	
+	function allowGroups($groups = array(), $options = array()){
+		if (empty($options['message'])) {
+			$options['message'] = 'non sei autorizzato ad accedere';
+		}
+		
+		$group = $this->Session->read('Auth.User.group');		
+		if (in_array($group, $groups) || ($groups[0] == "*")) {
+			return true;
+		} 
+		else {
+			$this->Session->setFlash(__($options['message']));
+			$this->Session->destroy();
+			$this->redirect($this->Auth->logout());
+
+		}
+	}	
+}
+[/php]
+Creaimo il file Views/Users/admin_login.ctp
+[php]
+<?
+echo $this->Session->flash('auth');
+echo $this->Form->create('User', array('url' => array('controller' => 'users', 'action' =>'login')));
+echo $this->Form->input('User.email', array('label'=>'Email'));
+echo $this->Form->input('User.password', array('label'=>'password'));
+echo $this->Form->end('Loggati');
+?>
+[/php]
+Qui sotto un esempio su come utilizzare allowGroups.
+[php]
+#se voglio autorizzare tutti i gruppi esistenti
+$this->allowGroups(array('*'));
+#se voglio autorizzare solo il gruppo admin
+$this->allowGroups(array('admin'));
+#se voglio autorizzare admin e supervisori
+$this->allowGroups(array('admin','supervisori'));
+[/php] 
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2011/08/15/php-strtoupper-umlauts" title="php strtoupper umlauts">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2011/09/20/git_branch" title="Git Branches">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>20 September 2011</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#authentication-ref">authentication <span>5</span></a></li>
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#cakephp2.0-ref">cakephp2.0 <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#php-ref">php <span>6</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

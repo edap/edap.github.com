@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Implementare velocemente una Newsletter in CakePHP</title>
+    
+    <meta name="author" content="Name Lastname">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Jekyll Bootstrap</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+    	
+    	<li><a href="/categories.html">Categories</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/tags.html">Tags</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages.html">Pages</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/archive.html">Archive</a></li>
+    	
+    
+  
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Implementare velocemente una Newsletter in CakePHP <small>Supporting tagline</small></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    Link utili per costruire una newsletter in cakephp.
+Utilizziamo un plugin già fatto, scaricarlo da qui
+<a href="http://github.com/innovativepm/cakephp-newsletter-plugin">http://github.com/innovativepm/cakephp-newsletter-plugin</a>
+
+aggiungere questo behaviour in app/models/behaviour/
+<a href="http://bakery.cakephp.org/articles/view/add-delete-habtm-behavior">http://bakery.cakephp.org/articles/view/add-delete-habtm-behavior</a>
+
+Scaricare swift <a href="http://swiftmailer.org/download">http://swiftmailer.org/download</a> ed installarlo seguendo questo tutorial
+<a href="http://bakery.cakephp.org/articles/view/updated-swiftmailer-4-xx-component-with-attachments-and-plugins">http://bakery.cakephp.org/articles/view/updated-swiftmailer-4-xx-component-with-attachments-and-plugins</a>
+
+Assicurarsi che nell'appController ci sia un metodo SendMail, ovviamente con il component swiftMailer incluso.
+Nel plugin scaricato, sono presenti dei file di configurazione, modificarli a seconda delle vostre esigenze
+<a href="http://github.com/fabiokr/cakephp-newsletter-plugin">http://github.com/fabiokr/cakephp-newsletter-plugin</a>
+
+aggiungere la chiamata a jquery nella cartella del plugin newsletter
+in mail/admin_send.ctp
+[php]link("jquery.min.js"); [/php]
+
+modificare i link che nel nostro percorso di navigazione richiamano parti relative al plugin, es "www.miosito.com/newsletter".
+<a href="http://github.com/fabiokr/cakephp-newsletter-plugin">http://book.cakephp.org/view/868/Plugin-routing</a>
+
+Importante!
+Il plugin richiede che nel vostro app controller ci sia un metodo sendEmail. Se usate questa funzione per l'invio di mal non legate alla newsletter, potrebbe non servirvi il template della newsletter.
+Quindi nel metodo dovete specifcare il vostro template (linea 10).
+[php]class AppController extends Controller{
+	var $components = array('Auth','SwiftMailer');
+
+	function sendEmail($subject, $viewSend=null, $to=null, $from = null, $fromName = null) {
+		$this->SwiftMailer->smtpHost = 'localhost';
+		//$this->SwiftMailer->sendAs = 'html';
+		if($to == null) {
+			$to = Configure::read('Newsletter.from_email');
+		}
+		if($viewSend == null) {
+			$view = Configure::read('Newsletter.default_view');
+			$this->set('message', 'My message');
+		}else{
+			$view = 'newsletter';
+			$this->set('message', $viewSend);
+		}
+		$this->SwiftMailer->from         = $from != null ? $from : Configure::read('Newsletter.from_email');
+		$this->SwiftMailer->fromName     = $fromName != null ? $fromName : Configure::read('Newsletter.from');
+		$this->SwiftMailer->to           = $to;
+		$method           = 'smtp';
+
+		try {
+			if(!$this->SwiftMailer->send($view, $subject, $method, true)) {
+				$this->log("Error sending email");
+			}
+		}
+		catch(Exception $e) {
+			$this->log("Failed to send email: ".$e->getMessage());
+		}
+
+	}
+
+}[/php] 
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev disabled"><a>&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/2010/03/24/conoscere-la-posizione-di-un-dominio-su-google-per-determinate-keywords" title="conoscere la posizione di un dominio su google per determinate keywords">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+  
+  <div class="span4">
+    <h4>Published</h4>
+    <div class="date"><span>20 March 2010</span></div>
+
+  
+    <h4>Tags</h4>
+    <ul class="tag_box">
+    
+    
+
+
+  
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
+     
+    	<li><a href="/tags.html#newsletter-ref">newsletter <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#swiftmailer-ref">swiftmailer <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Name Lastname 2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

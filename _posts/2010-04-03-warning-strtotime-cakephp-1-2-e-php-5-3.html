@@ -1,0 +1,19 @@
+--- 
+layout: post
+title: "Warning: strtotime(), cakephp 1.2 e php 5.3"
+published: true
+meta: 
+  _edit_last: "1"
+tags: 
+- cakephp
+type: post
+status: publish
+---
+Potrebbe capitare di ricevere questo warning su di un vostro sito sviluppato con cake.
+<code>Warning: strtotime() [function.strtotime]: It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'Europe/Berlin' for 'CEST/2.0/DST' instead in /home/da/public_html/under/cake/libs/cache.php on line 429</code>
+
+Per eliminarlo, basta settare correttamente il timezone nel vostro php.ini
+Per esempio:
+<code>date.timezone = Europe/London</code>
+Un elenco di tutti i timezone disponibili può essere trovato qui:
+<a href="For example: date.timezone = Europe/London http://uk2.php.net/manual/en/timezones.europe.php">http://uk2.php.net/manual/en/timezones.europe.php</a>
