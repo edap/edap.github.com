@@ -16,7 +16,7 @@ I've just pushed on github a <a href="https://github.com/edap/cakePHP-youtube-da
 Here I provide a solution that I've adopted to save in the database the fields "video_title", "video_thumb" and "video_id" for a given youtube video link associated to a model, for example an Article model containing a video, or a Submission Model containing a youtube video for a video contest. This code validates the video URL and, if valid, add the videos metatags to the data model to save, in this example, the Article model.
 1)Follow the instruction on the github page and install the datasource
 2) Add this rule to your $validate array in the model where you would like to save the video information
-{% highlight php %}
+{% highlight php startinline %}
 'video' => array(
     'rule' => 'validYoutube',
     'message' => 'the given videos link is incorrect',
