@@ -1482,3 +1482,7 @@ hr {
   *display: inline;
   float: right;
 }
+.avatar{
+  padding:2px 2px 2px 2px;
+  border: 1px solid #2D2D2D;
+}
