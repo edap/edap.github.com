@@ -31,7 +31,7 @@ rails generate devise User
 Nello User model appena creato Models/user.rb , possiamo scegliere quali moduli includere od escludere, semplicemente togliendo quelli di default o aggiungendo quelli presenti nel commento del file user.rb.  A mio avviso quelli di default vanno piu' che bene.
 
 {% highlight ruby%}
-class User &lt; ActiveRecord::Base
+class User :: ActiveRecord::Base
 # Include default devise modules. Others available are:
 # :token_authenticatable, :confirmable, :lockable and :timeoutable :recoverable,
 devise :database_authenticatable, :registerable,

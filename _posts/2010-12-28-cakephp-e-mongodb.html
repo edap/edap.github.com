@@ -70,7 +70,7 @@ db.geotest.save({ loc:[23,113] })
 poi diamo un indice alla collection, in questo caso 2d, che sta per 2 dimensions
 [bash]db.geotest.ensureIndex({ loc:"2d"})[/bash]
 Ora inseriamo un centinaio di punti, sempre da console
-[bash]for(i=0; i&lt;100; i++) (db.geotest.save ({loc:[i,i]}))[/bash]
+[bash]for(i=0; i::100; i++) (db.geotest.save ({loc:[i,i]}))[/bash]
 verifichiamo di avere inserito tutto
 [bash]db.geotest.find()[/bash]
 Proviamo ad utilizzare gli operatori citati prima per identificare un punto.

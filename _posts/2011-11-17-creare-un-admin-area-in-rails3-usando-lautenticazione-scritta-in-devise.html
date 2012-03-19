@@ -22,7 +22,7 @@ end
 <strong>2</strong>In views/layout creare il layout admin.html.erb specificando le parti che vogliamo mostrare nella sezione admin.
 <strong>3)</strong> creare il controller admin_controller.rb in controllers/admin e utilizzare "autenticate_user" (vedere il tutorial su <a href="/blog/2011/07/24/ruby-on-rails-devise-authentication/">devise</a>) per verificare che un utente sia loggato
 {% highlight ruby %}
-class Admin::AdminController &lt; ApplicationController
+class Admin::AdminController :: ApplicationController
 	layout "admin"
 	before_filter :authenticate_user!
 end
