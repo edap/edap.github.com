@@ -12,19 +12,19 @@ status: publish
 ---
 Ovvero, cose basilari per la migrazione da cake 1.2 a cake 1.3
 Partiamo con l'errore che leggete nel titolo. Il component Session non è più incluso di default. Va quindi aggiunto nell'app_controller.php
-[php]
+{% highlight php startinline %}
 class AppController extends Controller{
 var $components = array('Auth','Session);
-[/php]
+{% endhighlight %}
 Routing.admin è deprecato.
-[php]
+{% highlight php startinline %}
 //da:
 Configure::write('Routing.admin', 'admin');
 
 //a:
 Configure::write('Routing.prefixes', array('admin'));
 
-[/php]
+{% endhighlight %}
 <ul>
 	<li>Il metodo del() nei controller è sostituito con delete()</li>
 	<li>cake/tua_app_cake_1.2/webroot/index.php è da sostituire con index.php di cake 1.3</li>

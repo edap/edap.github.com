@@ -13,11 +13,11 @@ status: publish
 ---
 Strtoupper non funziona con i default local characters, come le umlauts.
 Per risolvere questo problema si può usare preg_replace.
-[php]
+{% highlight php startinline %}
 setlocale(LC_ALL, 'de_DE');
 $title = 'viele umlauts, zum beispiel ä, ü, ö...und eine ß';
 $umaluts = array('/ä/i','/ü/i','/ö/i','/ß/i');
 $replacing_umlauts = array('Ä','Ü','Ö','SS');
 $title = preg_replace($umaluts, $replacing_umlauts, $title);
 echo strtoupper($title);  
-[/php] 
+{% endhighlight %} 

@@ -35,13 +35,13 @@ cd app/plugins
 git clone http://github.com/ichikaway/mongoDB-Datasource.git mongodb
 [/bash]
 poi, modifichiamo il file app/config/database.php con dei dati fittizi.
-[php]	var $default = array(
+{% highlight php startinline %}	var $default = array(
 'driver' =&gt; 'mongodb.mongodbSource',
 'password' =&gt; 'password',
 'database' =&gt; 'cakemongo1',
 'port' =&gt; '27017',
 );
-[/php]
+{% endhighlight %}
 Ora, copiamo le cartelle views, controllers e models presenti in /app/plugins/mongodb/samples  in app. Aprite Il file app/models/post.php e decommentate la variabile mongoSchema. Apriamo il nostro  browser a questo indirizzo <a href="http://localhost/posts">http://localhost/posts</a> e clicchiamo su "add data" andando cosi' ad aggiungere il primo "document" (in mongodb row diventa document, column diventa field e database collection. Per altri preziosi parallelismi com mysql, date un occhio a <a href="http://www.mongodb.org/display/DOCS/SQL+to+Mongo+Mapping+Chart">Sql to Mongo Mapping chart</a>).
 Ora da console controlliamo i dati inseriti.
 

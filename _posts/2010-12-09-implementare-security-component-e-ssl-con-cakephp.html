@@ -16,21 +16,21 @@ CakePHP mette a disposizione un component che permette di rendere la nostra appl
 Vediamo come far sì che il nostro sito sia accessibile solo da https:// e non da http://, e come rendere i nostri form sicuri, non editabili con firebug.
 
 Il security component è già nella core di cakePHP, quindi per abilitarlo non dobbiamo fare altro che aggiungere i components necessari in app_controller.php
-[php]
+{% highlight php startinline %}
 var $components = array(
 	'Security',
 	'RequestHandler'
 );
-[/php]
+{% endhighlight %}
  e mettere questa funzione, sempre nel nostro app_controller.php
-[php]
+{% highlight php startinline %}
 	function beforeFilter(){
 		$this->Security->requireSecure();
 		$this->Security->blackHoleCallback = 'invalid';
 	}
-[/php]
+{% endhighlight %}
 La funzione requireSecure() obbliga il client ad utilizzare ssl, la proprietà validatePost invece dice che i nostri form vanno validati prima di essere processati, infine blackHoleCallback raccoglie tutte le richieste sporche, quelle che non soddisfano le nostre esigenze di sicurezza. Vediamo nel dettaglio la funzione invalid e forceSSL, entrambe all'interno dell'app_controller.php
-[php]
+{% highlight php startinline %}
 	function invalid() {
 		if(!$this->RequestHandler->isSSL()) {
 			$this->forceSSL();
@@ -42,11 +42,11 @@ La funzione requireSecure() obbliga il client ad utilizzare ssl, la proprietà v
 	function forceSSL() {
 		$this->redirect('https://' . env('SERVER_NAME') . $this->here);
 	}
-[/php]
+{% endhighlight %}
 La funzione invalid separa le richieste, quelle che non sono su ssl vengono passate a forceSSL, che provvede
 ad indirizzare tutte le richieste su https://, quelle che invece provengono da https:// ma presentano dati alterati maliziosamente, vengono inviate a cakeError('accessDenied'). QUesta funzione presenta un messaggio d'errore personalizzabile. Vediamo come.
 Nostra cartella app/ creaiamo un file app_error.php
-[php]
+{% highlight php startinline %}
 <?php
 class AppError extends ErrorHandler {	
 	public function accessDenied(){
@@ -56,20 +56,20 @@ class AppError extends ErrorHandler {
 	}	
 }
 ?>
-[/php]
+{% endhighlight %}
 Poi, nella cartella app/views/errors creaiamo il nostro template goaway.ctp
-[php]
+{% highlight php startinline %}
 <h2><?php echo $name ?></h2>
-[/php]
+{% endhighlight %}
 
 Abbiamo quindi predisposto la nostra applicazione ad essere accessibile solo su https:// e ad inviare le cattive richieste alla tal pagina. Per escludere un campo dal controllo del form da parte del Security component, dovremo disabilitarlo. Nell'esempio qui sotto, disabilito il confirm pwd in users_controller.php
-[php]
+{% highlight php startinline %}
 function beforeFilter() {
 	parent::beforeFilter();
 		$this->Security->blackHoleCallback = 'invalid';
 		$this->Security->disabledFields = array('User.confirmpassword');
 }
-[/php]
+{% endhighlight %}
 
 
 Ultima cosa, per utilizzare ssl, dovete modificare la configurazione del vostro server. Nel caso utilizziate apache2+linux, <a href="http://www.howtoforge.com/how-to-set-up-an-ssl-vhost-under-apache2-on-ubuntu-9.10-debian-lenny">questa</a> è la guida giusta.

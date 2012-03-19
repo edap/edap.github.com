@@ -25,7 +25,7 @@ do
 done
 [/bash]
 strip_comments.php li riscrive levando i commenti
-[php]
+{% highlight php startinline %}
 <?php
 	$source = $argv[1];
 	$fileStr = file_get_contents($source);
@@ -58,5 +58,5 @@ strip_comments.php li riscrive levando i commenti
 		echo "no fucking handle!!";
 	}
 ?>
-[/php]
+{% endhighlight %}
 Se il cliente era particolarmente antipatico, se siete troppo affezionati al vostro codice, o  se non avete nessun tipo di spirito solidale verso la persona che dovra' finire il vostro lavoro, potete modificare strip_comments.php inserendo questa simpatica <a href="http://www.raizlabs.com/software/phpobfuscator/">libreria</a>

@@ -24,12 +24,12 @@ dovrebbe diventare
 Per ottenere delle Friendly URL in cakePHP basta scaricare dal<a href="http://github.com/mariano/syrup/blob/master/models/behaviors/sluggable.php"> repo su github di Mariano Iglesias</a> "sluggable behavior" e metterlo in app/model/behavior/sluggable.php.
 
 Aggiungrere questa linea nel model 'articolo', che dice a cake di usare il behaviors prima scaricato:
-[php]
+{% highlight php startinline %}
 var $actsAs = array('Sluggable'); 
-[/php]
+{% endhighlight %}
 Ora l'articolo può essere richiamato da un nome significativo e non dall'id. Aggiungiamo quindi nella tabella 'Articoli' il campo 'slug'. Se volete cambiare il nome di questo campo, o utilizzare il campo title, o vedere altre opzioni, qui le potete trovare <a href="http://bakery.cakephp.org/articles/view/sluggable-behavior">http://bakery.cakephp.org/articles/view/sluggable-behavior</a>
 Dovete poi modificare la funzione view del vostro controller, aggiungendo il campo slug.
-[php]
+{% highlight php startinline %}
 function view($slug = null) {
     if(!$slug){
             $this->Session->setFlash(__('Invalid Articolo', true));
@@ -38,16 +38,16 @@ function view($slug = null) {
     $articolo = $this->Articolo->findBySlug($slug);
     $this->set('articolo', $articolo);
 }
-[/php]
+{% endhighlight %}
 
 Per richiamare l'articolo, passiamo al metodo view il valore del campo slug anzichè l'id.
-[php]
+{% highlight php startinline %}
 <?php echo $html->link('Articolo bello', array('controller'=>'Articoli', 'action'=>'view', 'valore del mio campo slug'))  ?>
-[/php]
+{% endhighlight %}
 Per far si che ogni volta che aggiungete un nuovo articolo, o che vogliate modificarne uno esistente, venga aggiornato il valore del campo 'slug', dovete settare il valore di a true nel vostro model
-[php]
+{% highlight php startinline %}
 var $actsAs = array('Sluggable' => array( 'overwrite' => true)); 
-[/php]
+{% endhighlight %}
 
 Una volta fatto questo, potremmo anche decidere di migliorare ulteriormente l'url, passando da:
 <strong>www.miosito.com/view/come-ottenere-friendly-url
@@ -56,9 +56,9 @@ Una volta fatto questo, potremmo anche decidere di migliorare ulteriormente l'ur
 </strong>
 
 per far questo basta aggiungere un alias nel file routes.php
-[php]
+{% highlight php startinline %}
 Router::connect('/articoli_SEO/*', array('controller' => 'articoli', 'action' => 'view'));
-[/php]
+{% endhighlight %}
 
 In CakePHP si possono fare tante cose modificando il file routes.php.
 Una buona lettura la trovate <a href="http://bakery.cakephp.org/articles/view/cakephp-s-routing-explained">qui</a> 

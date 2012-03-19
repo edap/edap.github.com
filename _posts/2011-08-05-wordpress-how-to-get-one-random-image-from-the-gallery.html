@@ -12,7 +12,7 @@ type: post
 status: publish
 ---
 Tramite lo <a href="http://codex.wordpress.org/Gallery_Shortcode">shortcode gallery</a> e' possibile inserire una galleria nel nostro tema personalizzato senza alcun problema. Per poter pero' estrarre un'immagine random dalla galleria e mostrarla nella larghezza desiderata dobbiamo scrivere un metodo apposito, perche' non vi sono opzioni sufficienti nello shortcode di default (si, esistono tanti plugin che permettono di avere un'immagine random senza scrivere una linea di codice....ma che noia!)
-[php]
+{% highlight php startinline %}
 /*
  * find a random image from the gallery, that is related to a post
  */
@@ -43,4 +43,4 @@ function get_random_image_from_gallery($custom_width) {
 		<p class="empty"><?php _e(no images found.'); ?></p>
 	<?php endif;		
 }
-[/php] 
+{% endhighlight %} 

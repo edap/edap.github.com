@@ -13,15 +13,15 @@ type: post
 status: publish
 ---
 Se volete salvare la data del login dei vostri utenti, dovet disabilitare l'autoRedirect nel vostro app_controller. Senza questo piccolo accorgimento, il codice all'interno della funzione login() viene ignorato.
-[php]
+{% highlight php startinline %}
     function beforeFilter() {
         ....
 	$this->Auth->autoRedirect = false;
         ....
     }
-[/php]
+{% endhighlight %}
 
-[php]
+{% highlight php startinline %}
 	function login() {
 	    if($this->Auth->user()){
 		$this->loginDate();
@@ -35,4 +35,4 @@ Se volete salvare la data del login dei vostri utenti, dovet disabilitare l'auto
 	    $now = date("Y-m-d H:i:s");
 	    $this->User->saveField('last_login', $now);
 	}
-[/php] 
+{% endhighlight %} 

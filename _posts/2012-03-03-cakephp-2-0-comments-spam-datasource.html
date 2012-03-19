@@ -13,16 +13,16 @@ status: publish
 Ho trovato questo <a href="http://www.thelittlebakery.org/2011/06/admin-panel-development-akismet-product-review/">post</a> che spiega come implementare akismet per verificare i commenti sul nostro sito.Mi e' sembrata davvero la soluzione piu' semplice fra le tante disponibili. I commenti vengono salvati nel nostro database, e dopo il salvataggio verifichiamo tramite akismet se il commento e' spam o meno. Ecco qui i passaggi:
 1) Scaricarsi il datasource <a href="https://github.com/alexdd55/thelittlebakery/blob/master/app/Model/Datasource/akismet.php">akismet.php</a> ed metterlo in app/Model/Datasource.
 1)Creare una api key sul sito di akisemt, ed aggiungere queste linee al file database.php
-[php]
+{% highlight php startinline %}
 public $Akismet = array(
     'datasource' => 'Akismet',
     'blog' => 'http://yourblog/',
     'key' => 'your_akismet_key'
 );
-[/php] 
+{% endhighlight %} 
 2)Nella nostra tabella destinanata ai commenti, aggiungere i campi spam e checked
 3)Aggiungere al model Comment.php la seguente funzione.
-[php]
+{% highlight php startinline %}
 public function checkForSpam($id) {
 	$comment = $this->read(null, $id);
 	App::uses('HttpSocket', 'Network/Http');
@@ -55,9 +55,9 @@ public function checkForSpam($id) {
 	};
 	return $this->save($spam, false);
 }
-[/php]
+{% endhighlight %}
 4) Nel vostro CommentsController file, dopo aver salvato il commento richiamate la funzione appena creata. Es
-[php]
+{% highlight php startinline %}
 public function add() {
 	if ($this->request->is('post')) {
 		$this->Comment->create();
@@ -72,6 +72,6 @@ public function add() {
 	$articles = $this->Comment->Article->find('list');
 	$this->set(compact('articles'));
 }
-[/php]
+{% endhighlight %}
 5)Nella vostra sezione amministrativa, elencate tutti i commenti, e verificate i falsi positivi, in caso ce ne siano
 6)Sul vostro sito, mostrate solo i commmenti con il valore di "spam" = 0

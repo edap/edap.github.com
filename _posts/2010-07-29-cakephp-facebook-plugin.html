@@ -21,11 +21,11 @@ Le cose belle di questo plugin sono tre:
 3)E' facile attingere dalle api per aggiungere nuove funzionalita' al component "Connect.php"
 
 Su quest'ultimo punto, un piccolo esempio. Se avete la necessità di far si che un utente possa pubblicare un link sul wall in facebook dal vostro sito, potete aggiungere al component Connect.php questa semplice funzione, ed utilizzarla direttamente nel vostro controller:
-[php]
+{% highlight php startinline %}
     function postLinkOnWall($url, $message, $uid){
             $this->FacebookApi->api_client->links_post($url, $message, $uid);
     }
-[/php]
+{% endhighlight %}
 
 Secondo la nuova policy di facebook che entra in vigore il 30 luglio 2010, la vostra applicazione dovrà richiedere all'utente quali <a href="http://developers.facebook.com/docs/authentication/permissions">Extended Permissions</a> concedervi. Nel caso del link sul wall, il permesso che ci interessa è il "publish_stream". Nell'helper c'è l'apposito metodo "promptPermission" che si occupa di questo, ma se volete personalizzare il messaggio, potete inserire il seguente codice fbml:
 [html]
@@ -35,10 +35,10 @@ Secondo la nuova policy di facebook che entra in vigore il 30 luglio 2010, la vo
 [/html]
 
 Per verificare se l'utente ha i permessi richiesti, possiamo aggiungere una funzione al component, e richiamarla quando ne abbiamo bisogno:
-[php]
+{% highlight php startinline %}
     function hasPublishPermitted($ext_perm, $uid){
         return $this->FacebookApi->api_client->users_hasAppPermission($ext_perm, $uid);
     }
-[/php]
+{% endhighlight %}
 
 Se ci sono altre funzioni alle quali volete accedere dal component "Connect", vi consiglio di leggervi il file /vendors/facebook/php/facebookapi_php5_restlib.php

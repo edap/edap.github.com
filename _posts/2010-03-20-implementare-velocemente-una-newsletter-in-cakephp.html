@@ -27,7 +27,7 @@ Nel plugin scaricato, sono presenti dei file di configurazione, modificarli a se
 
 aggiungere la chiamata a jquery nella cartella del plugin newsletter
 in mail/admin_send.ctp
-[php]link("jquery.min.js"); [/php]
+{% highlight php startinline %}link("jquery.min.js"); {% endhighlight %}
 
 modificare i link che nel nostro percorso di navigazione richiamano parti relative al plugin, es "www.miosito.com/newsletter".
 <a href="http://github.com/fabiokr/cakephp-newsletter-plugin">http://book.cakephp.org/view/868/Plugin-routing</a>
@@ -35,7 +35,7 @@ modificare i link che nel nostro percorso di navigazione richiamano parti relati
 Importante!
 Il plugin richiede che nel vostro app controller ci sia un metodo sendEmail. Se usate questa funzione per l'invio di mal non legate alla newsletter, potrebbe non servirvi il template della newsletter.
 Quindi nel metodo dovete specifcare il vostro template (linea 10).
-[php]class AppController extends Controller{
+{% highlight php startinline %}class AppController extends Controller{
 	var $components = array('Auth','SwiftMailer');
 
 	function sendEmail($subject, $viewSend=null, $to=null, $from = null, $fromName = null) {
@@ -67,4 +67,4 @@ Quindi nel metodo dovete specifcare il vostro template (linea 10).
 
 	}
 
-}[/php] 
+}{% endhighlight %} 

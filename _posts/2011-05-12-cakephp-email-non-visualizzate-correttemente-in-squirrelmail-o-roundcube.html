@@ -11,10 +11,10 @@ type: post
 status: publish
 ---
 Se el email spedite dalla vostra applicazione non vengono visualizzate correttamente in programmi come squirrelmail o roundcube, bisogna aggiungere questa porzione di codice prima dell'invio.
-[php]
+{% highlight php startinline %}
 $this->Email->__header[] = 'MIME-Version: 1.0';
 $this->Email->from = 'Sprecher <info@eintsprecher.de>';
-[/php]
+{% endhighlight %}
 Via <a href="http://www.pixelastic.com/blog/230:displaying-html-mails-sent-from-cakephp-in-squirrelmail">http://www.pixelastic.com/blog/230:displaying-html-mails-sent-from-cakephp-in-squirrelmail</a>
 
 <a href="http://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/14-email-component-should-set-mime-version-header-when-sendas-html-or-both">http://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/14-email-component-should-set-mime-version-header-when-sendas-html-or-both</a>

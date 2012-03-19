@@ -15,7 +15,7 @@ Capita spesso di dover inserire un form per l'upload delle immagini nella sezion
 C'è un <a href="http://github.com/tute/Thumbnail-component-for-CakePHP/">component</a> che fa al caso nostro, scala automaticamente ogni immagine in tre formati, big,med,small e la carica nella cartella predefinita.
 I passi per la configurazione sono pochi, presenti sul repo. 
 Dopo aver installato correttamente il component, ricordatevi che il path del file va salvato nel database. Modifichiamo quindi il controller per poter salvare il path dell'immagine nel campo 'file_path'
-[php]
+{% highlight php startinline %}
 function admin_add() {
         if (!empty($this->data)) {
                 $this->Pianta->create();
@@ -31,4 +31,4 @@ function admin_add() {
                 }
         }
 }
-[/php]
+{% endhighlight %}

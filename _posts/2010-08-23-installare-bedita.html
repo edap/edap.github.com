@@ -27,14 +27,14 @@ chown www-data:www-data -R bedita-app/webroot/media
 [/bash]
 fate la stessa operazione per bedita-app/tmp.
 Settate le due variabili mediaRoot e mediaUrl nel file bedita-app/config/bedita.sys.php
-[php]
+{% highlight php startinline %}
 $config['mediaRoot'] = "path_to_bedita_".DS."bedita-app".DS."webroot".DS."media";
 $config['mediaUrl'] = "http://localhost/media";
-[/php]
+{% endhighlight %}
 ovviamente, sostituite a "path_to_bedita" il percorso assoluto dove avete installato bedita nel mio caso 
-[php]
+{% highlight php startinline %}
 $config['mediaRoot'] = "/home/da/public_html/bedita".DS."bedita-app".DS."webroot".DS."media";
-[/php]
+{% endhighlight %}
 
 nella cartella bedita lanciate lo script che provvederà' a creare le tabelle necessarie.
 [bash]

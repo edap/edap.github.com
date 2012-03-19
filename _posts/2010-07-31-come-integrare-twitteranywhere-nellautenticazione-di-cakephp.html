@@ -20,10 +20,10 @@ Come faccio a far si che se un utente si logga su twitter viene registrato nel m
 Dovrò gestire l'output di twitter anywhere e tramite ajax passarlo ad un handler nel nostro controller che loggherà l'utente in caso sia andato tutto bene, restituirà un errore in caso contrario.
 
 Per prima cosa includiamo questi 2 file js nell'header del nostro template.
-[php]
+{% highlight php startinline %}
 echo $html->script("jquery.js");
 echo $html->script("checkTwitterUsername.js");
-[/php]
+{% endhighlight %}
 
 Jquery,js lo trovate sul sito di jquery, lo script checkTwitterUsername.js è una funzione che prende l'output di twitter@anywhere e lo passa all'handler ajax che si occuperà di loggare l'utente.
 
@@ -49,12 +49,12 @@ function checkTwitterUsername (twitterusername) {
 }
 [/javascript]
 includiamo anche l'element twitter_login.ctp, che fa uso di twitter @anywhere, che trovate qui sotto
-[php]
+{% highlight php startinline %}
 <? echo $this->element("twitter_login")?>
-[/php]
+{% endhighlight %}
 
 twitter_login.ctp
-[php]
+{% highlight php startinline %}
 <?php
 $id = 'twitter-login-button-'.rand(1000,9999);
 echo '<span id="'.$id.'"></span>';
@@ -93,10 +93,10 @@ echo $html->scriptBlock("
     ");
 ?>
 
-[/php]
+{% endhighlight %}
 
 Nella vostra tabelle Users aggiungete un campo twitter_username, nel controller users aggiungete questo metodo
-[php]
+{% highlight php startinline %}
 /**
  * It's called by checkTwitterUsername.js
  * Once a user is logged in twitter:
@@ -154,13 +154,13 @@ function handleTwitterUser(){
 		return $error;
 	}
 }
-[/php]
+{% endhighlight %}
 In questa porzione di codice faccio uso di "$User = new User;" per salvare e recuperare in ogni parte della mia applicazione informazioni relative all'utente. Questa tecnica è spiegata bene, con esempi pratici nel libro gratis scaricabile online http://www.pseudocoder.com/free-cakephp-book/
 
 Per poter sloggare l'utente automaticaente sia da twitter che dalla vostra applicazione, dovete far si che il link a logout abbia l'id "signout".
-[php]
+{% highlight php startinline %}
 echo $this->Html->link('logout', array('controller' => 'users', 'action' => 'logout' ),
                             array('id'=>'signout')
                 );
-[/php]
+{% endhighlight %}
 

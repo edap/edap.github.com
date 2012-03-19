@@ -24,7 +24,7 @@ $.ajax({
 });
 [/javascript] 
 Il nostro controller sara' cosi'.
-[php]
+{% highlight php startinline %}
 function MiaAction(){
 	$this->view = 'Json';
 	$json = array(
@@ -33,5 +33,5 @@ function MiaAction(){
 	);
 	$this->set(compact('json'));
 }
-[/php]
+{% endhighlight %}
 Notate la view 'Json'. Questa fa si che il vostro output sia formattato correttamente. Create un file chiamato json.php, aggiungetelo in app/views e copiate al suo interno la classe JsonView  che trovate a questo indirizzo <a href="http://nuts-and-bolts-of-cakephp.com/tag/cakephp-json/">http://nuts-and-bolts-of-cakephp.com/tag/cakephp-json/</a>

@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 </pre><br>
 Creiamo i relativi controllers, models e views usando "cake bake".
 Andiamo ad eliminare tutte le action e tutte le view che non saranno accessibili al di fuori dell'admin area. Rimuoviamo quindi,per esempio, dallo UserController le action delete, add, edit. Aggiungiamo i metodi per il login ed il logout dello user in app/Controllers/UsersController.php
-[php]
+{% highlight php startinline %}
 /**
  * Users Controller
  *
@@ -82,9 +82,9 @@ class UsersController extends AppController {
 		$this->Session->destroy();
 		$this->redirect($this->Auth->logout());
 	}
-[/php]
+{% endhighlight %}
 Come vedete ho utilizzato il metodo getGroup, che dovro' scrivere nel mio App/Model/User.php
-[php]
+{% highlight php startinline %}
 function getGroup($group_id){
 	$conditions = array('id' => $group_id);		
 	$group = $this->Group->field('nome', $conditions);		
@@ -95,10 +95,10 @@ function getGroup($group_id){
 		return false;
 	}		
 }
-[/php]
+{% endhighlight %}
 
 Passiamo ora all'AppController.php, richiediamo l'autenticazione per chiunque voglia accedere all'admin area, e creiamo in App/Views/Layouts il file admin.ctp che conterrà il layout specifico per l'admin. Inoltre, andiamo a scrivere nella sessione il nome del gruppo, in modo da poterlo sempre leggere nella variabile $current_user, e da poterlo utilizzare sia per decidere quali elementi nelle view mostrare, sia per verificare che il nome del gruppo sia nell'elenco delle funzioni che vogliamo restringere solo ad alcuni gruppi.
-[php]
+{% highlight php startinline %}
 class AppController extends Controller {
 	var $components = array('Auth','Session');
 	var $helpers = array('Session','Form','Html');
@@ -143,9 +143,9 @@ class AppController extends Controller {
 		}
 	}	
 }
-[/php]
+{% endhighlight %}
 Creaimo il file Views/Users/admin_login.ctp
-[php]
+{% highlight php startinline %}
 <?
 echo $this->Session->flash('auth');
 echo $this->Form->create('User', array('url' => array('controller' => 'users', 'action' =>'login')));
@@ -153,13 +153,13 @@ echo $this->Form->input('User.email', array('label'=>'Email'));
 echo $this->Form->input('User.password', array('label'=>'password'));
 echo $this->Form->end('Loggati');
 ?>
-[/php]
+{% endhighlight %}
 Qui sotto un esempio su come utilizzare allowGroups.
-[php]
+{% highlight php startinline %}
 #se voglio autorizzare tutti i gruppi esistenti
 $this->allowGroups(array('*'));
 #se voglio autorizzare solo il gruppo admin
 $this->allowGroups(array('admin'));
 #se voglio autorizzare admin e supervisori
 $this->allowGroups(array('admin','supervisori'));
-[/php] 
+{% endhighlight %} 
