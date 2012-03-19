@@ -21,10 +21,10 @@ Maggiori informazioni su questo aspetto riguradante la configurazione di apache2
 Create una directory dove bedita caricherà i file, foto, doc ecc...per esempio "media" 
 Spostatevi nella cartella "bedita".
 Assicuratevi che il webserver abbia i permessi di scrittura su tale cartella. Supponendo che il server si apache, e che la cartella sia bedita-app/webroot/media
-[bash]
+{% highlight bash %}
 chmod -R 777 bedita-app/webroot/media
 chown www-data:www-data -R bedita-app/webroot/media
-[/bash]
+{% endhighlight %}
 fate la stessa operazione per bedita-app/tmp.
 Settate le due variabili mediaRoot e mediaUrl nel file bedita-app/config/bedita.sys.php
 {% highlight php startinline %}
@@ -37,9 +37,9 @@ $config['mediaRoot'] = "/home/da/public_html/bedita".DS."bedita-app".DS."webroot
 {% endhighlight %}
 
 nella cartella bedita lanciate lo script che provvederà' a creare le tabelle necessarie.
-[bash]
+{% highlight bash %}
 ./cake.sh bedita init
-[/bash]
+{% endhighlight %}
 Se tutto è andato a buon fine, a questo indirizzo <a href="http://localhost">http://localhost</a> dovreste vedere il pannello d'amministrazione dal quale loggarvi.
 user : bedita
 pwd : bedita.

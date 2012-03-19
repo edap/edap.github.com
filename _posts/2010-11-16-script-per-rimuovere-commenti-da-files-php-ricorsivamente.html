@@ -17,13 +17,13 @@ Dovete comunque consegnare il codice ma volete per lo meno togliere i commenti.
 Allora piazzate questi due script nella direcotry dove risiedono i file che volete "spurgare":
 rm-phpcomments.sh e strip_comments.php.
 rm-phpcomments.sh trova i file php da ripulire e li passa in input a strip_comments.php.
-[bash]
+{% highlight bash %}
 #!bin/bash
 find . -name "*.php" | while read file
 do
 	php strip_comments.php $file
 done
-[/bash]
+{% endhighlight %}
 strip_comments.php li riscrive levando i commenti
 {% highlight php startinline %}
 <?php

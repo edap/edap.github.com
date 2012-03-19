@@ -15,20 +15,20 @@ status: publish
 Quasi tutti i progetti su cui lavoro sono sotto git. La necessità di caricare sul server ftp gli ultimi commits mi ha portato a scoprire <a href="https://github.com/resmo/git-ftp">git-ftp</a>. Si <a href="https://github.com/resmo/git-ftp/blob/develop/INSTALL.md">installa</a> su Mac,Win e Linux.
 Per installare il pacchetto su debian, consiglio di <a href="http://blog.anantshri.info/howto-add-ppa-in-debian/">aggiungere</a> il <a href="https://launchpad.net/~resmo/+archive/git-ftp">ppa</a> ubuntu dello sviluppatore ed <a href="http://stream-recorder.com/forum/w-gpg-error-http-ppa-launchpad-net-t6741.html">importare la chiave</a> in modo da avere sempre il pacchetto aggiornato.
 Per configurare le credenziali di accesso bisogna:
-[bash]
+{% highlight bash %}
 $ git config git-ftp.user john
 $ git config git-ftp.url ftp.example.com/myfolder
 $ git config git-ftp.password secr3t
-[/bash]
+{% endhighlight %}
 poi per caricare il tutto
-[bash]
+{% highlight bash %}
 $ git ftp push
-[/bash]
+{% endhighlight %}
 Se non riuscite a connettervi, verificate che il firewall del vostro hosting non stia bloccando cURL. In ogni caso, gli sviluppatori stanno lavorando ad una nuova versione che utilizza lftp invece che cURL.
 
 Dopo aver fatto questo, veniamo agli <a href="http://www.catonmat.net/blog/git-aliases/">alias</a> per git.
 Questi sono quelli che ho aggiunto io al mio file .bashrc
-[bash]
+{% highlight bash %}
 alias ga='git add'
 alias gp='git push'
 alias gfp='git ftp push'
@@ -45,5 +45,5 @@ alias grr='git remote rm'
 alias gpu='git pull'
 alias gcl='git clone'
 alias glast='git show --pretty="format:" --name-only'
-[/bash]
+{% endhighlight %}
 L'ultimo alias elenca i file modificati nell'ultimo commit effettuato.

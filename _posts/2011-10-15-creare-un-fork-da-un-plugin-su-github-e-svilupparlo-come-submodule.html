@@ -19,40 +19,40 @@ Poi andiamo su github e scegliamo il plugin da adattare alla versione 2.0 di Cak
 Importante! quando cloniamo o installiamo come submodule un repo da github, questo si porta con appresso tutti i branches. Sta a noi decidere con "git checkout nomebranch" su quale branch lavorare.
 <h5>Aggiungere il submodule</h5>
 Dobbiamo dire a git di aggiungere un submodule contenente il codice del nostro fork, per esempio git@github.com:user/categories.git
-[bash]
+{% highlight bash %}
 git submodule add git@github.com:user/categories.git app/Plugin/Categories
-[/bash]
+{% endhighlight %}
 Se vogliamo aggiungere solo un particolare branch, per esempio il 2.0, dobbiamo aggiunger il flag -b al comando precedente
-[bash]
+{% highlight bash %}
 git submodule add -b 2.0 git@github.com:user/categories.git app/Plugin/Categories
-[/bash]
+{% endhighlight %}
 Poi spostiamoci nella cartella del plugin appena scaricato e diciamo a git dove e' il repository remote
-[bash]
+{% highlight bash %}
 cd app/Plugin/Categories
 git remote add push git@github.com:user/categories.git
-[/bash]
+{% endhighlight %}
 Proviamo a modificare un file del plugin, e sempre dalla cartella del plugin, eseguiamo il commit ed il push.
-[bash]
+{% highlight bash %}
 git add .
 git commit -m "test commit"
 git push master
-[/bash]
+{% endhighlight %}
 <h5>Aggiungere l'indirizzo remote originario del repo forkato</h5>
 Automaticamente, la nostra "origin" e' il nostro repo forkato su github, non il repo originario(quello di CakeDC in questo esempio).
 Per dire a git di scaricare gli aggiornamenti fatti dagli sviluppatori di cakedc, dobbiamo aggiungere un altro remote.
 sempre nella cartella del submodule
-[bash]
+{% highlight bash %}
 git remote add upstream git://github.com/CakeDC/categorie.git
-[/bash]
+{% endhighlight %}
 <h5>Sincronizzare il nostro submodule con il repo originario forkato</h5>
 Per scaricare gli aggiornamenti
-[bash]
+{% highlight bash %}
 git fetch upstream
-[/bash]
+{% endhighlight %}
 Per fare un merge fra gli aggiornamenti appena scaricati da upstream ed il vostro repo in locale
-[bash]
+{% highlight bash %}
 git merge upstream/master
-[/bash]
+{% endhighlight %}
 Per capire la differenza tra "git pull upstream" e "git fetch upstream", consiglio di leggere il punto "Pull in upstream changes" di questa <a href="http://help.github.com/fork-a-repo/">guida</a>.
 Qui un link su<a href="http://stackoverflow.com/questions/3903817/how-to-pull-new-updates-for-forked-repository-in-github"> stackoverflow </a>riguardante questa parte.
 <h5>Rimuovere submodules</h5>
@@ -62,12 +62,12 @@ Delete the relevant section from .git/config.
 Run git rm --cached path_to_submodule (no trailing slash).
 via <a href="http://stackoverflow.com/questions/1260748/how-do-i-remove-a-git-submodule">Stackoverflow</a>
 <h5>Clonare un progetto contenente submodules</h5>
-[bash]
+{% highlight bash %}
 git clone git://github.com/user/progettoconsubmodules.git
-[/bash]
+{% endhighlight %}
 Questo clonera' il progetto e la cartella del submodule, ma non il contenuto di quest'ultima. Per farlo lanciamo:
-[bash]
+{% highlight bash %}
 git submodule init
 git submodule update
-[/bash]
+{% endhighlight %}
 Altre info su questa parte nel <a href="http://progit.org/book/ch6-6.html">git pro book</a>

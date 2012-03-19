@@ -26,14 +26,14 @@ Queste le caratteristiche di MongoDB:
 -Applicazioni che richiedono buona scalabilità
 
 Installiamo php5-dev. Dopo di che lanciamo dalla console
-[bash]pecl install mongo[/bash].  Se utilizzate windows...be, vi attaccate.
-Modificate il vostro /etc/php5/apache2/php.ini e inserite nella sezione delle extensions la seguente linea [bash]extension=mongo.so[/bash]
+{% highlight bash %}pecl install mongo{% endhighlight %}.  Se utilizzate windows...be, vi attaccate.
+Modificate il vostro /etc/php5/apache2/php.ini e inserite nella sezione delle extensions la seguente linea {% highlight bash %}extension=mongo.so{% endhighlight %}
 Riavviate apache. A questo link potete trovare il pratico <a href="http://us2.php.net/mongo">manuale di mongo su php</a>.
 Ora, spostatevi nell'applicazione in cui volete utilizzare mongo db, e scaricatevi il plugin dello sviluppatore giapponese Ichikawa. <a href="http://cake.eizoku.com/blog/">Ichikawa</a> spacca, qui il <a href="http://tv.cakephp.org/video/CakeFoundation/2010/12/24/yasushi_ichikawa_-_how_to_use_mongodb_with_cakephp">video</a> dal quale è tratto questo tutorial.
-[bash]
+{% highlight bash %}
 cd app/plugins
 git clone http://github.com/ichikaway/mongoDB-Datasource.git mongodb
-[/bash]
+{% endhighlight %}
 poi, modifichiamo il file app/config/database.php con dei dati fittizi.
 {% highlight php startinline %}	var $default = array(
 'driver' =&gt; 'mongodb.mongodbSource',
@@ -45,17 +45,17 @@ poi, modifichiamo il file app/config/database.php con dei dati fittizi.
 Ora, copiamo le cartelle views, controllers e models presenti in /app/plugins/mongodb/samples  in app. Aprite Il file app/models/post.php e decommentate la variabile mongoSchema. Apriamo il nostro  browser a questo indirizzo <a href="http://localhost/posts">http://localhost/posts</a> e clicchiamo su "add data" andando cosi' ad aggiungere il primo "document" (in mongodb row diventa document, column diventa field e database collection. Per altri preziosi parallelismi com mysql, date un occhio a <a href="http://www.mongodb.org/display/DOCS/SQL+to+Mongo+Mapping+Chart">Sql to Mongo Mapping chart</a>).
 Ora da console controlliamo i dati inseriti.
 
-[bash]
+{% highlight bash %}
 da@lungimiranza:~$ mongo
 show dbs
 use cakemongo1
 show collections
 db.posts.find()
-[/bash]
+{% endhighlight %}
 
 Come risultato otteremo qualcosa di simile
-[bash]
-{ "_id" : ObjectId("4d1a0a4776aa08bb22000000"), "title" : "regfwerg", "body" : "ertgertg", "hoge" : "ertgertg", "modified" : "Tue Dec 28 2010 17:03:19 GMT+0100 (CET)", "created" : "Tue Dec 28 2010 17:03:19 GMT+0100 (CET)" }[/bash].
+{% highlight bash %}
+{ "_id" : ObjectId("4d1a0a4776aa08bb22000000"), "title" : "regfwerg", "body" : "ertgertg", "hoge" : "ertgertg", "modified" : "Tue Dec 28 2010 17:03:19 GMT+0100 (CET)", "created" : "Tue Dec 28 2010 17:03:19 GMT+0100 (CET)" }{% endhighlight %}.
 
 Ora lasciamo perdere cakephp, diamo un occhio ad un altra cosa davvero belle in MongoDB. Geospatial index.
 Geospatial ci permette di gestire facilmente una collection di coordinate. <a href="http://www.mongodb.org/display/DOCS/Geospatial+Indexing">Qua</a> maggiori info a riguardo.
@@ -64,22 +64,22 @@ $near per trovare un punto vicino ad un altro
 $box per trovare i punti all'interno di un rettangolo
 $center per trovare punti all'interno di un cerchio
 Salviamo due coordinate dalla console, ricordiamoci che in mongo db non abbiamo bisogno di definire uno schema prima di inserirre dati.
-[bash]
+{% highlight bash %}
 db.geotest.save({ loc:[23,113] })
-[/bash]
+{% endhighlight %}
 poi diamo un indice alla collection, in questo caso 2d, che sta per 2 dimensions
-[bash]db.geotest.ensureIndex({ loc:"2d"})[/bash]
+{% highlight bash %}db.geotest.ensureIndex({ loc:"2d"}){% endhighlight %}
 Ora inseriamo un centinaio di punti, sempre da console
-[bash]for(i=0; i::100; i++) (db.geotest.save ({loc:[i,i]}))[/bash]
+{% highlight bash %}for(i=0; i::100; i++) (db.geotest.save ({loc:[i,i]})){% endhighlight %}
 verifichiamo di avere inserito tutto
-[bash]db.geotest.find()[/bash]
+{% highlight bash %}db.geotest.find(){% endhighlight %}
 Proviamo ad utilizzare gli operatori citati prima per identificare un punto.
-[bash]db.geotest.find( { loc : { $near : [50,50] } } )[/bash]
+{% highlight bash %}db.geotest.find( { loc : { $near : [50,50] } } ){% endhighlight %}
 Aggiungere un limite alla nostra ricerca in mongodb viene intuitivo
-[bash]db.geotest.find( { loc : { $near : [50,50] } } ).limit(6)[/bash]
+{% highlight bash %}db.geotest.find( { loc : { $near : [50,50] } } ).limit(6){% endhighlight %}
 Troviamo i nostri punti all'interno di un rettangolo
-[bash]db.geotest.find( { loc : { $within : { $box : [[1,1],[5,5]] } } } )[/bash]
+{% highlight bash %}db.geotest.find( { loc : { $within : { $box : [[1,1],[5,5]] } } } ){% endhighlight %}
 O partendo da un punto
-[bash]db.geotest.find( { loc : { $within : { $center : [[4,4],0.1] } } } )[/bash]
+{% highlight bash %}db.geotest.find( { loc : { $within : { $center : [[4,4],0.1] } } } ){% endhighlight %}
 Il secondo valore definisce il raggio, se lo aumentate avrete logicamente un maggior numero di risultati
-[bash]db.geotest.find( { loc : { $within : { $center : [[4,4],5] } } } )[/bash] 
+{% highlight bash %}db.geotest.find( { loc : { $within : { $center : [[4,4],5] } } } ){% endhighlight %} 

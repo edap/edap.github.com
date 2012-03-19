@@ -16,7 +16,7 @@ Per cominciare a testare la vostra applicazione:
 	<li>scaricate SimpleTest (la versione 1.01, perche' la piu' recente non funziona con cake)</li>
 	<li>spostatevi in http://localhost/test e verificate che tutto funzioni. Settatevi un database di test/li>
 	<li>create le fixture da console, lasciate perdere fixturizer o latri script che si trovano in giro, cakephp genere la fixture, basta seguire le indicazioni di bake. Supponiamo di avere un applicazione funzionante, con dei record gi'ainseriti nelle nostre tabelle. A questo punto lanciate bake<br>
-[bash]
+{% highlight bash %}
 cd cake/console
 ./cake bake
 
@@ -52,11 +52,11 @@ Example: WHERE 1=1 LIMIT 10
 [WHERE 1=1 LIMIT 10] > 
 
 Baking test fixture for User...
-[/bash]
+{% endhighlight %}
 </li>
 </ol>
 Sempre dalla console, create i tests controller. Dovrete riscriverli, ma alemno avrete un template con l' elenco delle funzioni da testare gia' scritto.
-[bash]
+{% highlight bash %}
 cd cake/console
 ./cake bake
 
@@ -70,7 +70,7 @@ cd cake/console
 [Q]uit
 What would you like to Bake? (D/M/V/C/P/F/T/Q) 
 T
-[/bash]
+{% endhighlight %}
 Seguite le risposte di default e tutto andra' per il meglio.
 Ora abbiamo i file necessari per cominciare a sporcarci le mani. In <a href="http://localhost/test">http://localhost/test</a> dovreste visualizzare la pagina con i test. Se cosi' non fosse avete sbagliato qualcosa nell'installazione dei test. Controllate il manuale di cake per eventali errori.
 Per testare i controller seguite questo <a href="http://mark-story.com/posts/view/testing-cakephp-controllers-the-hard-way">post</a> sul blog di mark story 

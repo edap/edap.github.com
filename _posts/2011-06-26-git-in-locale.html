@@ -13,15 +13,15 @@ status: publish
 ---
 non necessariamente un progetto web deve avere l'origin su un server in remoto.
 per settare la vostra origin in locale, dopo aver inizializzato il vostro repo, per esempio in /home/me/projektOne, creiamo una cartella /home/me/allMyGitsProject/projecktOne.git, al suo interno e digitiamo
-[bash]
+{% highlight bash %}
 git init --bare
-[/bash]
+{% endhighlight %}
 Ora ritonrniamo nella cartella contenente il nostro codice versionato /home/me/projectOne
 e diciamo a git che l'origin di questo progetto è in /home/me/allMyGitsProject
-[bash]
+{% highlight bash %}
 git remote add origin /home/me/allMyGitsProject/projectOne.git
-[/bash]
+{% endhighlight %}
 ora possiamo effettuare il push
-[bash]
+{% highlight bash %}
 git push origin master
-[/bash] 
+{% endhighlight %} 
