@@ -23,7 +23,7 @@ Here I provide a solution that I've adopted to save in the database the fields "
 ),
 3)Add this functions in the Model, that checks if the video is valid, and add the metatags to the $data array
 
-[php]
+{% highlight php %}
     public function validYoutube(array $data ){
         $url = current($data);
         $video_info = $this->getVideo($url);
@@ -54,5 +54,5 @@ Here I provide a solution that I've adopted to save in the database the fields "
 	$this->data['Article']['video_title'] = $info['title'];
     }
 ?>
-[/php]
+{% endhighlight %}
 Thanks <a href="http://debuggable.com/posts/datasources,-models,-components,-behaviors:48bd3025-2c44-40b6-a6e7-35674834cda3">debuggable for this article</a> on datasources in CakePHP
