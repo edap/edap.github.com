@@ -13,23 +13,23 @@ type: post
 status: publish
 ---
 <strong>1)</strong>aggiungere il namespace "admin" in routes.rb, ed abbinarlo ai controller per i quali vogliamo l'autenticazione, in questo esempio "questions".
-[ruby]
+{% highlight ruby %}
 namespace :admin do
 	match '/' => 'questions#index'
 	resources :questions
 end
-[/ruby]
+{% endhighlight %}
 <strong>2</strong>In views/layout creare il layout admin.html.erb specificando le parti che vogliamo mostrare nella sezione admin.
 <strong>3)</strong> creare il controller admin_controller.rb in controllers/admin e utilizzare "autenticate_user" (vedere il tutorial su <a href="/blog/2011/07/24/ruby-on-rails-devise-authentication/">devise</a>) per verificare che un utente sia loggato
-[ruby]
+{% highlight ruby %}
 class Admin::AdminController &lt; ApplicationController
 	layout "admin"
 	before_filter :authenticate_user!
 end
-[/ruby]
+{% endhighlight %}
 
 <strong>4)</strong> Sempre in controllers/admin, creare il file questions_controller.rb
-[ruby]
+{% highlight ruby %}
 class Admin::QuestionsController < Admin::AdminController
   def index
     @questions = Question.all
@@ -38,14 +38,14 @@ class Admin::QuestionsController < Admin::AdminController
     end
   end
 end
-[/ruby]
+{% endhighlight %}
 <strong>5)</strong>in views/admin creaimo la cartella "questions" e inderiamo tutte le views richieste dal controller controllers/admin/questions_controller.rb, in questo caso, solo il file index.html.rb
 <strong>6</strong>
 Le action dei form all'interno delle views in views/admin/questions devono rimandare ai controllers in controllers/admin/question controller. Quindi, sempre tenendo "question" come esempio da:
-[ruby]
+{% highlight ruby %}
 <%= form_for(@answer) do |f| %>
-[/ruby]
+{% endhighlight %}
 dobbiamo passare a 
-[ruby]
+{% highlight ruby %}
 <%= form_for(:admin, @answer) do |f| %>
-[/ruby]
+{% endhighlight %}

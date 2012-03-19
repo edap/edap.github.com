@@ -31,11 +31,11 @@ script/generate clearance
 [/bash]
 
 per aggiungere la richiesta d'autenticazione nel vostro controller, semplicemente aggiungete questo codice nel vostro metodo before_filter
-[ruby]
+{% highlight ruby %}
  before_filter :authenticate
-[/ruby]
+{% endhighlight %}
 Per poter includere i link al login/logout nella vostra applicazione, aggiungete nella view
-[ruby]
+{% highlight ruby %}
   <div id="navigation">
     <% if signed_in? %>
       <%= link_to 'Sign out', sign_out_path %>
@@ -44,7 +44,7 @@ Per poter includere i link al login/logout nella vostra applicazione, aggiungete
       <%= link_to 'Sign in', sign_in_path %>
     <% end %>
   </div>
-[/ruby]
+{% endhighlight %}
 Se tutto ha funzionato, a questo indirizzo dovreste vedere il form di login http://localhost:3000/sign_in.
 Per una lista completa delle url raggiungibili:
 [bash]

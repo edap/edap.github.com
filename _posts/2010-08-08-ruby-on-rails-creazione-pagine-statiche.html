@@ -22,25 +22,25 @@ touch pages/contact.html.erb
 [/shell]
 
 Creiamo un controller chiamato pages_controller.rb
-[ruby]
+{% highlight ruby %}
 class PagesController < ApplicationController
   def show
     page = params[:id]
     render :template => "pages/#{params[:id]}"
   end
 end
-[/ruby]
+{% endhighlight %}
 
 in routes.rb aggiungiamo questa regola
-[ruby]
+{% highlight ruby %}
   map.page ':id', :controller => 'pages',
                   :action => 'show', 
                   :requirements => { :id => /info|terms|contact/ }
-[/ruby]
+{% endhighlight %}
 
 nel nostro layout, aggiungiamo il menu con le voci appena create:
-[ruby]
+{% highlight ruby %}
 <%= link_to 'Info', page_path('info') %>
 <%= link_to 'Terms', page_path('terms') %>
 <%= link_to 'Contact', page_path('contact') %>
-[/ruby] 
+{% endhighlight %} 

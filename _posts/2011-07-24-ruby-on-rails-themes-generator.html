@@ -14,17 +14,17 @@ status: publish
 Questa gemma leva un sacco di castagne dal fuoco. Aggiungere stili e classi ad un'applicazione fatta prevalentemente da form e' decisamente noioso.
 <a href="https://github.com/pilu/web-app-theme">web-app-theme</a> e' la gemma che fa al caso nostro.
 Aggiungete al vostro Gemfile (su rails 3)
-[ruby]
+{% highlight ruby %}
 group :development, :test do
   gem 'web-app-theme', '>= 0.6.2'
 end
-[/ruby]
+{% endhighlight %}
 poi
-[ruby]
+{% highlight ruby %}
 bundle install
-[/ruby]
+{% endhighlight %}
 e scegliete quale tema installare. <a href="http://pilu.github.com/web-app-theme/#themes/drastic-dark">Qua</a> una lista con i relativi esempi.
-[ruby]
+{% highlight ruby %}
 rails g web_app_theme:theme --theme="drastic-dark" --app-name="Nome della mia app"
-[/ruby]
+{% endhighlight %}
 via <a href="http://blog.bryanbibat.net/2011/01/03/starting-a-professional-rails-app-with-haml-rspec-devise-and-web-app-theme/">bryanbibat</a>

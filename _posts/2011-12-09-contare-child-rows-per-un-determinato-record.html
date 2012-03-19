@@ -14,7 +14,7 @@ status: publish
 ---
 Supponiamo il caso di avere un post con relativi articoli, un autore con molti libri, una ditta che ha ricevuto degli ordini, o ancora, un la risposta piu' votata all'interno di un questionario.
 In tutti questi casi, per ogni record principale avremo piu' record correlati. Supponiamo il caso di voler contare, nella pagina dove vengono elencate le risposte, quanti voti ogni risposta ha ricevuto, mostrando la piu' votata per prima. In Rails, possiamo scrivere un apposito metodo direttamente nel model.
-[ruby]
+{% highlight ruby %}
 class Answer < ActiveRecord::Base
 	belongs_to :survey
 	has_many :vote, :dependent => :destroy	
@@ -29,21 +29,21 @@ class Answer < ActiveRecord::Base
 		)		
 	end
 end
-[/ruby]
+{% endhighlight %}
 
 Ora nella nostra action 'show' per il controller survey, dove vengono elencate tutte le risposte per il tal survey, possiamo recuperare le answer con il metodo appena creato.
-[ruby]
+{% highlight ruby %}
 @answers = Answer.more_voted(params[:survey_id])
-[/ruby]
+{% endhighlight %}
 e mostrare nella view il valore 'vote_count'
-[ruby]
+{% highlight ruby %}
 <% @answers.each do |a| %>
 	<tr class="even">
 	<td><%= "#{a.reply}" %></td>
 	<td><%= "#{a.vote_count}" %> </td>
 	</tr>
 <% end %>
-[/ruby]
+{% endhighlight %}
 Link consigliati:
 <a href="http://therailsway.com/2007/6/1/railsconf-recap-skinny-controllers">http://therailsway.com/2007/6/1/railsconf-recap-skinny-controllers</a>
 <a href="http://blog.devinterface.com/2010/06/rails-best-practices-1-fat-model-skinny-controller/">http://blog.devinterface.com/2010/06/rails-best-practices-1-fat-model-skinny-controller/</a>

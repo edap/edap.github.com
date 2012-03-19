@@ -42,33 +42,33 @@ attr_accessible :email, :password, :password_confirmation, :remember_me
 end
 {% endhighlight%}
 Ora aprite il file Migrations/***devise_create_users.rb e commentate o aggiungete i moduli che avete aggiunto to tolto nello User Model. Poi fate la migrazione.
-[ruby]
+{% highlight ruby %}
 rake db:migrate
-[/ruby]
+{% endhighlight %}
 Con "rake routes" potete vedere tutte le routes messe a disposizione dalla vostra applicazione. Trovo questo comendo davvero molto utile, anche nel debug di un applicazione, o quando vogliamo verificare che ogni action abbia la sua view ben fatta.Un'altra cosa che cakePHP non ha (cominciano ad essere tante).
 Ora se puntate il browser alla seguente url /users/sign_in potrete loggarvi. Per registrarvi andate qui /users/sign_up. Io ho incontrato il seguente errore:
-[ruby]
+{% highlight ruby %}
 No route matches "/users/sign_up"
-[/ruby]
+{% endhighlight %}
 Per risolverlo ho definito lo scope nel file routes, come spiegato qui <a href="http://stackoverflow.com/questions/2349604/using-devise-with-rails-3-beta">http://stackoverflow.com/questions/2349604/using-devise-with-rails-3-beta</a>
 Per visualizzare i messaggi d'errore nella vostra applicazione, aggiungete queste linee di codice nel vostro application.html.erb.
-[ruby]
+{% highlight ruby %}
 <%- flash.each do |name, msg| -%>
   <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
 <%- end -%>
-[/ruby]
+{% endhighlight %}
 
 Sempre in application.html.erb, aggiungete i link alle azioni sign_in e sign_out. Scoprite i relativi path attraverso "rake routes" e aggiungete questo codice dopo il tag body:
-[ruby]
+{% highlight ruby %}
 <div id="user_nav">signed in as</div>
-[/ruby]
+{% endhighlight %}
 Per circoscrivere il raggio d'azione di un utente non loggato all'interno della nostra applicazione, definiamo quali azini sono ad esso concesse. Poniamo il caso che solo un utente loggato puo' creare o modificare un post, mentre l'utente sloggato puo' solo vederli.
 Nel nostro "posts_controller" aggiungiamo la seguente funzione:
-[ruby]
+{% highlight ruby %}
 before_filter :authenticate_user!, :except =&gt; [:index, :show]
-[/ruby]
+{% endhighlight %}
 Per modificare le views di devise, lanciamo "rails g devise:views", ed otterremo un output simile a questo:
-[ruby]
+{% highlight ruby %}
 create app/views/devise
 create app/views/devise/confirmations/new.html.erb
 create app/views/devise/mailer/confirmation_instructions.html.erb
@@ -81,21 +81,21 @@ create app/views/devise/registrations/new.html.erb
 create app/views/devise/sessions/new.html.erb
 create app/views/devise/shared/_links.erb
 create app/views/devise/unlocks/new.html.erb
-[/ruby]
+{% endhighlight %}
 Modifichiamo i seguenti file a nostro piacimento. Se vogliamo modificare i messaggi d'errore, mettiamo mano al file config/locales/devise_en.yml. Se invece vogliamo modificare le regole di controllo per la registrazione (es passare da "Password is too short (minimum is 6 characters)" a "Password is too short (minimum is 8 characters)") modifichiamo il file initializers/devise.rb.
 Per modificare le URL di default con le quali avvengono le azioni di login e logout, apriamo il file routes.rb
-[ruby]
+{% highlight ruby %}
 devise_for :users, :path_names =&gt; {:sign_in =&gt; "login", :sign_up =&gt; "logout"}
-[/ruby].
+{% endhighlight %}.
 Il nostro futuro user si logga inserendo email e password, come fare se in futuro ci venisse richiesto di sostituire il campo email con il campo username? prima di tutto aggiungiamo la colonna necessaria:
-[ruby]
+{% highlight ruby %}
 rails generate migration AddUsernameToUsers username:string
 rake db:migrate
-[/ruby]
+{% endhighlight %}
 Ora in config/initializers/devise.rb aggiungiamo
-[ruby]
+{% highlight ruby %}
 config.authentication_keys = [ :username ]
-[/ruby]
+{% endhighlight %}
 Questo tutorial e' tratto dai seguenti railcasts:
 <a href="http://railscasts.com/episodes/209-introducing-devise">http://railscasts.com/episodes/209-introducing-devise</a>
 <a href="http://railscasts.com/episodes/210-customizing-devise">http://railscasts.com/episodes/210-customizing-devise</a>
