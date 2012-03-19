@@ -14,9 +14,9 @@ status: publish
 Ruby Virtual Machine serve per utilizzare differenti versioni di ruby sulla stessa macchina. In Ruby, data l'alta frequenza con cui vengono rilasciate le nuove release, e' molto facile avere progetti in produzione che funzionano con una versione vecchia di ruby. un altro scenario in cui RVM puo' tornare utile e' quello in cui vogliamo sperimentare la nuova versione di ruby al posto di quella predefinita dal nostro sistema.
 Se scegliamo di affidarci a RVM, cosa saggia, e' bene che d'ora in avanti ogni progetto in ruby abbia la sua versione di ruby e relativo gemset definito in .rvmrc (vedi tutorial alla fine), e di non affidarsi piu'alla versione di ruby in /usr/bin ma a quella installata nella nostra /home/user/.rvm. Dopo aver completato quanto scritto in questa guida, il comando "which ruby" restituira' il path dell'eseguibile all'interno della nostra .rvm folder. Se invece da root, eseguiamo il comando "which ruby" quesyto ritornera' il path "/usr/bin/ruby", perche' questo e' il path dell'eseguibile di sistema, mentre con rvm installiamo diverse versioni di ruby in user space, all'interno della nostra home. Si puo' installare rvm anche da root, ma e' una cosa che sconsiglio. Meglio avere una sola versione di ruby sull'intero sistema, e diverse versioni di ruby in user space, adattabili ai nostri progetti.
 <h4>Installare RVM</h4>
-{% highlight bash %}
+[bash]
 $ bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
-{% endhighlight%}
+[/bash]
 [bash]
 aggiungi questa linea alla fine di .bashrc
 [bash]

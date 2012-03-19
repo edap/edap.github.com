@@ -16,11 +16,11 @@ status: publish
 Supponiamo di avere un progetto in rails che usa rails 3.0.0 e ruby 1.8.7, ma di voler sviluppare parallelamente a questo, lo stesso progetto ma con ruby 1.9.3 e rails 3.2.2, per prepararci in tempo qual'ora verra' il momento di passare in produzione. Per fare questo creeremo un <a href="/blog/2011/09/20/git_branch/">branch</a> "develop" che useremo per portare avanti la nostra applicazione sull'ultima release disponibile.
 Per prima cosa, installiamo rvm come spiegato nel <a href="/blog/2012/02/26/installare-ruby-rvm-ovvero-come-avere-differenti-versioni-di-ruby-sulla-stessa-macchina/">post precedente</a> e ripassiamo come creare dei branch in git, e switchare tra l'uno e l'altro. Poi spostiamoci nella cartella del nostro progetto, nel branch master.
 creiamo il file .rvmrc contenente "ruby.1.8.7@progetto". usciamo dalla cartella e rientriamo, apparira' un messaggio. "Gemset 'progetto' does not exist, rvm gemset create 'progetto' first.". Facciamo quanto dice:
-{% highlight bash %}
+[bash]
 gemset create progetto
 gemset use progetto
 gem install bundler
-{% endhighlight %}
+[/bash]
 I primi due comandi dicono a ruby che per questo progetto esiste il gemset 'progetto' per la versione 1.8.7 e che quella va usata. se da linea di comando digitiamo "rvm gemset list", verranno elencati tutti i gemset per la versione di ruby selezionata, e con un asterisco verra' contrassegnata la versione corrente.
 L'ultimo comando installa bundler, onde evitare questo errore che potremmo avere al primo avvio di rails nel caso ce ne fossimo dimenticati:
 [bash]
