@@ -23,7 +23,7 @@ Here I provide a solution that I've adopted to save in the database the fields "
 ),
 3)Add this functions in the Model, that checks if the video is valid, and add the metatags to the $data array
 
-{% highlight php %}
+{% highlight startinline php %}
     public function validYoutube(array $data ){
         $url = current($data);
         $video_info = $this->getVideo($url);

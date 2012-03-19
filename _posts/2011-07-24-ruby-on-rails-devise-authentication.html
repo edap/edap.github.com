@@ -14,20 +14,23 @@ status: publish
 ---
 Aggiungete devise nel vostro Gemfile e lanciate "bundle install".
 Ora create i file di configurazione necessari:
-[ruby]
+{% highlight ruby%}
 rails generate devise:install
-[/ruby]
+{% endhighlight%}
 Definite l'url che verra' utilizzata per i link di conferma sulle email di registrazione. In configurations/environments/development.rb
-[ruby]
+
+{% highlight ruby%}
 #Devise email
 config.action_mailer.default_url_options = { :host =&gt; 'localhost:3000' }
-[/ruby]
+
+{% endhighlight%}
 Creiamo il file di migrazione e lo user model
-[ruby]
+{% highlight ruby%}
 rails generate devise User
-[/ruby]
+{% endhighlight%}
 Nello User model appena creato Models/user.rb , possiamo scegliere quali moduli includere od escludere, semplicemente togliendo quelli di default o aggiungendo quelli presenti nel commento del file user.rb.  A mio avviso quelli di default vanno piu' che bene.
-[ruby]
+
+{% highlight ruby%}
 class User &lt; ActiveRecord::Base
 # Include default devise modules. Others available are:
 # :token_authenticatable, :confirmable, :lockable and :timeoutable :recoverable,
@@ -37,7 +40,7 @@ devise :database_authenticatable, :registerable,
 # Setup accessible (or protected) attributes for your model
 attr_accessible :email, :password, :password_confirmation, :remember_me
 end
-[/ruby]
+{% endhighlight%}
 Ora aprite il file Migrations/***devise_create_users.rb e commentate o aggiungete i moduli che avete aggiunto to tolto nello User Model. Poi fate la migrazione.
 [ruby]
 rake db:migrate
