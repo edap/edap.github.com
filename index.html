@@ -10,7 +10,7 @@ group: navigation
    <!-- here add you post markup -->
    <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
    <p class="author">
-    <span class="date">{{post.date}}</span>
+   <span class="date">{{ post.date | date: "%d %B %Y" }}</span>
   </p>
   <div class="content">
     {{ post.content }}
