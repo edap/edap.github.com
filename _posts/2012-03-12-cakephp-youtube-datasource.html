@@ -18,9 +18,10 @@ I've just pushed on github a <a
 regarding a video. It's still incomplete, I would like to add some others
 functionalities, like to retrieve the standard feed for a given category, or to retrieve a video with more than X views. Ecc, anyway, Fork Me.
 Here I provide a solution adopted to save in the database the fields
-"video_title", "video_thumb" and "video_id" for a given youtube link associated to a model, for example an Article model containing a video, or a Submission Model containing a youtube video for a video contest. This code validates the video URL and, if valid, add the videos metatags to the data model to save, in this example, the Article model.
-1)Follow the instructions on the github page and install the datasource
-2) Add this rule to your $validate array in the model where you would like to save the video information
+"video_title", "video_thumb" and "video_id" for a given youtube link associated to a model, for example an Article model containing a video, or a Submission Model containing a youtube video for a video contest. This code validates the video URL and, if valid, add the videos metatags to the data model to save, in this example, the Article model.<br />
+1)Follow the instructions on the github page and install the datasource<br />
+2) Add this rule to your $validate array in the model where you would like to
+save the video information<br />
 
 {% highlight php startinline  %}
 'video' => array(
