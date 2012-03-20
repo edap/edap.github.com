@@ -990,7 +990,7 @@ pre {
 }
 /*
 	Not that old computer layout 
-*/
+
 @media only screen and (min-width: 1280px) {
   .the-header .unit-head .nav-global .logo {
     border-bottom: 0 none;
@@ -1023,9 +1023,9 @@ pre {
     width: 420px;
   }
 }
-/*
+
 	Huge-screen layout 
-*/
+
 @media only screen and (min-width: 1410px) {
   .the-header {
     float: left;
@@ -1094,6 +1094,7 @@ pre {
     margin-bottom: 26px;
   }
 }
+*/
 pre .c {
   color: #999999;
   font-style: italic;
