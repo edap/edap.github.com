@@ -1012,7 +1012,7 @@ pre {
   }
   .the-footer {
     position: fixed;
-    right:0px;
+    right:1px;
     top: auto;
     display: block;
     /*float: left;*/
@@ -1076,7 +1076,7 @@ pre {
   }
   .the-footer {
     position: fixed;
-    right:0px;
+    right:1px;
     top: auto;
     display: block;
     /* float: left; */
