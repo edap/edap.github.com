@@ -1,0 +1,31 @@
+---
+layout: post
+title: "cakePHP youtube datasource update"
+published: true
+category: 
+tags:
+- cakephp
+- datasource
+- youtube
+stauts: publish
+type: post
+---
+
+I've just added two new functions to the <a
+	href="https://github.com/edap/cakePHP-youtube-datasource">CakePHP
+	Youtube Datasource</a>, now it is possible find videos by Category or by
+Nation<br>
+
+{% highlight php startinline %}
+App::import('Model', 'ConnectionManager');
+
+public function video() {
+	$this->autoRender = false;
+	$videos = ConnectionManager::getDataSource('Youtube');
+	//find by category
+	print_r($videos->findByCategory('Comedy'));
+	//find By nation
+	print_r($videos->findByNation('JP', array('feed_id' => 'most_viewed')));
+}
+{% endhighlight %}
+Note: this example is intended to be used in a controller
