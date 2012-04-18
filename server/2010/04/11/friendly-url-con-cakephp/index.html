@@ -1,92 +1,55 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Friendly URL con CakePHP</title>
-    
-    <meta name="author" content="Name Lastname">
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Friendly URL con CakePHP</title>
+	<meta name="author" content="Davide Prati">
+	<link href='/assets/themes/the-program/css/style.css' rel="stylesheet" media="all">
+	<link href='/assets/themes/the-program/css/native.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="Friendly URL con CakePHP" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<nav class="nav-global">
+					<ul>
+						<li class="logo"><a href="/">Edapx</a></li>
+						<li class="pages"><a href="/about.html">about</a></li>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-post">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">Friendly URL con CakePHP</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
 
-    <!-- Le styles -->
-    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
-
-    <!-- Le fav and touch icons -->
-  <!-- Update these with your own images
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  -->
-  </head>
-
-  <body>
-
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">Jekyll Bootstrap</a>
-          <ul class="nav">
-            
-            
-            
-
-
-  
-    
-    	
-    	<li><a href="/categories.html">Categories</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/tags.html">Tags</a></li>
-    	
-    
-  
-    
-  
-    
-  
-    
-    	
-    	<li><a href="/pages.html">Pages</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/archive.html">Archive</a></li>
-    	
-    
-  
-    
-  
-
-
-
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-
-      <div class="content">
-        
-<div class="page-header">
-  <h1>Friendly URL con CakePHP <small>Supporting tagline</small></h1>
-</div>
-
-<div class="row">
-  <div class="span8">
-    Per una corretta indicizzazione del nostro sito sui motori di ricerca, le URL dovrebbero contenere delle parole chiave coerenti con i contenuti.
+			<div class="bd">
+				<div class="entry-content">
+					Per una corretta indicizzazione del nostro sito sui motori di ricerca, le URL dovrebbero contenere delle parole chiave coerenti con i contenuti.
 Ecco quindi che una pagina dalla url:
 <strong>www.miosito.com/view/24</strong>
 dovrebbe diventare
@@ -96,30 +59,34 @@ dovrebbe diventare
 Per ottenere delle Friendly URL in cakePHP basta scaricare dal<a href="http://github.com/mariano/syrup/blob/master/models/behaviors/sluggable.php"> repo su github di Mariano Iglesias</a> "sluggable behavior" e metterlo in app/model/behavior/sluggable.php.
 
 Aggiungrere questa linea nel model 'articolo', che dice a cake di usare il behaviors prima scaricato:
-[php]
-var $actsAs = array('Sluggable'); 
-[/php]
+<div class="highlight"><pre><code class="php"><span class="k">var</span> <span class="nv">$actsAs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Sluggable&#39;</span><span class="p">);</span> 
+</code></pre>
+</div>
+
 Ora l'articolo può essere richiamato da un nome significativo e non dall'id. Aggiungiamo quindi nella tabella 'Articoli' il campo 'slug'. Se volete cambiare il nome di questo campo, o utilizzare il campo title, o vedere altre opzioni, qui le potete trovare <a href="http://bakery.cakephp.org/articles/view/sluggable-behavior">http://bakery.cakephp.org/articles/view/sluggable-behavior</a>
 Dovete poi modificare la funzione view del vostro controller, aggiungendo il campo slug.
-[php]
-function view($slug = null) {
-    if(!$slug){
-            $this->Session->setFlash(__('Invalid Articolo', true));
-            $this->redirect(array('action' => 'index'));
-    }
-    $articolo = $this->Articolo->findBySlug($slug);
-    $this->set('articolo', $articolo);
-}
-[/php]
+<div class="highlight"><pre><code class="php"><span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$slug</span><span class="p">){</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Invalid Articolo&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">));</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="nv">$articolo</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Articolo</span><span class="o">-&gt;</span><span class="na">findBySlug</span><span class="p">(</span><span class="nv">$slug</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;articolo&#39;</span><span class="p">,</span> <span class="nv">$articolo</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
 
 Per richiamare l'articolo, passiamo al metodo view il valore del campo slug anzichè l'id.
-[php]
-<?php echo $html->link('Articolo bello', array('controller'=>'Articoli', 'action'=>'view', 'valore del mio campo slug'))  ?>
-[/php]
+<div class="highlight"><pre><code class="php"><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="s1">&#39;Articolo bello&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;Articoli&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;valore del mio campo slug&#39;</span><span class="p">))</span>  <span class="cp">?&gt;</span><span class="x"></span>
+</code></pre>
+</div>
+
 Per far si che ogni volta che aggiungete un nuovo articolo, o che vogliate modificarne uno esistente, venga aggiornato il valore del campo 'slug', dovete settare il valore di a true nel vostro model
-[php]
-var $actsAs = array('Sluggable' => array( 'overwrite' => true)); 
-[/php]
+<div class="highlight"><pre><code class="php"><span class="k">var</span> <span class="nv">$actsAs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Sluggable&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;overwrite&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">));</span> 
+</code></pre>
+</div>
+
 
 Una volta fatto questo, potremmo anche decidere di migliorare ulteriormente l'url, passando da:
 <strong>www.miosito.com/view/come-ottenere-friendly-url
@@ -128,33 +95,77 @@ Una volta fatto questo, potremmo anche decidere di migliorare ulteriormente l'ur
 </strong>
 
 per far questo basta aggiungere un alias nel file routes.php
-[php]
-Router::connect('/articoli_SEO/*', array('controller' => 'articoli', 'action' => 'view'));
-[/php]
+<div class="highlight"><pre><code class="php"><span class="nx">Router</span><span class="o">::</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/articoli_SEO/*&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;articoli&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">));</span>
+</code></pre>
+</div>
+
 
 In CakePHP si possono fare tante cose modificando il file routes.php.
 Una buona lettura la trovate <a href="http://bakery.cakephp.org/articles/view/cakephp-s-routing-explained">qui</a> 
 
-    <hr>
-    <div class="pagination">
-      <ul>
-      
-        <li class="prev"><a href="/2010/04/03/warning-strtotime-cakephp-1-2-e-php-5-3" title="Warning: strtotime(), cakephp 1.2 e php 5.3">&larr; Previous</a></li>
-      
-        <li><a href="/archive.html">Archive</a></li>
-      
-        <li class="next"><a href="/2010/04/22/upload-immagini-con-resize-automatico-in-cakephp" title="upload immagini con resize automatico in CakePHP">Next &rarr;</a></li>
-      
-      </ul>
-    </div>
-    <hr>
+					<div class="meta">
+						<p class="date-publish">
+							Published: 
+							<date class="date-pub" title="2010-04-11T00:00:00+02:00" datetime="2010-04-11T00:00:00+02:00" pubdate>
+							<span class="month"><abbr>April</abbr></span>
+							<span class="day">11</span>
+							<span class="year">2010</span>
+							</date>
+						</p>
+						<ul class="list-category list-linear">
+							<li class="list-head">category: </li>
+							
+							
+
+
+  
     
+  
+
+
+						</ul>
+						<ul class="list-tag list-linear">
+							<li class="list-head">tags: </li>
+							
+							
+
+
+  
+     
+    	<li><a href="/tags.html#behaviors-ref">behaviors <span>2</span></a></li>
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>21</span></a></li>
+     
+    	<li><a href="/tags.html#Friendly URL-ref">Friendly URL <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#posizionamento sui motori-ref">posizionamento sui motori <span>2</span></a></li>
+     
+    	<li><a href="/tags.html#SEO-ref">SEO <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#sluggable-ref">sluggable <span>1</span></a></li>
+    
+  
+
+
+
+						</ul>
+					</div><!-- meta -->
+				</div><!-- entry-content -->
+				<div class="misc-content">
+					<div class="social">
+						<ul class="list-linear">
+							<li><div class="twitter-tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="" data-lang="en">Tweet</a></div></li>
+							<li><div class="twitter-follow"><a href="https://twitter.com/" class="twitter-follow-button" data-show-count="false" data-lang="en"></a></div></li>
+						</ul>
+					</div>
+					<div class="comment">
+					
 
 
   <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_developer = 1;
-    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    var disqus_shortname = 'edapx'; // required: replace example with your forum shortname
     
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -169,55 +180,78 @@ Una buona lettura la trovate <a href="http://bakery.cakephp.org/articles/view/ca
 
 
 
-  </div>
+					</div>
+				</div><!-- misc-content -->
+			</div><!-- bd -->
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<nav class="pagination">
+						<ul>
+							
+							<li class="prev"><a class="internal" rel="prev"  href="/2010/04/03/warning-strtotime-cakephp-1-2-e-php-5-3" title="View Warning: strtotime(), cakephp 1.2 e php 5.3">&laquo; Warning: strtotime(), cakephp 1.2 e php 5.3</a></li>
+							
+							
+							<li class="pipe"> | </li>
+							
+							
+							<li class="next"><a class="internal" rel="next"  href="/2010/04/22/upload-immagini-con-resize-automatico-in-cakephp" title="View upload immagini con resize automatico in CakePHP">upload immagini con resize automatico in CakePHP &raquo;</a></li>
+							
+						</ul>
+					</nav>
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
+
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>contact</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">Davide Prati</span> - <span class="fn email">lastexxit guess gmail</span></address></li>
+						<li class="contact">Sonnenallee 201, Berlin</li>
+						<li class="github"><a href="http://github.com/edap/" rel="me">github.com/edap</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/Edapx">Subscribe to RSS Feed</a></li>
+						<li class="rss"><a href="http://edapx.tumblr.com">Tumblr</a></li>
+						<li class="rss"><a href="https://plus.google.com/u/0/114627287220738676405/posts">Google Plus</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/2010/04/11/friendly-url-con-cakephp" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
   
-  <div class="span4">
-    <h4>Published</h4>
-    <div class="date"><span>11 April 2010</span></div>
-
   
-    <h4>Tags</h4>
-    <ul class="tag_box">
-    
-    
-
-
-  
-     
-    	<li><a href="/tags.html#behaviors-ref">behaviors <span>2</span></a></li>
-     
-    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
-     
-    	<li><a href="/tags.html#Friendly URL-ref">Friendly URL <span>1</span></a></li>
-     
-    	<li><a href="/tags.html#posizionamento sui motori-ref">posizionamento sui motori <span>2</span></a></li>
-     
-    	<li><a href="/tags.html#SEO-ref">SEO <span>1</span></a></li>
-     
-    	<li><a href="/tags.html#sluggable-ref">sluggable <span>1</span></a></li>
-    
-  
-
-
-
-    </ul>
-    
-  </div>
-</div>
-
-
-      </div>
-
-      <footer>
-        <p>&copy; Name Lastname 2012 
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
-        </p>
-      </footer>
-
-    </div> <!-- /container -->
-
-    
-  </body>
+</body>
 </html>
 

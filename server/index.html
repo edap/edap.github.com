@@ -1,228 +1,299 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello World!</title>
-    
-    <meta name="author" content="Name Lastname">
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Blog</title>
+	<meta name="author" content="Davide Prati">
+	<link href='/assets/themes/the-program/css/style.css' rel="stylesheet" media="all">
+	<link href='/assets/themes/the-program/css/native.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="Blog" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<nav class="nav-global">
+					<ul>
+						<li class="logo"><a href="/">Edapx</a></li>
+						<li class="pages"><a href="/about.html">about</a></li>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-page">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">Blog</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
 
-    <!-- Le styles -->
-    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+			<div class="bd">
+				<div class="entry-content">
+					
 
-    <!-- Le fav and touch icons -->
-  <!-- Update these with your own images
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  -->
-  </head>
+   <!-- here add you post markup -->
+   <h1><a href="/2012/03/29/cakephp-youtube-datasource-update">cakePHP youtube datasource update</a></h1>
+   <p class="author">
+   <span class="date">29 March 2012</span>
+  </p>
+  <div class="content">
+    I've just added two new functions to the <a
+	href="https://github.com/edap/cakePHP-youtube-datasource">CakePHP
+	Youtube Datasource</a>, now it is possible find videos by Category or by
+Nation<br>
 
-  <body>
+<div class="highlight"><pre><code class="php"><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;ConnectionManager&#39;</span><span class="p">);</span>
 
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">Jekyll Bootstrap</a>
-          <ul class="nav">
-            
-            
-            
-
-
-  
-    
-    	
-    	<li><a href="/categories.html">Categories</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/tags.html">Tags</a></li>
-    	
-    
-  
-    
-  
-    
-  
-    
-    	
-    	<li><a href="/pages.html">Pages</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/archive.html">Archive</a></li>
-    	
-    
-  
-    
-  
-
-
-
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-
-      <div class="content">
-        
-<div class="page-header">
-  <h1>Hello World! <small>Supporting tagline</small></h1>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">video</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">autoRender</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+	<span class="nv">$videos</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">getDataSource</span><span class="p">(</span><span class="s1">&#39;Youtube&#39;</span><span class="p">);</span>
+	<span class="c1">//find by category</span>
+	<span class="nb">print_r</span><span class="p">(</span><span class="nv">$videos</span><span class="o">-&gt;</span><span class="na">findByCategory</span><span class="p">(</span><span class="s1">&#39;Comedy&#39;</span><span class="p">));</span>
+	<span class="c1">//find By nation</span>
+	<span class="nb">print_r</span><span class="p">(</span><span class="nv">$videos</span><span class="o">-&gt;</span><span class="na">findByNation</span><span class="p">(</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;feed_id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;most_viewed&#39;</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<div class="row">
-  <div class="span12">
-    <p>Read <a href='http://jekyllbootstrap.com/usage/jekyll-quick-start.html'>Jekyll Quick Start</a></p>
+Note: this example is intended to be used in a controller
 
-<p>Complete usage and documentation available at: <a href='http://jekyllbootstrap.com'>Jekyll Bootstrap</a></p>
-
-<h2 id='update_author_attributes'>Update Author Attributes</h2>
-
-<p>In <code>_config.yml</code> remember to specify your own data:</p>
-
-<pre><code>title : My Blog =)
-
-author :
-  name : Name Lastname
-  email : blah@email.test
-  github : username
-  twitter : username</code></pre>
-
-<p>The theme should reference these variables whenever needed.</p>
-
-<h2 id='sample_posts'>Sample Posts</h2>
-
-<p>This blog contains sample posts which help stage pages and blog data. When you don&#8217;t need the samples anymore just delete the <code>_posts/core-samples</code> folder.</p>
-
-<pre><code>$ rm -rf _posts/core-samples</code></pre>
-
-<p>Here&#8217;s a sample &#8220;posts list&#8221;.</p>
-<ul class='posts'>
-  
-    <li><span>12 Mar 2012</span> &raquo; <a href='/2012/03/12/cakephp-youtube-datasource'>cakePHP youtube datasource</a></li>
-  
-    <li><span>03 Mar 2012</span> &raquo; <a href='/2012/03/03/cakephp-2-0-comments-spam-datasource'>CakePHP 2.0 Comments Spam Datasource</a></li>
-  
-    <li><span>02 Mar 2012</span> &raquo; <a href='/2012/03/02/stesso-progetto-in-rails-due-versioni-di-ruby-e-due-gemset-diversi'>Stesso progetto in rails, due versioni di ruby e due gemset diversi</a></li>
-  
-    <li><span>26 Feb 2012</span> &raquo; <a href='/2012/02/26/installare-ruby-rvm-ovvero-come-avere-differenti-versioni-di-ruby-sulla-stessa-macchina'>Installare Ruby RVM, ovvero come avere differenti versioni di ruby sulla stessa macchina</a></li>
-  
-    <li><span>29 Dec 2011</span> &raquo; <a href='/lessons/2011/12/29/jekyll-introduction'>Jekyll Introduction</a></li>
-  
-    <li><span>09 Dec 2011</span> &raquo; <a href='/2011/12/09/contare-child-rows-per-un-determinato-record'>Contare child rows per un determinato record.</a></li>
-  
-    <li><span>02 Dec 2011</span> &raquo; <a href='/2011/12/02/aggiungere-una-action-ad-un-controller-in-rails3'>Aggiungere una action ad un controller in rails3</a></li>
-  
-    <li><span>17 Nov 2011</span> &raquo; <a href='/2011/11/17/creare-un-admin-area-in-rails3-usando-lautenticazione-scritta-in-devise'>Creare un admin area in rails3 usando l'autenticazione scritta in devise</a></li>
-  
-    <li><span>15 Oct 2011</span> &raquo; <a href='/2011/10/15/creare-un-fork-da-un-plugin-su-github-e-svilupparlo-come-submodule'>creare un fork da un plugin su Github e svilupparlo come submodule</a></li>
-  
-    <li><span>11 Oct 2011</span> &raquo; <a href='/2011/10/11/jquery-screensaver'>Jquery screensaver</a></li>
-  
-    <li><span>20 Sep 2011</span> &raquo; <a href='/2011/09/20/git_branch'>Git Branches</a></li>
-  
-    <li><span>20 Sep 2011</span> &raquo; <a href='/2011/09/20/cakephp-2-0-authentication'>CakePHP 2.0 Authentication</a></li>
-  
-    <li><span>15 Aug 2011</span> &raquo; <a href='/2011/08/15/php-strtoupper-umlauts'>php strtoupper umlauts</a></li>
-  
-    <li><span>05 Aug 2011</span> &raquo; <a href='/2011/08/05/wordpress-how-to-get-one-random-image-from-the-gallery'>Wordpress how to get ONE random image from the gallery</a></li>
-  
-    <li><span>24 Jul 2011</span> &raquo; <a href='/2011/07/24/ruby-on-rails-themes-generator'>Ruby on Rails themes generator</a></li>
-  
-    <li><span>24 Jul 2011</span> &raquo; <a href='/2011/07/24/ruby-on-rails-devise-authentication'>Ruby on Rails Devise authentication</a></li>
-  
-    <li><span>18 Jul 2011</span> &raquo; <a href='/2011/07/18/netbeans-e-phpunit'>Netbeans e PHPUnit</a></li>
-  
-    <li><span>13 Jul 2011</span> &raquo; <a href='/2011/07/13/cakephp-submit-form-json-reply'>CakePHP submit form json reply</a></li>
-  
-    <li><span>26 Jun 2011</span> &raquo; <a href='/2011/06/26/git-in-locale'>git in locale</a></li>
-  
-    <li><span>26 Jun 2011</span> &raquo; <a href='/2011/06/26/git-ftp-e-alias'>git-ftp e alias</a></li>
-  
-    <li><span>19 May 2011</span> &raquo; <a href='/2011/05/19/mp3-file-types'>Mp3 file types</a></li>
-  
-    <li><span>14 May 2011</span> &raquo; <a href='/2011/05/14/lxde-cambiare-layout-tastiera'>LXDE cambiare layout tastiera</a></li>
-  
-    <li><span>12 May 2011</span> &raquo; <a href='/2011/05/12/cakephp-email-non-visualizzate-correttemente-in-squirrelmail-o-roundcube'>CakePHP emails non visualizzate correttemente in Squirrelmail o Roundcube</a></li>
-  
-    <li><span>12 May 2011</span> &raquo; <a href='/2011/05/12/cakephp-check-the-owner'>CakePHP check the owner</a></li>
-  
-    <li><span>19 Apr 2011</span> &raquo; <a href='/2011/04/19/contare-caratteri-con-umlaut-con-php'>contare caratteri con umlaut con php</a></li>
-  
-    <li><span>07 Feb 2011</span> &raquo; <a href='/2011/02/07/debian-spacca'>debian spacca</a></li>
-  
-    <li><span>13 Jan 2011</span> &raquo; <a href='/2011/01/13/parsing-dei-link-da-un-file-html-con-ruby-e-nokogiri'>Parsing dei link da un file html con Ruby e Nokogiri</a></li>
-  
-    <li><span>28 Dec 2010</span> &raquo; <a href='/2010/12/28/cakephp-e-mongodb'>CakePHP e MongoDB</a></li>
-  
-    <li><span>09 Dec 2010</span> &raquo; <a href='/2010/12/09/implementare-security-component-e-ssl-con-cakephp'>Implementare Security Component e SSL con CakePHP</a></li>
-  
-    <li><span>17 Nov 2010</span> &raquo; <a href='/2010/11/17/cakephp-e-acl'>CakePHP e ACL</a></li>
-  
-    <li><span>16 Nov 2010</span> &raquo; <a href='/2010/11/16/script-per-rimuovere-commenti-da-files-php-ricorsivamente'>script per rimuovere commenti da files php ricorsivamente</a></li>
-  
-    <li><span>23 Aug 2010</span> &raquo; <a href='/2010/08/23/installare-bedita'>Installare Bedita</a></li>
-  
-    <li><span>23 Aug 2010</span> &raquo; <a href='/2010/08/23/cakephp-salvare-la-data-del-login-ad-ogni-autenticazione'>CakePHP Salvare la data del login ad ogni autenticazione.</a></li>
-  
-    <li><span>08 Aug 2010</span> &raquo; <a href='/2010/08/08/ruby-on-rails-creazione-pagine-statiche'>Ruby on Rails, creazione pagine statiche</a></li>
-  
-    <li><span>07 Aug 2010</span> &raquo; <a href='/2010/08/07/ruby-on-rails-tutorial-autenticazione-con-clearance'>Ruby On Rails Tutorial, autenticazione con clearance</a></li>
-  
-    <li><span>31 Jul 2010</span> &raquo; <a href='/2010/07/31/come-integrare-twitteranywhere-nellautenticazione-di-cakephp'>come integrare twitter@anywhere nell'autenticazione di cakePHP</a></li>
-  
-    <li><span>29 Jul 2010</span> &raquo; <a href='/2010/07/29/cakephp-facebook-plugin'>cakePHP facebook plugin</a></li>
-  
-    <li><span>23 Jul 2010</span> &raquo; <a href='/2010/07/23/cakephp-paypal-component'>cakePHP paypal component</a></li>
-  
-    <li><span>24 May 2010</span> &raquo; <a href='/2010/05/24/cakephp-todolist-plugin'>cakePHP todolist plugin</a></li>
-  
-    <li><span>14 May 2010</span> &raquo; <a href='/2010/05/14/fatal-error-call-to-a-member-function-setflash-on-a-non-object'>Fatal error: Call to a member function setFlash() on a non-object</a></li>
-  
-    <li><span>22 Apr 2010</span> &raquo; <a href='/2010/04/22/upload-immagini-con-resize-automatico-in-cakephp'>upload immagini con resize automatico in CakePHP</a></li>
-  
-    <li><span>11 Apr 2010</span> &raquo; <a href='/2010/04/11/friendly-url-con-cakephp'>Friendly URL con CakePHP</a></li>
-  
-    <li><span>03 Apr 2010</span> &raquo; <a href='/2010/04/03/warning-strtotime-cakephp-1-2-e-php-5-3'>Warning: strtotime(), cakephp 1.2 e php 5.3</a></li>
-  
-    <li><span>24 Mar 2010</span> &raquo; <a href='/2010/03/24/conoscere-la-posizione-di-un-dominio-su-google-per-determinate-keywords'>conoscere la posizione di un dominio su google per determinate keywords</a></li>
-  
-    <li><span>20 Mar 2010</span> &raquo; <a href='/2010/03/20/implementare-velocemente-una-newsletter-in-cakephp'>Implementare velocemente una Newsletter in CakePHP</a></li>
-  
-</ul>
-<h2 id='todo'>To-Do</h2>
-
-<p>This theme is still unfinished. If you&#8217;d like to be added as a contributor, <a href='http://github.com/plusjade/jekyll-bootstrap'>please fork</a>! We need to clean up the themes, make theme usage guides with theme-specific markup examples.</p>
   </div>
+
+
+   <!-- here add you post markup -->
+   <h1><a href="/2012/03/12/cakephp-youtube-datasource">cakePHP youtube datasource</a></h1>
+   <p class="author">
+   <span class="date">12 March 2012</span>
+  </p>
+  <div class="content">
+    I've seen in google analytics that mosts visitors of this blog speak english. I've thought that the italians can understand what i'm writing, so, here we are, i've switched language.
+I've just pushed on github a <a
+	href="https://github.com/edap/cakePHP-youtube-datasource">cakePHP
+	youtube datasource</a>, to retrieve information (all the metatags)
+regarding a video. It's still incomplete, I would like to add some others
+functionalities, like to retrieve the standard feed for a given category, or to retrieve a video with more than X views. Ecc, anyway, Fork Me.
+Here I provide a solution adopted to save in the database the fields
+"video_title", "video_thumb" and "video_id" for a given youtube link associated to a model, for example an Article model containing a video, or a Submission Model containing a youtube video for a video contest. This code validates the video URL and, if valid, add the videos metatags to the data model to save, in this example, the Article model.<br />
+1)Follow the instructions on the github page and install the datasource<br />
+2) Add this rule to your $validate array in the model where you would like to
+save the video information<br />
+
+<div class="highlight"><pre><code class="php"><span class="s1">&#39;video&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;rule&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;validYoutube&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;message&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;the given videos link is incorrect&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;allowEmpty&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+<span class="p">),</span>
+</code></pre>
 </div>
 
+3)Add these functions to the Model, that check if the video is valid and add the metatags to the $data array
 
-      </div>
+<div class="highlight"><pre><code class="php">    <span class="k">public</span> <span class="k">function</span> <span class="nf">validYoutube</span><span class="p">(</span><span class="k">array</span> <span class="nv">$data</span> <span class="p">){</span>
+        <span class="nv">$url</span> <span class="o">=</span> <span class="nb">current</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+        <span class="nv">$video_info</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getVideo</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$video_info</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setVideoValues</span><span class="p">(</span><span class="nv">$video_info</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-      <footer>
-        <p>&copy; Name Lastname 2012 
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
-        </p>
-      </footer>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getVideo</span><span class="p">(</span><span class="nv">$id</span><span class="p">){</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Youtube</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">getDataSource</span><span class="p">(</span><span class="s1">&#39;Youtube&#39;</span><span class="p">);</span>	
+        <span class="nv">$video</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Youtube</span><span class="o">-&gt;</span><span class="na">findById</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$video</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$info</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Youtube</span><span class="o">-&gt;</span><span class="na">formatData</span><span class="p">(</span><span class="nv">$video</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nv">$info</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    </div> <!-- /container -->
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setVideoValues</span><span class="p">(</span><span class="nv">$info</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$info</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Article&#39;</span><span class="p">][</span><span class="s1">&#39;video&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Article&#39;</span><span class="p">][</span><span class="s1">&#39;video_thumb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;default_thumb&#39;</span><span class="p">];</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Article&#39;</span><span class="p">][</span><span class="s1">&#39;video_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre>
+</div>
 
-    
-  </body>
+Thanks <a href="http://debuggable.com/posts/datasources,-models,-components,-behaviors:48bd3025-2c44-40b6-a6e7-35674834cda3">debuggable for this article</a> on datasources in CakePHP
+
+  </div>
+
+
+   <!-- here add you post markup -->
+   <h1><a href="/2012/03/03/cakephp-2-0-comments-spam-datasource">CakePHP 2.0 Comments Spam Datasource</a></h1>
+   <p class="author">
+   <span class="date">03 March 2012</span>
+  </p>
+  <div class="content">
+    Ho trovato questo <a href="http://www.thelittlebakery.org/2011/06/admin-panel-development-akismet-product-review/">post</a> che spiega come implementare akismet per verificare i commenti sul nostro sito.Mi e' sembrata davvero la soluzione piu' semplice fra le tante disponibili. I commenti vengono salvati nel nostro database, e dopo il salvataggio verifichiamo tramite akismet se il commento e' spam o meno. Ecco qui i passaggi:
+1) Scaricarsi il datasource <a href="https://github.com/alexdd55/thelittlebakery/blob/master/app/Model/Datasource/akismet.php">akismet.php</a> ed metterlo in app/Model/Datasource.
+1)Creare una api key sul sito di akisemt, ed aggiungere queste linee al file database.php
+<div class="highlight"><pre><code class="php"><span class="k">public</span> <span class="nv">$Akismet</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;datasource&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Akismet&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://yourblog/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;your_akismet_key&#39;</span>
+<span class="p">);</span>
+</code></pre>
+</div>
+ 
+2)Nella nostra tabella destinanata ai commenti, aggiungere i campi spam e checked
+3)Aggiungere al model Comment.php la seguente funzione.
+<div class="highlight"><pre><code class="php"><span class="k">public</span> <span class="k">function</span> <span class="nf">checkForSpam</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nv">$comment</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="nv">$id</span><span class="p">);</span>
+	<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;HttpSocket&#39;</span><span class="p">,</span> <span class="s1">&#39;Network/Http&#39;</span><span class="p">);</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Http</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HttpSocket</span><span class="p">();</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Akismet</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">getDataSource</span><span class="p">(</span><span class="s1">&#39;Akismet&#39;</span><span class="p">);</span>	
+	<span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+	      <span class="s1">&#39;user_ip&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;ip&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;user_agent&#39;</span> <span class="o">=&gt;</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;referrer&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://www.google.com&#39;</span><span class="p">,</span>
+	      <span class="s1">&#39;permalink&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;/comments/view/&#39;</span><span class="o">.</span><span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;comment_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;comment&#39;</span><span class="p">,</span>
+	      <span class="s1">&#39;comment_author&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;comment_author_email&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;email&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;comment_author_url&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+	      <span class="s1">&#39;comment_content&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+		<span class="p">);</span>
+	<span class="nv">$check</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Akismet</span><span class="o">-&gt;</span><span class="na">checkSpam</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+	<span class="k">if</span><span class="p">(</span><span class="nv">$check</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$spam</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+			<span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+			<span class="s1">&#39;checked&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="s1">&#39;spam&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+		<span class="p">);</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nv">$spam</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+			<span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+			<span class="s1">&#39;checked&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="s1">&#39;spam&#39;</span> <span class="o">=&gt;</span> <span class="mi">0</span>
+		<span class="p">);</span>
+	<span class="p">};</span>
+	<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$spam</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+4) Nel vostro CommentsController file, dopo aver salvato il commento richiamate la funzione appena creata. Es
+<div class="highlight"><pre><code class="php"><span class="k">public</span> <span class="k">function</span> <span class="nf">add</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">is</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">))</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">checkForSpam</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">getInsertID</span><span class="p">());</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The comment has been saved&#39;</span><span class="p">));</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">));</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The comment could not be saved. Please, try again.&#39;</span><span class="p">));</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="nv">$articles</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">Article</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">);</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="nb">compact</span><span class="p">(</span><span class="s1">&#39;articles&#39;</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+5)Nella vostra sezione amministrativa, elencate tutti i commenti, e verificate i falsi positivi, in caso ce ne siano
+6)Sul vostro sito, mostrate solo i commmenti con il valore di "spam" = 0
+
+  </div>
+
+
+<!-- Pagination links -->
+<div class="pagination">
+  
+    <span class="previous">Previous</span>
+  
+  <span class="page_number ">Page: 1 of 16</span>
+  
+    <a href="/page2" class="next ">Next</a>
+  
+</div>
+
+				</div><!-- entry-content -->
+			</div><!-- bd -->
+
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
+
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>contact</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">Davide Prati</span> - <span class="fn email">lastexxit guess gmail</span></address></li>
+						<li class="contact">Sonnenallee 201, Berlin</li>
+						<li class="github"><a href="http://github.com/edap/" rel="me">github.com/edap</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/Edapx">Subscribe to RSS Feed</a></li>
+						<li class="rss"><a href="http://edapx.tumblr.com">Tumblr</a></li>
+						<li class="rss"><a href="https://plus.google.com/u/0/114627287220738676405/posts">Google Plus</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/index.html" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
+  
+  
+</body>
 </html>
 

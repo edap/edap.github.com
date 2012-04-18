@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Blog</title>
+	<meta name="author" content="Davide Prati">
+	<link href='/assets/themes/the-program/css/style.css' rel="stylesheet" media="all">
+	<link href='/assets/themes/the-program/css/native.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="Blog" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
+
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<nav class="nav-global">
+					<ul>
+						<li class="logo"><a href="/">Edapx</a></li>
+						<li class="pages"><a href="/about.html">about</a></li>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-page">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">Blog</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
+
+			<div class="bd">
+				<div class="entry-content">
+					
+
+   <!-- here add you post markup -->
+   <h1><a href="/2010/05/24/cakephp-todolist-plugin">cakePHP todolist plugin</a></h1>
+   <p class="author">
+   <span class="date">24 May 2010</span>
+  </p>
+  <div class="content">
+    Ho realizzato un plugin per cakePHP che permette di creare una ToDo list, aggiungere dei compiti e assegnarli a diversi users.
+<a href="http://github.com/edap/todolist">http://github.com/edap/todolist</a>
+
+  </div>
+
+
+   <!-- here add you post markup -->
+   <h1><a href="/2010/05/14/fatal-error-call-to-a-member-function-setflash-on-a-non-object">Fatal error: Call to a member function setFlash() on a non-object</a></h1>
+   <p class="author">
+   <span class="date">14 May 2010</span>
+  </p>
+  <div class="content">
+    Ovvero, cose basilari per la migrazione da cake 1.2 a cake 1.3
+Partiamo con l'errore che leggete nel titolo. Il component Session non è più incluso di default. Va quindi aggiunto nell'app_controller.php
+<div class="highlight"><pre><code class="php"><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span><span class="p">{</span>
+<span class="k">var</span> <span class="nv">$components</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Auth&#39;</span><span class="p">,</span><span class="err">&#39;</span><span class="nx">Session</span><span class="p">);</span>
+</code></pre>
+</div>
+
+Routing.admin è deprecato.
+<div class="highlight"><pre><code class="php"><span class="c1">//da:</span>
+<span class="nx">Configure</span><span class="o">::</span><span class="na">write</span><span class="p">(</span><span class="s1">&#39;Routing.admin&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">);</span>
+
+<span class="c1">//a:</span>
+<span class="nx">Configure</span><span class="o">::</span><span class="na">write</span><span class="p">(</span><span class="s1">&#39;Routing.prefixes&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">));</span>
+</code></pre>
+</div>
+
+<ul>
+	<li>Il metodo del() nei controller è sostituito con delete()</li>
+	<li>cake/tua_app_cake_1.2/webroot/index.php è da sostituire con index.php di cake 1.3</li>
+	<li>Il metodo renderElement non è più supportato, al suo posto usare Element</li>
+	<li>$javascript-&gt;link() va sostituito con $html-&gt;script()</li>
+	<li>$javascript-&gt;codeBlock() va sostituito con $html-&gt;scriptBlock()</li>
+	<li>In route.php, sostituire route.admin</li>
+</ul>
+Se avete installato dei plugin esterni, se avete scritto dei component personalizzati, controllate la <a href="http://book.cakephp.org/view/1561/Migrating-from-CakePHP-1-2-to-1-3">guida ufficiale</a>, le novità sono parecchie.
+
+  </div>
+
+
+   <!-- here add you post markup -->
+   <h1><a href="/2010/04/22/upload-immagini-con-resize-automatico-in-cakephp">upload immagini con resize automatico in CakePHP</a></h1>
+   <p class="author">
+   <span class="date">22 April 2010</span>
+  </p>
+  <div class="content">
+    Capita spesso di dover inserire un form per l'upload delle immagini nella sezione amministrativa del nostro sito. 
+C'è un <a href="http://github.com/tute/Thumbnail-component-for-CakePHP/">component</a> che fa al caso nostro, scala automaticamente ogni immagine in tre formati, big,med,small e la carica nella cartella predefinita.
+I passi per la configurazione sono pochi, presenti sul repo. 
+Dopo aver installato correttamente il component, ricordatevi che il path del file va salvato nel database. Modifichiamo quindi il controller per poter salvare il path dell'immagine nel campo 'file_path'
+<div class="highlight"><pre><code class="php"><span class="k">function</span> <span class="nf">admin_add</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Pianta</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Pianta</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nv">$file_path</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Attachment</span><span class="o">-&gt;</span><span class="na">upload</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Pianta&#39;</span><span class="p">][</span><span class="s1">&#39;Attachment&#39;</span><span class="p">]);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$file_path</span><span class="p">)){</span>
+                            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Pianta</span><span class="o">-&gt;</span><span class="na">saveField</span><span class="p">(</span><span class="s1">&#39;file_path&#39;</span><span class="p">,</span><span class="nv">$file_path</span><span class="p">);</span>
+                        <span class="p">}</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The Pianta has been saved&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">));</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">));</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The Pianta could not be saved. Please, try again.&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">));</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+
+  </div>
+
+
+<!-- Pagination links -->
+<div class="pagination">
+  
+    <a href="/page13" class="previous">Previous</a>
+  
+  <span class="page_number ">Page: 14 of 16</span>
+  
+    <a href="/page15" class="next ">Next</a>
+  
+</div>
+
+				</div><!-- entry-content -->
+			</div><!-- bd -->
+
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
+
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>contact</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">Davide Prati</span> - <span class="fn email">lastexxit guess gmail</span></address></li>
+						<li class="contact">Sonnenallee 201, Berlin</li>
+						<li class="github"><a href="http://github.com/edap/" rel="me">github.com/edap</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/Edapx">Subscribe to RSS Feed</a></li>
+						<li class="rss"><a href="http://edapx.tumblr.com">Tumblr</a></li>
+						<li class="rss"><a href="https://plus.google.com/u/0/114627287220738676405/posts">Google Plus</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/page14/index.html" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
+  
+  
+</body>
+</html>
+

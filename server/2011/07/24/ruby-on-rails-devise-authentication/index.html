@@ -1,222 +1,180 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Ruby on Rails Devise authentication</title>
-    
-    <meta name="author" content="Name Lastname">
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Ruby on Rails Devise authentication</title>
+	<meta name="author" content="Davide Prati">
+	<link href='/assets/themes/the-program/css/style.css' rel="stylesheet" media="all">
+	<link href='/assets/themes/the-program/css/native.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="Ruby on Rails Devise authentication" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<nav class="nav-global">
+					<ul>
+						<li class="logo"><a href="/">Edapx</a></li>
+						<li class="pages"><a href="/about.html">about</a></li>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-post">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">Ruby on Rails Devise authentication</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
 
-    <!-- Le styles -->
-    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
-
-    <!-- Le fav and touch icons -->
-  <!-- Update these with your own images
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  -->
-  </head>
-
-  <body>
-
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">Jekyll Bootstrap</a>
-          <ul class="nav">
-            
-            
-            
-
-
-  
-    
-    	
-    	<li><a href="/categories.html">Categories</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/tags.html">Tags</a></li>
-    	
-    
-  
-    
-  
-    
-  
-    
-    	
-    	<li><a href="/pages.html">Pages</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/archive.html">Archive</a></li>
-    	
-    
-  
-    
-  
-
-
-
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-
-      <div class="content">
-        
-<div class="page-header">
-  <h1>Ruby on Rails Devise authentication <small>Supporting tagline</small></h1>
+			<div class="bd">
+				<div class="entry-content">
+					Aggiungete devise nel vostro Gemfile e lanciate "bundle install".
+Ora create i file di configurazione necessari:
+<div class="highlight"><pre><code class="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">devise</span><span class="ss">:install</span>
+</code></pre>
 </div>
 
-<div class="row">
-  <div class="span8">
-    Aggiungete devise nel vostro Gemfile e lanciate "bundle install".
-Ora create i file di configurazione necessari:
-[ruby]
-rails generate devise:install
-[/ruby]
 Definite l'url che verra' utilizzata per i link di conferma sulle email di registrazione. In configurations/environments/development.rb
-[ruby]
-#Devise email
-config.action_mailer.default_url_options = { :host =&gt; 'localhost:3000' }
-[/ruby]
-Creiamo il file di migrazione e lo user model
-[ruby]
-rails generate devise User
-[/ruby]
-Nello User model appena creato Models/user.rb , possiamo scegliere quali moduli includere od escludere, semplicemente togliendo quelli di default o aggiungendo quelli presenti nel commento del file user.rb.  A mio avviso quelli di default vanno piu' che bene.
-[ruby]
-class User &lt; ActiveRecord::Base
-# Include default devise modules. Others available are:
-# :token_authenticatable, :confirmable, :lockable and :timeoutable :recoverable,
-devise :database_authenticatable, :registerable,
-:rememberable, :trackable, :validatable
 
-# Setup accessible (or protected) attributes for your model
-attr_accessible :email, :password, :password_confirmation, :remember_me
-end
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="c1">#Devise email</span>
+<span class="n">config</span><span class="o">.</span><span class="n">action_mailer</span><span class="o">.</span><span class="n">default_url_options</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:host</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s1">&#39;localhost:3000&#39;</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+Creiamo il file di migrazione e lo user model
+<div class="highlight"><pre><code class="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">devise</span> <span class="no">User</span>
+</code></pre>
+</div>
+
+Nello User model appena creato Models/user.rb , possiamo scegliere quali moduli includere od escludere, semplicemente togliendo quelli di default o aggiungendo quelli presenti nel commento del file user.rb.  A mio avviso quelli di default vanno piu' che bene.
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">::</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="c1"># Include default devise modules. Others available are:</span>
+<span class="c1"># :token_authenticatable, :confirmable, :lockable and :timeoutable :recoverable,</span>
+<span class="n">devise</span> <span class="ss">:database_authenticatable</span><span class="p">,</span> <span class="ss">:registerable</span><span class="p">,</span>
+<span class="ss">:rememberable</span><span class="p">,</span> <span class="ss">:trackable</span><span class="p">,</span> <span class="ss">:validatable</span>
+
+<span class="c1"># Setup accessible (or protected) attributes for your model</span>
+<span class="n">attr_accessible</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:password</span><span class="p">,</span> <span class="ss">:password_confirmation</span><span class="p">,</span> <span class="ss">:remember_me</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
 Ora aprite il file Migrations/***devise_create_users.rb e commentate o aggiungete i moduli che avete aggiunto to tolto nello User Model. Poi fate la migrazione.
-[ruby]
-rake db:migrate
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="n">rake</span> <span class="n">db</span><span class="ss">:migrate</span>
+</code></pre>
+</div>
+
 Con "rake routes" potete vedere tutte le routes messe a disposizione dalla vostra applicazione. Trovo questo comendo davvero molto utile, anche nel debug di un applicazione, o quando vogliamo verificare che ogni action abbia la sua view ben fatta.Un'altra cosa che cakePHP non ha (cominciano ad essere tante).
 Ora se puntate il browser alla seguente url /users/sign_in potrete loggarvi. Per registrarvi andate qui /users/sign_up. Io ho incontrato il seguente errore:
-[ruby]
-No route matches "/users/sign_up"
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="no">No</span> <span class="n">route</span> <span class="n">matches</span> <span class="s2">&quot;/users/sign_up&quot;</span>
+</code></pre>
+</div>
+
 Per risolverlo ho definito lo scope nel file routes, come spiegato qui <a href="http://stackoverflow.com/questions/2349604/using-devise-with-rails-3-beta">http://stackoverflow.com/questions/2349604/using-devise-with-rails-3-beta</a>
 Per visualizzare i messaggi d'errore nella vostra applicazione, aggiungete queste linee di codice nel vostro application.html.erb.
-[ruby]
-<%- flash.each do |name, msg| -%>
-  <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
-<%- end -%>
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="o">&lt;</span><span class="sx">%- flash.each do |name, msg| -%&gt;</span>
+<span class="sx">  &lt;%= content_tag :div, msg, :id =&gt;</span> <span class="s2">&quot;flash_</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="sx">%&gt;</span>
+<span class="sx">&lt;%- end -%&gt;</span>
+</code></pre>
+</div>
+
 
 Sempre in application.html.erb, aggiungete i link alle azioni sign_in e sign_out. Scoprite i relativi path attraverso "rake routes" e aggiungete questo codice dopo il tag body:
-[ruby]
-<div id="user_nav">signed in as</div>
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;user_nav&quot;</span><span class="o">&gt;</span><span class="n">signed</span> <span class="k">in</span> <span class="n">as</span><span class="o">&lt;</span><span class="sr">/div&gt;</span>
+</code></pre>
+</div>
+
 Per circoscrivere il raggio d'azione di un utente non loggato all'interno della nostra applicazione, definiamo quali azini sono ad esso concesse. Poniamo il caso che solo un utente loggato puo' creare o modificare un post, mentre l'utente sloggato puo' solo vederli.
 Nel nostro "posts_controller" aggiungiamo la seguente funzione:
-[ruby]
-before_filter :authenticate_user!, :except =&gt; [:index, :show]
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="n">before_filter</span> <span class="ss">:authenticate_user!</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">[</span><span class="ss">:index</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>
+</code></pre>
+</div>
+
 Per modificare le views di devise, lanciamo "rails g devise:views", ed otterremo un output simile a questo:
-[ruby]
-create app/views/devise
-create app/views/devise/confirmations/new.html.erb
-create app/views/devise/mailer/confirmation_instructions.html.erb
-create app/views/devise/mailer/reset_password_instructions.html.erb
-create app/views/devise/mailer/unlock_instructions.html.erb
-create app/views/devise/passwords/edit.html.erb
-create app/views/devise/passwords/new.html.erb
-create app/views/devise/registrations/edit.html.erb
-create app/views/devise/registrations/new.html.erb
-create app/views/devise/sessions/new.html.erb
-create app/views/devise/shared/_links.erb
-create app/views/devise/unlocks/new.html.erb
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">confirmations</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">mailer</span><span class="o">/</span><span class="n">confirmation_instructions</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">mailer</span><span class="o">/</span><span class="n">reset_password_instructions</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">mailer</span><span class="o">/</span><span class="n">unlock_instructions</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">passwords</span><span class="o">/</span><span class="n">edit</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">passwords</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">registrations</span><span class="o">/</span><span class="n">edit</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">registrations</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">sessions</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">shared</span><span class="o">/</span><span class="n">_links</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">unlocks</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+</code></pre>
+</div>
+
 Modifichiamo i seguenti file a nostro piacimento. Se vogliamo modificare i messaggi d'errore, mettiamo mano al file config/locales/devise_en.yml. Se invece vogliamo modificare le regole di controllo per la registrazione (es passare da "Password is too short (minimum is 6 characters)" a "Password is too short (minimum is 8 characters)") modifichiamo il file initializers/devise.rb.
 Per modificare le URL di default con le quali avvengono le azioni di login e logout, apriamo il file routes.rb
-[ruby]
-devise_for :users, :path_names =&gt; {:sign_in =&gt; "login", :sign_up =&gt; "logout"}
-[/ruby].
+<div class="highlight"><pre><code class="ruby"><span class="n">devise_for</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:path_names</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">{</span><span class="ss">:sign_in</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="ss">:sign_up</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s2">&quot;logout&quot;</span><span class="p">}</span>
+</code></pre>
+</div>
+.
 Il nostro futuro user si logga inserendo email e password, come fare se in futuro ci venisse richiesto di sostituire il campo email con il campo username? prima di tutto aggiungiamo la colonna necessaria:
-[ruby]
-rails generate migration AddUsernameToUsers username:string
-rake db:migrate
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">migration</span> <span class="no">AddUsernameToUsers</span> <span class="n">username</span><span class="ss">:string</span>
+<span class="n">rake</span> <span class="n">db</span><span class="ss">:migrate</span>
+</code></pre>
+</div>
+
 Ora in config/initializers/devise.rb aggiungiamo
-[ruby]
-config.authentication_keys = [ :username ]
-[/ruby]
+<div class="highlight"><pre><code class="ruby"><span class="n">config</span><span class="o">.</span><span class="n">authentication_keys</span> <span class="o">=</span> <span class="o">[</span> <span class="ss">:username</span> <span class="o">]</span>
+</code></pre>
+</div>
+
 Questo tutorial e' tratto dai seguenti railcasts:
 <a href="http://railscasts.com/episodes/209-introducing-devise">http://railscasts.com/episodes/209-introducing-devise</a>
 <a href="http://railscasts.com/episodes/210-customizing-devise">http://railscasts.com/episodes/210-customizing-devise</a>
 Qua la <a href="https://github.com/plataformatec/devise/wiki">pagina del progetto su github</a>.
 
-    <hr>
-    <div class="pagination">
-      <ul>
-      
-        <li class="prev"><a href="/2011/07/18/netbeans-e-phpunit" title="Netbeans e PHPUnit">&larr; Previous</a></li>
-      
-        <li><a href="/archive.html">Archive</a></li>
-      
-        <li class="next"><a href="/2011/07/24/ruby-on-rails-themes-generator" title="Ruby on Rails themes generator">Next &rarr;</a></li>
-      
-      </ul>
-    </div>
-    <hr>
-    
+					<div class="meta">
+						<p class="date-publish">
+							Published: 
+							<date class="date-pub" title="2011-07-24T00:00:00+02:00" datetime="2011-07-24T00:00:00+02:00" pubdate>
+							<span class="month"><abbr>July</abbr></span>
+							<span class="day">24</span>
+							<span class="year">2011</span>
+							</date>
+						</p>
+						<ul class="list-category list-linear">
+							<li class="list-head">category: </li>
+							
+							
 
-
-  <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-
-  </div>
-  
-  <div class="span4">
-    <h4>Published</h4>
-    <div class="date"><span>24 July 2011</span></div>
 
   
-    <h4>Tags</h4>
-    <ul class="tag_box">
     
-    
+  
+
+
+						</ul>
+						<ul class="list-tag list-linear">
+							<li class="list-head">tags: </li>
+							
+							
 
 
   
@@ -233,24 +191,110 @@ Qua la <a href="https://github.com/plataformatec/devise/wiki">pagina del progett
 
 
 
-    </ul>
+						</ul>
+					</div><!-- meta -->
+				</div><!-- entry-content -->
+				<div class="misc-content">
+					<div class="social">
+						<ul class="list-linear">
+							<li><div class="twitter-tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="" data-lang="en">Tweet</a></div></li>
+							<li><div class="twitter-follow"><a href="https://twitter.com/" class="twitter-follow-button" data-show-count="false" data-lang="en"></a></div></li>
+						</ul>
+					</div>
+					<div class="comment">
+					
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'edapx'; // required: replace example with your forum shortname
     
-  </div>
-</div>
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-      </div>
 
-      <footer>
-        <p>&copy; Name Lastname 2012 
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
-        </p>
-      </footer>
 
-    </div> <!-- /container -->
+					</div>
+				</div><!-- misc-content -->
+			</div><!-- bd -->
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<nav class="pagination">
+						<ul>
+							
+							<li class="prev"><a class="internal" rel="prev"  href="/2011/07/18/netbeans-e-phpunit" title="View Netbeans e PHPUnit">&laquo; Netbeans e PHPUnit</a></li>
+							
+							
+							<li class="pipe"> | </li>
+							
+							
+							<li class="next"><a class="internal" rel="next"  href="/2011/07/24/ruby-on-rails-themes-generator" title="View Ruby on Rails themes generator">Ruby on Rails themes generator &raquo;</a></li>
+							
+						</ul>
+					</nav>
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
 
-    
-  </body>
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>contact</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">Davide Prati</span> - <span class="fn email">lastexxit guess gmail</span></address></li>
+						<li class="contact">Sonnenallee 201, Berlin</li>
+						<li class="github"><a href="http://github.com/edap/" rel="me">github.com/edap</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/Edapx">Subscribe to RSS Feed</a></li>
+						<li class="rss"><a href="http://edapx.tumblr.com">Tumblr</a></li>
+						<li class="rss"><a href="https://plus.google.com/u/0/114627287220738676405/posts">Google Plus</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/2011/07/24/ruby-on-rails-devise-authentication" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
+  
+  
+</body>
 </html>
 

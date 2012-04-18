@@ -1,97 +1,61 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Netbeans e PHPUnit</title>
-    
-    <meta name="author" content="Name Lastname">
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Netbeans e PHPUnit</title>
+	<meta name="author" content="Davide Prati">
+	<link href='/assets/themes/the-program/css/style.css' rel="stylesheet" media="all">
+	<link href='/assets/themes/the-program/css/native.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="Netbeans e PHPUnit" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<nav class="nav-global">
+					<ul>
+						<li class="logo"><a href="/">Edapx</a></li>
+						<li class="pages"><a href="/about.html">about</a></li>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-post">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">Netbeans e PHPUnit</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
 
-    <!-- Le styles -->
-    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
-
-    <!-- Le fav and touch icons -->
-  <!-- Update these with your own images
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  -->
-  </head>
-
-  <body>
-
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">Jekyll Bootstrap</a>
-          <ul class="nav">
-            
-            
-            
-
-
-  
-    
-    	
-    	<li><a href="/categories.html">Categories</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/tags.html">Tags</a></li>
-    	
-    
-  
-    
-  
-    
-  
-    
-    	
-    	<li><a href="/pages.html">Pages</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/archive.html">Archive</a></li>
-    	
-    
-  
-    
-  
-
-
-
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-
-      <div class="content">
-        
-<div class="page-header">
-  <h1>Netbeans e PHPUnit <small>Supporting tagline</small></h1>
-</div>
-
-<div class="row">
-  <div class="span8">
-    Dopo aver verificato che anche<a href="http://blog.enebo.com/2011/02/installing-ruby-support-in-netbeans-70.html"> NetBeans 7 supporta Ruby</a>, ho deciso di aggiornarlo. La prima cosa che  ho configurato e' il supporto a PHPUnit. In questo ultimo mese ho scritto tests per un applicazione in CakePHP (post a breve a rigurardo) e ho trovato parecchi link a PHPUnit, che e' il framework di testing per CakePHP 2.0.
+			<div class="bd">
+				<div class="entry-content">
+					Dopo aver verificato che anche<a href="http://blog.enebo.com/2011/02/installing-ruby-support-in-netbeans-70.html"> NetBeans 7 supporta Ruby</a>, ho deciso di aggiornarlo. La prima cosa che  ho configurato e' il supporto a PHPUnit. In questo ultimo mese ho scritto tests per un applicazione in CakePHP (post a breve a rigurardo) e ho trovato parecchi link a PHPUnit, che e' il framework di testing per CakePHP 2.0.
 
 Su Debian/Ubuntu derivate lanciate da console:
-[bash]
-apt-get install phpunit
-[/bash]
+<div class="highlight"><pre><code class="bash">apt-get install phpunit
+</code></pre>
+</div>
+
 Ora aprite Netbeans, andate in Tools-&gt;Options-&gt;PHP-&gt;Unit Testing.
 Nel campo PHPUnit script inserite il valore "/usr/bin/phpunit".
 Cliccate OK e chiudete.
@@ -102,51 +66,31 @@ Per lanciare il test, premete CTRL+F6, o cliccate con il tasto destro sul file e
 
 Qui invece il sito di PHPUnit, con tutte le assertions <a href="http://www.phpunit.de/manual/current/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions">disponibili</a>
 
-    <hr>
-    <div class="pagination">
-      <ul>
-      
-        <li class="prev"><a href="/2011/07/13/cakephp-submit-form-json-reply" title="CakePHP submit form json reply">&larr; Previous</a></li>
-      
-        <li><a href="/archive.html">Archive</a></li>
-      
-        <li class="next"><a href="/2011/07/24/ruby-on-rails-devise-authentication" title="Ruby on Rails Devise authentication">Next &rarr;</a></li>
-      
-      </ul>
-    </div>
-    <hr>
-    
+					<div class="meta">
+						<p class="date-publish">
+							Published: 
+							<date class="date-pub" title="2011-07-18T00:00:00+02:00" datetime="2011-07-18T00:00:00+02:00" pubdate>
+							<span class="month"><abbr>July</abbr></span>
+							<span class="day">18</span>
+							<span class="year">2011</span>
+							</date>
+						</p>
+						<ul class="list-category list-linear">
+							<li class="list-head">category: </li>
+							
+							
 
-
-  <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-
-  </div>
-  
-  <div class="span4">
-    <h4>Published</h4>
-    <div class="date"><span>18 July 2011</span></div>
 
   
-    <h4>Tags</h4>
-    <ul class="tag_box">
     
-    
+  
+
+
+						</ul>
+						<ul class="list-tag list-linear">
+							<li class="list-head">tags: </li>
+							
+							
 
 
   
@@ -165,24 +109,110 @@ Qui invece il sito di PHPUnit, con tutte le assertions <a href="http://www.phpun
 
 
 
-    </ul>
+						</ul>
+					</div><!-- meta -->
+				</div><!-- entry-content -->
+				<div class="misc-content">
+					<div class="social">
+						<ul class="list-linear">
+							<li><div class="twitter-tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="" data-lang="en">Tweet</a></div></li>
+							<li><div class="twitter-follow"><a href="https://twitter.com/" class="twitter-follow-button" data-show-count="false" data-lang="en"></a></div></li>
+						</ul>
+					</div>
+					<div class="comment">
+					
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'edapx'; // required: replace example with your forum shortname
     
-  </div>
-</div>
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-      </div>
 
-      <footer>
-        <p>&copy; Name Lastname 2012 
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
-        </p>
-      </footer>
 
-    </div> <!-- /container -->
+					</div>
+				</div><!-- misc-content -->
+			</div><!-- bd -->
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<nav class="pagination">
+						<ul>
+							
+							<li class="prev"><a class="internal" rel="prev"  href="/2011/07/13/cakephp-submit-form-json-reply" title="View CakePHP submit form json reply">&laquo; CakePHP submit form json reply</a></li>
+							
+							
+							<li class="pipe"> | </li>
+							
+							
+							<li class="next"><a class="internal" rel="next"  href="/2011/07/24/ruby-on-rails-devise-authentication" title="View Ruby on Rails Devise authentication">Ruby on Rails Devise authentication &raquo;</a></li>
+							
+						</ul>
+					</nav>
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
 
-    
-  </body>
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>contact</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">Davide Prati</span> - <span class="fn email">lastexxit guess gmail</span></address></li>
+						<li class="contact">Sonnenallee 201, Berlin</li>
+						<li class="github"><a href="http://github.com/edap/" rel="me">github.com/edap</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/Edapx">Subscribe to RSS Feed</a></li>
+						<li class="rss"><a href="http://edapx.tumblr.com">Tumblr</a></li>
+						<li class="rss"><a href="https://plus.google.com/u/0/114627287220738676405/posts">Google Plus</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/2011/07/18/netbeans-e-phpunit" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
+  
+  
+</body>
 </html>
 

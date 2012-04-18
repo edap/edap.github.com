@@ -1,92 +1,55 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>come integrare twitter@anywhere nell'autenticazione di cakePHP</title>
-    
-    <meta name="author" content="Name Lastname">
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>come integrare twitter@anywhere nell'autenticazione di cakePHP</title>
+	<meta name="author" content="Davide Prati">
+	<link href='/assets/themes/the-program/css/style.css' rel="stylesheet" media="all">
+	<link href='/assets/themes/the-program/css/native.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="come integrare twitter@anywhere nell'autenticazione di cakePHP" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<nav class="nav-global">
+					<ul>
+						<li class="logo"><a href="/">Edapx</a></li>
+						<li class="pages"><a href="/about.html">about</a></li>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-post">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">come integrare twitter@anywhere nell'autenticazione di cakePHP</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
 
-    <!-- Le styles -->
-    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
-
-    <!-- Le fav and touch icons -->
-  <!-- Update these with your own images
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  -->
-  </head>
-
-  <body>
-
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">Jekyll Bootstrap</a>
-          <ul class="nav">
-            
-            
-            
-
-
-  
-    
-    	
-    	<li><a href="/categories.html">Categories</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/tags.html">Tags</a></li>
-    	
-    
-  
-    
-  
-    
-  
-    
-    	
-    	<li><a href="/pages.html">Pages</a></li>
-    	
-    
-  
-    
-    	
-    	<li><a href="/archive.html">Archive</a></li>
-    	
-    
-  
-    
-  
-
-
-
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-
-      <div class="content">
-        
-<div class="page-header">
-  <h1>come integrare twitter@anywhere nell'autenticazione di cakePHP <small>Supporting tagline</small></h1>
-</div>
-
-<div class="row">
-  <div class="span8">
-    Twitter @anywhere è l'API di twitter che vi permette di integrare la funzionalità di twitter nel vostro sito con poco codice javascript.
+			<div class="bd">
+				<div class="entry-content">
+					Twitter @anywhere è l'API di twitter che vi permette di integrare la funzionalità di twitter nel vostro sito con poco codice javascript.
 Registrare la vostra application, richiedere le API e cominciare ad usarle sul vostro sito è una cosa che si fa <a href="http://dev.twitter.com/anywhere">velocemente</a> e che non spiego qui.
 La cosa che mi interessa è l'integrazione di twitter anywhere nella mia application...ovvero:
 Come faccio a far si che se un utente si logga su twitter viene registrato nel mio database ed automaticamente loggato?
@@ -94,10 +57,11 @@ Come faccio a far si che se un utente si logga su twitter viene registrato nel m
 Dovrò gestire l'output di twitter anywhere e tramite ajax passarlo ad un handler nel nostro controller che loggherà l'utente in caso sia andato tutto bene, restituirà un errore in caso contrario.
 
 Per prima cosa includiamo questi 2 file js nell'header del nostro template.
-[php]
-echo $html->script("jquery.js");
-echo $html->script("checkTwitterUsername.js");
-[/php]
+<div class="highlight"><pre><code class="php"><span class="k">echo</span> <span class="nv">$html</span><span class="o">-&gt;</span><span class="na">script</span><span class="p">(</span><span class="s2">&quot;jquery.js&quot;</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$html</span><span class="o">-&gt;</span><span class="na">script</span><span class="p">(</span><span class="s2">&quot;checkTwitterUsername.js&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+
 
 Jquery,js lo trovate sul sito di jquery, lo script checkTwitterUsername.js è una funzione che prende l'output di twitter@anywhere e lo passa all'handler ajax che si occuperà di loggare l'utente.
 
@@ -123,142 +87,182 @@ function checkTwitterUsername (twitterusername) {
 }
 [/javascript]
 includiamo anche l'element twitter_login.ctp, che fa uso di twitter @anywhere, che trovate qui sotto
-[php]
-<? echo $this->element("twitter_login")?>
-[/php]
+<div class="highlight"><pre><code class="php"><span class="o">&lt;?</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span><span class="s2">&quot;twitter_login&quot;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x"></span>
+</code></pre>
+</div>
+
 
 twitter_login.ctp
-[php]
-<?php
-$id = 'twitter-login-button-'.rand(1000,9999);
-echo '<span id="'.$id.'"></span>';
-echo $html->scriptBlock("
-    twttr.anywhere(function (T) {
-        var currentUser,
-            screenName,
-            profileImage,
-            profileImageTag;
+<div class="highlight"><pre><code class="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="nv">$id</span> <span class="o">=</span> <span class="s1">&#39;twitter-login-button-&#39;</span><span class="o">.</span><span class="nx">rand</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">9999</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s1">&#39;&lt;span id=&quot;&#39;</span><span class="o">.</span><span class="nv">$id</span><span class="o">.</span><span class="s1">&#39;&quot;&gt;&lt;/span&gt;&#39;</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$html</span><span class="o">-&gt;</span><span class="na">scriptBlock</span><span class="p">(</span><span class="s2">&quot;</span>
+<span class="s2">    twttr.anywhere(function (T) {</span>
+<span class="s2">        var currentUser,</span>
+<span class="s2">            screenName,</span>
+<span class="s2">            profileImage,</span>
+<span class="s2">            profileImageTag;</span>
 
-        if (T.isConnected()) {
-            currentUser = T.currentUser;
-            screenName = currentUser.data('screen_name');
-            profileImage = currentUser.data('profile_image_url');
-            profileImageTag = \"<img src='\" + profileImage + \"'/>\";
-            $('#{$id}').append(\"Logged in as \" + profileImageTag + \" \" + screenName );
-            $('#signout').bind(\"click\", function () {
-                twttr.anywhere.signOut();
-                window.location.reload();
-            });
+<span class="s2">        if (T.isConnected()) {</span>
+<span class="s2">            currentUser = T.currentUser;</span>
+<span class="s2">            screenName = currentUser.data(&#39;screen_name&#39;);</span>
+<span class="s2">            profileImage = currentUser.data(&#39;profile_image_url&#39;);</span>
+<span class="s2">            profileImageTag = </span><span class="se">\&quot;</span><span class="s2">&lt;img src=&#39;</span><span class="se">\&quot;</span><span class="s2"> + profileImage + </span><span class="se">\&quot;</span><span class="s2">&#39;/&gt;</span><span class="se">\&quot;</span><span class="s2">;</span>
+<span class="s2">            $(&#39;#</span><span class="si">{</span><span class="nv">$id</span><span class="si">}</span><span class="s2">&#39;).append(</span><span class="se">\&quot;</span><span class="s2">Logged in as </span><span class="se">\&quot;</span><span class="s2"> + profileImageTag + </span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2"> + screenName );</span>
+<span class="s2">            $(&#39;#signout&#39;).bind(</span><span class="se">\&quot;</span><span class="s2">click</span><span class="se">\&quot;</span><span class="s2">, function () {</span>
+<span class="s2">                twttr.anywhere.signOut();</span>
+<span class="s2">                window.location.reload();</span>
+<span class="s2">            });</span>
 
-        } else {
-            T('#{$id}').connectButton();
-            T.bind(\"authComplete\", function () {
-                if (T.isConnected()) {
-                    currentUser = T.currentUser;
-                    screenName = currentUser.data('screen_name');
-                    checkTwitterUsername(screenName);
-                }
-            });
+<span class="s2">        } else {</span>
+<span class="s2">            T(&#39;#</span><span class="si">{</span><span class="nv">$id</span><span class="si">}</span><span class="s2">&#39;).connectButton();</span>
+<span class="s2">            T.bind(</span><span class="se">\&quot;</span><span class="s2">authComplete</span><span class="se">\&quot;</span><span class="s2">, function () {</span>
+<span class="s2">                if (T.isConnected()) {</span>
+<span class="s2">                    currentUser = T.currentUser;</span>
+<span class="s2">                    screenName = currentUser.data(&#39;screen_name&#39;);</span>
+<span class="s2">                    checkTwitterUsername(screenName);</span>
+<span class="s2">                }</span>
+<span class="s2">            });</span>
 
-        };
+<span class="s2">        };</span>
 
-    });
+<span class="s2">    });</span>
 
-    ");
-?>
+<span class="s2">    &quot;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre>
+</div>
 
-[/php]
 
 Nella vostra tabelle Users aggiungete un campo twitter_username, nel controller users aggiungete questo metodo
-[php]
-/**
- * It's called by checkTwitterUsername.js
- * Once a user is logged in twitter:
- * 1)if it's not logged in your application and there is no twitter_username as the twitter user logged,
- * create and log the user in your application.
- * If a user with the same twittername exists, log the user.
- * 2)If the user is logged, check if he has a twitter_username, if not, update the value "twitter username"
- *
- * @return string
- * @access public
- **/
-function handleTwitterUser(){
-	$this->autoRender = false;
-	$msg = "";
-	if(!empty($_POST['name'])){
-		$name = $_POST['name'];
-		if(!$this->Auth->user()){
-			$user = $this->User->findByTwitterUsername($name);
-			if(!$user){
-				//generate passowrd
-				srand ((double) microtime( )*1000000);
-				$random_number = rand(0,10);
-				$user['username'] = $name;
-				$user['twitter_username'] = $name;
-				$user['password'] = $this->Auth->password($random_number);
-				$user['is_active'] = 1;
-				$user['is_verified'] = 1;
-				$this->User->create();
-				$this->User->save($user);
-				$msg = "User saved and ";
-			}
-			$this->Auth->login($user);
-			if($this->Session->check('Auth.User')) {
-				App::import('Model', 'User');
-				$User = new User;
-				$User->store($this->Session->read('Auth'));
-				$User->store(array('User' => array('is_loggedin' => true)));
+<div class="highlight"><pre><code class="php"><span class="sd">/**</span>
+<span class="sd"> * It&#39;s called by checkTwitterUsername.js</span>
+<span class="sd"> * Once a user is logged in twitter:</span>
+<span class="sd"> * 1)if it&#39;s not logged in your application and there is no twitter_username as the twitter user logged,</span>
+<span class="sd"> * create and log the user in your application.</span>
+<span class="sd"> * If a user with the same twittername exists, log the user.</span>
+<span class="sd"> * 2)If the user is logged, check if he has a twitter_username, if not, update the value &quot;twitter username&quot;</span>
+<span class="sd"> *</span>
+<span class="sd"> * @return string</span>
+<span class="sd"> * @access public</span>
+<span class="sd"> **/</span>
+<span class="k">function</span> <span class="nf">handleTwitterUser</span><span class="p">(){</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">autoRender</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+	<span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])){</span>
+		<span class="nv">$name</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">];</span>
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">user</span><span class="p">()){</span>
+			<span class="nv">$user</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">findByTwitterUsername</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$user</span><span class="p">){</span>
+				<span class="c1">//generate passowrd</span>
+				<span class="nx">srand</span> <span class="p">((</span><span class="nx">double</span><span class="p">)</span> <span class="nb">microtime</span><span class="p">(</span> <span class="p">)</span><span class="o">*</span><span class="mi">1000000</span><span class="p">);</span>
+				<span class="nv">$random_number</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+				<span class="nv">$user</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
+				<span class="nv">$user</span><span class="p">[</span><span class="s1">&#39;twitter_username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
+				<span class="nv">$user</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">password</span><span class="p">(</span><span class="nv">$random_number</span><span class="p">);</span>
+				<span class="nv">$user</span><span class="p">[</span><span class="s1">&#39;is_active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+				<span class="nv">$user</span><span class="p">[</span><span class="s1">&#39;is_verified&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$user</span><span class="p">);</span>
+				<span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&quot;User saved and &quot;</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">login</span><span class="p">(</span><span class="nv">$user</span><span class="p">);</span>
+			<span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">check</span><span class="p">(</span><span class="s1">&#39;Auth.User&#39;</span><span class="p">))</span> <span class="p">{</span>
+				<span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;User&#39;</span><span class="p">);</span>
+				<span class="nv">$User</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">;</span>
+				<span class="nv">$User</span><span class="o">-&gt;</span><span class="na">store</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="s1">&#39;Auth&#39;</span><span class="p">));</span>
+				<span class="nv">$User</span><span class="o">-&gt;</span><span class="na">store</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;User&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;is_loggedin&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">)));</span>
 
-			}
-			$msg.= "User logged";
-			return $msg;
-		}else{
-			$user = $this->User->findByTwitterUsername($name);
-			if(!$user){
-				$this->User->id = User::get('User.id');
-				$this->data['User']['twitter_username']=$name;
-				$this->User->store(array('User' => array('twitter_username' => $name)));
-				$this->User->save($this->data);
-				$msg = "your twitter username is now associated with yours profile";
-				return $msg;
-			}
-		}
-	}else{
-		$error = "Error, we could not associate your twitter username with your profile";
-		return $error;
-	}
-}
-[/php]
+			<span class="p">}</span>
+			<span class="nv">$msg</span><span class="o">.=</span> <span class="s2">&quot;User logged&quot;</span><span class="p">;</span>
+			<span class="k">return</span> <span class="nv">$msg</span><span class="p">;</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="nv">$user</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">findByTwitterUsername</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$user</span><span class="p">){</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">id</span> <span class="o">=</span> <span class="nx">User</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;User.id&#39;</span><span class="p">);</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;User&#39;</span><span class="p">][</span><span class="s1">&#39;twitter_username&#39;</span><span class="p">]</span><span class="o">=</span><span class="nv">$name</span><span class="p">;</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">store</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;User&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;twitter_username&#39;</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">)));</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">);</span>
+				<span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&quot;your twitter username is now associated with yours profile&quot;</span><span class="p">;</span>
+				<span class="k">return</span> <span class="nv">$msg</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="nv">$error</span> <span class="o">=</span> <span class="s2">&quot;Error, we could not associate your twitter username with your profile&quot;</span><span class="p">;</span>
+		<span class="k">return</span> <span class="nv">$error</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
 In questa porzione di codice faccio uso di "$User = new User;" per salvare e recuperare in ogni parte della mia applicazione informazioni relative all'utente. Questa tecnica è spiegata bene, con esempi pratici nel libro gratis scaricabile online http://www.pseudocoder.com/free-cakephp-book/
 
 Per poter sloggare l'utente automaticaente sia da twitter che dalla vostra applicazione, dovete far si che il link a logout abbia l'id "signout".
-[php]
-echo $this->Html->link('logout', array('controller' => 'users', 'action' => 'logout' ),
-                            array('id'=>'signout')
-                );
-[/php]
+<div class="highlight"><pre><code class="php"><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="s1">&#39;logout&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;logout&#39;</span> <span class="p">),</span>
+                            <span class="k">array</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;signout&#39;</span><span class="p">)</span>
+                <span class="p">);</span>
+</code></pre>
+</div>
 
 
-    <hr>
-    <div class="pagination">
-      <ul>
-      
-        <li class="prev"><a href="/2010/07/29/cakephp-facebook-plugin" title="cakePHP facebook plugin">&larr; Previous</a></li>
-      
-        <li><a href="/archive.html">Archive</a></li>
-      
-        <li class="next"><a href="/2010/08/07/ruby-on-rails-tutorial-autenticazione-con-clearance" title="Ruby On Rails Tutorial, autenticazione con clearance">Next &rarr;</a></li>
-      
-      </ul>
-    </div>
-    <hr>
+
+					<div class="meta">
+						<p class="date-publish">
+							Published: 
+							<date class="date-pub" title="2010-07-31T00:00:00+02:00" datetime="2010-07-31T00:00:00+02:00" pubdate>
+							<span class="month"><abbr>July</abbr></span>
+							<span class="day">31</span>
+							<span class="year">2010</span>
+							</date>
+						</p>
+						<ul class="list-category list-linear">
+							<li class="list-head">category: </li>
+							
+							
+
+
+  
     
+  
+
+
+						</ul>
+						<ul class="list-tag list-linear">
+							<li class="list-head">tags: </li>
+							
+							
+
+
+  
+     
+    	<li><a href="/tags.html#auth-ref">auth <span>2</span></a></li>
+     
+    	<li><a href="/tags.html#cakephp-ref">cakephp <span>21</span></a></li>
+     
+    	<li><a href="/tags.html#twitter @anywhere-ref">twitter @anywhere <span>1</span></a></li>
+    
+  
+
+
+
+						</ul>
+					</div><!-- meta -->
+				</div><!-- entry-content -->
+				<div class="misc-content">
+					<div class="social">
+						<ul class="list-linear">
+							<li><div class="twitter-tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="" data-lang="en">Tweet</a></div></li>
+							<li><div class="twitter-follow"><a href="https://twitter.com/" class="twitter-follow-button" data-show-count="false" data-lang="en"></a></div></li>
+						</ul>
+					</div>
+					<div class="comment">
+					
 
 
   <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_developer = 1;
-    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    var disqus_shortname = 'edapx'; // required: replace example with your forum shortname
     
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -273,49 +277,78 @@ echo $this->Html->link('logout', array('controller' => 'users', 'action' => 'log
 
 
 
-  </div>
+					</div>
+				</div><!-- misc-content -->
+			</div><!-- bd -->
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<nav class="pagination">
+						<ul>
+							
+							<li class="prev"><a class="internal" rel="prev"  href="/2010/07/29/cakephp-facebook-plugin" title="View cakePHP facebook plugin">&laquo; cakePHP facebook plugin</a></li>
+							
+							
+							<li class="pipe"> | </li>
+							
+							
+							<li class="next"><a class="internal" rel="next"  href="/2010/08/07/ruby-on-rails-tutorial-autenticazione-con-clearance" title="View Ruby On Rails Tutorial, autenticazione con clearance">Ruby On Rails Tutorial, autenticazione con clearance &raquo;</a></li>
+							
+						</ul>
+					</nav>
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
+
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>contact</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">Davide Prati</span> - <span class="fn email">lastexxit guess gmail</span></address></li>
+						<li class="contact">Sonnenallee 201, Berlin</li>
+						<li class="github"><a href="http://github.com/edap/" rel="me">github.com/edap</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/Edapx">Subscribe to RSS Feed</a></li>
+						<li class="rss"><a href="http://edapx.tumblr.com">Tumblr</a></li>
+						<li class="rss"><a href="https://plus.google.com/u/0/114627287220738676405/posts">Google Plus</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/2010/07/31/come-integrare-twitteranywhere-nellautenticazione-di-cakephp" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
   
-  <div class="span4">
-    <h4>Published</h4>
-    <div class="date"><span>31 July 2010</span></div>
-
   
-    <h4>Tags</h4>
-    <ul class="tag_box">
-    
-    
-
-
-  
-     
-    	<li><a href="/tags.html#auth-ref">auth <span>2</span></a></li>
-     
-    	<li><a href="/tags.html#cakephp-ref">cakephp <span>20</span></a></li>
-     
-    	<li><a href="/tags.html#twitter @anywhere-ref">twitter @anywhere <span>1</span></a></li>
-    
-  
-
-
-
-    </ul>
-    
-  </div>
-</div>
-
-
-      </div>
-
-      <footer>
-        <p>&copy; Name Lastname 2012 
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
-        </p>
-      </footer>
-
-    </div> <!-- /container -->
-
-    
-  </body>
+</body>
 </html>
 

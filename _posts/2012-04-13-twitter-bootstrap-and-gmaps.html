@@ -1,0 +1,27 @@
+---
+layout: post
+title: "twitter bootstrap and gmaps"
+category: 
+tags: [ruby on rails, gmaps4rails, twitter bootstrap]
+---
+{% include JB/setup %}
+
+Im creating a rails app using devise, twitter bootstrap and gmaps4rails. Twitter bootstrap and gmaps need some tricks to work properly.<br>
+<b>1)</b>height 100% doesn't work. You need to use jquery to fix it
+{% highlight javascript %}
+$(window).bind("load resize", function(){
+    var h = $(window).height(),
+    offsetTop = 40;
+    $('#map').css('height', (h - offsetTop));
+});
+{% endhighlight %}
+Note the offset value depends on your css offset. My is defined in the bootstrap_and_overrides.css.less file as follow:
+{% highlight css %}
+body { padding-top: 40px; }
+{% endhighlight css %}
+<b>2)</b>If the gmaps tooltip are not displayed correctly, add this line to your style.css file
+{% highlight css %}
+img {
+  max-width: none;
+}
+{% endhighlight css %}
