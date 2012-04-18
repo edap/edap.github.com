@@ -22,7 +22,7 @@ gem "devise"
 gem "cancan"
 {% endhighlight ruby %}
 Then run 'bundle update'.<br>
-<h2>Setting up devise </h2>
+<h3>Setting up devise </h3>
 Install devise in your application with the command 'rails generate devise:install', read carefully the messages for the setup. Follow <a href="http://guides.rubyonrails.org/getting_started.html#hello-rails">the Hello rails paragraph</a> to create a dummy controller and remove the default index page. Now, we have to define a root
 {% highlight ruby %}
 root :to => "home#index"
@@ -59,7 +59,7 @@ Remember to add the username field to the attr_accessible in your user model. Tr
 <%else%>
 {% endhighlight erb %}
 Add your user to the system through the http://0.0.0.0:3000/users/sign_up page. Try to login and logout. If you have problems, check another time this tutorial.
-<h2>You are the admin </h2>
+<h3>You are the admin </h3>
 Let's say that only a logged user can acces to the admin area. First of all, we have to define an admin area. Add this lines to your routes.rb file
 {% highlight ruby %}
 namespace :admin do
@@ -76,7 +76,7 @@ class Admin::AdminController < ApplicationController
 end
 {% endhighlight ruby %}
 We need also to create an admin/users_controller.rb and the related views in views/admin/users to manage the users. You can find the whole code on the github repo of this example, copy these files from there.<br/> Comment the "#load_and_authorize_resource" lines in the controllers/admin/users_controller.rb file, we are going to see later what this line is used to. Sign in and go to this address: http://0.0.0.0:3000/admin/users. You will see your user and the links to edit/delete it. But if you click on they, you will receive an error, cause we have no roles
-<h2>Add roles to rule the world</h2>
+<h3>Add roles to rule the world</h3>
 Generate 2 migrations to add the roles table and set up an HABTM relationship with the user table. Edit the migration like follow, thanks <a href="http://www.tonyamoyal.com/2010/07/28/rails-authentication-with-devise-and-cancan-customizing-devise-controllers/">Tony Amoyal</a> for your tutorial:
 {% highlight ruby %}
 class CreateRoles < ActiveRecord::Migration
@@ -217,7 +217,7 @@ Now login as a robbers and try to create a Post. Yes, you can do it. To avoid th
 class PostsController < ApplicationController
   load_and_authorize_resource
 {% endhighlight ruby %}
-<h2>Edit my profile</h2>
+<h3>Edit my profile</h3>
 Now we want to allow every user (yes, also the robbers) to edit their username and password. In this case, I will create the profile controller with only one action (dashboard) 'cause i find it useful, and it is pretty a standard in every application. maybe in the future you will add more action to this controller, like a public profile action, or something similar. But to edit the user, i will use the devise logic. We have to create the Profile controller and the dashboard profile view. Copy the profile stuff from the github repo.
 Now, we have to edit the route file to inform rails about the profiles controller and to define an admin_root and a user_root, that will be used in the profile_controller.
 {% highlight ruby %}
