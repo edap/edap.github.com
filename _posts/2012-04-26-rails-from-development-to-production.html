@@ -1,0 +1,63 @@
+---
+layout: post
+title: "Rails from development to production"
+category: 
+tags: [ruby on rails, assets, production]
+---
+{% include JB/setup %}
+This article has no need to be read if you have seen <a
+	href="http://railscasts.com/episodes/341-asset-pipeline-in-production?autoplay=true">this</a> excellent
+Ryan Bates railscast's. After months, i've decided to subscribe his tutorials,
+after all, they are a great way to learn rails, to be updated with all the new
+stuff, and, last but not least,  they are really well
+done.<br />Thanks Ryan!<br />
+Moving an application to production can be a little tricky. With rails assets we
+can avoid expensive http requests, all the css and the js files will be called
+in only 2 files. That's great, but how it works?<br />
+Let's start the apllication in production mode <br />
+{% highlight bash %}
+rails server -e production
+{% endhighlight bash %}
+and we will probably catch this error
+{% highlight bash %}
+ActionView::Template::Error (application.css isn't precompiled):
+{% endhighlight bash %}
+That's happen 'cause rails is looking for a compiled version of ours css files.
+But we DONT have a precompiled version. To precompile it, we have to be sure
+that our Gemfile contain the required gems.
+{% highlight ruby %}
+group :assets do
+  gem 'sass-rails',   '~> 3.2.4'
+  gem 'coffee-rails', '~> 3.2.2'
+  gem 'uglifier'
+end
+{% endhighlight ruby %}
+Ok, now 
+{% highlight ruby %}
+rake assets:precompile --trace
+{% endhighlight ruby %}
+I've added the --trace flag 'cause more than one time this command has failed,
+for differente reason. The most common was the wrong css's files order with
+twitter bootstrap and bootswatch. Now all our assets are under public/assets. We
+can upload this folder on the remote server and tell rails to serve the static
+files in this folder, add this line to your config/environments/production.rb
+file.
+{% highlight ruby %}
+config.serve_static_assets = true
+{% endhighlight ruby %}
+Every time that for development purpose you will run your application in
+development mode, rails will take the compiled files in public/assets. This may
+be annoiyng when you are trying to improve your css or add new features in the
+javascript files. I've searched for solution to avoid this beahviour, but I end
+up that the best solution in to erase the folder public/assets, and then
+recompile the files when you are ready to go to production.<br /><br />
+
+suggested readings:
+<a href
+	="http://wekeroad.com/2012/01/12/understanding-the-rails-asset-pipeline/">wekeroad
+	blogpost</a><br/>
+<a href =""></a><br />
+If you have problem with compiling javascript (like me) <a
+	href="http://arcturo.github.com/library/coffeescript/index.html">The
+	Little Book on coffescript</a>
+
