@@ -6,7 +6,7 @@ tags: [rails, devise, cancan, admin]
 type: post
 status: publish
 ---
-
+<b>Updated at 14/04/2012</b><br />
 The goal of this tutorial is to realize a rails application with:<br >
 <ul>
 <li>A public area whith register, logout and login functionalities</li>
@@ -44,7 +44,7 @@ rails g devise:views
 {% endhighlight ruby %}
 now add this two lines to your routes.rb file
 {% highlight ruby %}
-devise_for :users, :path_names => {:sign_in => "login", :sign_out => "logout"}
+devise_for :users, :path_names => {:sign_in => "login", :sign_out => "logout"}, :path => "d"
 resources :users
 {% endhighlight ruby %}
 Remember to add the username field to the attr_accessible in your user model. Try to run the command 'rake routes' to see all the new routes created by Devise. in order to display the links "login", "logout" and "register", add these lines to your views/layout/application.html.erb file. Pay attention to the "method post" in the logout button.
@@ -73,6 +73,10 @@ Second, we need to create an admin_controller in app/controller/admin
 class Admin::AdminController < ApplicationController
   layout "admin"
   before_filter :authenticate_user!
+  def current_ability
+    @current_ability ||= AdminAbility.new(current_user)
+  end
+
 end
 {% endhighlight ruby %}
 We need also to create an admin/users_controller.rb and the related views in views/admin/users to manage the users. You can find the whole code on the github repo of this example, copy these files from there.<br/> Comment the "#load_and_authorize_resource" lines in the controllers/admin/users_controller.rb file, we are going to see later what this line is used to. Sign in and go to this address: http://0.0.0.0:3000/admin/users. You will see your user and the links to edit/delete it. But if you click on they, you will receive an error, cause we have no roles
@@ -168,6 +172,10 @@ Edit your app/controller/application_controller.rb to define a method to handle 
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  def has_role?(current_user, role)
+    return !!current_user.roles.find_by_name(role.to_s.camelize)
+  end
+
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
   end
@@ -179,9 +187,11 @@ Now we have to tell to the controllers/admin/admin_controller file to check the 
 class Admin::AdminController < ApplicationController
   layout "admin"
   before_filter :verify_admin
+
   def verify_admin
-    @user = current_user
-    redirect_to root_url unless @user.role? "admin"
+    :authenticate_user!
+    has_role?(current_user, 'admin')
+    redirect_to root_url unless has_role?(current_user, 'admin')
   end
 
   def current_ability
@@ -219,15 +229,13 @@ class PostsController < ApplicationController
 {% endhighlight ruby %}
 <h3>Edit my profile</h3>
 Now we want to allow every user (yes, also the robbers) to edit their username and password. In this case, I will create the profile controller with only one action (dashboard) 'cause i find it useful, and it is pretty a standard in every application. maybe in the future you will add more action to this controller, like a public profile action, or something similar. But to edit the user, i will use the devise logic. We have to create the Profile controller and the dashboard profile view. Copy the profile stuff from the github repo.
-Now, we have to edit the route file to inform rails about the profiles controller and to define an admin_root and a user_root, that will be used in the profile_controller.
+Now, we have to edit the route file to inform rails about the profiles controller and to define a user_root, that will be used in the profile_controller.
 {% highlight ruby %}
 Authuser::Application.routes.draw do
   root :to => "home#index"
   match '/profiles/dashboard' => 'profiles#dashboard', :as => :user_root
-  match '/admin/users' => 'admin/users#index', :as => :admin_root
 
   devise_for :users, :path_names => {:sign_in => "login", :sign_out => "logout"}
-  resources :users
 
   resources :profiles, :only => [:dashboard]
 

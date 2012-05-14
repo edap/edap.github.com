@@ -5,9 +5,8 @@ category:
 tags: [ruby on rails, assets, production]
 ---
 {% include JB/setup %}
-This article has no need to be read if you have seen <a
-	href="http://railscasts.com/episodes/341-asset-pipeline-in-production?autoplay=true">this</a> excellent
-Ryan Bates railscast's. After months, i've decided to subscribe his tutorials,
+This article has no need to be read if you have seen <a href="http://railscasts.com/episodes/341-asset-pipeline-in-production?autoplay=true">this</a> excellent
+Ryan Bates railscasts. After months, i've decided to subscribe his tutorials,
 after all, they are a great way to learn rails, to be updated with all the new
 stuff, and, last but not least,  they are really well
 done.<br />Thanks Ryan!<br />
@@ -23,7 +22,7 @@ and we will probably catch this error
 ActionView::Template::Error (application.css isn't precompiled):
 {% endhighlight bash %}
 That's happen 'cause rails is looking for a compiled version of ours css files.
-But we DONT have a precompiled version. To precompile it, we have to be sure
+But we DONT have a precompiled version. To compile it, we have to be sure
 that our Gemfile contain the required gems.
 {% highlight ruby %}
 group :assets do
@@ -37,7 +36,7 @@ Ok, now
 rake assets:precompile --trace
 {% endhighlight ruby %}
 I've added the --trace flag 'cause more than one time this command has failed,
-for differente reason. The most common was the wrong css's files order with
+for differents reasons. The most common was the wrong css's files order with
 twitter bootstrap and bootswatch. Now all our assets are under public/assets. We
 can upload this folder on the remote server and tell rails to serve the static
 files in this folder, add this line to your config/environments/production.rb
