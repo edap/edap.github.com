@@ -648,6 +648,7 @@ pre {
   color: #474747;
   border: 0;
 }
+/*
 .unit-article .entry-content:first-child h2,
 .unit-article .entry-content:first-child h3,
 .unit-article .entry-content:first-child h4,
@@ -655,6 +656,7 @@ pre {
 .unit-article .entry-content:first-child h6 {
   margin-top: 0;
 }
+*/
 .unit-article a:link {
   border-bottom: 1px dashed #c26164;
 }
