@@ -14,9 +14,8 @@ version, that need to be managed with RVM).<br>
 Nginx is a web server created by <a href="http://www.webhostingskills.com/open_source/articles/interview_with_creator_of_nginx_igor_sysoev">IgorSysoev</a> to address the <a href="http://www.kegel.com/c10k.html">C10K
 problem</a>. It is known for his simple configuration, performance and low
 resources consumption. If you come from apache (like me) I suggest you to read this
- <a href="http://blog.martinfjordvald.com/2011/02/nginx-primer-2-from-apache-to-nginx/">article</a> linked in the nginx <a href="http://wiki.nginx.org/Configuration">wiki</a><br> .There
-is no need to install nginx from apt repository, to work with passenger, nginx
-required to be compiled with the passenger module.You can download the source and compile it by yourself, or you install it through passenger gem. I choose the second one
+ <a href="http://blog.martinfjordvald.com/2011/02/nginx-primer-2-from-apache-to-nginx/">article</a> linked in the nginx <a href="http://wiki.nginx.org/Configuration">wiki</a>
+.There is no need to install nginx from apt repository, to work with passenger, nginx required to be compiled with the passenger module.You can download the source and compile it by yourself, or you install it through passenger gem. I choose the second one
 {% highlight bash %}
 gem install passenger
 rvmsudo passenger-install-nginx-module
