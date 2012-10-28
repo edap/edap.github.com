@@ -70,7 +70,9 @@ In my installation there was an error,
 {% endhighlight bash %}
  The solution is described i<a href="http://stackoverflow.com/questions/3605235/rails-3-passenger-cant-find-git-gems-installed-by-bundler">here</a>.You can pack your gem in vendor, or set an appropriate BUNDLE_PATH. I need to move in production as soon as possible, so i hve opted for the first solution.
 <h4>Virtual host</h4>
-The term "Virtual host" is wrong, is an apache word, in nginx they are called simply "server block". What happen if we have an application called "girala" that use a ruby 1.8.7 version and a specific gemset? Passenger is installed in ruby 1.9.3, it could not work. We have to use a reverse proxy to solve this proble. Move in your app folder and delcare the gemset and install passenger.
+The term "Virtual host" is wrong, is an apache word, in nginx they are called simply "server block". What happens if we have an application called "girala" that use a ruby 1.8.7 version and a specific gemset? Passenger is installed in
+ruby 1.9.3, it could not work. We have to use a reverse proxy to solve this
+problem. Move in your app folder and delcare the gemset and install passenger.
 {% highlight bash %}
 rvm use 1.8.7@girala --rvmrc --create
 gem install passenger
