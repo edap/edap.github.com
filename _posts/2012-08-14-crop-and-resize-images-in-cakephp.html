@@ -26,6 +26,7 @@ To install it in your application and start to crop the images that you have
 previously uploaded:
 <ul>
 <li>copy app/View/Helper/CropHelper.php in your app/View/Helper folder</li>
+<li>copy app/View/Elements/* in your app/View/Element folder</li>
 <li>copy app/Controller/Component/CropComponent.php in your app/Controller/Component
 folder</li>
 <li>copy app/webroot/js/jwindowcrop folder in your webroot/js folder</li>
@@ -42,6 +43,7 @@ class ImagesController extends AppController{
     public $components = array('Crop'); 
 
     public function beforeFilter() {
+	parent::beforeFilter();
         $this->Crop->image_directory = 'files'; //image thumbs folder, 
         //has to be in your webroot, has to be same folder of the orginal image file
         $this->Crop->quality = 90; // 0 for no compression at all, 100 for the best quality compression

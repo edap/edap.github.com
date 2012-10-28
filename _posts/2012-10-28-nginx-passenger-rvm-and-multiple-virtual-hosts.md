@@ -1,0 +1,105 @@
+---
+layout: post
+title: "Nginx, Passenger, Rvm and multiple virtual hosts"
+category: 
+tags: [nginx, RVM, Passenger, ruby on rails, debian]
+---
+{% include JB/setup %}
+<h4>Install nginx and passenger</h4>
+I have just reinstalled and reconfigured nginx and passenger to run multiple
+hosts. There is a lot of material about this argument, thus, I will write here
+what are the requirement to run nginx and passenger with virtual hosts(and like
+often happens with rails, what to do if every app has his own gemset, with his own ruby
+version, that need to be managed with RVM).<br> 
+Nginx is a web server created by <a href="http://www.webhostingskills.com/open_source/articles/interview_with_creator_of_nginx_igor_sysoev">IgorSysoev</a> to address the <a href="http://www.kegel.com/c10k.html">C10K
+problem</a>. It is known for his simple configuration, performance and low
+resources consumption. If you come from apache (like me) I suggest you to read this
+ <a href="http://blog.martinfjordvald.com/2011/02/nginx-primer-2-from-apache-to-nginx/">article</a> linked in the nginx <a href="http://wiki.nginx.org/Configuration">wiki</a><br> .There
+is no need to install nginx from apt repository, to work with passenger, nginx
+required to be compiled with the passenger module.You can download the source and compile it by yourself, or you install it through passenger gem. I choose the second one
+{% highlight bash %}
+gem install passenger
+rvmsudo passenger-install-nginx-module
+{% endhighlight bash %}
+Now download a bash script that allow you to manage nginx like every service in /etc/init.d
+{% highlight bash %}
+wget -O init-deb.sh http://library.linode.com/assets/660-init-deb.sh
+sudo mv init-deb.sh /etc/init.d/nginx
+sudo chmod +x /etc/init.d/nginx
+sudo /usr/sbin/update-rc.d -f nginx defaults
+{% endhighlight bash %}
+<h4>RVM and passenger</h4>
+Now, if you open your browser you will the "Welcome to nginx message". It is true, nginx is installed.Let's have a look at the configuration file. At the top of the file, under http, you will see something like this:
+{% highlight bash %}
+passenger_root /home/da/.rvm/gems/ruby-1.9.3-p194/gems/passenger-3.0.17;
+passenger_ruby /home/da/.rvm/wrappers/ruby-1.9.3-p194/ruby;
+{% endhighlight bash %}
+The passenger gem is installed in the 1.9.3-p194 gemset. If we run a ruby application with this ruby version, there is no problem. Just instruct rvm about wich ruby use and create a .rvmrc file for the application, called "pigliala".
+{% highlight bash %}
+rvm use 1.9.3-p194@pigliala --rvmrc --create
+{% endhighlight bash %}
+Now,if you are installing a ruby on rails application,  create a config/setub_load_path.rb file as described <a href="https://rvm.io/integration/passenger/">here</a>,
+{% highlight ruby %}
+if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
+  begin
+    gems_path = ENV['MY_RUBY_HOME'].split(/@/)[0].sub(/rubies/,'gems')
+    ENV['GEM_PATH'] = "#{gems_path}:#{gems_path}@global"
+    require 'rvm'
+    RVM.use_from_path! File.dirname(File.dirname(__FILE__))
+  rescue LoadError
+    raise "RVM gem is currently unavailable."
+  end
+end
+
+# If you're not using Bundler at all, remove lines bellow
+ENV['BUNDLE_GEMFILE'] = File.expand_path('../Gemfile', File.dirname(__FILE__))
+require 'bundler/setup'
+{% endhighlight ruby %}
+Also a new server block in the nginx.conf file must the setted. Open the file, if you have followed the default installation, it would be here /opt/nginx/conf/nginx.conf. Add this line:
+{% highlight bash %}
+server {
+    listen 80;
+    server_name pigliala;
+    root /home/da/public_html/pigliala/public;
+    passenger_enabled on;
+}
+{% endhighlight bash %}
+Add an entry called "pigliala" in your /etc/hosts file, restart nginx and open the browser at http://pigliala. You will see your app.
+In my installation there was an error, 
+{% highlight bash %}
+"git://github.com/thoughtbot/paperclip.git (at master) is not checked out. Please run `bundle install` (Bundler::GitError)".
+{% endhighlight bash %}
+ The solution is described i<a href="http://stackoverflow.com/questions/3605235/rails-3-passenger-cant-find-git-gems-installed-by-bundler">here</a>.You can pack your gem in vendor, or set an appropriate BUNDLE_PATH. I need to move in production as soon as possible, so i hve opted for the first solution.
+<h4>Virtual host</h4>
+The term "Virtual host" is wrong, is an apache word, in nginx they are called simply "server block". What happen if we have an application called "girala" that use a ruby 1.8.7 version and a specific gemset? Passenger is installed in ruby 1.9.3, it could not work. We have to use a reverse proxy to solve this proble. Move in your app folder and delcare the gemset and install passenger.
+{% highlight bash %}
+rvm use 1.8.7@girala --rvmrc --create
+gem install passenger
+{% endhighlight bash %}
+Now we create a unix socket waiting for our app.
+{% highlight bash %}
+passenger start --socket /tmp/girala.socket -d
+{% endhighlight bash %}
+This comand will also install and compile a passanger standalone version. But we need to tell nginx that this socket is available. Open the nginx.conf file and add the new server block entry and the entry for our reverse proxy
+{% highlight bash %}
+upstream girala_upstream {
+	server unix:/tmp/girala.socket;
+}
+
+server {
+	listen 80;
+	server_name girala;
+	root /home/da/public_html/girala/public;
+	location / {
+		proxy_pass http://girala_upstream;
+		proxy_set_header Host $host;
+	}
+}
+{% endhighlight bash %}
+Finish. We can now access both applications.<br />
+Useful links:<br />
+<a href="http://blog.phusion.nl/2010/09/21/phusion-passenger-running-multiple-ruby-versions/">http://blog.phusion.nl/2010/09/21/phusion-passenger-running-multiple-ruby-versions/</a><br />
+<a href="http://shapeshed.com/installing-passenger-3-with-rvm-and-nginx-on-osx/">http://shapeshed.com/installing-passenger-3-with-rvm-and-nginx-on-osx/</a><br />
+<a href="http://blog.martinfjordvald.com/2010/07/nginx-primer/">http://blog.martinfjordvald.com/2010/07/nginx-primer/</a><br />
+<a href="http://wiki.nginx.org/Pitfalls">http://wiki.nginx.org/Pitfalls</a><br />
+
