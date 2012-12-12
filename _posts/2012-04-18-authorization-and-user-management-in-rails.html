@@ -56,7 +56,7 @@ Remember to add the username field to the attr_accessible in your user model. Tr
 <% if user_signed_in? %>
   <% #link_to "My Profile", user_root_path%>
   <%= link_to('Logout', destroy_user_session_path, :method=>'delete') %>  
-<%else%>
+<%end%>
 {% endhighlight erb %}
 Add your user to the system through the http://0.0.0.0:3000/users/sign_up page. Try to login and logout. If you have problems, check another time this tutorial.
 <h3>You are the admin </h3>
