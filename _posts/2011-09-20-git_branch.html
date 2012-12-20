@@ -5,7 +5,6 @@ published: true
 meta: 
   _edit_last: "1"
 tags: 
-- cakephp
 - git
 - git branch
 type: post
@@ -46,7 +45,7 @@ se un giorno decidessimo che il branch develop non ci serve più, cancelliamolo
 git branch -d develop
 {% endhighlight %}
 
-<strong>Differenze tra i due branches</strong>
+<h4>Differenze tra i due branches</h4>
 Può capitare che alcune modifiche fatte su 'develop' differiscano dal codice presente su master. Puoà darsi che abbiate innavertitamente lavorato su master per delle modifiche che dovevano essere effettuate su develop, o altri scenari simili. Quando, dal branch master lanciamo
 {% highlight bash %}
 git merge develop
@@ -60,7 +59,7 @@ Apriamo il file incriminato, sistemiamolo e poi git add e git commit.
 git add file_config.txt
 git commit
 {% endhighlight %}
-<strong>Il control-Z dell'ultimo merge</strong>
+<h4>Il control-Z dell'ultimo merge</h4>
 Se avete appena fatto il merge sul branch master di una bizzarra feature che avevate sviluppato su develop, che credevate pronta e superefficiente ma in realtà ha scatenato un turbine di email di protesta da parte degli utenti che rivogliono indietro il loro vecchio sistema, dove "tutto funzionava", dove "tutto era più semplice" e sentite che sta per arrivare la email "si stava meglio quando si stava peggio", beh, allora, forse è meglio tornare indietro, e levare l'ultima feature aggiunta.
 {% highlight bash %}
 git reset --hard ORIG_HEAD
