@@ -36,7 +36,15 @@ group :test do
   gem 'capybara'
 end
 {% endhighlight ruby %}
-As you ca see we have added also Capybara, Cucumber, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them.
+As you ca see we have added also Capybara, Cucumber, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them. Another step, is to tell rails that we wanto to replace fixtures with factories, and to suppress the creation of test files for views and helpers. Open your config/application.rb file and after the line "class Application < Rails::Application" add the following lines:
+{% highlight ruby %}
+config.generators do |g|    
+  g.test_framework :rspec, :fixture => true
+  g.fixture_replacement :factory_girl      
+  g.view_specs false
+  g.helper_specs false
+end
+{% endhighlight ruby %}
 Now running "rails generate rspec:install" to preare your application for the testing you will have this files .rspec, the spec/spec_helper.rb, and the folder spec, that is used to store the test files. You can safely remove the folder "test", if you have created your app without the flag "-T".<br />
 To write the rspec files from scratch, we will create a controller with some view.<br />
 To do so, we will use the flag "--no-test-framework" to suppress the generation of the default Rspec tests.	
@@ -107,7 +115,7 @@ describe Post do
   it "is valid with title and boby"
   it "is not valid with an empty title"
 end
-{% highlight ruby %}
+{% endhighlight ruby %}
 If you run "bundle exec rspec spec/models/post_spec.rb" you will see a message like this:
 {% highlight bash %}
 **
@@ -119,17 +127,100 @@ Pending:
   Post is not valid with an empty title
     # Not yet implemented
     # ./spec/models/post_spec.rb:5
-{% highlight bash %}
+{% endhighlight bash %}
+That happens because we dont have defined the test. Open the file and add the following lines, note that we are using FactoryGirl to define the Post ActiveRecord object.
+{% highlight ruby %}
+require 'spec_helper'
 
+describe Post do
 
-<h4>Introducing Behaviour Drive Development</h4>
+  before(:each) do
+    @post = FactoryGirl.build(:post)
+  end
+
+  it "is valid with title and boby" do
+    @post.should be_valid
+  end
+
+  it "is not valid with an empty title" do
+    @post.title = nil
+    @post.should_not be_valid
+  end
+
+end
+{% endhighlight ruby %}
+We create a @post object at the beginning, some users prefere to specify the factory in every test, because you can just override attributes. Check this example
+{% highlight ruby %}
+require 'spec_helper'
+
+describe Post do
+
+  it "is valid with title and boby" do
+    post = FactoryGirl.build(:post)
+    post.should be_valid
+  end
+
+  it "is not valid with an empty title" do
+    post = FactoryGirl.build(:post, title:nil)
+    post.should_not be_valid
+  end
+
+end
+{% endhighlight ruby %}
+I prefer the second one, however, it's a matter of taste.
+{% highlight ruby %}
+require 'spec_helper'
+
+describe Post do
+
+  it "is valid with title and boby" do
+    post = FactoryGirl.build(:post)
+    post.should be_valid
+  end
+
+  it "is not valid with an empty title" do
+    post = FactoryGirl.build(:post, title:nil)
+    post.should_not be_valid
+  end
+
+end
+{% endhighlight ruby %}
+If repeating "FactoryGirl" is too verbose for you, we can can mix the syntax methods. Open you spec/spec_helper.rb and add this line 
+{% highlight ruby %}
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+end
+{% endhighlight ruby %}
+Now edit the spec/models/post.rb and remove the "FactoryGirl" word, because we don't need it anymore.
+{% highlight ruby %}
+require 'spec_helper'
+
+describe Post do
+
+  it "is valid with title and boby" do
+    post = build(:post)
+    post.should be_valid
+  end
+
+  it "is not valid with an empty title" do
+    post = build(:post, title:nil)
+    post.should_not be_valid
+  end
+
+end
+{% endhighlight ruby %}
+If we run this test, we will see the second example failing. The post will be saved also with an empty title. That's Test Driven Development, we have define first what "should happen if", and then we write the code to adapt it to our test. Open the app/post/model and write the following lines:
+{% highlight ruby %}
+class Post < ActiveRecord::Base
+    attr_accessible :title, :body
+    validates_presence_of :title
+end
+{% endhighlight ruby %}
+
 
 {% highlight ruby %}
 {% highlight ruby %}
 
-
-PROBLEM Between capybara and rspec
-http://alindeman.github.com/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html
 
 <h4>List of usefull links</h4>
 getting started:<br />
@@ -157,9 +248,9 @@ Capybara<br/>
 <a href="https://github.com/jnicklas/capybara">https://github.com/jnicklas/capybara</a><br/>
 <a
 	href="http://rubydoc.info/github/jnicklas/capybara">http://rubydoc.info/github/jnicklas/capybara</a><br/><br
-/><br /><br />
+/>
 Factory Girl Rails<br>
-<a href="http://ruby.railstutorial.org/chapters/sign-up#sec-tests_with_factories">http://ruby.railstutorial.org/chapters/sign-up#sec-tests_with_factories</a><br /><br />
+<a href="http://ruby.railstutorial.org/chapters/sign-up#sec-tests_with_factories">http://ruby.railstutorial.org/chapters/sign-up#sec-tests_with_factories</a><br />
 <a href="https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md">https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md</a><br /><br />
 Matt Wynne blog<br/>
 <a href="http://blog.mattwynne.net/">http://blog.mattwynne.net/</a><br/><br />
