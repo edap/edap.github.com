@@ -39,7 +39,7 @@ rvm use 1.9.3-p194@pigliala --rvmrc --create
 {% endhighlight bash %}
 Now,if you are installing a ruby on rails application,  create a config/setub_load_path.rb file as described <a href="https://rvm.io/integration/passenger/">here</a>,
 {% highlight ruby %}
-if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
+if ENV['MY_RUBY_HOME'] &amp;&amp; ENV['MY_RUBY_HOME'].include?('rvm')
   begin
     gems_path = ENV['MY_RUBY_HOME'].split(/@/)[0].sub(/rubies/,'gems')
     ENV['GEM_PATH'] = "#{gems_path}:#{gems_path}@global"
