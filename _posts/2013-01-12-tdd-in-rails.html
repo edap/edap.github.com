@@ -209,13 +209,15 @@ describe Post do
 
 end
 {% endhighlight ruby %}
-If we run this test, we will see the second example failing. The post will be saved also with an empty title. That's Test Driven Development, we have define first what "should happen if", and then we write the code to adapt it to our test. Open the app/post/model and write the following lines:
+If we run this test, we will see the second example failing. The post will be saved also with an empty title. That's Test Driven Development, we have define first what "should happen if", and then we write the code to adapt it to our test. Open the app/post/model.rb and write the following lines:
 {% highlight ruby %}
 class Post < ActiveRecord::Base
-    attr_accessible :title, :body
-    validates_presence_of :title
+  attr_accessible :body, :title
+  validates_presence_of :title
 end
 {% endhighlight ruby %}
+
+
 
 
 <h4>Database cleaner</h4>
