@@ -3,7 +3,7 @@ layout: post
 title: "TDD in Rails"
 category: 
 status: published
-tags: [ruby on rails, TDD, rspec, factorygirls, cucumber]
+tags: [ruby on rails, TDD, rspec, factorygirl]
 ---
 {% include JB/setup %}
 
@@ -32,12 +32,11 @@ gem 'factory_girl_rails', :group =&gt; [:development, :test]
 group :test do
   gem 'database_cleaner'
   gem 'email_spec'
-  gem 'cucumber-rails'
   gem 'launchy'
   gem 'capybara'
 end
 {% endhighlight ruby %}
-As you ca see we have added also Capybara, Cucumber, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them. Another step, is to tell rails that we wanto to replace fixtures with factories, and to suppress the creation of test files for views and helpers. Open your config/application.rb file and add the following lines:
+As you can see we have added also Capybara, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them. Another step, is to tell rails that we wanto to replace fixtures with factories, and to suppress the creation of test files for views and helpers. Open your config/application.rb file and add the following lines:
 {% highlight ruby %}
 class Application &lt; Rails::Application
 #...
@@ -301,11 +300,11 @@ and run watchr with "rake watchr". Credits to this solution go <a href="http://w
 you can run the whole test with "rake spec", or simply "rake". You can run a single test with:
 {% highlight ruby %}
 bundle exec rspec /spec/models/post_spec.rb
-{% highlight ruby %}
+{% endhighlight ruby %}
 and you can also run a test for a single line, giving the line number as parameter
 {% highlight ruby %}
 bundle exec rspec /spec/controllers/posts_controller_spec.rb:10
-{% highlight ruby %}
+{% endhighlight ruby %}
 Why are we using 'bundle exec'? this is needed to load our exact gem environment specified in our Gemfile
 
 <h4>List of usefull links</h4>
