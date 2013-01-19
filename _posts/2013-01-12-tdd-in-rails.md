@@ -7,23 +7,14 @@ tags: [ruby on rails, TDD, rspec, factorygirls, cucumber]
 ---
 {% include JB/setup %}
 <h4>First: No code is safe.</h4>
-Start asking your code: "Are you good enough to pass this test?". If he didn't
-answer, write a test and fire the console<br />.Be active, don't wait until your
-code start screaming. It's a common habit to think "i will write later my test
-code". No, you will not, you will have other things to do, bug fixing, new
-features, or take a walk outside, but no, abslolutly, no test code.<br /> To
-avoid procrastination, testing has to be integrated in the development code
-cycle, "you have to start thinking about testing before you write a line of
-code"(tip 48, <a href="http://www.amazon.com/exec/obidos/ASIN/020161622X/codinghorror-20">The Pragmatic Programmer</a>). The most complete TDD definition that i found on the net comes from <a href="http://www.agileskillsproject.org/agile-skills-inventory/technical-excellence/test-driven-design-tdd">agileskillsproject.org</a>:<br />
+Start asking your code: "Are you good enough to pass this test?". If he didn't answer, write a test and fire the console<br />.Be active, don't wait until your code start screaming. It's a common habit to think "i will write later my test code". No, you will not, you will have other things to do, bug fixing, new features, or take a wal outside, but no, abslolutly, no test code.<br /> To avoid procrastination, testing has to be integrated in the development code cycle. The most complete TDD definition that i found on the net comes from <a href="http://www.agileskillsproject.org/agile-skills-inventory/technical-excellence/test-driven-design-tdd">agileskillsproject.org</a>:<br />
 <i>Test-Driven Development (TDD) is a way of driving the design of code by writing a test which expresses what you intend the code to do, making that test pass, and continuously refactoring to keep the design as simple as possible. TDD can apply at multiple levels, e.g., Customer Tests, Integration Tests, Unit Tests.<br />
 Test-Driven Development/Design follows a rigorous cycle. Start by writing a failing test (Red.) Implement the simplest solution that will cause the test to pass (Green.) Search for duplication and remove it (Refactor.) "RED-GREEN-REFACTOR" has become almost a mantra for many TDD practitioners. Understanding and even internalizing this cycle is key to being able to use TDD to solve problems.</i><br>
 Kent Beck rediscovered this technique in 2003, and from his book "Test-Driven Development by example" is taken this <a href="http://en.wikipedia.org/wiki/Test-driven_development#Test-driven_development_cycle">part</a> on the wiki page about TDD.
 
+Citation da Pragmatic programmers, 
 <h4>Test Driven Development in Rails</h4>
-How it work's on Ruby on Rails? First of all, you have to include some gems for
-ours Integration tests. The most important is Rspec-rails for our integration
-test (known as "request specs" in the context of RSpec), so edit your Gemfile,
-add the following lines and run bundle install <br />
+How it work's on Ruby on Rails? First of all, you have to include Rspec for ours Integration tests (known as "request specs" in the context of RSpec), so edit your Gemfile, add the following lines and run : <br />
 {% highlight ruby %}
 gem 'rspec-rails', :group => [:development, :test]
 gem 'factory_girl_rails', :group => [:development, :test]
@@ -36,7 +27,7 @@ group :test do
   gem 'capybara'
 end
 {% endhighlight ruby %}
-As you ca see we have added also Capybara, Cucumber, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them.
+Notes, we have added also Capybara, Cucumber, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them.
 Now running "rails generate rspec:install" to preare your application for the testing you will have this files .rspec, the spec/spec_helper.rb, and the folder spec, that is used to store the test files. You can safely remove the folder "test", if you have created your app without the flag "-T".<br />
 To write the rspec files from scratch, we will create a controller with some view.<br />
 To do so, we will use the flag "--no-test-framework" to suppress the generation of the default Rspec tests.	
@@ -79,60 +70,42 @@ describe "Home page" do
 end
 {% endhighlight ruby %}
 Note, i've write this example just to point out some differences between the two methods, but they should never be used for the same goal, each of them is more appropriated than the other in a specific context, it's up to you find the right one.
-<h4>FactoryGirls, not Fixtures</h4>
-We are going to use factories to define Active Record objects and test them with insert/delete/edit methods. The most used gem for thsi scope ils Facotry Girl. Like Rspec and Capybara, also FG has his own DSL.<br /> Now, in the pages controller that we have written before there is no database, let's create a resource, Post for example.
-{% highlight ruby %}
-rails generate scaffold Post title:string body:text
-{% endhighlight ruby %} 
-Due to the factory-girl-rails gem, this command have generated also the file:  spec/factories/posts.rb. Open it
-{% highlight ruby %}
-FactoryGirl.define do
-  factory :post do
-    title "MyString"
-    body "MyText"
-  end
-end
-{% endhighlight ruby %} 
-This factory define our ActiveRecord object for the model "Post", we can use it in 
+ 
 <h4>Introducing Behaviour Drive Development</h4>
+<h4>FactoryGirls, not Fixtures</h4>
 
 {% highlight ruby %}
-
+{% endhighlight ruby %}
 
 PROBLEM Between capybara and rspec
 http://alindeman.github.com/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html
 
-<h4>List of usefull links</h4>
-getting started:<br />
-<a
-	href="http://en.wikipedia.org/wiki/Test-driven_development">http://en.wikipedia.org/wiki/Test-driven_development</a><br
-/>
-<a
-	href="http://stackoverflow.com/questions/1386562/how-to-get-started-on-tdd-with-ruby-on-rails">http://stackoverflow.com/questions/1386562/how-to-get-started-on-tdd-with-ruby-on-rails</a><br
-/><br />
-Detailed explanation for the first steps development<br> <a
-	href="http://ruby.railstutorial.org/chapters/static-pages#sec-TDD">http://ruby.railstutorial.org/chapters/static-pages#sec-TDD</a><br
-/><br />
-best practices<br>
- <a
-	 href="https://docs.google.com/document/d/1gi00-wwPaLk5VvoAJhBVNh9Htw4Rwmj-Ut88T4M2MwI/mobilebasic?pli=1&hl=en">https://docs.google.com/document/d/1gi00-wwPaLk5VvoAJhBVNh9Htw4Rwmj-Ut88T4M2MwI/mobilebasic?pli=1&hl=en</a><br/>
- <a
-	 href="http://bitfluxx.com/2011/05/23/some-rspec-tips-and-best-practices.html">http://bitfluxx.com/2011/05/23/some-rspec-tips-and-best-practices.html</a><br/><br />
+
+link
+wiki
+http://en.wikipedia.org/wiki/Test-driven_development
+
+getting started
+http://stackoverflow.com/questions/1386562/how-to-get-started-on-tdd-with-ruby-on-rails
+Detailed explanation for the first steps development http://ruby.railstutorial.org/chapters/static-pages#sec-TDD
+
+best practices
+https://docs.google.com/document/d/1gi00-wwPaLk5VvoAJhBVNh9Htw4Rwmj-Ut88T4M2MwI/mobilebasic?pli=1&hl=en
+http://bitfluxx.com/2011/05/23/some-rspec-tips-and-best-practices.html
+
+Slides about different types of tests
+http://alindeman.github.com/acceptance_testing
 
 
- Slides about different types of tests<br />
-<a
-	href="http://alindeman.github.com/acceptance_testing">http://alindeman.github.com/acceptance_testing</a><br
-/><br />
-Capybara<br/>
-<a href="https://github.com/jnicklas/capybara">https://github.com/jnicklas/capybara</a><br/>
-<a
-	href="http://rubydoc.info/github/jnicklas/capybara">http://rubydoc.info/github/jnicklas/capybara</a><br/><br
-/><br /><br />
-Matt Wynne blog<br/>
-<a href="http://blog.mattwynne.net/">http://blog.mattwynne.net/</a><br/><br />
-Chris Parsons Blog<br/>
-<a href="http://chrismdp.com/">http://chrismdp.com/</a><br/><br />
-They run together this project about behaviuor test development (i will write soon about it)<br/>
-<a href="http://bddkickstart.com/">http://bddkickstart.com/</a><br/>
+Capybara
+https://github.com/jnicklas/capybara
+http://rubydoc.info/github/jnicklas/capybara
 
+Matt Wynne blog
+http://blog.mattwynne.net/
+
+Chris Parsons Blog
+http://chrismdp.com/
+
+They run together this project about behaviuor test development (i will write soon about it)
+http://bddkickstart.com/
