@@ -218,9 +218,90 @@ end
 {% endhighlight ruby %}
 
 
+<h4>Database cleaner</h4>
+Database cleaner is a tool to clean the database before testing. Sometimes, for example in a user registration, some values has to be unique. For example, if we try to insert two times a user with the same email, we have this error
+{% highlight bash %}
+ActiveRecord::RecordInvalid: Validation failed: Email has already been taken, Email has already been taken, Username has already been taken.
+{% endhighlight bash %}
+It's easy to setup, open your loved spec/spec_helper.rb file and add these lines
 {% highlight ruby %}
-{% highlight ruby %}
+RSpec.configure do |config|
 
+  config.before(:suite) do
+    #for sqlite use:
+    # DatabaseCleaner.strategy = :truncation
+    # instead the following 2 lines
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+end
+{% endhighlight ruby %}
+Nevertheless, FactoryGirl has a nice method to avoid duplication, the method 'sequence'
+{% highlight ruby %}
+FactoryGirl.define do
+  factory :user do
+    sequence(:username) { |n| "foo#{n}" }
+    password "foobar"
+    email { "#{username}@example.com" }
+{% endhighlight ruby %}
+More details at this <a href="http://stackoverflow.com/questions/9248582/testing-the-controller-with-rspec-devise-factory-girl">question </a>in stackoverflow
+<h4>Watchr</h4>
+It could be very annoying run a test each time we write something. There is a tool to automate this process, called <a href="https://github.com/mynyml/watchr">watchr</a>. Add it ro your Gemfile
+{% highlight ruby %}
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'watchr'
+end
+{% endhighlight ruby %}
+Next, add a file called .watchr in your app root folder, with the following content, that tell watchr to run a test each time a .rb file in your app is saved, and each time you save a changement in any file ending in _spec.rb under the spec/
+{% highlight ruby %}
+def run_spec(file)
+  unless File.exist?(file)
+    puts "#{file} does not exist"
+    return
+  end
+
+  puts "Running #{file}"
+  system "bundle exec rspec #{file}"
+  puts
+end
+
+watch("spec/.*/*_spec.rb") do |match|
+  run_spec match[0]
+end
+
+watch("app/(.*/.*).rb") do |match|
+  run_spec %{spec/#{match[1]}_spec.rb}
+end
+{% endhighlight ruby %}
+Open a new console window, and run "watchr .watchr". Nothing happen, true. But if you change a model, a controller or a file in spec/ your test will be running automatically. We can also create a rake task in lib/tasks/watchr.rake
+{% highlight ruby %}
+desc "Run watchr"
+task :watchr do
+  sh %{bundle exec watchr .watchr}
+end
+{% endhighlight ruby %}
+and run watchr with "rake watchr". Credits to this solution go <a href="http://www.rubyinside.com/how-to-rails-3-and-rspec-2-4336.html">here</a>
+
+<h4>Running your test</h4>
+you can run the whole test with "rake spec", or simply "rake". You can run a single test with:
+{% highlight ruby %}
+bundle exec rspec /spec/models/post_spec.rb
+{% highlight ruby %}
+and you can also run a test for a single line, giving the line number as parameter
+{% highlight ruby %}
+bundle exec rspec /spec/controllers/posts_controller_spec.rb:10
+{% highlight ruby %}
+Why are we using 'bundle exec'? this is needed to load our exact gem environment specified in our Gemfile
 
 <h4>List of usefull links</h4>
 getting started:<br />
@@ -236,6 +317,8 @@ Detailed explanation for the first steps development<br> <a
 best practices<br>
  <a
 	 href="https://docs.google.com/document/d/1gi00-wwPaLk5VvoAJhBVNh9Htw4Rwmj-Ut88T4M2MwI/mobilebasic?pli=1&hl=en">https://docs.google.com/document/d/1gi00-wwPaLk5VvoAJhBVNh9Htw4Rwmj-Ut88T4M2MwI/mobilebasic?pli=1&hl=en</a><br/>
+
+<a href = "http://blog.carbonfive.com/2010/10/21/rspec-best-practices/">http://blog.carbonfive.com/2010/10/21/rspec-best-practices/</a><br />
  <a
 	 href="http://bitfluxx.com/2011/05/23/some-rspec-tips-and-best-practices.html">http://bitfluxx.com/2011/05/23/some-rspec-tips-and-best-practices.html</a><br/><br />
 
