@@ -26,8 +26,8 @@ ours Integration tests. The most important is Rspec-rails for our integration
 test (known as "request specs" in the context of RSpec), so edit your Gemfile,
 add the following lines and run bundle install <br />
 {% highlight ruby %}
-gem 'rspec-rails', :group => [:development, :test]
-gem 'factory_girl_rails', :group => [:development, :test]
+gem 'rspec-rails', :group =&gt; [:development, :test]
+gem 'factory_girl_rails', :group =&gt; [:development, :test]
 
 group :test do
   gem 'database_cleaner'
@@ -39,10 +39,10 @@ end
 {% endhighlight ruby %}
 As you ca see we have added also Capybara, Cucumber, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them. Another step, is to tell rails that we wanto to replace fixtures with factories, and to suppress the creation of test files for views and helpers. Open your config/application.rb file and add the following lines:
 {% highlight ruby %}
-class Application  Rails::Application
+class Application &lt; Rails::Application
 #...
 config.generators do |g|    
-  g.test_framework :rspec, :fixture => true
+  g.test_framework :rspec, :fixture =&gt; true
   g.fixture_replacement :factory_girl      
   g.view_specs false
   g.helper_specs false
@@ -214,7 +214,7 @@ end
 {% endhighlight ruby %}
 If we run this test, we will see the second example failing. The post will be saved also with an empty title. That's Test Driven Development, we have define first what "should happen if", and then we write the code to adapt it to our test. Open the app/post/model.rb and write the following lines:
 {% highlight ruby %}
-class Post < ActiveRecord::Base
+class Post &lt; ActiveRecord::Base
   attr_accessible :body, :title
   validates_presence_of :title
 end
