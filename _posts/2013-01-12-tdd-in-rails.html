@@ -40,7 +40,7 @@ end
 {% endhighlight ruby %}
 As you can see we have added also Capybara, FactoryGirls and DatabaseCleaner, during this post we will see how and when use them. Another step, is to tell rails that we wanto to replace fixtures with factories, and to suppress the creation of test files for views and helpers. Open your config/application.rb file and add the following lines:
 {% highlight ruby %}
-class Application &lt; Rails::Application
+class Application < Rails::Application
 #...
 config.generators do |g|    
   g.test_framework :rspec, :fixture => true
@@ -49,8 +49,10 @@ config.generators do |g|
   g.helper_specs false
 end
 {% endhighlight ruby %}
-Now running "rails generate rspec:install" to preare your application for the testing you will have this files .rspec, the spec/spec_helper.rb, and the folder spec, that is used to store the test files. You can safely remove the folder "test", if you have created your app without the flag "-T".<br />
-To write the rspec files from scratch, we will create a controller with some view.<br />
+Now, running "rails generate rspec:install" to preare your application for the
+testing, you will have these files: .rspec, the spec/spec_helper.rb, and the folder spec, that is used to store the test files. You can safely remove the folder "test", if you have created your app without the flag "-T".<br />
+To write the rspec files from scratch, we will create a controller with some
+views.<br />
 To do so, we will use the flag "--no-test-framework" to suppress the generation of the default Rspec tests.	
 {% highlight ruby %}
 rails generate controller Pages home help --no-test-framework
@@ -60,10 +62,14 @@ After that, we'll generate the integration test file for the pages controller
 rails generate integration_test pages
 {% endhighlight ruby %}
 This will generate the file spec/requests/pages_spec.rb. Add this line at "require 'capybara/rspec'" in your spec_helper.rb file. Copy this file in another folder, called spec/features/pages_spec.rb.
-Yeah, in spec/ we'll have 2 subfolders, one called requests and the other one called fetaures. In the folder spec/features we are going to store <a href="https://www.relishapp.com/rspec/rspec-rails/v/2-12-2/docs/feature-specs/feature-spec">RSpec feature specs</a> (with capybara),  and in spec/requests/ all the <a href="https://www.relishapp.com/rspec/rspec-rails/v/2-12-2/docs/request-specs/request-spec">RSpec request specs</a>. Request specs are intended to run Integratione test, feature specs are used to driving web application, cheking url and verify content.
+Yes, in spec/ we'll have 2 subfolders, one called requests and the other one called fetaures. In the folder spec/features we are going to store <a href="https://www.relishapp.com/rspec/rspec-rails/v/2-12-2/docs/feature-specs/feature-spec">RSpec feature specs</a> (with capybara),  and in spec/requests/ all the <a href="https://www.relishapp.com/rspec/rspec-rails/v/2-12-2/docs/request-specs/request-spec">RSpec request specs</a>. Request specs are intended to run Integratione test, feature specs are used to driving web application, cheking url and verify content.
 Use the first one to test interactions with your application as a HTTP API. Use features specs (with capybara) to test your application like a user could do it. <br>
 This is a necessary reading about <a href="http://alindeman.github.com/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html">rspec-rails and capybara</a>.<br>
-Now will write some test that HAS to fail.This is an important point, you are defining a new feature or starting from skratch, your code is not ready for your requirement. If the test does not fail, either your text was wrong, or your code was just ready to pass the test. Both, are wrong. You have to code untill your code pass the test. After that start to refactoring your code, write new test if necessary, and write the small amount of code necessary to pass the test. Now, back on the code.
+Now we will write some test that HAS to fail.This is an important point, you are
+defining a new feature or starting from scratch, your code is not ready for your
+requirement. If the test does not fail, either your text was wrong, or your code
+was just ready to pass the test. Both, are wrong. You have to write untill your
+code pass the test. After that start to refactoring it, write new test if necessary, and write the small amount of code necessary to pass the test. Now, back on the code.
 {% highlight ruby %}
 require 'spec_helper'
 
@@ -213,7 +219,9 @@ describe Post do
 
 end
 {% endhighlight ruby %}
-If we run this test, we will see the second example failing. The post will be saved also with an empty title. That's Test Driven Development, we have define first what "should happen if", and then we write the code to adapt it to our test. Open the app/post/model.rb and write the following lines:
+If we run this test, we will see the second example failing. The post will be
+saved also with an empty title. That's Test Driven Development, we have to
+define first what "should happen if", and after that write the code to adapt it to our test. Open the app/post/model.rb and write the following lines:
 {% highlight ruby %}
 class Post < ActiveRecord::Base
   attr_accessible :body, :title
@@ -222,7 +230,9 @@ end
 {% endhighlight ruby %}
 
 <h4>Database cleaner</h4>
-Database cleaner is a tool to clean the database before testing. Sometimes, for example in a user registration, some values has to be unique. For example, if we try to insert two times a user with the same email, we have this error
+Database cleaner is a tool to clean the database before testing. Sometimes, for
+example in a user registration, some values has to be unique. For example, if we
+try to insert two times a user with the same email, we could have this error
 {% highlight bash %}
 ActiveRecord::RecordInvalid: Validation failed: Email has already been taken, Email has already been taken, Username has already been taken.
 {% endhighlight bash %}
@@ -258,7 +268,9 @@ FactoryGirl.define do
 {% endhighlight ruby %}
 More details at this <a href="http://stackoverflow.com/questions/9248582/testing-the-controller-with-rspec-devise-factory-girl">question </a>in stackoverflow
 <h4>Watchr</h4>
-It could be very annoying run a test each time we write something. There is a tool to automate this process, called <a href="https://github.com/mynyml/watchr">watchr</a>. Add it ro your Gemfile
+It could be very annoying to run a test every time we write something. There is
+a tool to automate this process (and a lot of other things, it is used also in
+jekyll), called <a href="https://github.com/mynyml/watchr">watchr</a>. Add it ro your Gemfile
 {% highlight ruby %}
 group :development, :test do
   gem 'rspec-rails'
@@ -286,7 +298,7 @@ watch("app/(.*/.*).rb") do |match|
   run_spec %{spec/#{match[1]}_spec.rb}
 end
 {% endhighlight ruby %}
-Open a new console window, and run "watchr .watchr". Nothing happen, true. But if you change a model, a controller or a file in spec/ your test will be running automatically. We can also create a rake task in lib/tasks/watchr.rake
+Open a new console window, and run "watchr .watchr". Nothing happens, true. But if you change a model, a controller or a file in spec/ your test will be running automatically. We can also create a rake task in lib/tasks/watchr.rake
 {% highlight ruby %}
 desc "Run watchr"
 task :watchr do
