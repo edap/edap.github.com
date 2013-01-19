@@ -79,12 +79,16 @@ describe "Home page" do
 end
 {% endhighlight ruby %}
 Note, i've write this example just to point out some differences between the two methods, but they should never be used for the same goal, each of them is more appropriated than the other in a specific context, it's up to you find the right one.
-<h4>FactoryGirls, not Fixtures</h4>
-We are going to use factories to define Active Record objects and test them with insert/delete/edit methods. The most used gem for thsi scope ils Facotry Girl. Like Rspec and Capybara, also FG has his own DSL.<br /> Now, in the pages controller that we have written before there is no database, let's create a resource, Post for example.
+<h4>Use FactoryGirl</h4>
+We are going to use factories to define Active Record objects and test them with insert/delete/edit methods. The most used gem for this scope is Facotry Girl. Like Rspec and Capybara, also FG has his own DSL.<br /> There are two ways to define factories:<b>1)</b> Using a single file, spec/factories.rb, or <b>2)</b> using multiple files, one file for each model. In his <a href="http://railscasts.com/episodes/158-factories-not-fixtures-revised">railcast</a>, Ryan Bates suggest to use one single file, but is up to you. Rails generator use by default the second method. Create a resource, a Post for example.
 {% highlight ruby %}
 rails generate scaffold Post title:string body:text
-{% endhighlight ruby %} 
-Due to the factory-girl-rails gem, this command have generated also the file:  spec/factories/posts.rb. Open it
+{% endhighlight ruby %}
+And update the test db
+{% highlight ruby %}
+rake db:test:prepare 
+{% highlight ruby %}
+If the factory-girl-rails gem is correctly installed, this command has generated the file:  spec/factories/posts.rb. Open it
 {% highlight ruby %}
 FactoryGirl.define do
   factory :post do
@@ -93,9 +97,34 @@ FactoryGirl.define do
   end
 end
 {% endhighlight ruby %} 
-This factory define our ActiveRecord object for the model "Post", we can use it in 
+This factory defines our ActiveRecord object for the model "Post", is the simplest set of attributes necessary to create an instance of this class. 
+You have to edit your spec/spec_helper.rb, add "require 'factory_girl_rails'" after the other require declaration, and comment the line containing "config.fixture_path = "#{::Rails.root}/spec/fixtures", because we are going to use factories and not fixtures.<br>
+We can use this class in our test. How? Let's start from the model, open /spec/models/post.rb and edit it like this:
+{% highlight ruby %}
+require 'spec_helper'
+
+describe Post do
+  it "is valid with title and boby"
+  it "is not valid with an empty title"
+end
+{% highlight ruby %}
+If you run "bundle exec rspec spec/models/post_spec.rb" you will see a message like this:
+{% highlight bash %}
+**
+
+Pending:
+  Post is valid with title and boby
+    # Not yet implemented
+    # ./spec/models/post_spec.rb:4
+  Post is not valid with an empty title
+    # Not yet implemented
+    # ./spec/models/post_spec.rb:5
+{% highlight bash %}
+
+
 <h4>Introducing Behaviour Drive Development</h4>
 
+{% highlight ruby %}
 {% highlight ruby %}
 
 
@@ -129,6 +158,9 @@ Capybara<br/>
 <a
 	href="http://rubydoc.info/github/jnicklas/capybara">http://rubydoc.info/github/jnicklas/capybara</a><br/><br
 /><br /><br />
+Factory Girl Rails<br>
+<a href="http://ruby.railstutorial.org/chapters/sign-up#sec-tests_with_factories">http://ruby.railstutorial.org/chapters/sign-up#sec-tests_with_factories</a><br /><br />
+<a href="https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md">https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md</a><br /><br />
 Matt Wynne blog<br/>
 <a href="http://blog.mattwynne.net/">http://blog.mattwynne.net/</a><br/><br />
 Chris Parsons Blog<br/>
