@@ -3,19 +3,21 @@ layout: post
 title: "TDD in Rails"
 category: 
 status: published
-tags: [ruby on rails, TDD, rspec, factorygirl]
+tags: [ruby on rails, TDD, testing, Rspec, FactoryGirl, Capybara]
 ---
 {% include JB/setup %}
 
 <h4>First: No code is safe.</h4>
 Start asking your code: "Are you good enough to pass this test?". If he didn't
-answer, write a test and fire the console<br />.Be active, don't wait until your
+answer, write a test and fire the console.<br />Be active, don't wait until your
 code start screaming. It's a common habit to think "i will write later my test
 code". No, you will not, you will have other things to do, bug fixing, new
-features, or take a walk outside, but no, abslolutly, no test code.<br /> To
+features, or take a walk outside, but no, abslolutely, no test code.<br /> To
 avoid procrastination, testing has to be integrated in the development code
 cycle, "you have to start thinking about testing before you write a line of
-code"(tip 48, <a href="http://www.amazon.com/exec/obidos/ASIN/020161622X/codinghorror-20">The Pragmatic Programmer</a>). The most complete TDD definition that i found on the net comes from <a href="http://www.agileskillsproject.org/agile-skills-inventory/technical-excellence/test-driven-design-tdd">agileskillsproject.org</a>:<br />
+code"(tip 48, <a
+	href="http://www.amazon.com/exec/obidos/ASIN/020161622X/codinghorror-20">The
+	Pragmatic Programmer</a>). The most complete TDD definition that i've found on the net comes from <a href="http://www.agileskillsproject.org/agile-skills-inventory/technical-excellence/test-driven-design-tdd">agileskillsproject.org</a>:<br />
 <i>Test-Driven Development (TDD) is a way of driving the design of code by writing a test which expresses what you intend the code to do, making that test pass, and continuously refactoring to keep the design as simple as possible. TDD can apply at multiple levels, e.g., Customer Tests, Integration Tests, Unit Tests.<br />
 Test-Driven Development/Design follows a rigorous cycle. Start by writing a failing test (Red.) Implement the simplest solution that will cause the test to pass (Green.) Search for duplication and remove it (Refactor.) "RED-GREEN-REFACTOR" has become almost a mantra for many TDD practitioners. Understanding and even internalizing this cycle is key to being able to use TDD to solve problems.</i><br>
 Kent Beck rediscovered this technique in 2003, and from his book "Test-Driven Development by example" is taken this <a href="http://en.wikipedia.org/wiki/Test-driven_development#Test-driven_development_cycle">part</a> on the wiki page about TDD.
@@ -26,8 +28,8 @@ ours Integration tests. The most important is Rspec-rails for our integration
 test (known as "request specs" in the context of RSpec), so edit your Gemfile,
 add the following lines and run bundle install <br />
 {% highlight ruby %}
-gem 'rspec-rails', :group =&gt; [:development, :test]
-gem 'factory_girl_rails', :group =&gt; [:development, :test]
+gem 'rspec-rails', :group => [:development, :test]
+gem 'factory_girl_rails', :group => [:development, :test]
 
 group :test do
   gem 'database_cleaner'
@@ -41,7 +43,7 @@ As you can see we have added also Capybara, FactoryGirls and DatabaseCleaner, du
 class Application &lt; Rails::Application
 #...
 config.generators do |g|    
-  g.test_framework :rspec, :fixture =&gt; true
+  g.test_framework :rspec, :fixture => true
   g.fixture_replacement :factory_girl      
   g.view_specs false
   g.helper_specs false
@@ -213,14 +215,11 @@ end
 {% endhighlight ruby %}
 If we run this test, we will see the second example failing. The post will be saved also with an empty title. That's Test Driven Development, we have define first what "should happen if", and then we write the code to adapt it to our test. Open the app/post/model.rb and write the following lines:
 {% highlight ruby %}
-class Post &lt; ActiveRecord::Base
+class Post < ActiveRecord::Base
   attr_accessible :body, :title
   validates_presence_of :title
 end
 {% endhighlight ruby %}
-
-
-
 
 <h4>Database cleaner</h4>
 Database cleaner is a tool to clean the database before testing. Sometimes, for example in a user registration, some values has to be unique. For example, if we try to insert two times a user with the same email, we have this error
