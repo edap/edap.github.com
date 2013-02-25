@@ -1,0 +1,95 @@
+---
+layout: post
+title: "Phlorida, a Rails3 portfolio website application"
+tags: [ruby on rails, twitter bootstrap, TDD, devise, cancan, ancestry, image
+gallery, paperclip, bootswatch]
+---
+{% include JB/setup %}
+
+<h4>What</h4>
+Phlorida is a normal rails3 application that comes packaged with some gems that
+may speed up your website development.
+<h4>Why</h4>
+Most of the time we (we intended as we, web developers) have to deal with the same
+kind of web application: a website where the customer has an admin area behind a
+secure authentication system, in which he can adds some pages, editing title and
+content, or adding some items (products, projects, fruits,
+vegetables...whatever) in some categories. Maybe he wants to choose which page
+should be the homepage, or which items should has a photogallery, and which
+photos put in the photogallery. Well, Phlorida comes with a solution for this
+kind of website.
+<h4>How</h4>
+I've started to work to Phlorida because i wanted an admin namespace in this
+<a href="https://github.com/RailsApps/rails3-bootstrap-devise-cancan/"> web
+	application
+	i</a>written by <a href="https://github.com/DanielKehoe">Daniel
+	Kehoe</a>.Then I've added somes other features that i think i will reuse
+in my future projects. Here a short overview:
+<ul>
+	<li>Authentication System through <a
+		href="http://github.com/plataformatec/devise">Devise</a></li>	
+	<li>Role Management with <a href =
+		"https://github.com/ryanb/cancan">CanCan</a></li>	
+	<li>Categories organized in a tree structure using <a
+		href="https://github.com/stefankroes/ancestry">Ancestry</a> as
+	suggested in <a href
+		="http://railscasts.com/episodes/262-trees-with-ancestry">Episode
+		262</a>of Ryan Bates Railscasts</li>	
+	<li>Twitter bootstrap with <a
+		href="https://github.com/thomas-mcdonald/bootstrap-sass">Bootstrap
+	sass</a> gems</li>	
+<li>Bootswatch themes with this <a
+	href="https://github.com/maxim/bootswatch-rails">gem</a></li>	
+	<li>A Pages controller, with an homepage method, and the possibility to
+	edit the page content with a <a href
+		="https://github.com/Nerian/bootstrap-wysihtml5-rails">wysiwyg html5 editor</a></li>	
+	<li>A galleryable polymorphic association, in order to simply upload
+	photos in a photogallery with
+	paperclip , and show this photogallery in the front-end
+	using <a
+		href="http://twitter.github.com/bootstrap/javascript.html">Twitter
+	bootstrap Carousel</a></li>	
+</ul>
+<h4>Installation:</h4>
+Clone the <a href="https://github.com/edap/phlorida">Phlorida</a> repo in a local folder. Move into it and create a .rvmrc file and a
+gemset.
+
+{% highlight bash %}
+rvm --rvmrc --create 1.9.3@yourapp
+rvm gemset create yourapp
+{% endhighlight bash %}
+Run bundle install and check that everithing goes ok. Now, Phlorida comes with
+some data, like a user administrator and some pages, in order to run the
+application as soon as possible. You can remove or edit this data later. Let's
+create the database and add this data.
+{% highlight ruby %}
+rake db:schema:load
+rake db:seed
+{% endhighlight ruby %}
+Run the server and open the browser.Done!
+<h4>Customization</h4>
+Phlorida is a prepackaged solution that needs to be modelled to what do you
+need.In the standard version you will find this solutions that maybe don't fit
+your needs:
+<ul>
+	<li>I've mantained the registrable behaviour in Devise in order to allow the
+	user to edit his profile but i've removed the possibility to sign up.
+	I've adopted this <a
+		href="http://stackoverflow.com/questions/6734323/how-do-i-remove-the-devise-route-to-sign-up">solution</a></li>
+	<li>I've choosed the twitter bootswatch "Readable" theme. You can pick
+	up another theme changing the word "readable" in the
+	assets/stylesheets/application.css.scss file, with one of the availables
+	themes</li>
+	<li>I've put a "Login" link on the front end, but there is also a /login
+	route available in case you would remove the link.</li>
+	<li>In the application controller I've added a method to dynamically
+	fetch the items needed for the menu. If you are not thinking to add
+	pages or categories in the future, it's a good solution to write your
+	pages and categories links statically in the _navigation partial, you
+	will spare two queries.
+	</li>
+	<li>If you want to add some css classes, use the base.css file, that I
+	leave empty.</li>
+</ul>
+<h4>Something didn't work as described</h4>
+Don't write a comment on this blog post but open an issue on github. Thanks.<br/><br/>
