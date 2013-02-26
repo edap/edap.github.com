@@ -13,17 +13,17 @@ may speed up your website development.
 <h4>Why</h4>
 Most of the time we (we intended as we, web developers) have to deal with the same
 kind of web application: a website where the customer has an admin area behind a
-secure authentication system, in which he can adds some pages, editing title and
-content, or adding some items (products, projects, fruits,
+secure authentication system, in which he can adds some pages, edit title and
+content, or add some items (products, projects, fruits,
 vegetables...whatever) in some categories. Maybe he wants to choose which page
-should be the homepage, or which items should has a photogallery, and which
+should be the homepage, or which items should have a photogallery, and which
 photos put in the photogallery. Well, Phlorida comes with a solution for this
 kind of website.
 <h4>How</h4>
-I've started to work to Phlorida because i wanted an admin namespace in this
+I've started Phlorida because i wanted an admin namespace in this
 <a href="https://github.com/RailsApps/rails3-bootstrap-devise-cancan/"> web
 	application
-	i</a>written by <a href="https://github.com/DanielKehoe">Daniel
+	</a>written by <a href="https://github.com/DanielKehoe">Daniel
 	Kehoe</a>.Then I've added somes other features that i think i will reuse
 in my future projects. Here a short overview:
 <ul>
@@ -35,7 +35,7 @@ in my future projects. Here a short overview:
 		href="https://github.com/stefankroes/ancestry">Ancestry</a> as
 	suggested in <a href
 		="http://railscasts.com/episodes/262-trees-with-ancestry">Episode
-		262</a>of Ryan Bates Railscasts</li>	
+		262</a> of Ryan Bates Railscasts</li>	
 	<li>Twitter bootstrap with <a
 		href="https://github.com/thomas-mcdonald/bootstrap-sass">Bootstrap
 	sass</a> gems</li>	
@@ -59,7 +59,7 @@ gemset.
 rvm --rvmrc --create 1.9.3@yourapp
 rvm gemset create yourapp
 {% endhighlight bash %}
-Run bundle install and check that everithing goes ok. Now, Phlorida comes with
+Run "bundle install" and check that everithing goes ok. Now, Phlorida comes with
 some data, like a user administrator and some pages, in order to run the
 application as soon as possible. You can remove or edit this data later. Let's
 create the database and add this data.
@@ -69,9 +69,9 @@ rake db:seed
 {% endhighlight ruby %}
 Run the server and open the browser.Done!
 <h4>Customization</h4>
-Phlorida is a prepackaged solution that needs to be modelled to what do you
-need.In the standard version you will find this solutions that maybe don't fit
-your needs:
+Phlorida is, after all, a rails app with some gems and 4 resources. These are
+some small changements thought to run the app as soon as installed, that can
+easily be removed or edited:
 <ul>
 	<li>I've mantained the registrable behaviour in Devise in order to allow the
 	user to edit his profile but i've removed the possibility to sign up.
