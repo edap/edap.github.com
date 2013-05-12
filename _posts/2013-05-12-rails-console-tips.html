@@ -1,0 +1,78 @@
+---
+layout: post
+title: "Rails console tips"
+category: 
+tags: [ruby on rails]
+---
+{% include JB/setup %}
+<h4>Starting the console</h4>
+I find the rails console very helpful when it comes to debug an application, or inspect records, route, or model relation in the database. It is possible to start the console in very environments, for example in test.
+{% highlight bash %}
+rails c test
+{% endhighlight bash %}
+Or in the local environment, without commiting nothing into the database
+{% highlight bash %}
+rails c --sandbox
+{% endhighlight bash %}
+For the sql database engine (postgreesql, mysql and sqlite), it is also possible to start the database interpreter from your rails application, simply launch 
+{% highlight bash %}
+rails dbconsole
+{% endhighlight bash %}
+After inserting your database password connection, you could start querying your database with the database engine commands.Type ctrl c and you will be back to your app.
+<h4>Inspecting records</h4>
+just find a record, for example a Post with id 11 that belongs to a User.
+{% highlight bash %}
+i = Item.find(11)
+{% endhighlight bash %}
+print it in a more readable form, in yaml
+{% highlight bash %}
+y i
+{% endhighlight bash %}
+change the title for this post
+{% highlight bash %}
+i.title = "new title"
+i.save
+{% endhighlight bash %}
+Or find all the post's title and the name of the users who wrote them
+{% highlight bash %}
+Post.all.map{|p| [p.title, p.user.name]}
+{% endhighlight bash %}
+The underscore "_" will returns the last variable we have obtained. In order to save tha array that we have just found, simply 	
+{% highlight bash %}
+title_and_name = _
+{% endhighlight bash %}
+Remember! rails console executes the code loaded at the beginning, when we have launched "rails console" the first time. Any changement in the models or controllers is not automatically detected. To reload the console without quitting it, just type
+{% highlight bash %}
+reload!
+{% endhighlight bash %}
+<h4>Inspecting routes</h4>
+Like described in <a href="https://37signals.com/svn/posts/3176-three-quick-rails-console-tips">this post</a>, it's possible to use the console to check routes. Running the app method in the console will returns an Integration::Session instance
+{% highlight bash %}
+app.class
+{% endhighlight bash %}
+Let's try to get the route for a given Post id
+{% highlight bash %}
+app.posts_path(Post.find(3))
+{% endhighlight bash %}
+
+we can also sending request to our app, like a get, a post or one of the others <a href="http://api.rubyonrails.org/classes/ActionDispatch/Integration/RequestHelpers.html">availables methods</a>, and reading the html content 
+{% highlight bash %}
+app.get "/"
+app.response.body
+{% endhighlight bash %}
+
+<h4>Other tips</h4>
+it's possible to chek helper's methods
+{% highlight bash %}
+helpers.euro_dollar_converter(30)
+{% endhighlight bash %}
+Use pluck instead the select method to retrieve a single value from each record in a table. instead
+{% highlight bash %}
+Post.select(:id).map{|p|, p.id}
+{% endhighlight bash %}
+use
+{% highlight bash %}
+Post.pluck(:id)
+{% endhighlight bash %}
+
+
