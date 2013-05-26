@@ -4,7 +4,7 @@ title: "switching from rvm to rbenv"
 tags: [rbenv, rvmc]
 ---
 {% include JB/setup %}
-<h2>Why</h2>
+<h4>Why</h4>
 Why should I switch from rvm to <a href="https://github.com/sstephenson/rbenv">rbenv</a>? The last few years rvm helped me a lot
 managing differents ruby versions and differents gemsets. Without this wonderful
 tool probably rails development would have been much more complicated.<br />
@@ -16,7 +16,7 @@ of these works. Bundler. Bundler is absolutely the best tool ever to manage gems
 (is there another one?), we need only one tool to deal with different ruby
 version. And here we are, rbenv. If this is not enaough, you can read a complete list of reasons 
 <a href="https://github.com/sstephenson/rbenv/wiki/Why-rbenv%3F">here</a>
-<h2>Exit rvm, enter rbenv</h2>
+<h4>Exit rvm, enter rbenv</h4>
 To install rbenv you have to disintstall rvm. Don't worry about your gemset, you
 ain't gonna need it.
 Disinstall rvm
@@ -36,7 +36,7 @@ From the rbenv website:
 {% highlight bash %}
 rbenv rehash
 {% endhighlight bash %}
-<h2>Defining the ruby version</h2>
+<h4>Defining the ruby version</h4>
 rbenv look for the right ruby version to match in this order:
 <ul>
 <li>The RBEN_VERSION setted for your current session, you can define it with 'rbenv shell'</li>
@@ -44,5 +44,5 @@ rbenv look for the right ruby version to match in this order:
 <li>The first .ruby_version file founded recursively back to the root of your file system</li>
 <li>The global ~/.rbenv/version file. You can modify this file using the command 'rbenv global'</li>
 </ul>
-<h2>Where are my gemsets?</h2>
+<h4>Where are my gemsets?</h4>
 You don't need it. Bundler can manage all your gems for each ruby version. When you need to go online, simply put your gems in /vendor and you are ready to  go. Some more detailed explanations can be found <a href="http://rakeroutes.com/blog/how-to-use-bundler-instead-of-rvm-gemsets/">here</a>
