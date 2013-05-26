@@ -25,11 +25,10 @@ rvm implode
 I've to remove some folder manually due to some permission problems.
 {% highlight bash %}
 Now checkout rbenv in your home direcotry. Follow the instrucion reported here
-<a
-	href"https://github.com/sstephenson/rbenv#basic-github-checkout">https://github.com/sstephenson/rbenv#basic-github-checkout</a> to install rbenv in your home directory, configure your bash or zsh profile, and to install ruby-build, a plugin for rbenv needed to install the wished ruby version. After that, it will be very easy install new ruby version. Type 'rbenv install -l' to have a complete list of the availables rubies. Install version 2.0.0-rc2 with
-{% endhighlight bash %}
-rbenv install 2.0.0-rc2
+<a href"https://github.com/sstephenson/rbenv#basic-github-checkout">https://github.com/sstephenson/rbenv#basic-github-checkout</a> to install rbenv in your home directory, configure your bash or zsh profile, and to install ruby-build, a plugin for rbenv needed to install the wished ruby version. After that, it will be very easy install new ruby version. Type 'rbenv install -l' to have a complete list of the availables rubies. Install version 2.0.0-rc2 with
 {% highlight bash %}
+rbenv install 2.0.0-rc2
+{% endhighlight bash %}
 It will start automatically to download the selected version.
 {% endhighlight bash %}
 Now, when you call for example'rake' rbenv pass the call to a directory in your environment PATH ~/.rbenv/shims. Shims are small executables that pass the call to the right command for that ruby version.
