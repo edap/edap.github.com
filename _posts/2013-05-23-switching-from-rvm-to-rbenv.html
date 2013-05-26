@@ -14,7 +14,7 @@ job, by this way of thought, rvm is too ambitious.Trying to manage ruby version 
 the ruby gems is too much work, especially when there is another tool to do one
 of these works. Bundler. Bundler is absolutely the best tool ever to manage gems
 (is there another one?), we need only one tool to deal with different ruby
-version. And here we are, rbenv. A complete list of reasons is <a href="https://github.com/sstephenson/rbenv/wiki/Why-rbenv%3F">here</a>
+version. And here we are, rbenv. If this is not enaough, you can read a complete list of reasons <a href="https://github.com/sstephenson/rbenv/wiki/Why-rbenv%3F">here</a>
 <h3>Exit rvm, enter rbenv</h3>
 To install rbenv you have to disintstall rvm. Don't worry about your gemset, you
 ain't gonna need it.
@@ -30,38 +30,19 @@ Now checkout rbenv in your home direcotry. Follow the instrucion reported here
 rbenv install 2.0.0-rc2
 {% endhighlight bash %}
 It will start automatically to download the selected version.
-{% endhighlight bash %}
 Now, when you call for example'rake' rbenv pass the call to a directory in your environment PATH ~/.rbenv/shims. Shims are small executables that pass the call to the right command for that ruby version.
 From the rbenv website:
-<blockquote>Through a process called rehashing, rbenv maintains shims in that directory to match every Ruby command across every installed version of Ruby—irb, gem, rake, rails, ruby, and so on.</blockquote>. After each installation we have to  
+<blockquote>Through a process called rehashing, rbenv maintains shims in that directory to match every Ruby command across every installed version of Ruby—irb, gem, rake, rails, ruby, and so on.</blockquote>That's why after each installation we have to  
 {% highlight bash %}
 rbenv rehash
 {% endhighlight bash %}
-
-{% highlight bash %}
-
-{% endhighlight bash %}
-
-{% highlight bash %}
-
-{% endhighlight bash %}
-
-{% highlight bash %}
-
-{% endhighlight bash %}
-
-{% highlight bash %}
-
-{% endhighlight bash %}
-
-{% highlight bash %}
-
-{% endhighlight bash %}
-
-{% highlight bash %}
-
-{% endhighlight bash %}
-
-<h3></h3>
-<h3></h3>
-<h3></h3>
+<h3>Defining the ruby version</h3>
+rbenv look for the right ruby version to match in this order:
+<ul>
+<li>The RBEN_VERSION setted for your current session, you can define it with 'rbenv shell'</li>
+<li>The ruby version defined in the current folder, in a file called '.ruby_version'. You can directly edit this file wiht 'ruby local'</li>
+<li>The first .ruby_version file founded recursively back to the root of your file system</li>
+<li>The global ~/.rbenv/version file. You can modify this file using the command 'rbenv global'</li>
+</ul>
+<h3>Where are my gemsets?</h3>
+You don't need it. Bundler can manage all your gems for each ruby version. When you need to go online, simply put your gems in /vendor and you are ready to  go. Some more detailed explanations can be found <a href="http://rakeroutes.com/blog/how-to-use-bundler-instead-of-rvm-gemsets/">here</a>
