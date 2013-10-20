@@ -38,6 +38,7 @@ the controller, and set the folder to store your images. Look at this example to
 see how to include the crop component.See "Controller Example" below.</li>
 </ul>
 <h4>Controller Example</h4>
+
 {% highlight php startinline %}
 class ImagesController extends AppController{
     public $components = array('Crop'); 
@@ -82,8 +83,9 @@ class ImagesController extends AppController{
     }
 
 }
-{% endhighlight%}
+{% endhighlight %}
 <h4>View Example</h4>
+
 {% highlight php startinline %}
 	<?= $this->Html->script('http://code.jquery.com/jquery-latest.min.js',array('inline' => false))  ?>
 	<?= $this->element('jwindowCrop') ?>
