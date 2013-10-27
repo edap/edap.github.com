@@ -186,6 +186,12 @@ c.give_me_the_vegetable_cutted_off
 This apply to the prepare_vegetable method, where we leave to the subclass the decision about how to fullfill it.
 These three code examples are published on my github [repository](https://github.com/edap/design-patterns). In this repo, will also be published the other design patterns implementations that will come in the future.
 
+### Am I doing it wrong?
+> The Template Method pattern is at its best when it is at its leanest
+That means, every hook method should be there for a reason.
++ Avoid to write a template class full of methods that no one will override
++ Avoid to create a template class where each subclass will override the methods only to cover as much cases as possible.
+
 ### Others links
 [A really deep article by practicingruby, ](https://practicingruby.com/articles/unobtrusive-ruby-in-practice)
 [a blog post by Tammer Saleh and ](http://tammersaleh.com/posts/the-template-pattern-is-underused/)
