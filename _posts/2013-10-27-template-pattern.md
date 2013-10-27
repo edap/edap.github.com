@@ -189,5 +189,4 @@ These three code examples are published on my github [repository](https://github
 ### Others links
 [A really deep article by practicingruby, ](https://practicingruby.com/articles/unobtrusive-ruby-in-practice)
 [a blog post by Tammer Saleh and ](http://tammersaleh.com/posts/the-template-pattern-is-underused/)
-
 [a tutorial found on the web, with some interesting comments](http://reefpoints.dockyard.com/ruby/2013/07/10/design-patterns-template-pattern.html)
