@@ -5,7 +5,7 @@ category:
 tags: [scala]
 ---
 {% include JB/setup %}
-A collegue of mine told me about Scala "a functional programming language with some OOP features, has to be compiled and run on the JVM". I've never tried it before, but i was curious.
+A collegue of mine told me about Scala "a functional programming language with OOP features, has to be compiled and run on the JVM". I've never tried it before, but i was curious.
 
 ### Installation
 This installation instructions works in all debian based distros. Download scala form [here](http://www.scala-lang.org/download)
