@@ -2,7 +2,7 @@
 layout: post
 title: "#3 observer pattern"
 category:
-tags: [design pattern, ruby]
+tags: [design patterns, observer pattern, ruby]
 ---
 {% include JB/setup %}
 The observer pattern helps us when we need to spread informations across our application. A system where every part is aware of the state of the whole is better than a system where each object should be manually notify for every small change. How is it possible to accomplish this task without coupling our objects?
@@ -76,7 +76,7 @@ lucky_guy.add_observer(driving_license)
 lucky_guy.address = 'Gustav Mueller Str., Berlin'
 {% endhighlight bash %}
 
-[The Gang of Four](http://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612) call defines to types of object. The _subject_, the object that has the news, and the _observer_, the object that want to know the news. In this case is pretty clear that the object is the Person, and the rest are the observer.
+[The Gang of Four](http://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612) defines two types of object. The _subject_, the object that has the news, and the _observer_, the object that want to know the news. In this case is pretty clear that the object is the Person, and the rest are the observers.
 
 But what if in our application there are more than one Subjects, and we want to reuse the code that add and remove the observer? Let's pack this code in a module:
 
@@ -127,7 +127,7 @@ class Person
 end
 {% endhighlight ruby %}
 
-The method super (in ruby, only the method `super` needs the two `()` also if there is no argument ), is used to call the initialize method in the Subject module. In real world application, there is no need to create the subject module, the Ruby standard  library comes with a predefined 'Observable' module, that, when included, tranform the object in a subject. The only thing that change, is that the `Observable` module requires that the subject calls the method `changed` before `notify_observers` every time the object is well...ehm...changed.This method set a flag in the object to `true`, when the `notify_object` method finish his task, the flag is set back to `false`. Here the example
+The method `super` (in ruby, only the method `super` needs the two `()` also if there is no argument ), is used to call the initialize method in the Subject module. In real world application, there is no need to create the subject module, the Ruby standard  library comes with a predefined 'Observable' module, that, when included, tranform the object in a subject. The only thing that has changed, is that the `Observable` module requires that the subject calls the method `changed` before `notify_observers` every time the object is changed.This method sets a flag in the object to `true`, when the `notify_object` method finish his task, the flag is set back to `false`. Here the example
 
 {% highlight ruby %}
 require 'observer'
@@ -150,4 +150,6 @@ class Person
   end
 end
 {% endhighlight ruby %}
+
+As in the previous posts regarding design patterns in ruby (all of them inspired by the [book wrote by Russ Olsen](http://www.amazon.com/Design-Patterns-Ruby-Russ-Olsen/dp/0321490452)), the code's example are available [here](https://github.com/edap/design-patterns)
 
