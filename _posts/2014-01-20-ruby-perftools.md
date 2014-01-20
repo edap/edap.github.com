@@ -74,6 +74,9 @@ curl http://localhost:3000/__data__
 {% endhighlight bash %}
 The call to `__start__` will start the profiler, the calls to `an_action_*` are the requests that we want to test, and `__data__` will render in the browser the results of our test, in the format defined in config/application.rb
 
+lista delle opzioni per rack-perftools (qui sotto)
+lettura in dettaglio dei params
+
 
 
 #### Rspec
