@@ -5,7 +5,7 @@ category:
 tags: [perftools, ruby, profiling, cpu profiling]
 ---
 
-### CPU usage, use perftools
+### Profiling CPU usage in ruby with perftools.rb
 Perftools is a library created from google to profile the CPU.  The ruby implementation is curated by [Aman Gupta](https://github.com/tmm1/) and it's called perftools.rb, here you can find an old but still [concise and nice introduction](http://www.igvita.com/2009/06/13/profiling-ruby-with-googles-perftools/) by Ilya Grigorik.
 Running this tool inside your code (or application, as we will see later), will interrupt your code for some milliseconds and extract a sample on a periodic interval, like a photoframe. These samples, that describe the current stack of the application at the moment that the 'picture' was token, are then put together in an output file.
 As Ilya Grigorik point out, we can perform the profiling in two differents way:
@@ -62,7 +62,6 @@ Let's start analyzing the first row from left to right:
 * The name of the method
 A detailed lecture about how to read the output can be found [here](http://gperftools.googlecode.com/svn/trunk/doc/cpuprofile.html#pprof)
 
-
 #### Perftools with Rails
 There is a middleware for perftools.rb called [rack-perftools_profiler](https://github.com/bhb/rack-perftools_profiler). Following the readme file you can easily install the gem and configure the output format that you prefer in config/application.rb
 Once the server is restarted, you can:
@@ -83,7 +82,8 @@ The call to `__start__` will start the profiler, the calls to `an_action_*` are 
 
 * or you can profile multiple request that has the same URL, always with curl, appending the `times` options at the end of the:
 `curl http://localhost:3000/foobar?profile=true&times=3`
-The option directly added in the call overwrites that defined in config/application.rb. Other interesting options are `frequency` and `mode`, have a look here for more information [options in rack-perftools_profiler](https://github.com/bhb/rack-perftools_profiler#options)
+The option directly added in the call overwrites that defined in config/application.rb. Other interesting options are `frequency`, that set how many times pro second a sample has to be caught(default), and `mode`, that defines the focus of the profiler, as default on the CPU.
+Have a look here for more information [options in rack-perftools_profiler](https://github.com/bhb/rack-perftools_profiler#options)
 
 #### Rspec
 It is possible to profile the test suite adding this to your spec_helper, [via StackOverflow](http://stackoverflow.com/questions/9680481/how-to-profile-rspec-with-perftools-and-bundler)
@@ -97,5 +97,5 @@ config.after :suite do
 end
 {% endhighlight ruby %}
 
-Or enabling the profiler before start the rspec suite:
+Or enabling the profiler before starting the rspec suite:
 `CPUPROFILE=/tmp/prof CPUPROFILE_REALTIME=1 time rspec spec/`
