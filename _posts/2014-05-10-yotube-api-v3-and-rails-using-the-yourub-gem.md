@@ -10,7 +10,7 @@ In this post we will use the [yourub](https://github.com/edap/yourub) gem to imp
 
 ### Installation
 A youtube developer key is needed, grab one as explained [here](http://www.youtube.com/watch?v=Im69kzhpR3I). After that, add `gem 'yourub', '~> 1.0.5'` to the Gemfile and run bundle install. Create an app/config/yourub.yml file, and change the developer key value with yours.
-```ruby
+{% highlight ruby %}
 yourub_defaults: &yourub_defaults
   developer_key: 'YoUrDevEl0PerKey'
   youtube_api_service_name: 'youtube'
@@ -27,19 +27,19 @@ production:
 
 test:
   <<: *yourub_defaults
-```
+{% endhighlight ruby %}
 
 ### Controller & Route
 Add this lines to your route.rb file, in order to route the 2 action that we are gonna to create
-```ruby
+{% highlight ruby %}
   get 'videos/index'
   post 'videos/index'
   get 'videos/:id' => 'videos#details', as: :details
-```
+{% endhighlight ruby %}
 
 Now create a the controller `app/controllers/videos` and add the following code:
 
-```ruby
+{% highlight ruby %}
 class VideosController < ApplicationController
 
   def client
@@ -59,13 +59,13 @@ class VideosController < ApplicationController
     @video = client.search(id: params[:id])
   end
 end
-```
+{% endhighlight ruby %}
 
 ###View
 We are gonna to add 2 views, one containing the form to add the search criteria and one containing the details of a single video. In the search page, we will use only the `query` options, but there are others available, have a look at the [readme]((https://github.com/edap/yourub)).
 Now add these to files `app/views/index.html.haml`
 
-```ruby
+{% highlight ruby %}
 = form_tag videos_index_path, :method => :post do
   %div
     = label_tag "search for:"
@@ -95,13 +95,12 @@ Now add these to files `app/views/index.html.haml`
       %iframe{:allowscriptaccess => "always", :allowFullScreen => "true", |
       :frameborder => "0", :height => "430", :src => "//www.youtube.com/embed/#{v["id"]}", |
       :title => "YouTube video player", :width => "640"}
-```
+{% endhighlight ruby %}
 
 and `app/views/details.html.haml`, only to show whic information you could have adding the options `client.extended_info = true`
 
-```ruby
+{% highlight ruby %}
 =@video
-```
-
+{% endhighlight ruby %}
 
 
