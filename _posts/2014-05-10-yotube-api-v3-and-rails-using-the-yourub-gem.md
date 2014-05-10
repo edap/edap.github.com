@@ -97,7 +97,7 @@ Now add these to files `app/views/index.html.haml`
       :title => "YouTube video player", :width => "640"}
 {% endhighlight ruby %}
 
-and `app/views/details.html.haml`, only to show whic information you could have adding the options `client.extended_info = true`
+and `app/views/details.html.haml`, only to show which information you could have adding the options `client.extended_info = true`
 
 {% highlight ruby %}
 =@video
