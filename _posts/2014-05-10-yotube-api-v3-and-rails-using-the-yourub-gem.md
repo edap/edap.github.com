@@ -4,7 +4,7 @@ title: "Yotube API v3 and rails using the yourub gem"
 category: 
 tags: [youtube API v3, rails, ruby, gem, yourub]
 ---
-{% include JB/setup %}
+  
 
 In this post we use the [yourub](https://github.com/edap/yourub) gem to implement a youtube search page in our rails application.
 

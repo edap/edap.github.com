@@ -4,7 +4,7 @@ title: "#3 observer pattern"
 category:
 tags: [design patterns, observer pattern, ruby]
 ---
-{% include JB/setup %}
+ 
 The observer pattern helps us when we need to spread informations across our application. A system where every part is aware of the state of the whole is better than a system where each object should be manually notify for every small change. How is it possible to accomplish this task without coupling our objects?
 Let's say we have just moved in a new flat, and every documents should be updates; driving license, passport, health insurance card... etc. Would be great if at the same time we change address, automatically our passport will be up-to date. That's what the observer pattern would do:
 

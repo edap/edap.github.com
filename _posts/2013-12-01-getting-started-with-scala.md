@@ -4,7 +4,7 @@ title: "Getting started with Scala"
 category:
 tags: [scala]
 ---
-{% include JB/setup %}
+ 
 A collegue of mine told me about Scala "a functional programming language with OOP features, has to be compiled and run on the JVM". I've never tried it before, but i was curious.
 
 ### Installation

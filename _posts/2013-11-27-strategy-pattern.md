@@ -4,7 +4,7 @@ title: "#2 strategy pattern"
 category:
 tags: [ruby, design patterns, strategy pattern]
 ---
-{% include JB/setup %}
+ 
 Last time we have a look at the [template pattern in ruby](http://edapx.com/2013/10/27/template-pattern/). The problem was, how can we put in a separate part the thing that is gonna to change? the solution implemented was to create a template class and to use subclasses to fill out the details. The template pattern has one drawback, is based on inheritance. That means that the subclasses are tangled up with the template class.
 
 ### Prefer delegation over inheritance

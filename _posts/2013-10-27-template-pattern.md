@@ -4,7 +4,7 @@ title: "#1 template pattern"
 category:
 tags: [ruby, design patterns, template pattern]
 ---
-{% include JB/setup %}
+ 
 
 With this blog post i would like to start to write a list of posts dedicated to design patterns in object oriented programming. If the most common design patterns are, after some years of practice, pretty well known, I found myself not always sure about which one should I use, and IF should I use them. Take this post as a kind o notes, or skip it and keep surfing, there are a lot of interesting things this sunday on the net. The programming language that I'm going to use is ruby, the book i'm using as main reference is [Design Patterns in Ruby](http://www.amazon.com/Design-Patterns-Ruby-Russ-Olsen/dp/0321490452) by [Russ Olsen](https://twitter.com/russolsen), the citations comes from this book.
 
