@@ -6,10 +6,10 @@ tags: [youtube API v3, rails, ruby, gem, yourub]
 ---
 {% include JB/setup %}
 
-In this post we will use the [yourub](https://github.com/edap/yourub) gem to implement a youtube search page in our rails application.
+In this post we use the [yourub](https://github.com/edap/yourub) gem to implement a youtube search page in our rails application.
 
 ### Installation
-A youtube developer key is needed, grab one as explained [here](http://www.youtube.com/watch?v=Im69kzhpR3I). After that, add `gem 'yourub', '~> 1.0.5'` to the Gemfile and run bundle install. Create an app/config/yourub.yml file, and change the developer key value with yours.
+A youtube developer key is needed, grab one as explained [here](http://www.youtube.com/watch?v=Im69kzhpR3I). After that, add `gem 'yourub', '~> 1.0.5'` to the Gemfile and run bundle install. Create an app/config/yourub.yml file, and change the developer_key value with yours.
 {% highlight ruby %}
 yourub_defaults: &yourub_defaults
   developer_key: 'YoUrDevEl0PerKey'
@@ -30,14 +30,14 @@ test:
 {% endhighlight ruby %}
 
 ### Controller & Route
-Add this lines to your route.rb file, in order to route the 2 action that we are gonna to create
+Add this lines to your route.rb file, in order to route the two actions that we are going to create
 {% highlight ruby %}
   get 'videos/index'
   post 'videos/index'
   get 'videos/:id' => 'videos#details', as: :details
 {% endhighlight ruby %}
 
-Now create a the controller `app/controllers/videos` and add the following code:
+Now create the controller `app/controllers/videos` and add the following code:
 
 {% highlight ruby %}
 class VideosController < ApplicationController
@@ -62,8 +62,8 @@ end
 {% endhighlight ruby %}
 
 ###View
-We are gonna to add 2 views, one containing the form to add the search criteria and one containing the details of a single video. In the search page, we will use only the `query` options, but there are others available, have a look at the [readme]((https://github.com/edap/yourub)).
-Now add these to files `app/views/index.html.haml`
+We are going to add two views, one containing the form to add the search criteria and the other the details of a single video. In the search page, we use only the `query` options, but there are others available, have a look at the [readme]((https://github.com/edap/yourub)).
+Now add these lines to the file `app/views/index.html.haml`
 
 {% highlight ruby %}
 = form_tag videos_index_path, :method => :post do
@@ -97,7 +97,9 @@ Now add these to files `app/views/index.html.haml`
       :title => "YouTube video player", :width => "640"}
 {% endhighlight ruby %}
 
-and `app/views/details.html.haml`, only to show which information you could have adding the options `client.extended_info = true`
+In the file `app/views/details.html.haml` we print only the variable `@video`
+to show which information you could obtain adding the option `client.extended_info = true` in the controller.
+As you can see, there are statistitics, thumbs, ecc..
 
 {% highlight ruby %}
 =@video
