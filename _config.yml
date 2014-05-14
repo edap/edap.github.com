@@ -4,6 +4,8 @@ paginate: 10 # pagination based on number of posts
 paginate_path: "page:num"
 exclude: [".rbenv-version", "README.md", "Rakefile", "changelog.md"] # files to exclude
 pygments: true
+permalink: pretty
+markdown: kramdown
 
 title: edap
 description: edap
@@ -20,6 +22,5 @@ rss_path: feed.xml
 code_path: code.html
 tags_path: tags.html
 
-markdown: kramdown
 
 
