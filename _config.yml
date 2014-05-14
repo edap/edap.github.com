@@ -18,9 +18,9 @@ author:
   bio: My name is Davide Prati and that's my website. I'm looking for what's happen tomorrow in the web. Hopefully not boring.
   email_md5: 495416d8082cf024cd664937b4feb88a
 
-rss_path: feed.xml
-code_path: code.html
-tags_path: tags.html
+rss_path: feed
+code_path: code
+tags_path: tags
 
 
 
