@@ -1,0 +1,17 @@
+I've just added two new functions to the <a
+	href="https://github.com/edap/cakePHP-youtube-datasource">CakePHP
+	Youtube Datasource</a>, now it is possible find videos by Category or by
+Nation<br>
+
+<div class="highlight"><pre><code class="php"><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;ConnectionManager&#39;</span><span class="p">);</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">video</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">autoRender</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+	<span class="nv">$videos</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">getDataSource</span><span class="p">(</span><span class="s1">&#39;Youtube&#39;</span><span class="p">);</span>
+	<span class="c1">//find by category</span>
+	<span class="nb">print_r</span><span class="p">(</span><span class="nv">$videos</span><span class="o">-&gt;</span><span class="na">findByCategory</span><span class="p">(</span><span class="s1">&#39;Comedy&#39;</span><span class="p">));</span>
+	<span class="c1">//find By nation</span>
+	<span class="nb">print_r</span><span class="p">(</span><span class="nv">$videos</span><span class="o">-&gt;</span><span class="na">findByNation</span><span class="p">(</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;feed_id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;most_viewed&#39;</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></div>
+Note: this example is intended to be used in a controller

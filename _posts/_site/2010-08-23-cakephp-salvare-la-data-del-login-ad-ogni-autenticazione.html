@@ -1,0 +1,22 @@
+Se volete salvare la data del login dei vostri utenti, dovet disabilitare l'autoRedirect nel vostro app_controller. Senza questo piccolo accorgimento, il codice all'interno della funzione login() viene ignorato.
+<div class="highlight"><pre><code class="php">    <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">()</span> <span class="p">{</span>
+        <span class="o">....</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">autoRedirect</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="o">....</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+<div class="highlight"><pre><code class="php">	<span class="k">function</span> <span class="nf">login</span><span class="p">()</span> <span class="p">{</span>
+	    <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">user</span><span class="p">()){</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loginDate</span><span class="p">();</span>
+                <span class="c1">//reindirizzamento dopo un corretto login</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">));</span>
+	    <span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">function</span> <span class="nf">loginDate</span><span class="p">()</span> <span class="p">{</span>
+	    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">id</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="s1">&#39;Auth.User.id&#39;</span><span class="p">);</span>
+	    <span class="nv">$now</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s2">&quot;Y-m-d H:i:s&quot;</span><span class="p">);</span>
+	    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">saveField</span><span class="p">(</span><span class="s1">&#39;last_login&#39;</span><span class="p">,</span> <span class="nv">$now</span><span class="p">);</span>
+	<span class="p">}</span>
+</code></pre></div> 

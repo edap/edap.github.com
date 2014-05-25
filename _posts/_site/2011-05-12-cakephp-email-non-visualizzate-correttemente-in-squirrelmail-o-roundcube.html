@@ -1,0 +1,7 @@
+Se el email spedite dalla vostra applicazione non vengono visualizzate correttamente in programmi come squirrelmail o roundcube, bisogna aggiungere questa porzione di codice prima dell'invio.
+<div class="highlight"><pre><code class="php"><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Email</span><span class="o">-&gt;</span><span class="na">__header</span><span class="p">[]</span> <span class="o">=</span> <span class="s1">&#39;MIME-Version: 1.0&#39;</span><span class="p">;</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Email</span><span class="o">-&gt;</span><span class="na">from</span> <span class="o">=</span> <span class="s1">&#39;Sprecher &lt;info@eintsprecher.de&gt;&#39;</span><span class="p">;</span>
+</code></pre></div>
+Via <a href="http://www.pixelastic.com/blog/230:displaying-html-mails-sent-from-cakephp-in-squirrelmail">http://www.pixelastic.com/blog/230:displaying-html-mails-sent-from-cakephp-in-squirrelmail</a>
+
+<a href="http://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/14-email-component-should-set-mime-version-header-when-sendas-html-or-both">http://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/14-email-component-should-set-mime-version-header-when-sendas-html-or-both</a>

@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "Yotube API v3 and rails using the yourub gem"
+redirect_from: "/2014/05/10/yotube-api-v3-and-rails-using-the-yourub-gem.html"
+title: "Youtube API v3 and rails using the yourub gem"
 category: 
 tags: [youtube API v3, rails, ruby, gem, yourub]
 ---

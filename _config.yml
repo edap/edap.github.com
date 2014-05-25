@@ -22,5 +22,6 @@ rss_path: feed
 code_path: code
 tags_path: tags
 
-
+gems:
+  - jekyll-redirect-from
 

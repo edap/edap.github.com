@@ -1,0 +1,24 @@
+In severa ottemperanza del paradigma MVC, ogni dogmatico cakePHP developer ripudia la risposta ad una chiamata in ajax stampata direttamente nel controller. Vediamo quindi come utlizzare la view appropriata per non fare inorridire il piu' oltranzista dei cakePHP developer.
+poniamo di inviare il nostro form "#MioForm" all'action "MiaAction" e voler visualizzare la risposta nel "MioDiv". Il codice javascript (utilizziamo jquery, ovvio) e' questo.
+[javascript]
+$.ajax({
+	url: '/bookings/MiaAction',
+	type: 'POST',
+	data: $('#MioForm').serialize(),
+	dataType: 'json',
+	success: function(response) {
+		$('#MioDiv').val(response.first_value);
+	}
+});
+[/javascript] 
+Il nostro controller sara' cosi'.
+<div class="highlight"><pre><code class="php"><span class="k">function</span> <span class="nf">MiaAction</span><span class="p">(){</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span> <span class="o">=</span> <span class="s1">&#39;Json&#39;</span><span class="p">;</span>
+	<span class="nv">$json</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+		<span class="s1">&#39;first_value&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Yes, i am the first value&#39;</span><span class="p">,</span>
+		<span class="s1">&#39;second_value&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;No, i am the third value&#39;</span><span class="p">,</span>
+	<span class="p">);</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="nb">compact</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+Notate la view 'Json'. Questa fa si che il vostro output sia formattato correttamente. Create un file chiamato json.php, aggiungetelo in app/views e copiate al suo interno la classe JsonView  che trovate a questo indirizzo <a href="http://nuts-and-bolts-of-cakephp.com/tag/cakephp-json/">http://nuts-and-bolts-of-cakephp.com/tag/cakephp-json/</a>

@@ -1,0 +1,74 @@
+Aggiungete devise nel vostro Gemfile e lanciate "bundle install".
+Ora create i file di configurazione necessari:
+<div class="highlight"><pre><code class="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="ss">devise</span><span class="p">:</span><span class="n">install</span>
+</code></pre></div>
+Definite l'url che verra' utilizzata per i link di conferma sulle email di registrazione. In configurations/environments/development.rb
+
+<div class="highlight"><pre><code class="ruby"><span class="c1">#Devise email</span>
+<span class="n">config</span><span class="o">.</span><span class="n">action_mailer</span><span class="o">.</span><span class="n">default_url_options</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:host</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s1">&#39;localhost:3000&#39;</span> <span class="p">}</span>
+</code></pre></div>
+Creiamo il file di migrazione e lo user model
+<div class="highlight"><pre><code class="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">devise</span> <span class="no">User</span>
+</code></pre></div>
+Nello User model appena creato Models/user.rb , possiamo scegliere quali moduli includere od escludere, semplicemente togliendo quelli di default o aggiungendo quelli presenti nel commento del file user.rb.  A mio avviso quelli di default vanno piu' che bene.
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">::</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+<span class="c1"># Include default devise modules. Others available are:</span>
+<span class="c1"># :token_authenticatable, :confirmable, :lockable and :timeoutable :recoverable,</span>
+<span class="n">devise</span> <span class="ss">:database_authenticatable</span><span class="p">,</span> <span class="ss">:registerable</span><span class="p">,</span>
+<span class="ss">:rememberable</span><span class="p">,</span> <span class="ss">:trackable</span><span class="p">,</span> <span class="ss">:validatable</span>
+
+<span class="c1"># Setup accessible (or protected) attributes for your model</span>
+<span class="n">attr_accessible</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:password</span><span class="p">,</span> <span class="ss">:password_confirmation</span><span class="p">,</span> <span class="ss">:remember_me</span>
+<span class="k">end</span>
+</code></pre></div>
+Ora aprite il file Migrations/***devise_create_users.rb e commentate o aggiungete i moduli che avete aggiunto to tolto nello User Model. Poi fate la migrazione.
+<div class="highlight"><pre><code class="ruby"><span class="n">rake</span> <span class="ss">db</span><span class="p">:</span><span class="n">migrate</span>
+</code></pre></div>
+Con "rake routes" potete vedere tutte le routes messe a disposizione dalla vostra applicazione. Trovo questo comendo davvero molto utile, anche nel debug di un applicazione, o quando vogliamo verificare che ogni action abbia la sua view ben fatta.Un'altra cosa che cakePHP non ha (cominciano ad essere tante).
+Ora se puntate il browser alla seguente url /users/sign_in potrete loggarvi. Per registrarvi andate qui /users/sign_up. Io ho incontrato il seguente errore:
+<div class="highlight"><pre><code class="ruby"><span class="no">No</span> <span class="n">route</span> <span class="n">matches</span> <span class="s2">&quot;/users/sign_up&quot;</span>
+</code></pre></div>
+Per risolverlo ho definito lo scope nel file routes, come spiegato qui <a href="http://stackoverflow.com/questions/2349604/using-devise-with-rails-3-beta">http://stackoverflow.com/questions/2349604/using-devise-with-rails-3-beta</a>
+Per visualizzare i messaggi d'errore nella vostra applicazione, aggiungete queste linee di codice nel vostro application.html.erb.
+<div class="highlight"><pre><code class="ruby"><span class="o">&lt;</span><span class="sx">%- flash.each do |name, msg| -%&gt;</span>
+<span class="sx">  &lt;%= content_tag :div, msg, :id =&gt;</span> <span class="s2">&quot;flash_</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="sx">%&gt;</span>
+<span class="sx">&lt;%- end -%&gt;</span>
+</code></pre></div>
+
+Sempre in application.html.erb, aggiungete i link alle azioni sign_in e sign_out. Scoprite i relativi path attraverso "rake routes" e aggiungete questo codice dopo il tag body:
+<div class="highlight"><pre><code class="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;user_nav&quot;</span><span class="o">&gt;</span><span class="n">signed</span> <span class="k">in</span> <span class="n">as</span><span class="o">&lt;</span><span class="sr">/div&gt;</span>
+</code></pre></div>
+Per circoscrivere il raggio d'azione di un utente non loggato all'interno della nostra applicazione, definiamo quali azini sono ad esso concesse. Poniamo il caso che solo un utente loggato puo' creare o modificare un post, mentre l'utente sloggato puo' solo vederli.
+Nel nostro "posts_controller" aggiungiamo la seguente funzione:
+<div class="highlight"><pre><code class="ruby"><span class="n">before_filter</span> <span class="ss">:authenticate_user!</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">[</span><span class="ss">:index</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>
+</code></pre></div>
+Per modificare le views di devise, lanciamo "rails g devise:views", ed otterremo un output simile a questo:
+<div class="highlight"><pre><code class="ruby"><span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">confirmations</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">mailer</span><span class="o">/</span><span class="n">confirmation_instructions</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">mailer</span><span class="o">/</span><span class="n">reset_password_instructions</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">mailer</span><span class="o">/</span><span class="n">unlock_instructions</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">passwords</span><span class="o">/</span><span class="n">edit</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">passwords</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">registrations</span><span class="o">/</span><span class="n">edit</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">registrations</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">sessions</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">shared</span><span class="o">/</span><span class="n">_links</span><span class="o">.</span><span class="n">erb</span>
+<span class="n">create</span> <span class="n">app</span><span class="o">/</span><span class="n">views</span><span class="o">/</span><span class="n">devise</span><span class="o">/</span><span class="n">unlocks</span><span class="o">/</span><span class="kp">new</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span>
+</code></pre></div>
+Modifichiamo i seguenti file a nostro piacimento. Se vogliamo modificare i messaggi d'errore, mettiamo mano al file config/locales/devise_en.yml. Se invece vogliamo modificare le regole di controllo per la registrazione (es passare da "Password is too short (minimum is 6 characters)" a "Password is too short (minimum is 8 characters)") modifichiamo il file initializers/devise.rb.
+Per modificare le URL di default con le quali avvengono le azioni di login e logout, apriamo il file routes.rb
+<div class="highlight"><pre><code class="ruby"><span class="n">devise_for</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:path_names</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">{</span><span class="ss">:sign_in</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="ss">:sign_up</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s2">&quot;logout&quot;</span><span class="p">}</span>
+</code></pre></div>.
+Il nostro futuro user si logga inserendo email e password, come fare se in futuro ci venisse richiesto di sostituire il campo email con il campo username? prima di tutto aggiungiamo la colonna necessaria:
+<div class="highlight"><pre><code class="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">migration</span> <span class="no">AddUsernameToUsers</span> <span class="ss">username</span><span class="p">:</span><span class="n">string</span>
+<span class="n">rake</span> <span class="ss">db</span><span class="p">:</span><span class="n">migrate</span>
+</code></pre></div>
+Ora in config/initializers/devise.rb aggiungiamo
+<div class="highlight"><pre><code class="ruby"><span class="n">config</span><span class="o">.</span><span class="n">authentication_keys</span> <span class="o">=</span> <span class="o">[</span> <span class="ss">:username</span> <span class="o">]</span>
+</code></pre></div>
+Questo tutorial e' tratto dai seguenti railcasts:
+<a href="http://railscasts.com/episodes/209-introducing-devise">http://railscasts.com/episodes/209-introducing-devise</a>
+<a href="http://railscasts.com/episodes/210-customizing-devise">http://railscasts.com/episodes/210-customizing-devise</a>
+Qua la <a href="https://github.com/plataformatec/devise/wiki">pagina del progetto su github</a>.

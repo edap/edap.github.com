@@ -1,0 +1,9 @@
+Strtoupper non funziona con i default local characters, come le umlauts.
+Per risolvere questo problema si può usare preg_replace.
+<div class="highlight"><pre><code class="php"><span class="nb">setlocale</span><span class="p">(</span><span class="nx">LC_ALL</span><span class="p">,</span> <span class="s1">&#39;de_DE&#39;</span><span class="p">);</span>
+<span class="nv">$title</span> <span class="o">=</span> <span class="s1">&#39;viele umlauts, zum beispiel ä, ü, ö...und eine ß&#39;</span><span class="p">;</span>
+<span class="nv">$umaluts</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;/ä/i&#39;</span><span class="p">,</span><span class="s1">&#39;/ü/i&#39;</span><span class="p">,</span><span class="s1">&#39;/ö/i&#39;</span><span class="p">,</span><span class="s1">&#39;/ß/i&#39;</span><span class="p">);</span>
+<span class="nv">$replacing_umlauts</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Ä&#39;</span><span class="p">,</span><span class="s1">&#39;Ü&#39;</span><span class="p">,</span><span class="s1">&#39;Ö&#39;</span><span class="p">,</span><span class="s1">&#39;SS&#39;</span><span class="p">);</span>
+<span class="nv">$title</span> <span class="o">=</span> <span class="nb">preg_replace</span><span class="p">(</span><span class="nv">$umaluts</span><span class="p">,</span> <span class="nv">$replacing_umlauts</span><span class="p">,</span> <span class="nv">$title</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nx">strtoupper</span><span class="p">(</span><span class="nv">$title</span><span class="p">);</span>  
+</code></pre></div> 

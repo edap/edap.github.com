@@ -1,0 +1,62 @@
+Ho trovato questo <a href="http://www.thelittlebakery.org/2011/06/admin-panel-development-akismet-product-review/">post</a> che spiega come implementare akismet per verificare i commenti sul nostro sito.Mi e' sembrata davvero la soluzione piu' semplice fra le tante disponibili. I commenti vengono salvati nel nostro database, e dopo il salvataggio verifichiamo tramite akismet se il commento e' spam o meno. Ecco qui i passaggi:
+1) Scaricarsi il datasource <a href="https://github.com/alexdd55/thelittlebakery/blob/master/app/Model/Datasource/akismet.php">akismet.php</a> ed metterlo in app/Model/Datasource.
+1)Creare una api key sul sito di akisemt, ed aggiungere queste linee al file database.php
+<div class="highlight"><pre><code class="php"><span class="k">public</span> <span class="nv">$Akismet</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;datasource&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Akismet&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://yourblog/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;your_akismet_key&#39;</span>
+<span class="p">);</span>
+</code></pre></div> 
+2)Nella nostra tabella destinanata ai commenti, aggiungere i campi spam e checked
+3)Aggiungere al model Comment.php la seguente funzione.
+<div class="highlight"><pre><code class="php"><span class="k">public</span> <span class="k">function</span> <span class="nf">checkForSpam</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nv">$comment</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="nv">$id</span><span class="p">);</span>
+	<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;HttpSocket&#39;</span><span class="p">,</span> <span class="s1">&#39;Network/Http&#39;</span><span class="p">);</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Http</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HttpSocket</span><span class="p">();</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Akismet</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">getDataSource</span><span class="p">(</span><span class="s1">&#39;Akismet&#39;</span><span class="p">);</span>	
+	<span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+	      <span class="s1">&#39;user_ip&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;ip&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;user_agent&#39;</span> <span class="o">=&gt;</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;referrer&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://www.google.com&#39;</span><span class="p">,</span>
+	      <span class="s1">&#39;permalink&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;/comments/view/&#39;</span><span class="o">.</span><span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;comment_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;comment&#39;</span><span class="p">,</span>
+	      <span class="s1">&#39;comment_author&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;comment_author_email&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;email&#39;</span><span class="p">],</span>
+	      <span class="s1">&#39;comment_author_url&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+	      <span class="s1">&#39;comment_content&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+		<span class="p">);</span>
+	<span class="nv">$check</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Akismet</span><span class="o">-&gt;</span><span class="na">checkSpam</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+	<span class="k">if</span><span class="p">(</span><span class="nv">$check</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$spam</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+			<span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+			<span class="s1">&#39;checked&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="s1">&#39;spam&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+		<span class="p">);</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nv">$spam</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+			<span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">[</span><span class="s1">&#39;Comment&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+			<span class="s1">&#39;checked&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="s1">&#39;spam&#39;</span> <span class="o">=&gt;</span> <span class="mi">0</span>
+		<span class="p">);</span>
+	<span class="p">};</span>
+	<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$spam</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+4) Nel vostro CommentsController file, dopo aver salvato il commento richiamate la funzione appena creata. Es
+<div class="highlight"><pre><code class="php"><span class="k">public</span> <span class="k">function</span> <span class="nf">add</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">is</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">))</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">checkForSpam</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">getInsertID</span><span class="p">());</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The comment has been saved&#39;</span><span class="p">));</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">));</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The comment could not be saved. Please, try again.&#39;</span><span class="p">));</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="nv">$articles</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Comment</span><span class="o">-&gt;</span><span class="na">Article</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">);</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="nb">compact</span><span class="p">(</span><span class="s1">&#39;articles&#39;</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+5)Nella vostra sezione amministrativa, elencate tutti i commenti, e verificate i falsi positivi, in caso ce ne siano
+6)Sul vostro sito, mostrate solo i commmenti con il valore di "spam" = 0

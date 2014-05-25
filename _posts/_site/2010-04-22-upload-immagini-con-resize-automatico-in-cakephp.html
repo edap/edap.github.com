@@ -1,0 +1,20 @@
+Capita spesso di dover inserire un form per l'upload delle immagini nella sezione amministrativa del nostro sito. 
+C'è un <a href="http://github.com/tute/Thumbnail-component-for-CakePHP/">component</a> che fa al caso nostro, scala automaticamente ogni immagine in tre formati, big,med,small e la carica nella cartella predefinita.
+I passi per la configurazione sono pochi, presenti sul repo. 
+Dopo aver installato correttamente il component, ricordatevi che il path del file va salvato nel database. Modifichiamo quindi il controller per poter salvare il path dell'immagine nel campo 'file_path'
+<div class="highlight"><pre><code class="php"><span class="k">function</span> <span class="nf">admin_add</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Pianta</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Pianta</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nv">$file_path</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Attachment</span><span class="o">-&gt;</span><span class="na">upload</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Pianta&#39;</span><span class="p">][</span><span class="s1">&#39;Attachment&#39;</span><span class="p">]);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$file_path</span><span class="p">)){</span>
+                            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Pianta</span><span class="o">-&gt;</span><span class="na">saveField</span><span class="p">(</span><span class="s1">&#39;file_path&#39;</span><span class="p">,</span><span class="nv">$file_path</span><span class="p">);</span>
+                        <span class="p">}</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The Pianta has been saved&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">));</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">));</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The Pianta could not be saved. Please, try again.&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">));</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>

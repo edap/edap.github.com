@@ -1,0 +1,127 @@
+<p>The observer pattern helps us when we need to spread informations across our application. A system where every part is aware of the state of the whole is better than a system where each object should be manually notify for every small change. How is it possible to accomplish this task without coupling our objects? Let&#8217;s say we have just moved in a new flat, and every documents should be updates; driving license, passport, health insurance card&#8230; etc. Would be great if at the same time we change address, automatically our passport will be up-to date. That&#8217;s what the observer pattern would do:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Person</span>
+
+  <span class='kp'>attr_reader</span> <span class='ss'>:name</span><span class='p'>,</span> <span class='ss'>:age</span>
+  <span class='kp'>attr_reader</span> <span class='ss'>:address</span>
+
+  <span class='k'>def</span> <span class='nf'>initialize</span><span class='p'>(</span> <span class='nb'>name</span><span class='p'>,</span> <span class='n'>age</span><span class='p'>,</span> <span class='n'>address</span> <span class='p'>)</span>
+    <span class='vi'>@name</span> <span class='o'>=</span> <span class='nb'>name</span>
+    <span class='vi'>@age</span> <span class='o'>=</span> <span class='n'>age</span>
+    <span class='vi'>@address</span> <span class='o'>=</span> <span class='n'>address</span>
+    <span class='vi'>@observers</span> <span class='o'>=</span> <span class='o'>[]</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>address</span><span class='o'>=</span><span class='p'>(</span><span class='n'>new_address</span><span class='p'>)</span>
+    <span class='vi'>@address</span> <span class='o'>=</span> <span class='n'>new_address</span>
+    <span class='n'>notify_observers</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>add_observer</span><span class='p'>(</span><span class='n'>observer</span><span class='p'>)</span>
+    <span class='vi'>@observers</span> <span class='o'>&lt;&lt;</span> <span class='n'>observer</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>delete_observer</span><span class='p'>(</span><span class='n'>observer</span><span class='p'>)</span>
+    <span class='vi'>@observers</span><span class='o'>.</span><span class='n'>delete</span><span class='p'>(</span><span class='n'>observer</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>notify_observers</span>
+    <span class='vi'>@observers</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>observer</span><span class='o'>|</span>
+      <span class='n'>observer</span><span class='o'>.</span><span class='n'>update</span><span class='p'>(</span><span class='nb'>self</span><span class='p'>)</span>
+    <span class='k'>end</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+</code></pre></div>
+<p>The important thing to know here is that the @observers variable is an array, and could contain more than one objects, as more than one item needs to be notified.</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Passport</span>
+
+  <span class='k'>def</span> <span class='nf'>update</span><span class='p'>(</span> <span class='n'>changed_person</span> <span class='p'>)</span>
+    <span class='nb'>puts</span><span class='p'>(</span><span class='s2'>&quot;I have to update the citizen </span><span class='si'>#{</span><span class='n'>changed_person</span><span class='o'>.</span><span class='n'>name</span><span class='si'>}</span><span class='s2'>!&quot;</span><span class='p'>)</span>
+    <span class='nb'>puts</span><span class='p'>(</span><span class='s2'>&quot;His address is now </span><span class='si'>#{</span><span class='n'>changed_person</span><span class='o'>.</span><span class='n'>address</span><span class='si'>}</span><span class='s2'>!&quot;</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+</code></pre></div><div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>DrivingLicense</span>
+
+  <span class='k'>def</span> <span class='nf'>update</span><span class='p'>(</span> <span class='n'>changed_person</span> <span class='p'>)</span>
+    <span class='nb'>puts</span><span class='p'>(</span><span class='s2'>&quot;I&#39;m the driving license! I have to update the citizen </span><span class='si'>#{</span><span class='n'>changed_person</span><span class='o'>.</span><span class='n'>name</span><span class='si'>}</span><span class='s2'>!&quot;</span><span class='p'>)</span>
+    <span class='nb'>puts</span><span class='p'>(</span><span class='s2'>&quot;His address is now </span><span class='si'>#{</span><span class='n'>changed_person</span><span class='o'>.</span><span class='n'>address</span><span class='si'>}</span><span class='s2'>!&quot;</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+</code></pre></div>
+<p>And here the implementation</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>lucky_guy</span> <span class='o'>=</span> <span class='no'>Person</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='s1'>&#39;Bob&#39;</span><span class='p'>,</span> <span class='mi'>30</span><span class='p'>,</span> <span class='s1'>&#39;Karl Marx strasse, Berlin&#39;</span><span class='p'>)</span>
+<span class='n'>passport</span> <span class='o'>=</span> <span class='no'>Passport</span><span class='o'>.</span><span class='n'>new</span>
+<span class='n'>driving_license</span> <span class='o'>=</span> <span class='no'>DrivingLicense</span><span class='o'>.</span><span class='n'>new</span>
+<span class='n'>lucky_guy</span><span class='o'>.</span><span class='n'>add_observer</span><span class='p'>(</span><span class='n'>passport</span><span class='p'>)</span>
+<span class='n'>lucky_guy</span><span class='o'>.</span><span class='n'>add_observer</span><span class='p'>(</span><span class='n'>driving_license</span><span class='p'>)</span>
+<span class='n'>lucky_guy</span><span class='o'>.</span><span class='n'>address</span> <span class='o'>=</span> <span class='s1'>&#39;Gustav Mueller Str., Berlin&#39;</span>
+</code></pre></div>
+<p><a href='http://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612'>The Gang of Four</a> defines two types of object. The <em>subject</em>, the object that has the news, and the <em>observer</em>, the object that want to know the news. In this case is pretty clear that the object is the Person, and the rest are the observers.</p>
+
+<p>But what if in our application there are more than one Subjects, and we want to reuse the code that add and remove the observer? Let&#8217;s pack this code in a module:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>module</span> <span class='nn'>Subject</span>
+  <span class='k'>def</span> <span class='nf'>initialize</span>
+    <span class='vi'>@observers</span><span class='o'>=[]</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>add_observer</span><span class='p'>(</span><span class='n'>observer</span><span class='p'>)</span>
+    <span class='vi'>@observers</span> <span class='o'>&lt;&lt;</span> <span class='n'>observer</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>delete_observer</span><span class='p'>(</span><span class='n'>observer</span><span class='p'>)</span>
+    <span class='vi'>@observers</span><span class='o'>.</span><span class='n'>delete</span><span class='p'>(</span><span class='n'>observer</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>notify_observers</span>
+    <span class='vi'>@observers</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>observer</span><span class='o'>|</span>
+      <span class='n'>observer</span><span class='o'>.</span><span class='n'>update</span><span class='p'>(</span><span class='nb'>self</span><span class='p'>)</span>
+    <span class='k'>end</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+</code></pre></div>
+<p>Our Person class can now include all the methods present in the Subject module, and simplify the process to add others subjects to our application.</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Person</span>
+  <span class='kp'>include</span> <span class='no'>Subject</span>
+
+  <span class='kp'>attr_reader</span> <span class='ss'>:name</span><span class='p'>,</span> <span class='ss'>:age</span>
+  <span class='kp'>attr_reader</span> <span class='ss'>:address</span>
+
+  <span class='k'>def</span> <span class='nf'>initialize</span><span class='p'>(</span> <span class='nb'>name</span><span class='p'>,</span> <span class='n'>age</span><span class='p'>,</span> <span class='n'>address</span> <span class='p'>)</span>
+    <span class='k'>super</span><span class='p'>()</span>
+    <span class='vi'>@name</span> <span class='o'>=</span> <span class='nb'>name</span>
+    <span class='vi'>@age</span> <span class='o'>=</span> <span class='n'>age</span>
+    <span class='vi'>@address</span> <span class='o'>=</span> <span class='n'>address</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>address</span><span class='o'>=</span><span class='p'>(</span><span class='n'>new_address</span><span class='p'>)</span>
+    <span class='vi'>@address</span> <span class='o'>=</span> <span class='n'>new_address</span>
+    <span class='n'>notify_observers</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+</code></pre></div>
+<p>The method <code>super</code> (in ruby, only the method <code>super</code> needs the two <code>()</code> also if there is no argument ), is used to call the initialize method in the Subject module. In real world application, there is no need to create the subject module, the Ruby standard library comes with a predefined &#8216;Observable&#8217; module, that, when included, tranform the object in a subject. The only thing that has changed, is that the <code>Observable</code> module requires that the subject calls the method <code>changed</code> before <code>notify_observers</code> every time the object is changed.This method sets a flag in the object to <code>true</code>, when the <code>notify_object</code> method finish his task, the flag is set back to <code>false</code>. Here the example</p>
+<div class='highlight'><pre><code class='ruby'><span class='nb'>require</span> <span class='s1'>&#39;observer&#39;</span>
+
+<span class='k'>class</span> <span class='nc'>Person</span>
+  <span class='kp'>include</span> <span class='no'>Observable</span>
+  <span class='kp'>attr_reader</span> <span class='ss'>:name</span><span class='p'>,</span> <span class='ss'>:age</span>
+  <span class='kp'>attr_reader</span> <span class='ss'>:address</span>
+
+  <span class='k'>def</span> <span class='nf'>initialize</span><span class='p'>(</span> <span class='nb'>name</span><span class='p'>,</span> <span class='n'>age</span><span class='p'>,</span> <span class='n'>address</span><span class='p'>)</span>
+    <span class='vi'>@name</span> <span class='o'>=</span> <span class='nb'>name</span>
+    <span class='vi'>@age</span> <span class='o'>=</span> <span class='n'>age</span>
+    <span class='vi'>@address</span> <span class='o'>=</span> <span class='n'>address</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>address</span><span class='o'>=</span><span class='p'>(</span><span class='n'>new_address</span><span class='p'>)</span>
+    <span class='vi'>@address</span> <span class='o'>=</span> <span class='n'>new_address</span>
+    <span class='n'>changed</span>
+    <span class='n'>notify_observers</span><span class='p'>(</span><span class='nb'>self</span><span class='p'>)</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>As in the previous posts regarding design patterns in ruby (all of them inspired by the <a href='http://www.amazon.com/Design-Patterns-Ruby-Russ-Olsen/dp/0321490452'>book wrote by Russ Olsen</a>), the code&#8217;s example are available <a href='https://github.com/edap/design-patterns'>here</a></p>

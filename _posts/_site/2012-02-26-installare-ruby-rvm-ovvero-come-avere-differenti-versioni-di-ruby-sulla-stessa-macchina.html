@@ -1,0 +1,82 @@
+Ruby Virtual Machine serve per utilizzare differenti versioni di ruby sulla stessa macchina. In Ruby, data l'alta frequenza con cui vengono rilasciate le nuove release, e' molto facile avere progetti in produzione che funzionano con una versione vecchia di ruby. un altro scenario in cui RVM puo' tornare utile e' quello in cui vogliamo sperimentare la nuova versione di ruby al posto di quella predefinita dal nostro sistema.
+Se scegliamo di affidarci a RVM, cosa saggia, e' bene che d'ora in avanti ogni progetto in ruby abbia la sua versione di ruby e relativo gemset definito in .rvmrc (vedi tutorial alla fine), e di non affidarsi piu'alla versione di ruby in /usr/bin ma a quella installata nella nostra /home/user/.rvm. Dopo aver completato quanto scritto in questa guida, il comando "which ruby" restituira' il path dell'eseguibile all'interno della nostra .rvm folder. Se invece da root, eseguiamo il comando "which ruby" quesyto ritornera' il path "/usr/bin/ruby", perche' questo e' il path dell'eseguibile di sistema, mentre con rvm installiamo diverse versioni di ruby in user space, all'interno della nostra home. Si puo' installare rvm anche da root, ma e' una cosa che sconsiglio. Meglio avere una sola versione di ruby sull'intero sistema, e diverse versioni di ruby in user space, adattabili ai nostri progetti.
+<h4>Installare RVM</h4>
+<div class="highlight"><pre><code class="bash">bash -s stable &lt; &lt; <span class="o">(</span>curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer<span class="o">)</span>
+</code></pre></div>
+
+aggiungi questa linea alla fine di .bashrc
+<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span>
+</code></pre></div>
+
+ricarica il file ".bashrc"
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">source</span> ~/.bashrc
+</code></pre></div>
+
+leggi bene cosa ti dice l'output di questo comando, e in caso installa quanto richiesto
+<div class="highlight"><pre><code class="bash">rvm requirements
+</code></pre></div>
+
+Qui leggiamo
+<div class="highlight"><pre><code class="bash">To install rbx and/or Ruby 1.9 head <span class="o">(</span>MRI<span class="o">)</span> <span class="o">(</span>eg. 1.9.2-head<span class="o">)</span>,
+<span class="k">then </span>you must install and use rvm 1.8.7 first
+</code></pre></div>
+Ed e' quello che faremo.Per installa MRI dobbiamo prima installare ruby 1.8.7.MRI, Matz' Ruby Interpreter e' l'implementazione ufficiale di ruby scritta in C.
+
+<div class="highlight"><pre><code class="bash">apt-get install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion
+</code></pre></div>
+poi
+<div class="highlight"><pre><code class="bash">rvm install ruby 1.8.7
+</code></pre></div>
+
+con questo comando possiamo invece vedere tutte le versioni di ruby che possiamo installare
+<div class="highlight"><pre><code class="bash">rvm list known
+</code></pre></div>
+
+Ora possiamo installare ruby 1.9.3
+<div class="highlight"><pre><code class="bash">rvm install ruby 1.9.3
+</code></pre></div>
+
+<h4>Passare da una versiona all'altra di ruby, o sceglierne una di default</h4>
+dando il comando
+<div class="highlight"><pre><code class="bash">rwm list
+</code></pre></div>
+
+Possiamo avere un elenco delle versione di ruby installate. Per passare dalla 1.8.7 alla 1.9.3, diamo il comando
+<div class="highlight"><pre><code class="bash">rwm use 1.9.3
+</code></pre></div>
+Se invece vogliamo usarne una di default, basta settarla
+
+<div class="highlight"><pre><code class="bash"> rvm --default use 1.9.3
+</code></pre></div>
+
+<h4>.rvmrc</h4>
+Come far si che ogni progetto abbia la sua versione di ruby e il suo gemset gia' configurato.creiamo la cartella "uno" che conterra' un progetto che usa ruby 1.8.7 e la cartella "due" che usa ruby 1.9.3.
+Spostiamoci in "uno" e creiamo il file .rvmrc contenente il nome della versione di ruby che vogliamo usare ed il nome del progetto separati dal simbolo <b>@</b>.Quindi
+<div class="highlight"><pre><code class="bash">rvm 1.8.7@uno
+</code></pre></div>
+Facciamo la stessa cosa nella cartella "due", modificando i valori per il file .rvmrc
+<div class="highlight"><pre><code class="bash">rvm 1.9.3@due
+</code></pre></div>
+Ora ritorniamo nella cartella "uno", apparira' un warning, che ci dira' che non abbiamo il gemset installato. Digitiamo "y" ed andiamo avanti. spostandoci nelle cartelle e digitando "ruby -v" si puo' vedere come ruby cambi la versione a seconda di dove si trovi.
+Per creare il gemset dove necessario(nel mio caso 1.9.3, perche' 1.8.7 era gia' installato) basta copiare il messagio letto nel warning ed eseguirlo nella directory dove abbiamo letto tale warning
+<div class="highlight"><pre><code class="bash">rvm gemset create <span class="s1">&#39;due&#39;</span>
+</code></pre></div>
+<h4>Aggiornare RVM</h4>
+All'ultima stable
+<div class="highlight"><pre><code class="bash">rvm get stable
+</code></pre></div>
+Alla piu' recente
+<div class="highlight"><pre><code class="bash">rvm get latest
+</code></pre></div>
+Alla recentissima piena di bugs
+<div class="highlight"><pre><code class="bash">rvm get head
+</code></pre></div>
+rvm ha davvero un infinita' di opzioni, dare un occhio alla pagina help (rvm -h) per rendersene conto. Il progetto e' attivamente sviluppato qua <a href="https://github.com/wayneeseguin/rvm">https://github.com/wayneeseguin/rvm</a>
+
+
+<strong>Link utili:</strong>
+<a href="http://beginrescueend.com/set/gem/">http://beginrescueend.com/set/gem/</a>
+<a href="http://beginrescueend.com/rvm/best-practices/">http://beginrescueend.com/rvm/best-practices/</a>
+<a href="http://screencasts.org/episodes/how-to-use-rvm">http://screencasts.org/episodes/how-to-use-rvm</a>
+<a href=" http://rails.vandenabeele.com/blog/2011/11/26/installing-ruby-and-rails-with-rvm-on-ubuntu-11-dot-10/">http://rails.vandenabeele.com/blog/2011/11/26/installing-ruby-and-rails-with-rvm-on-ubuntu-11-dot-10/</a>
+<a href="http://beginrescueend.com/">http://beginrescueend.com/</a>

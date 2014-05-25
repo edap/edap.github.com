@@ -1,0 +1,28 @@
+<a href="http://nokogiri.org/">Nokogiri</a> è una fantastica libreria di ruby che consente di parsare dei file. E' molto intuitiva, e permette di trovare velocemente la soluzione senza necessariamente conoscerla a fondo.
+Per esempio, se voglio trovare i link di un documento html:
+
+<div class="highlight"><pre><code class="ruby"><span class="c1">#/usr/bin/ruby</span>
+<span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;home.html&quot;</span><span class="p">)</span>
+<span class="vi">@doc</span> <span class="o">=</span> <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">links</span> <span class="o">=</span> <span class="vi">@doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;//a&quot;</span><span class="p">)</span>
+<span class="n">links</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">l</span><span class="o">|</span>
+	<span class="nb">p</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+
+La libreria utilizza xpath, trova il tag "a" e lo mette nel node "l". Il risultato può apparire a prima vista confuso.
+In realta', una volta capito il concetto di <a href="http://nokogiri.org/Nokogiri/XML/Node.html">node</a> tutto appare chiaro. Stampiamo quindi a video il percorso assoluto dei link:
+<div class="highlight"><pre><code class="ruby"><span class="c1">#/usr/bin/ruby</span>
+<span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;home.html&quot;</span><span class="p">)</span>
+<span class="vi">@doc</span> <span class="o">=</span> <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">links</span> <span class="o">=</span> <span class="vi">@doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;//a&quot;</span><span class="p">)</span>
+<span class="n">links</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">l</span><span class="o">|</span> 
+	<span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="o">[</span><span class="s1">&#39;href&#39;</span><span class="o">]+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div> 

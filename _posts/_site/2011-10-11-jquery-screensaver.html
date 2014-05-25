@@ -1,0 +1,65 @@
+Uno screensaver stile windows, fatto con jquery.
+questo l'html
+[html]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<style>
+body{
+	background-color:#b0c4de;
+	margin:0px;
+	width:100%;
+}
+#container{
+	position: relative;
+}
+#saver{
+	background-color:lime;
+	width:100px;
+	height:100px;
+	position: fixed;
+	z-index: 50;
+}
+</style>
+</head>
+<body>
+	<div id ="container">
+		<div id ="saver">I'm a screensaver
+		</div>
+	</div>
+</body>
+</html>
+[/html]
+Dopo la fine del tag <pre>head</pre> inserite questo codice js
+[javascript]
+<script>
+$(function(){
+var savescreen = function(speed, vertical, horizontal){
+	$("#saver").animate({left: '+='+horizontal, top: '+='+vertical}, speed);
+	$("#saver").animate({left: '-='+horizontal, top: '+='+vertical}, speed);
+	$("#saver").animate({left: '-='+horizontal, top: '-='+vertical}, speed);
+	$("#saver").animate({left: '+='+horizontal, top: '-='+vertical}, speed);
+};
+
+$(function(){
+	larg_saver = $('#saver').width();
+	alt_saver = $('#saver').height();
+	width = $(window).width();
+	height = $(window).height();
+	margin_top_saver = (height - alt_saver)/2;
+	margin_left_saver = (width - larg_saver)/2;
+	$('#saver').css('top',0);
+	$('#saver').css('left',margin_left_saver);				
+  });
+
+
+window.setInterval(function(){
+	speed = 1000
+	savescreen(speed, margin_top_saver, margin_left_saver);
+}, 1000);
+
+});
+</script>
+[/javascript]
+Qui una demo per lo <a href="/demo/screensaver.html">screensaver</a> in jquery

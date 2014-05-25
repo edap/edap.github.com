@@ -1,0 +1,14 @@
+Dopo aver verificato che anche<a href="http://blog.enebo.com/2011/02/installing-ruby-support-in-netbeans-70.html"> NetBeans 7 supporta Ruby</a>, ho deciso di aggiornarlo. La prima cosa che  ho configurato e' il supporto a PHPUnit. In questo ultimo mese ho scritto tests per un applicazione in CakePHP (post a breve a rigurardo) e ho trovato parecchi link a PHPUnit, che e' il framework di testing per CakePHP 2.0.
+
+Su Debian/Ubuntu derivate lanciate da console:
+<div class="highlight"><pre><code class="bash">apt-get install phpunit
+</code></pre></div>
+Ora aprite Netbeans, andate in Tools-&gt;Options-&gt;PHP-&gt;Unit Testing.
+Nel campo PHPUnit script inserite il valore "/usr/bin/phpunit".
+Cliccate OK e chiudete.
+
+Ora quando cliccate con il tasto destro su un file nel vostro project tree, alla voce Tools vi comparira' l'opzione "create PHPUnit tests". Scegliete la cartella nella quale volete che il vostro file di test venga generato e confermate.
+
+Per lanciare il test, premete CTRL+F6, o cliccate con il tasto destro sul file e scelgiete la voce "Test". Maggiori info a riguardo a questo <a href="http://netbeans.org/kb/docs/php/phpunit.html">link</a>.
+
+Qui invece il sito di PHPUnit, con tutte le assertions <a href="http://www.phpunit.de/manual/current/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions">disponibili</a>

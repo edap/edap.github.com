@@ -1,0 +1,146 @@
+Con CakePHP 2.0 ci sono tante novità. In questo post spiegherò come realizzare una semplice sistema di <a href="http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html">autenticazione</a> per l'admin area, in cui abbiamo differenti users che possono accedervi, ma solo uno e' l'admin, gli altri sono amministratori con funzioni limitate. Per un piccolo sistema, con pochi utenti, ho deciso di non usare ACL, troppo ingombrante e dispendiosa, ma di scrivere un metodo apposito, allowedGroups da richiamare nelle azioni in cui voglio verificare che solo un determinato gruppo di utenti possa accedere a determinate funzioni. Alcune note sulle novità che influiscono sull'autenticazione.
+<ul>
+	<li>Sono supporati diversi tipi di autenticazione, configurabili tramite degli handlers, quello usato in questo articolo è il FormAuthenticate handler di default.</li>
+	<li>Nelle versioni precedenti di CakePHP 2.0 bastava aggiungere l'Auth Component e chiamare la funzione login nello user controller,  nella nuova versione, nella nostra function login, dovremo chiamare manualmente "$this-&gt;Auth-&gt;login()"</li>
+	<li>La password non viene più crittata di default, il metodo va chiamato manualmente</li>
+</ul>
+Creiamo un database per gli users e uno per i groups<br>
+<pre>
+CREATE TABLE IF NOT EXISTS `groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(70) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `name` varchar(70) NOT NULL,
+  `email` varchar(70) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `description` text NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+</pre><br>
+Creiamo i relativi controllers, models e views usando "cake bake".
+Andiamo ad eliminare tutte le action e tutte le view che non saranno accessibili al di fuori dell'admin area. Rimuoviamo quindi,per esempio, dallo UserController le action delete, add, edit. Aggiungiamo i metodi per il login ed il logout dello user in app/Controllers/UsersController.php
+<div class="highlight"><pre><code class="php"><span class="sd">/**</span>
+<span class="sd"> * Users Controller</span>
+<span class="sd"> *</span>
+<span class="sd"> * @property User $User</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">UsersController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">parent</span><span class="o">::</span><span class="na">beforeFilter</span><span class="p">();</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">allow</span><span class="p">(</span><span class="s1">&#39;admin_login&#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="sd">/**</span>
+<span class="sd"> * login method</span>
+<span class="sd"> *</span>
+<span class="sd"> * @return void</span>
+<span class="sd"> */</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">admin_login</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">is</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">))</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">login</span><span class="p">())</span> <span class="p">{</span>
+				<span class="nv">$user_id</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">user</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+				<span class="nv">$group_id</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">user</span><span class="p">(</span><span class="s1">&#39;group_id&#39;</span><span class="p">);</span>
+				<span class="nv">$group</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">getGroup</span><span class="p">(</span><span class="nv">$group_id</span><span class="p">);</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s1">&#39;Auth.User.group&#39;</span><span class="p">,</span> <span class="nv">$group</span><span class="p">);</span>		
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="nv">$user_id</span><span class="p">,</span> 
+										<span class="s1">&#39;admin&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">));</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;email o password errata&#39;</span><span class="p">),</span> 
+											<span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="s1">&#39;auth&#39;</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="sd">/**</span>
+<span class="sd"> * logout method</span>
+<span class="sd"> *</span>
+<span class="sd"> * @return void</span>
+<span class="sd"> */</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">admin_logout</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="s1">&#39;Sei ora sloggato dal sistema&#39;</span><span class="p">);</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">destroy</span><span class="p">();</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">logout</span><span class="p">());</span>
+	<span class="p">}</span>
+</code></pre></div>
+Come vedete ho utilizzato il metodo getGroup, che dovro' scrivere nel mio App/Model/User.php
+<div class="highlight"><pre><code class="php"><span class="k">function</span> <span class="nf">getGroup</span><span class="p">(</span><span class="nv">$group_id</span><span class="p">){</span>
+	<span class="nv">$conditions</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$group_id</span><span class="p">);</span>		
+	<span class="nv">$group</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Group</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span><span class="s1">&#39;nome&#39;</span><span class="p">,</span> <span class="nv">$conditions</span><span class="p">);</span>		
+	<span class="k">if</span> <span class="p">(</span><span class="nv">$group</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nv">$group</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+	<span class="p">}</span>		
+<span class="p">}</span>
+</code></pre></div>
+
+Passiamo ora all'AppController.php, richiediamo l'autenticazione per chiunque voglia accedere all'admin area, e creiamo in App/Views/Layouts il file admin.ctp che conterrà il layout specifico per l'admin. Inoltre, andiamo a scrivere nella sessione il nome del gruppo, in modo da poterlo sempre leggere nella variabile $current_user, e da poterlo utilizzare sia per decidere quali elementi nelle view mostrare, sia per verificare che il nome del gruppo sia nell'elenco delle funzioni che vogliamo restringere solo ad alcuni gruppi.
+<div class="highlight"><pre><code class="php"><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="nv">$components</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Auth&#39;</span><span class="p">,</span><span class="s1">&#39;Session&#39;</span><span class="p">);</span>
+	<span class="k">var</span> <span class="nv">$helpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Session&#39;</span><span class="p">,</span><span class="s1">&#39;Form&#39;</span><span class="p">,</span><span class="s1">&#39;Html&#39;</span><span class="p">);</span>
+    <span class="k">var</span> <span class="nv">$current_user</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">params</span><span class="p">[</span><span class="s1">&#39;admin&#39;</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">layout</span> <span class="o">=</span> <span class="s1">&#39;admin&#39;</span><span class="p">;</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">logoutRedirect</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="p">;</span>		
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">authenticate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+				<span class="nx">AuthComponent</span><span class="o">::</span><span class="na">ALL</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+					<span class="s1">&#39;fields&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+						<span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;email&#39;</span><span class="p">,</span>
+						<span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;password&#39;</span><span class="p">),</span>
+					<span class="s1">&#39;userModel&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Users.User&#39;</span>
+				<span class="p">),</span> <span class="s1">&#39;Form&#39;</span>
+			<span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">allow</span><span class="p">();</span>
+        <span class="p">}</span>		
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">current_user</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">user</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="nf">beforeRender</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;current_user&#39;</span><span class="p">,</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">current_user</span> <span class="p">);</span>
+    <span class="p">}</span>
+	
+	<span class="k">function</span> <span class="nf">allowGroups</span><span class="p">(</span><span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(),</span> <span class="nv">$options</span> <span class="o">=</span> <span class="k">array</span><span class="p">()){</span>
+		<span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$options</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]))</span> <span class="p">{</span>
+			<span class="nv">$options</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;non sei autorizzato ad accedere&#39;</span><span class="p">;</span>
+		<span class="p">}</span>
+		
+		<span class="nv">$group</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="s1">&#39;Auth.User.group&#39;</span><span class="p">);</span>		
+		<span class="k">if</span> <span class="p">(</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$group</span><span class="p">,</span> <span class="nv">$groups</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nv">$groups</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">))</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+		<span class="p">}</span> 
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="nv">$options</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]));</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">destroy</span><span class="p">();</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Auth</span><span class="o">-&gt;</span><span class="na">logout</span><span class="p">());</span>
+
+		<span class="p">}</span>
+	<span class="p">}</span>	
+<span class="p">}</span>
+</code></pre></div>
+Creaimo il file Views/Users/admin_login.ctp
+<div class="highlight"><pre><code class="php"><span class="o">&lt;?</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;url&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span><span class="s1">&#39;login&#39;</span><span class="p">)));</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">input</span><span class="p">(</span><span class="s1">&#39;User.email&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;Email&#39;</span><span class="p">));</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">input</span><span class="p">(</span><span class="s1">&#39;User.password&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;password&#39;</span><span class="p">));</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">(</span><span class="s1">&#39;Loggati&#39;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+Qui sotto un esempio su come utilizzare allowGroups.
+<div class="highlight"><pre><code class="php"><span class="c1">#se voglio autorizzare tutti i gruppi esistenti</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">allowGroups</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">));</span>
+<span class="c1">#se voglio autorizzare solo il gruppo admin</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">allowGroups</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">));</span>
+<span class="c1">#se voglio autorizzare admin e supervisori</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">allowGroups</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">,</span><span class="s1">&#39;supervisori&#39;</span><span class="p">));</span>
+</code></pre></div> 

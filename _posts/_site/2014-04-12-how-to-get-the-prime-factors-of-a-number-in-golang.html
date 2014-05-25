@@ -1,0 +1,52 @@
+<p>Learning golang, i&#8217;m writing a program that reads the images in a folder and composes a grid of thumbs out of them. The first problem was how to calculate how many thumbs fit a rectangle. in order to do that i need to compose the total number of the images in prime factors. In the go source code you can find an example about <a href='http://play.golang.org/p/9U22NfrXeq'>how to produce a list of prime numbers</a>. What was missing in that example, was the capacity to declare a limit, that corresponds to the number that i have to factorize. The solution was to use a channel as a signal, that sends a message to the other goroutine when the limit is reached. Here the complete code with an example.</p>
+<div class='highlight'><pre><code class='go'><span class='c1'>// Prime factorization derived from slightly modified version</span>
+<span class='c1'>// of sieve.go in Go source distribution.</span>
+<span class='kn'>package</span> <span class='nx'>main</span>
+
+<span class='kn'>import</span> <span class='p'>(</span>
+    <span class='s'>&quot;fmt&quot;</span>
+<span class='p'>)</span>
+<span class='c1'>// Generate numbers until the limit max.</span>
+<span class='c1'>// after the 2, all the prime numbers are odd</span>
+<span class='c1'>// Send a channel signal when the limit is reached</span>
+<span class='kd'>func</span> <span class='nx'>Generate</span><span class='p'>(</span><span class='nx'>max</span> <span class='kt'>int</span><span class='p'>,</span> <span class='nx'>ch</span> <span class='kd'>chan</span><span class='o'>&lt;-</span> <span class='kt'>int</span><span class='p'>)</span> <span class='p'>{</span>
+    <span class='nx'>ch</span> <span class='o'>&lt;-</span> <span class='mi'>2</span>
+    <span class='k'>for</span> <span class='nx'>i</span> <span class='o'>:=</span> <span class='mi'>3</span><span class='p'>;</span> <span class='nx'>i</span> <span class='o'>&lt;=</span> <span class='nx'>max</span><span class='p'>;</span> <span class='nx'>i</span> <span class='o'>+=</span> <span class='mi'>2</span> <span class='p'>{</span>
+        <span class='nx'>ch</span> <span class='o'>&lt;-</span> <span class='nx'>i</span>
+    <span class='p'>}</span>
+    <span class='nx'>ch</span> <span class='o'>&lt;-</span> <span class='o'>-</span><span class='mi'>1</span> <span class='c1'>// signal that the limit is reached</span>
+<span class='p'>}</span>
+
+<span class='c1'>// Copy the values from channel &#39;in&#39; to channel &#39;out&#39;,</span>
+<span class='c1'>// removing those divisible by &#39;prime&#39;.</span>
+<span class='kd'>func</span> <span class='nx'>Filter</span><span class='p'>(</span><span class='nx'>in</span> <span class='o'>&lt;-</span><span class='kd'>chan</span> <span class='kt'>int</span><span class='p'>,</span> <span class='nx'>out</span> <span class='kd'>chan</span><span class='o'>&lt;-</span> <span class='kt'>int</span><span class='p'>,</span> <span class='nx'>prime</span> <span class='kt'>int</span><span class='p'>)</span> <span class='p'>{</span>
+    <span class='k'>for</span> <span class='nx'>i</span> <span class='o'>:=</span> <span class='o'>&lt;-</span><span class='nx'>in</span><span class='p'>;</span> <span class='nx'>i</span> <span class='o'>!=</span> <span class='o'>-</span><span class='mi'>1</span><span class='p'>;</span> <span class='nx'>i</span> <span class='p'>=</span> <span class='o'>&lt;-</span><span class='nx'>in</span> <span class='p'>{</span>
+        <span class='k'>if</span> <span class='nx'>i</span><span class='o'>%</span><span class='nx'>prime</span> <span class='o'>!=</span> <span class='mi'>0</span> <span class='p'>{</span>
+            <span class='nx'>out</span> <span class='o'>&lt;-</span> <span class='nx'>i</span>
+        <span class='p'>}</span>
+    <span class='p'>}</span>
+    <span class='nx'>out</span> <span class='o'>&lt;-</span> <span class='o'>-</span><span class='mi'>1</span>
+<span class='p'>}</span>
+
+<span class='kd'>func</span> <span class='nx'>CalcPrimeFactors</span><span class='p'>(</span><span class='nx'>number_to_factorize</span> <span class='kt'>int</span><span class='p'>)</span> <span class='p'>[]</span><span class='kt'>int</span> <span class='p'>{</span>
+    <span class='nx'>rv</span> <span class='o'>:=</span> <span class='p'>[]</span><span class='kt'>int</span><span class='p'>{}</span>
+    <span class='nx'>ch</span> <span class='o'>:=</span> <span class='nb'>make</span><span class='p'>(</span><span class='kd'>chan</span> <span class='kt'>int</span><span class='p'>)</span>
+    <span class='k'>go</span> <span class='nx'>Generate</span><span class='p'>(</span><span class='nx'>number_to_factorize</span><span class='p'>,</span> <span class='nx'>ch</span><span class='p'>)</span>
+    <span class='k'>for</span> <span class='nx'>prime</span> <span class='o'>:=</span> <span class='o'>&lt;-</span><span class='nx'>ch</span><span class='p'>;</span> <span class='p'>(</span><span class='nx'>prime</span> <span class='o'>!=</span> <span class='o'>-</span><span class='mi'>1</span><span class='p'>)</span> <span class='o'>&amp;&amp;</span> <span class='p'>(</span><span class='nx'>number_to_factorize</span> <span class='p'>&gt;</span> <span class='mi'>1</span><span class='p'>);</span> <span class='nx'>prime</span> <span class='p'>=</span> <span class='o'>&lt;-</span><span class='nx'>ch</span> <span class='p'>{</span>
+        <span class='k'>for</span> <span class='nx'>number_to_factorize</span><span class='o'>%</span><span class='nx'>prime</span> <span class='o'>==</span> <span class='mi'>0</span> <span class='p'>{</span>
+            <span class='nx'>number_to_factorize</span> <span class='p'>=</span> <span class='nx'>number_to_factorize</span> <span class='o'>/</span> <span class='nx'>prime</span>
+            <span class='nx'>rv</span> <span class='p'>=</span> <span class='nb'>append</span><span class='p'>(</span><span class='nx'>rv</span><span class='p'>,</span> <span class='nx'>prime</span><span class='p'>)</span>
+        <span class='p'>}</span>
+        <span class='nx'>ch1</span> <span class='o'>:=</span> <span class='nb'>make</span><span class='p'>(</span><span class='kd'>chan</span> <span class='kt'>int</span><span class='p'>)</span>
+        <span class='k'>go</span> <span class='nx'>Filter</span><span class='p'>(</span><span class='nx'>ch</span><span class='p'>,</span> <span class='nx'>ch1</span><span class='p'>,</span> <span class='nx'>prime</span><span class='p'>)</span>
+        <span class='nx'>ch</span> <span class='p'>=</span> <span class='nx'>ch1</span>
+    <span class='p'>}</span>
+    <span class='k'>return</span> <span class='nx'>rv</span>
+<span class='p'>}</span>
+
+<span class='kd'>func</span> <span class='nx'>main</span><span class='p'>()</span> <span class='p'>{</span>
+    <span class='nx'>fmt</span><span class='p'>.</span><span class='nx'>Println</span><span class='p'>(</span><span class='nx'>CalcPrimeFactors</span><span class='p'>(</span><span class='mi'>699</span><span class='p'>))</span>
+    <span class='nx'>fmt</span><span class='p'>.</span><span class='nx'>Println</span><span class='p'>(</span><span class='nx'>CalcPrimeFactors</span><span class='p'>(</span><span class='mi'>1233</span><span class='p'>))</span>
+    <span class='nx'>fmt</span><span class='p'>.</span><span class='nx'>Println</span><span class='p'>(</span><span class='nx'>CalcPrimeFactors</span><span class='p'>(</span><span class='mi'>9876</span><span class='p'>))</span>
+<span class='p'>}</span>
+</code></pre></div>

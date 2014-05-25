@@ -1,0 +1,20 @@
+Ho dovuto realizzare un uploader utlizzando questo <a href="http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin">plugin </a> nel quale si possono specificare quali tipi di file e' possibile caricare. L'applicazione si concentra sui file audio, da qui la necessita' di elencare i filetypes consentiti. Non ho ancora trovato una lista completa, non pensavo fossero cosi' tanti e ogni giorno un utente me ne segnala uno nuovo. Ecco l'elenco, spero possa risparmiare tempo a qualcuno.
+<div class="highlight"><pre><code class="php"><span class="s1">&#39;allowedTypes&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;mp3&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;audio/mp3&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/mpeg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/mpg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-amzaudio&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-mp3&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/mpeg3&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-mpeg3&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-mpeg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-mpg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/mpeg3&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-mpegaudio&#39;</span>
+									<span class="p">),</span>
+						<span class="s1">&#39;ogg&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;audio/x-vorbis+ogg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;audio/x-ogg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;application/x-ogg&#39;</span><span class="p">,</span>
+										<span class="s1">&#39;application/ogg&#39;</span>
+										<span class="p">)</span>
+<span class="p">),</span>
+</code></pre></div> 

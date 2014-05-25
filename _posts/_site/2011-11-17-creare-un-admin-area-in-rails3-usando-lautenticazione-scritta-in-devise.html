@@ -1,0 +1,32 @@
+<strong>1)</strong>aggiungere il namespace "admin" in routes.rb, ed abbinarlo ai controller per i quali vogliamo l'autenticazione, in questo esempio "questions".
+<div class="highlight"><pre><code class="ruby"><span class="n">namespace</span> <span class="ss">:admin</span> <span class="k">do</span>
+	<span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;questions#index&#39;</span>
+	<span class="n">resources</span> <span class="ss">:questions</span>
+<span class="k">end</span>
+</code></pre></div>
+<strong>2</strong>In views/layout creare il layout admin.html.erb specificando le parti che vogliamo mostrare nella sezione admin.
+<strong>3)</strong> creare il controller admin_controller.rb in controllers/admin e utilizzare "autenticate_user" (vedere il tutorial su <a href="/blog/2011/07/24/ruby-on-rails-devise-authentication/">devise</a>) per verificare che un utente sia loggato
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Admin</span><span class="o">::</span><span class="no">AdminController</span> <span class="o">::</span> <span class="no">ApplicationController</span>
+	<span class="n">layout</span> <span class="s2">&quot;admin&quot;</span>
+	<span class="n">before_filter</span> <span class="ss">:authenticate_user!</span>
+<span class="k">end</span>
+</code></pre></div>
+
+<strong>4)</strong> Sempre in controllers/admin, creare il file questions_controller.rb
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Admin</span><span class="o">::</span><span class="no">QuestionsController</span> <span class="o">&lt;</span> <span class="ss">Admin</span><span class="p">:</span><span class="ss">:AdminController</span>
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="vi">@questions</span> <span class="o">=</span> <span class="no">Question</span><span class="o">.</span><span class="n">all</span>
+    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>
+      <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="c1"># index.html.erb</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<strong>5)</strong>in views/admin creaimo la cartella "questions" e inderiamo tutte le views richieste dal controller controllers/admin/questions_controller.rb, in questo caso, solo il file index.html.rb
+<strong>6</strong>
+Le action dei form all'interno delle views in views/admin/questions devono rimandare ai controllers in controllers/admin/question controller. Quindi, sempre tenendo "question" come esempio da:
+<div class="highlight"><pre><code class="ruby"><span class="o">&lt;%=</span> <span class="n">form_for</span><span class="p">(</span><span class="vi">@answer</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="o">%&gt;</span>
+</code></pre></div>
+dobbiamo passare a 
+<div class="highlight"><pre><code class="ruby"><span class="o">&lt;%=</span> <span class="n">form_for</span><span class="p">(</span><span class="ss">:admin</span><span class="p">,</span> <span class="vi">@answer</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="o">%&gt;</span>
+</code></pre></div>

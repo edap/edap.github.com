@@ -1,0 +1,39 @@
+<h4>Why</h4>
+Why should I switch from rvm to <a href="https://github.com/sstephenson/rbenv">rbenv</a>? The last two years rvm helped me a lot
+managing differents ruby versions and differents gemsets. Without this wonderful
+tool probably rails development would have been much more complicated.<br />
+So, why?<br>
+The Unix way is pretty simple. One tool should make only one small and discrete
+job, by this way of thought, rvm is too ambitious.Trying to manage ruby version AND
+the ruby gems is too much work, especially when there is another tool to do one
+of these works. Bundler. Bundler is absolutely the best tool ever to manage gems
+(is there another one?), we need only one tool to deal with different ruby
+version. And here we are, rbenv. If this is not enaough, you can read a complete list of reasons 
+<a href="https://github.com/sstephenson/rbenv/wiki/Why-rbenv%3F">here</a>
+<h4>Exit rvm, enter rbenv</h4>
+To install rbenv you have to disintstall rvm. Don't worry about your gemset, you
+ain't gonna need it.
+Disinstall rvm
+<div class="highlight"><pre><code class="bash">rvm implode
+</code></pre></div>
+I've to remove some folder manually due to some permission problems.
+Now checkout rbenv in your home direcotry. Follow the instrucion reported 
+<a href="https://github.com/sstephenson/rbenv#basic-github-checkout">here</a> to install rbenv in your home directory, configure your bash or zsh profile, and to install ruby-build, a plugin for rbenv needed to install the wished ruby version. After that, it will be very easy install new ruby version. Type 'rbenv install -l' to have a complete list of the availables rubies. Install version 2.0.0-rc2 with
+<div class="highlight"><pre><code class="bash">rbenv install 2.0.0-rc2
+</code></pre></div>
+It will start automatically to download the selected version.
+Now, when you call for example'rake' rbenv pass the call to a directory in your environment PATH ~/.rbenv/shims. Shims are small executables that pass the call to the right command for that ruby version.
+From the rbenv website:
+<blockquote>Through a process called rehashing, rbenv maintains shims in that directory to match every Ruby command across every installed version of Ruby—irb, gem, rake, rails, ruby, and so on.</blockquote>That's why after each installation we have to  
+<div class="highlight"><pre><code class="bash">rbenv rehash
+</code></pre></div>
+<h4>Defining the ruby version</h4>
+rbenv look for the right ruby version to match in this order:
+<ul>
+<li>The RBEN_VERSION setted for your current session, you can define it with 'rbenv shell'</li>
+<li>The ruby version defined in the current folder, in a file called '.ruby_version'. You can directly edit this file wiht 'ruby local'</li>
+<li>The first .ruby_version file founded recursively back to the root of your file system</li>
+<li>The global ~/.rbenv/version file. You can modify this file using the command 'rbenv global'</li>
+</ul>
+<h4>Where are my gemsets?</h4>
+You don't need it. Bundler can manage all your gems for each ruby version. When you need to go online, simply put your gems in /vendor and you are ready to  go. Some more detailed explanations can be found <a href="http://rakeroutes.com/blog/how-to-use-bundler-instead-of-rvm-gemsets/">here</a>

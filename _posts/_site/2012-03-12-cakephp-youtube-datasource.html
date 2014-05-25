@@ -1,0 +1,52 @@
+I've seen in google analytics that mosts visitors of this blog speak english. I've thought that the italians can understand what i'm writing, so, here we are, i've switched language.
+I've just pushed on github a <a
+	href="https://github.com/edap/cakePHP-youtube-datasource">cakePHP
+	youtube datasource</a>, to retrieve information (all the metatags)
+regarding a video. It's still incomplete, I would like to add some others
+functionalities, like to retrieve the standard feed for a given category, or to retrieve a video with more than X views. Ecc, anyway, Fork Me.
+Here I provide a solution adopted to save in the database the fields
+"video_title", "video_thumb" and "video_id" for a given youtube link associated to a model, for example an Article model containing a video, or a Submission Model containing a youtube video for a video contest. This code validates the video URL and, if valid, add the videos metatags to the data model to save, in this example, the Article model.<br />
+1)Follow the instructions on the github page and install the datasource<br />
+2) Add this rule to your $validate array in the model where you would like to
+save the video information<br />
+
+<div class="highlight"><pre><code class="php"><span class="s1">&#39;video&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;rule&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;validYoutube&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;message&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;the given videos link is incorrect&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;allowEmpty&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+<span class="p">),</span>
+</code></pre></div>
+3)Add these functions to the Model, that check if the video is valid and add the metatags to the $data array
+
+<div class="highlight"><pre><code class="php">    <span class="k">public</span> <span class="k">function</span> <span class="nf">validYoutube</span><span class="p">(</span><span class="k">array</span> <span class="nv">$data</span> <span class="p">){</span>
+        <span class="nv">$url</span> <span class="o">=</span> <span class="nb">current</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+        <span class="nv">$video_info</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getVideo</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$video_info</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setVideoValues</span><span class="p">(</span><span class="nv">$video_info</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getVideo</span><span class="p">(</span><span class="nv">$id</span><span class="p">){</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Youtube</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">getDataSource</span><span class="p">(</span><span class="s1">&#39;Youtube&#39;</span><span class="p">);</span>	
+        <span class="nv">$video</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Youtube</span><span class="o">-&gt;</span><span class="na">findById</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$video</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$info</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Youtube</span><span class="o">-&gt;</span><span class="na">formatData</span><span class="p">(</span><span class="nv">$video</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nv">$info</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setVideoValues</span><span class="p">(</span><span class="nv">$info</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$info</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Article&#39;</span><span class="p">][</span><span class="s1">&#39;video&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Article&#39;</span><span class="p">][</span><span class="s1">&#39;video_thumb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;default_thumb&#39;</span><span class="p">];</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Article&#39;</span><span class="p">][</span><span class="s1">&#39;video_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+Thanks <a href="http://debuggable.com/posts/datasources,-models,-components,-behaviors:48bd3025-2c44-40b6-a6e7-35674834cda3">debuggable for this article</a> on datasources in CakePHP

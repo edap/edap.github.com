@@ -1,0 +1,50 @@
+This article has no need to be read if you have seen <a href="http://railscasts.com/episodes/341-asset-pipeline-in-production?autoplay=true">this</a> excellent
+Ryan Bates railscasts. After months, i've decided to subscribe his tutorials,
+after all, they are a great way to learn rails, to be updated with all the new
+stuff, and, last but not least,  they are really well
+done.<br />Thanks Ryan!<br />
+Moving an application to production can be a little tricky. With rails assets we
+can avoid expensive http requests, all the css and the js files will be called
+in only 2 files. That's great, but how it works?<br />
+Let's start the apllication in production mode <br />
+<div class="highlight"><pre><code class="bash">rails server -e production
+</code></pre></div>
+and we will probably catch this error
+<div class="highlight"><pre><code class="bash">ActionView::Template::Error <span class="o">(</span>application.css isn<span class="err">&#39;</span>t precompiled<span class="o">)</span>:
+</code></pre></div>
+That's happen 'cause rails is looking for a compiled version of ours css files.
+But we DONT have a precompiled version. To compile it, we have to be sure
+that our Gemfile contain the required gems.
+<div class="highlight"><pre><code class="ruby"><span class="n">group</span> <span class="ss">:assets</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span>   <span class="s1">&#39;~&gt; 3.2.4&#39;</span>
+  <span class="n">gem</span> <span class="s1">&#39;coffee-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 3.2.2&#39;</span>
+  <span class="n">gem</span> <span class="s1">&#39;uglifier&#39;</span>
+<span class="k">end</span>
+</code></pre></div>
+Ok, now 
+<div class="highlight"><pre><code class="ruby"><span class="n">rake</span> <span class="ss">assets</span><span class="p">:</span><span class="n">precompile</span> <span class="o">--</span><span class="n">trace</span>
+</code></pre></div>
+I've added the --trace flag 'cause more than one time this command has failed,
+for differents reasons. The most common was the wrong css's files order with
+twitter bootstrap and bootswatch. Now all our assets are under public/assets. We
+can upload this folder on the remote server and tell rails to serve the static
+files in this folder, add this line to your config/environments/production.rb
+file.
+<div class="highlight"><pre><code class="ruby"><span class="n">config</span><span class="o">.</span><span class="n">serve_static_assets</span> <span class="o">=</span> <span class="kp">true</span>
+</code></pre></div>
+Every time that for development purpose you will run your application in
+development mode, rails will take the compiled files in public/assets. This may
+be annoiyng when you are trying to improve your css or add new features in the
+javascript files. I've searched for solution to avoid this beahviour, but I end
+up that the best solution in to erase the folder public/assets, and then
+recompile the files when you are ready to go to production.<br /><br />
+
+suggested readings:
+<a href
+	="http://wekeroad.com/2012/01/12/understanding-the-rails-asset-pipeline/">wekeroad
+	blogpost</a><br/>
+<a href =""></a><br />
+If you have problem with compiling javascript (like me) <a
+	href="http://arcturo.github.com/library/coffeescript/index.html">The
+	Little Book on coffescript</a>
+

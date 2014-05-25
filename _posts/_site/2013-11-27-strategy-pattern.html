@@ -1,0 +1,67 @@
+<p>Last time we have a look at the <a href='http://edapx.com/2013/10/27/template-pattern/'>template pattern in ruby</a>. The problem was, how can we put in a separate part the thing that is gonna to change? the solution implemented was to create a template class and to use subclasses to fill out the details. The template pattern has one drawback, is based on inheritance. That means that the subclasses are tangled up with the template class.</p>
+
+<h3 id='prefer_delegation_over_inheritance'>Prefer delegation over inheritance</h3>
+
+<p>The alternative is to isolate the thing that is gonna to change in a separate class. Let&#8217;s continue with the example of the magic cutter, this tool for the kitchen that can cuts/slices/trims every kind of vegetable. Let&#8217;s isolate the different procedures for each vegetable, aubergine and potato. Let&#8217;s assume that in this example, the thing that always remains the same is the number of items that we are gonna to prepare, and the &#8220;algorithm&#8221; that changes is the procedure we use to cut the vegetable.</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>require_relative</span> <span class='s1'>&#39;magic_cutter&#39;</span>
+
+<span class='k'>class</span> <span class='nc'>PotatoFormatter</span>
+
+  <span class='k'>def</span> <span class='nf'>give_me_the_vegetable_cutted_off</span><span class='p'>(</span><span class='n'>context</span><span class='p'>)</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;Hey! we have </span><span class='si'>#{</span><span class='n'>context</span><span class='o'>.</span><span class='n'>number_vegetables</span><span class='si'>}</span><span class='s2'> potatoes&quot;</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;skin the potato&quot;</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;i take a professional potato cutter for my french fries&quot;</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;put the potato in the cutter an press it&quot;</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+
+<span class='n'>c</span> <span class='o'>=</span> <span class='no'>MagicCutter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='no'>PotatoFormatter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>)</span>
+<span class='n'>c</span><span class='o'>.</span><span class='n'>give_me_the_vegetable_cutted_off</span>
+</code></pre></div><div class='highlight'><pre><code class='ruby'><span class='n'>require_relative</span> <span class='s1'>&#39;magic_cutter&#39;</span>
+
+<span class='k'>class</span> <span class='nc'>AubergineFormatter</span>
+
+  <span class='k'>def</span> <span class='nf'>give_me_the_vegetable_cutted_off</span><span class='p'>(</span><span class='n'>context</span><span class='p'>)</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;Hey! we have </span><span class='si'>#{</span><span class='n'>context</span><span class='o'>.</span><span class='n'>number_vegetables</span><span class='si'>}</span><span class='s2'> aubergine&quot;</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;i need a very sharp knife&quot;</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;I slice the aubergine in long thumbsized pieces, ready to be grilled&quot;</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+
+<span class='n'>c</span> <span class='o'>=</span> <span class='no'>MagicCutter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='no'>AubergineFormatter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>)</span>
+<span class='n'>c</span><span class='o'>.</span><span class='n'>give_me_the_vegetable_cutted_off</span>
+</code></pre></div>
+<p>We have removed the details of preparing the vegetable from our MagicCutter class, that look shorter and easier</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>MagicCutter</span>
+  <span class='kp'>attr_accessor</span> <span class='ss'>:vegetable_formatter</span>
+  <span class='kp'>attr_reader</span> <span class='ss'>:number_vegetables</span>
+
+  <span class='k'>def</span> <span class='nf'>initialize</span> <span class='n'>formatter</span>
+    <span class='vi'>@number_vegetables</span> <span class='o'>=</span> <span class='mi'>4</span>
+    <span class='vi'>@vegetable_formatter</span> <span class='o'>=</span> <span class='n'>formatter</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>give_me_the_vegetable_cutted_off</span>
+    <span class='vi'>@vegetable_formatter</span><span class='o'>.</span><span class='n'>give_me_the_vegetable_cutted_off</span><span class='p'>(</span><span class='nb'>self</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+<span class='k'>end</span>
+</code></pre></div>
+<p>And that&#8217;s a practical implementation of the two formatter</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>c</span> <span class='o'>=</span> <span class='no'>MagicCutter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='no'>PotatoFormatter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>)</span>
+<span class='n'>c</span><span class='o'>.</span><span class='n'>give_me_the_vegetable_cutted_off</span>
+
+<span class='n'>c</span> <span class='o'>=</span> <span class='no'>MagicCutter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='no'>AubergineFormatter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>)</span>
+<span class='n'>c</span><span class='o'>.</span><span class='n'>give_me_the_vegetable_cutted_off</span>
+</code></pre></div>
+<blockquote>
+<p>The GoF call this &#8220;pull the algorithm out into a separate object&#8221; technique the Strategy pattern. The key idea underlying the Strategy pattern is to define a family of objects, the strategies, which all do the same thing.</p>
+</blockquote>
+
+<p>The key concept of the strategy pattern, is to isolate the things that do the same thing (cutting vegetables) and to put them in different strategies. Both, the PotatoFormatter and the AubergineFormatter, are doing the same thing and have the same interface method, the &#8216;give_me_the_vegetable_cutted_off&#8217;. That means that from an external point of view, all the strategies look alike, and can be used in the same way, they are interchangeables. But they are not realy the same, because each class is doing something slightly different. If in a future we will have other vegetables, we will simply add a new strategy, without touching a single line of code in the MagicCutter class. That&#8217;s one of the advantage to base our design on composition instead inheritance. The other one, is that it is easy to switch strategy at runtime.</p>
+
+<blockquote>
+<p>The Strategy pattern does have one thing in common with the Template Method pattern: Both patterns allow us to concentrate the decision about which variation we are using in one or a few places. With the Template Method pattern, we make our decision when we pick our concrete subclass. In the Strategy pattern, we make our decision by selecting a strategy class at runtime.</p>
+</blockquote>
