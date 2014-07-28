@@ -21,7 +21,7 @@ Usage of poster:
 {% endhighlight go %}
 
 To customize them, do as follow, overriding the default options with yours
-`poster dest_dir=/home/username/dest source_dir=/home/username/source log_file=/home/username/my.log`
+`poster -dest_dir=/home/username/dest -source_dir=/home/username/source -log_file=/home/username/my.log`
 
 ###How does it works, packages involved
 - The program reads list the images located in the folder and creates a map of them.
