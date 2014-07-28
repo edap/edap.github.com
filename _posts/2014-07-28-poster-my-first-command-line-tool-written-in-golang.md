@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Poster, my first command line tool written in Golang"
+title: "Poster, how to make one image out of more images"
 category: 
 tags: [golang, package, poster, image]
 ---
 
-###Poster, how to make one image out of more images
-[Poster](https://github.com/edap/poster) is a command line tool written in Go that, given a folder containing images, combines them in a grid and create a new image that contains a thumb of each of them. Here an image that i've obtained running poster in an a folder full of images.
-[go poster example](/assets/media/go_poster_example.jpg)
+[Poster](https://github.com/edap/poster) is a command line tool written in Go that, given a folder containing images, combines them in a grid and create a new image that contains a thumb of each of them. Here an image that i've obtained running poster in an a folder with 14 images.
+![go poster example](/assets/media/go_poster_example.jpg)
+
 
 ###Default options and example
 Running `poster -h` you have a list of the default options
