@@ -19,6 +19,7 @@
 	  {{ content }}
 	  </div>
 
+
 		{% unless page.categories == empty %}
 		<ul class="tag_box list-unstyled list-inline">
 		  <li><i class="fa fa-folder-open"></i></li>
@@ -69,6 +70,10 @@
 		{% endunless %}  
 
 		<hr>
+
+	  {% include disqus.html %}
+
+	  <hr>
 
 		<ul class="pager">
 		  {% if page.previous %}
