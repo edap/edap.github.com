@@ -22,7 +22,7 @@ author:
 
 google_analytics_id : 'UA-401520-11'
 
-rss_path: http://feeds.feedburner.com/Edapx
+rss_path: feed.xml
 code_path: code
 tags_path: tags
 
