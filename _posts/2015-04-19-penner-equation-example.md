@@ -2,7 +2,7 @@
 layout: post
 title: "Penner Equations Example"
 category: 
-tags: [openFrameworks, animation, 2D]
+tags: [openframeworks, animation, 2D]
 ---
 
 Penner equations are functions used to describe the movement of an object in a space in a way the more natural as possible. Each function describe a different movement, an object can bounce, starts fast and arrives slow, slow down in the midlle  etc... You can have an overview of all of them at this [page](http://hosted.zeh.com.br/tweener/docs/en-us/misc/transitions.html). The functions were written the first time by [Robert Penner](http://robertpenner.com/easing/), a flash developer, and were later written in other languages, as c++ and javascript. 
