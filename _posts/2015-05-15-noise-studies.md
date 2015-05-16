@@ -7,7 +7,7 @@ tags: [openframeworks, noise, opengl, 3d]
 Some screenshots taken while working with Perlin noise in OpenFramework. Code
 available at this [github repo](https://github.com/edap/noise_landscape_example). 
 
-If you are interested in more advanced material, have a look at the [workshop](https://github.com/andreasmuller/NoiseWorkshop) that Andreas Mueller had at the Resonance Festival.
+If you are interested in more advanced material, have a look at the [workshop](https://github.com/andreasmuller/NoiseWorkshop) that Andreas Mueller had at the Resonate Festival.
 
 ![noise1](/assets/media/1.png)
 ![noise1](/assets/media/2.png)
