@@ -119,6 +119,7 @@ $(boot2docker shellinit)
 this populate and export the environment variables
 
 ##### missing pem certificates 
+
 if you have the error where docker is looking for the certificate associated with the wrong ip address:
 
 {% highlight bash %}
@@ -149,4 +150,13 @@ save and close the file, exit the vm and go back to your console. Restart boot2d
 
 {% highlight bash %}
 boot2docker stop && boot2docker start && docker images
+{% endhighlight bash %}
+
+##### Increasing default memory
+
+To increase the boot2docker default memory assignment, for example to 4 GB
+{% highlight bash %}
+boot2docker delete
+boot2docker init -m 4000
+boot2docker start
 {% endhighlight bash %}
