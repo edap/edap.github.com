@@ -16,7 +16,7 @@ An Artificial Neural Neural network can be thought as a simplification of our br
 
 ### Install Docker on MacOS
 
-To install all the software can be a tedious task, fortunately [Matt Jibson](http://mattjibson.com/) puts together a [docker image](https://registry.hub.docker.com/u/mjibson/deepdream/) with everything  installed. In this tutorial we will use my [forked version]("https://github.com/edap/ddd"), that contains a couple of parameters more than the original one.
+To install all the software can be a tedious task, fortunately [Matt Jibson](http://mattjibson.com/) puts together a [docker image](https://registry.hub.docker.com/u/mjibson/deepdream/) with everything  installed. In this tutorial we will use my [forked version](https://github.com/edap/ddd), that contains a couple of parameters more than the original one.
 We use boot2docker, if you are on linux you can install docker in the normal
 way.
 {% highlight bash%}
