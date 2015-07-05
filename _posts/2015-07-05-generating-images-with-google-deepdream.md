@@ -10,7 +10,7 @@ Some days ago google published a [post](http://googleresearch.blogspot.ch/2015/0
 An Artificial Neural Neural network can be thought as a simplification of our brain, it consists of layers of neurons and connections between them, low-level layers recognize low level information as edges, surfacese, orientation, etc.. and send them up to the high-level layers. High-level layers recognize high level feature, as a human body, or an incredible amount of eyes and dogs, depending on what was fed into the brain. This is a big simplification, I suggest you these 3 links to have a deeper understanding on how is this working.
 
 - [Memo Atken's summary](https://vimeo.com/132462576), (click on 'More') 
-- [LSD Neural Net](https://317070.github.io/LSD/) (also have a look a this [twich expmeriment](http://www.twitch.tv/317070) )
+- [LSD Neural Net](https://317070.github.io/LSD/) (also have a look a this [twich experiment](http://www.twitch.tv/317070) )
 - [Sensual Machine, by Samin](https://medium.com/@samim/sensual-machines-82858b32a4e5)
 
 
