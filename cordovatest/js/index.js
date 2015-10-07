@@ -42,17 +42,15 @@ var app = {
     },
     // deviceready Event Handler
     //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        cordova.InAppBrowser.open("http://www.google.com", '_system', 'location=yes');
         app.receivedEvent('deviceready');
     },
 
     openBrowser: function(evt){
         var element = evt.target || evt.srcElement;
         event.preventDefault();
-        cordova.InAppBrowser.open(element.href, '_system', 'location=yes');
+        cordova.InAppBrowser.open(element.href, '_blank', 'location=yes');
     },
 
     // Update DOM on a Received Event
