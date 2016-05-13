@@ -10,7 +10,7 @@ title: Davide Prati
 email: your-email@domain.com
 description_header: Hi there, I’m Davide Prati, a programmer based in Berlin.
 description: > # this means to ignore newlines until "baseurl:"
-  I’m interested in how the generative processes that give shape to water, terrains, trees, mountains and clouds are applicable to industrial design, interactive installations, visual art and architecture.
+  I’m interested in how the generative processes that give shape to water, terrains, trees, mountains and clouds are applicable to design, visual art and interactive installations.
 description_contact: I like hearing about possible new work. Get in touch
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://davideprati.com" # the base hostname & protocol for your site
