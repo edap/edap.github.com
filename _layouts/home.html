@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  {% include head.html %}
+  <body>
+  <header>
+    <div class ="top">
+      <div class = "top_content">
+        <h1><a href = "/">Davide Prati</a></h1>
+        <p class = "large">{{ site.description_header }}</p>
+        <p class = "large">
+          {{ site.description }}
+        </p>
+        <p class = "large">{{ site.description_contact }}</p>
+        <p class = "links">
+          <a href = "mailto:lastexxit@gmail.com">lastexxit@gmail.com</a>
+          <a href = "https://twitter.com/edapx">Twitter</a>
+          <a href = "https://github.com/edap">Github</a>
+          <a href = "/posts">Blog</a>
+        </p>
+      </div>
+      <div class = "top_links">
+      </div>
+    </div>
+  </header>
+
+  <div class="content-container">
+  {{ content }}
+  </div>
+  {% include footer.html %}
+  </body>
+</html>

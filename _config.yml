@@ -1,31 +1,25 @@
-# visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
 
-paginate: 10 # pagination based on number of posts
-paginate_path: "page:num"
-exclude: [".rbenv-version", "README.md", "Rakefile", "changelog.md"] # files to exclude
-highlighter: 'rouge'
-permalink: pretty
+# Site settings
+title: Davide Prati
+email: your-email@domain.com
+description_header: Hi there, I’m Davide Prati, a programmer based in Berlin.
+description: > # this means to ignore newlines until "baseurl:"
+  I’m interested in how the generative processes that give shape to water, terrains, trees, mountains and clouds are applicable to industrial design, interactive installations, visual art and architecture.
+description_contact: I like hearing about possible new work. Get in touch
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://davideprati.com" # the base hostname & protocol for your site
+twitter_username: edapx
+github_username:  edap
+collections:
+  projects:
+    cover: ""
+    cover_vimeo: ""
+    output: true
+# Build settings
 markdown: kramdown
-
-title: edap
-description: edap
-author:
-  name: Davide Prati
-  # email: lastexxit@gmail.com
-  github: edap
-  twitter: edapx
-  linkedin: davide-prati/21/566/889
-  feedname : Edapx
-  disqus: edapx
-  bio: My name is Davide Prati and that's my website. I'm looking for what's happen tomorrow in the web (hopefully not boring).
-  email_md5: 495416d8082cf024cd664937b4feb88a
-
-google_analytics_id : UA-401520-11
-
-rss_path: feed.xml
-code_path: code
-tags_path: tags
-
-gems:
-  - jekyll-redirect-from
-

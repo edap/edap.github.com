@@ -1,15 +1,17 @@
 ---
 layout: post
 title: "Generating images with google inception deepdream"
-category: 
+category:
 tags: [deepdream, neural networks, generative design, computer vision]
+description: "Some days ago google published a post about using Artificial Neural Network to generate images, and shortly after they open sourced the code."
 ---
 
 Some days ago google published a [post](http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html) about using Artificial Neural Network to generate images, and shortly after they open sourced the [code](http://googleresearch.blogspot.de/2015/07/deepdream-code-example-for-visualizing.html). In non-technical words, the software tries to reproduce what your brain does when it receive images, it tries to recognize forms for which it has been trained during its experience of the word, it tries to put them together and make a sense out of these forms. Inadvertently, your brain does that all the time, and it demands your attention when there are some clouds in the sky that looks like a human face. The code released by google goes a step further, not only it recognizes knowed forms, but it draws on them what it thinks it has seen.
 
 An Artificial Neural Neural network can be thought as a simplification of our brain, it consists of layers of neurons and connections between them, low-level layers recognize low level information as edges, surfacese, orientation, etc.. and send them up to the high-level layers. High-level layers recognize high level feature, as a human body, or an incredible amount of eyes and dogs, depending on what was fed into the brain. This is a big simplification, I suggest you these 3 links to have a deeper understanding on how is this working.
 
-- [Memo Atken's summary](https://vimeo.com/132462576), (click on 'More') 
+- [Memo Atken's post](https://medium.com/@memoakten/deepdream-is-blowing-my-mind-6a2c8669c698#.t3u5q8mqp)
+- [Google's post](http://googleresearch.blogspot.de/2015/06/inceptionism-going-deeper-into-neural.html)
 - [LSD Neural Net](https://317070.github.io/LSD/) (also have a look a this [twich experiment](http://www.twitch.tv/317070) )
 - [Sensual Machine, by Samin](https://medium.com/@samim/sensual-machines-82858b32a4e5)
 
@@ -94,7 +96,7 @@ As reported in the google's ipython notebook:
 The complexity of the details generated depends on which layer's activations we try to maximize. Higher layers produce complex features, while lower ones
 enhance edges and textures.
 </blockquote>
-Let's put the layer a bit up, from `inception_5a` to `inception_5b` 
+Let's put the layer a bit up, from `inception_5a` to `inception_5b`
 {% highlight bash%}
 docker run --rm -v /Users/da1/Pictures/movie:/images edap/ddd 'http://fightinginthewarroom.com/wp-content/uploads/2015/04/ex-machina-feat.jpg' 'inception_5b/5x5_reduce' 19 4
 {% endhighlight bash%}
@@ -107,7 +109,8 @@ docker run --rm -v /Users/da1/Pictures/movie:/images edap/ddd 'http://fightingin
 
 ### Boot2docker troubleshooting
 
-##### boot2docker does not start
+*boot2docker does not start*
+
 If after running `boot2docker start` you receive this message:
 {% highlight bash %}
 Post http:///var/run/docker.sock/v1.19/containers/create: dial unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?
@@ -118,7 +121,7 @@ $(boot2docker shellinit)
 {% endhighlight bash %}
 this populate and export the environment variables
 
-##### missing pem certificates 
+*missing pem certificates*
 
 if you have the error where docker is looking for the certificate associated with the wrong ip address:
 
@@ -152,7 +155,7 @@ save and close the file, exit the vm and go back to your console. Restart boot2d
 boot2docker stop && boot2docker start && docker images
 {% endhighlight bash %}
 
-##### Increasing default memory
+*Increasing default memory*
 
 To increase the boot2docker default memory assignment, for example to 4 GB
 {% highlight bash %}

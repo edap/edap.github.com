@@ -1,9 +1,26 @@
-<!-- footer.html -->
-<footer>
- <hr/>
- <p>
- 	&copy; {{ site.time | date: '%Y' }} {{ site.author.name }} with Jekyll. Theme: <a href="https://github.com/dbtek/dbyll">dbyll</a> by dbtek.
- </p>
-</footer>
+  <footer></footer>
+  <script src="/js/jquery-2.2.3.min.js"></script>
+  <script src="/js/masonry.pkgd.min.js"></script>
+  <script src="/js/imagesloaded.pkgd.min.js"></script>
+  <script>
+  var container = document.querySelector('.index-content');
+  var msnry;
+  if(container){
+    $(container).imagesLoaded( function() {
 
-<!-- footer.html end -->
+      msnry = new Masonry( container, {
+        columnWidth: '.grid-sizer',
+        gutter: '.grid-gutter',
+        itemSelector: '.grid',
+        transitionDuration: '0.1s'
+      });
+
+      imgLoadHandler = function() {
+          msnry.layout();
+      }
+
+      $('img').bind('load', imgLoadHandler);
+
+    });
+  }
+  </script>
