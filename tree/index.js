@@ -2,9 +2,6 @@ var objFile = 'assets/obj/test.obj';
 var plyFile = 'assets/ply/simple.ply';
 var container, camera, scene, renderer;
 var camera_z_position = 1000;
-// Interaction
-var mouseX = 0, mouseY = 0;
-var mouse = new THREE.Vector2(), raycaster, INTERSECTED, mouseDown, clickedY;
 
 init();
 animate();
@@ -13,9 +10,7 @@ function init() {
     camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
     camera.position.z = camera_z_position;
 
-    // fog
     scene = new THREE.Scene();
-    //scene.fog = new THREE.FogExp2( 0xFFFFFF, 0.002 );
 
     // lights
     light = new THREE.DirectionalLight( 0xD1A6ED );
