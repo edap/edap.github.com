@@ -1,5 +1,5 @@
 var objFile = 'assets/obj/test.obj';
-var plyFile = 'assets/obj/test.ply';
+var plyFile = 'assets/ply/simple.ply';
 var container, camera, scene, renderer;
 var camera_z_position = 1000;
 // Interaction
