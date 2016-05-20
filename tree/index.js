@@ -1,6 +1,6 @@
 var objFile = 'assets/obj/test.obj';
 var plyFile = 'assets/ply/simple.ply';
-var container, camera, scene, renderer;
+var container, camera, controls, scene, renderer;
 var camera_z_position = 1000;
 
 init();
@@ -9,7 +9,8 @@ animate();
 function init() {
     camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
     camera.position.z = camera_z_position;
-
+    controls = new THREE.OrbitControls( camera );
+    controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
 
     // lights
@@ -44,7 +45,7 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame( animate );
-  render();
+  controls.update();
 }
 
 function render() {
