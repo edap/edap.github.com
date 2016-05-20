@@ -79,8 +79,11 @@ function makeTree(){
     var loader = new THREE.PLYLoader( manager );
     loader.load( plyFile, function ( geometry ) {
         geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
+        //var material = new THREE.MeshBasicMaterial({color: 0xff4444});
         var mesh = new THREE.Mesh( geometry, material );
         mesh.position.y = - 1800.25;
+        mesh.position.z = -200;
         mesh.scale.multiplyScalar( 8 );
 
         //mesh.castShadow = true;
