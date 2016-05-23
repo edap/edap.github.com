@@ -9,6 +9,8 @@
 // create a shared variable for the
 // VS and FS containing the normal
 varying vec3 vNormal;
+uniform float amplitude;
+attribute float displacement;
 
 void main() {
 
@@ -16,36 +18,37 @@ void main() {
   // the attribute value passed
   // in by Three.js
   vNormal = normal;
+  vec3 newPosition = position + normal * vec3(amplitude * displacement);
 
   gl_Position = projectionMatrix *
                 modelViewMatrix *
-                vec4(position, 1.0);
+                vec4(newPosition, 1.0);
 }
     </script>
 
     <script id="fragmentShader" type="x-shader/x-vertex">
-// same name and type as VS
-varying vec3 vNormal;
+    // same name and type as VS
+    varying vec3 vNormal;
 
-void main() {
+    void main() {
 
-  // calc the dot product and clamp
-  // 0 -> 1 rather than -1 -> 1
-  vec3 light = vec3(0.5, 0.2, 1.0);
+      // calc the dot product and clamp
+      // 0 -> 1 rather than -1 -> 1
+      vec3 light = vec3(0.5, 0.2, 1.0);
 
-  // ensure it's normalized
-  light = normalize(light);
+      // ensure it's normalized
+      light = normalize(light);
 
-  // calculate the dot product of
-  // the light to the vertex normal
-  float dProd = max(0.0,
-                    dot(vNormal, light));
+      // calculate the dot product of
+      // the light to the vertex normal
+      float dProd = max(0.0,
+                        dot(vNormal, light));
 
-  // feed into our frag colour
-  gl_FragColor = vec4(dProd, // R
-                      dProd, // G
-                      dProd, // B
-                      1.0);  // A
+      // feed into our frag colour
+      gl_FragColor = vec4(dProd, // R
+                          dProd, // G
+                          dProd, // B
+                          1.0);  // A
 
 }
     </script>
