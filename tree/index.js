@@ -1,10 +1,57 @@
-var objFile = 'assets/obj/test.obj';
-var plyFile = 'assets/ply/simple.ply';
+var plyFile = 'assets/ply/tree.ply';
 var container, camera, controls, scene, renderer;
+var displacement, noise, uniforms;
 var camera_z_position = 1000;
+var mesh;
 
-init();
-animate();
+var loadTree = function() {
+    var d = $.Deferred();
+    var customMaterial = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: document.getElementById( 'vertexShader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+    });
+    customMaterial.side = THREE.BackSide;
+    // ply model
+    var loader = new THREE.PLYLoader();
+    loader.load( plyFile, function ( ofMesh ) {
+        ofMesh.computeFaceNormals();
+        ofMesh.computeVertexNormals();
+        var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
+
+        //displacement
+        displacement = new Float32Array( treeGeometry.attributes.position.count );
+        noise = new Float32Array( treeGeometry.attributes.position.count );
+        for ( var i = 0; i < displacement.length; i ++ ) {
+            noise[ i ] = Math.random() * 5;
+        }
+        treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
+        //fine displacement
+
+        mesh = new THREE.Mesh( treeGeometry, customMaterial );
+        mesh.position.y = - 1800.25;
+        mesh.position.z = -200;
+        mesh.scale.multiplyScalar( 8 );
+
+        //mesh.castShadow = true;
+        //mesh.receiveShadow = true;
+        //scene.add( mesh);
+        d.resolve();
+    });
+    return d.promise();
+};
+
+$.when(loadTree()).then(function(){
+        //if model loaded OK
+        init();
+        animate();
+    },
+        //if smth went wrong
+        // TODO add error messages
+        function(){
+        console.log(error);
+    }
+);
 
 function init() {
     camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
@@ -12,6 +59,13 @@ function init() {
     controls = new THREE.OrbitControls( camera );
     controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
+    scene.add(mesh);
+
+    // uniforms
+    uniforms = {
+        amplitude: { type: "f", value: 1.0 },
+        color:     { type: "c", value: new THREE.Color( 0xff2200 ) },
+    };
 
     // lights
     light = new THREE.DirectionalLight( 0xD1A6ED );
@@ -25,8 +79,6 @@ function init() {
     light = new THREE.AmbientLight( 0x99C794 );
     scene.add( light );
 
-    //make driver object
-    makeTree();
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -49,61 +101,16 @@ function animate() {
 }
 
 function render() {
+    //update displacement
+    uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
+    uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
+    var time = Date.now() * 0.01;
+    for ( var i = 0; i < displacement.length; i ++ ) {
+        displacement[ i ] = Math.sin( 0.1 * i + time );
+        noise[ i ] += 0.5 * ( 0.5 - Math.random() );
+        noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
+        displacement[ i ] += noise[ i ];
+    }
+    mesh.geometry.attributes.displacement.needsUpdate = true;
     renderer.render( scene, camera );
 }
-
-function makeTree(){
-    // load manager
-    var manager = new THREE.LoadingManager();
-    manager.onProgress = function(item, loaded, total){
-      console.log(item, loaded, total);
-    };
-
-    var onProgress = function ( xhr ) {
-        if ( xhr.lengthComputable ) {
-            var percentComplete = xhr.loaded / xhr.total * 100;
-            console.log( Math.round(percentComplete, 2) + '% downloaded' );
-        }
-    };
-
-    var onError = function ( xhr ) {
-        console.log("Object can not be loaded");
-    };
-    // material for the three
-    var material = new THREE.MeshPhongMaterial( {
-        color: 0x555555,
-        specular: 0x111111,
-        shininess: 50
-    } );
-    // ply model
-    var loader = new THREE.PLYLoader( manager );
-    loader.load( plyFile, function ( geometry ) {
-        geometry.computeFaceNormals();
-        geometry.computeVertexNormals();
-        //var material = new THREE.MeshBasicMaterial({color: 0xff4444});
-        var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.y = - 1800.25;
-        mesh.position.z = -200;
-        mesh.scale.multiplyScalar( 8 );
-
-        //mesh.castShadow = true;
-        //mesh.receiveShadow = true;
-        scene.add( mesh);
-    }, onProgress, onError );
-
-//    // obj loader
-//    var objloader = new THREE.OBJLoader( manager );
-//    objloader.load( objFile, function ( object ) {
-//        object.traverse( function ( child ) {
-//            if ( child instanceof THREE.Mesh ) {
-//                child.material = material;
-//            }
-//        } );
-
-//        object.position.y = - 1800.25;
-//        object.position.z = -200;
-//        object.scale.multiplyScalar( 8 );
-//        //scene.add( object );
-//    }, onProgress, onError );
-}
-

@@ -5,12 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>forest</title>
+    <script id="vertexShader" type="x-shader/x-vertex">
+// create a shared variable for the
+// VS and FS containing the normal
+varying vec3 vNormal;
+
+void main() {
+
+  // set the vNormal value with
+  // the attribute value passed
+  // in by Three.js
+  vNormal = normal;
+
+  gl_Position = projectionMatrix *
+                modelViewMatrix *
+                vec4(position, 1.0);
+}
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-vertex">
+// same name and type as VS
+varying vec3 vNormal;
+
+void main() {
+
+  // calc the dot product and clamp
+  // 0 -> 1 rather than -1 -> 1
+  vec3 light = vec3(0.5, 0.2, 1.0);
+
+  // ensure it's normalized
+  light = normalize(light);
+
+  // calculate the dot product of
+  // the light to the vertex normal
+  float dProd = max(0.0,
+                    dot(vNormal, light));
+
+  // feed into our frag colour
+  gl_FragColor = vec4(dProd, // R
+                      dProd, // G
+                      dProd, // B
+                      1.0);  // A
+
+}
+    </script>
   </head>
   <body>
     <div id="container"></div>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
     <script type="text/javascript" src="PLYLoader.js"></script>
     <script type="text/javascript" src="OBJLoader.js"></script>
+    <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
     <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
     <script type="text/javascript" src="index.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/style.css">
