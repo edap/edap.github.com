@@ -2,8 +2,8 @@ var plyFile = 'assets/ply/tree.ply';
 var container, camera, controls, scene, renderer, stats;
 var displacement, noise, uniforms;
 var camera_z_position = 1000;
-var nTree = 2;
-var mesh, trees;
+var nTree = 8;
+var trees = [];
 
 var loadTree = function() {
     var d = $.Deferred();
@@ -34,14 +34,16 @@ var loadTree = function() {
         }
         treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
         //fine displacement
-
-        mesh = new THREE.Mesh( treeGeometry, customMaterial );
-        mesh.position.y = - 1800.25;
-        mesh.position.z = -200;
-        mesh.scale.multiplyScalar( 8 );
-        //mesh.castShadow = true;
-        //mesh.receiveShadow = true;
-        //
+        var n = 0;
+        while( n < nTree){
+            var tree = new THREE.Mesh( treeGeometry, customMaterial );
+            tree.position.z = getRandomArbitrary(-1800.25, -1200.25);
+            tree.position.x = getRandomArbitrary(-6000, 6000);
+            tree.position.y = -200;
+            tree.scale.multiplyScalar( 8 );
+            trees.push(tree);
+            n++;
+        }
         d.resolve();
     });
     return d.promise();
@@ -65,7 +67,9 @@ function init() {
     controls = new THREE.OrbitControls( camera );
     controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
-    scene.add(mesh);
+    for(var n = 0, tree; tree = trees[n]; n++){
+        scene.add(tree);
+    }
 
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -105,7 +109,15 @@ function render() {
         noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
         displacement[ i ] += noise[ i ];
     }
-    mesh.geometry.attributes.displacement.needsUpdate = true;
 
+    for(var n = 0, tree; tree = trees[n]; n++){
+        tree.geometry.attributes.displacement.needsUpdate = true;
+    }
     renderer.render( scene, camera );
+}
+
+
+//helpers
+function getRandomArbitrary(min, max){
+    return Math.random() * (max -min) +min;
 }
