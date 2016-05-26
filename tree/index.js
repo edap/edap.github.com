@@ -2,7 +2,9 @@ var plyFile = 'assets/ply/tree.ply';
 var container, camera, controls, scene, renderer, stats;
 var displacement, noise, uniforms;
 var camera_z_position = 1000;
-var nTree = 8;
+var camera_y_position = -170;
+var nTree = 60;
+var centerOffset = 40;
 var trees = [];
 
 var loadTree = function() {
@@ -35,12 +37,15 @@ var loadTree = function() {
         treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
         //fine displacement
         var n = 0;
-        while( n < nTree){
+        var inc = (camera_z_position * 2) / nTree;
+        for(var zpos = -camera_z_position;zpos < camera_z_position; zpos += inc){
             var tree = new THREE.Mesh( treeGeometry, customMaterial );
-            tree.position.z = getRandomArbitrary(-1800.25, -1200.25);
-            tree.position.x = getRandomArbitrary(-6000, 6000);
-            tree.position.y = -200;
-            tree.scale.multiplyScalar( 8 );
+            var pos = getRandomPosition();
+            tree.position.z = zpos;
+            tree.position.x = pos.x;
+            tree.position.y = pos.y;
+            tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
+            tree.scale.multiplyScalar( 1 );
             trees.push(tree);
             n++;
         }
@@ -64,9 +69,11 @@ $.when(loadTree()).then(function(){
 function init() {
     camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
     camera.position.z = camera_z_position;
-    controls = new THREE.OrbitControls( camera );
-    controls.addEventListener( 'change', render );
+    camera.position.y = camera_y_position;
+    //controls = new THREE.OrbitControls( camera );
+    //controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2( 0xFFFFFF, 0.002 );
     for(var n = 0, tree; tree = trees[n]; n++){
         scene.add(tree);
     }
@@ -96,28 +103,56 @@ function animate() {
   //controls.update();
   render();
   stats.update();
+  run();
 }
 
 function render() {
     //update displacement
-    var time = Date.now() * 0.01;
-    uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
-    uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
-    for ( var i = 0; i < displacement.length; i ++ ) {
-        displacement[ i ] = Math.sin( 0.1 * i + time );
-        noise[ i ] += 0.5 * ( 0.5 - Math.random() );
-        noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
-        displacement[ i ] += noise[ i ];
-    }
 
-    for(var n = 0, tree; tree = trees[n]; n++){
-        tree.geometry.attributes.displacement.needsUpdate = true;
-    }
+     // var time = Date.now() * 0.01;
+     // uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
+     // uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
+     // for ( var i = 0; i < displacement.length; i ++ ) {
+     //     displacement[ i ] = Math.sin( 0.1 * i + time );
+     //     noise[ i ] += 0.5 * ( 0.5 - Math.random() );
+     //     noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
+     //     displacement[ i ] += noise[ i ];
+     // }
+
+     // for(var n = 0, tree; tree = trees[n]; n++){
+     //     tree.geometry.attributes.displacement.needsUpdate = true;
+     // }
     renderer.render( scene, camera );
+}
+
+function run(){
+     var speed = 4;
+     for(var n = 0, tree; tree = trees[n]; n++){
+         tree.position.z += 1 * speed;
+         if(tree.position.z >= camera_z_position ){
+            tree.position.z = -camera_z_position;
+         }
+     }
 }
 
 
 //helpers
 function getRandomArbitrary(min, max){
     return Math.random() * (max -min) +min;
+}
+
+function getRandomPosition(){
+    var pos = {};
+    pos.x = Math.random() * 1000 -500;
+    pos.y = -200;
+
+    //do not put trees in the middle
+    if(pos.x > -centerOffset && pos.x <= 0 ){
+        pos.x = getRandomArbitrary(-500, -centerOffset);
+    }
+
+    if(pos.x < centerOffset && pos.x > 0){
+        pos.x = getRandomArbitrary(centerOffset, 500);
+    }
+    return pos;
 }
