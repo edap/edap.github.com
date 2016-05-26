@@ -1,8 +1,10 @@
 var plyFile = 'assets/ply/tree.ply';
 var container, camera, controls, scene, renderer, stats;
 var displacement, noise, uniforms;
-var camera_z_position = 1000;
-var camera_y_position = -170;
+var camera_z_position = 800;
+//sometimes the branches disappear too fast because the tree is already behind the camera
+var z_disappear_delay = 300;
+var camera_y_position = -100;
 var nTree = 60;
 var centerOffset = 40;
 var trees = [];
@@ -13,13 +15,19 @@ var speed = 3;
 var loadTree = function() {
     var d = $.Deferred();
 
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2( 0xFFFFFF, 0.002 );
+
     uniforms = {
-        amplitude: { type: "f", value: 1.0 },
-        color:     { type: "c", value: new THREE.Color( 0xff2200 ) },
+        amplitude:  { type: "f", value: 1.0 },
+        fogDensity: { type: "f", value: scene.fog.density},
+        fogColor:   { type: "c", value:scene.fog.color},
+        color:      { type: "c", value: new THREE.Color( 0xff2200 ) },
     };
 
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: uniforms,
+        fog: false,
         vertexShader: document.getElementById( 'vertexShader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShader' ).textContent
     });
@@ -58,7 +66,6 @@ var loadTree = function() {
 };
 
 $.when(loadTree()).then(function(){
-        //if model loaded OK
         init();
         animate();
     },
@@ -75,8 +82,6 @@ function init() {
     camera.position.y = camera_y_position;
     //controls = new THREE.OrbitControls( camera );
     //controls.addEventListener( 'change', render );
-    scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2( 0xFFFFFF, 0.002 );
     for (var n = 0, tree; tree = trees[n]; n++) {
         scene.add(tree);
     }
@@ -89,8 +94,8 @@ function init() {
     container.appendChild( renderer.domElement );
 
     stats = new Stats();
-    stats.showPanel( 0 );
-    container.appendChild(stats.domElement);
+    //stats.showPanel( 1 );
+    //container.appendChild(stats.domElement);
 
     document.body.addEventListener("keypress", maybeSpacebarPressed);
     window.addEventListener( 'resize', onWindowResize, false );

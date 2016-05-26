@@ -26,30 +26,39 @@
     </script>
 
     <script id="fragmentShader" type="x-shader/x-vertex">
-      // same name and type as VS
+      // fog's constant and functions
+      #define LOG2 1.442695
+      #define saturate(a) clamp( a, 0.0, 1.0 )
+      #define whiteCompliment(a) ( 1.0 - saturate( a ) )
+
       varying vec3 vNormal;
       uniform vec3 color;
+      uniform float fogDensity;
+      uniform vec3 fogColor;
 
       void main() {
-
-        // calc the dot product and clamp
-        // 0 -> 1 rather than -1 -> 1
-        vec3 light = vec3(0.5, 0.2, 1.0);
-
-        // ensure it's normalized
+        vec3 light = vec3(0.5, 0.2, 0.5);
         light = normalize(light);
-
         // calculate the dot product of
         // the light to the vertex normal
-
         // higher
         // float dProd = dot( vNormal, light ) * 0.5 + 0.5;
         // lower
         float dProd = max(0.0,dot(vNormal, light));
-        //black and white
-        gl_FragColor = vec4(dProd, dProd, dProd, 1.0);
-        //color
-        //gl_FragColor = vec4( vec3( dProd ) * vec3( color ), 1.0 );
+
+        // black and white
+        //vec4 col = vec4(dProd, dProd, dProd, 1.0);
+        // colors
+        vec4 col = vec4( vec3( dProd ) * vec3( color ), 1.0 );
+
+        #ifdef USE_FOG // only FogExp2 is implemented
+          vec3 outgoingLight = vec3( 0.0 );
+          float depth = gl_FragCoord.z / gl_FragCoord.w;
+          float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * depth * depth * LOG2 ) );
+          gl_FragColor.rgb = mix( col.rgb, fogColor, fogFactor );
+        #else
+          gl_FragColor = col;
+        #endif
         }
     </script>
   </head>
