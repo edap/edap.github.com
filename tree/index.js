@@ -1,8 +1,9 @@
 var plyFile = 'assets/ply/tree.ply';
-var container, camera, controls, scene, renderer;
+var container, camera, controls, scene, renderer, stats;
 var displacement, noise, uniforms;
 var camera_z_position = 1000;
-var mesh;
+var nTree = 2;
+var mesh, trees;
 
 var loadTree = function() {
     var d = $.Deferred();
@@ -72,6 +73,10 @@ function init() {
     //container DOM
     container = document.getElementById( 'container' );
     container.appendChild( renderer.domElement );
+
+    stats = new Stats();
+    stats.showPanel( 0 );
+    container.appendChild(stats.domElement);
     window.addEventListener( 'resize', onWindowResize, false );
 }
 
@@ -86,6 +91,7 @@ function animate() {
   requestAnimationFrame( animate );
   //controls.update();
   render();
+  stats.update();
 }
 
 function render() {
