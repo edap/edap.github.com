@@ -41,7 +41,7 @@ var loadTree = function() {
         //fine displacement
         var n = 0;
         var inc = (camera_z_position * 2) / nTree;
-        for(var zpos = -camera_z_position;zpos < camera_z_position; zpos += inc){
+        for (var zpos = -camera_z_position;zpos < camera_z_position; zpos += inc) {
             var tree = new THREE.Mesh( treeGeometry, customMaterial );
             var pos = getRandomPosition();
             tree.position.z = zpos;
@@ -77,14 +77,12 @@ function init() {
     //controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2( 0xFFFFFF, 0.002 );
-    for(var n = 0, tree; tree = trees[n]; n++){
+    for (var n = 0, tree; tree = trees[n]; n++) {
         scene.add(tree);
     }
 
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
-
-    document.body.addEventListener("keypress", maybeSpacebarPressed);
 
     //container DOM
     container = document.getElementById( 'container' );
@@ -93,17 +91,19 @@ function init() {
     stats = new Stats();
     stats.showPanel( 0 );
     container.appendChild(stats.domElement);
+
+    document.body.addEventListener("keypress", maybeSpacebarPressed);
     window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function maybeSpacebarPressed(e){
-    if(e.keyCode === 0 || e.keyCode === 32){
+    if (e.keyCode === 0 || e.keyCode === 32) {
         e.preventDefault();
         barking_dog = !barking_dog;
-        if(barking_dog){
-            speed = 7;
+        if (barking_dog) {
+            speed = 9;
             add_noise = true;
-        }else{
+        } else {
             speed = 3;
             add_noise = false;
         }
@@ -131,7 +131,7 @@ function render() {
 }
 
 function updateDisplacement(){
-    if(barking_dog){
+    if (barking_dog) {
         var time = Date.now() * 0.01;
         uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
         uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
@@ -145,12 +145,12 @@ function updateDisplacement(){
 }
 
 function run(){
-    for(var n = 0, tree; tree = trees[n]; n++){
-        if(barking_dog){
+    for (var n = 0, tree; tree = trees[n]; n++) {
+        if (barking_dog) {
             tree.geometry.attributes.displacement.needsUpdate = true;
         }
         tree.position.z += 1 * speed;
-        if(tree.position.z >= camera_z_position + z_disappear_delay ){
+        if (tree.position.z >= camera_z_position + z_disappear_delay) {
             tree.position.z = -camera_z_position;
         }
     }
@@ -166,12 +166,12 @@ function getRandomPosition(){
     pos.x = Math.random() * 1000 -500;
     pos.y = -200;
 
-    //do not put trees in the middle
-    if(pos.x > -centerOffset && pos.x <= 0 ){
+    //do not put trees in the middle of the way
+    if (pos.x > -centerOffset && pos.x <= 0 ) {
         pos.x = getRandomArbitrary(-500, -centerOffset);
     }
 
-    if(pos.x < centerOffset && pos.x > 0){
+    if (pos.x < centerOffset && pos.x > 0) {
         pos.x = getRandomArbitrary(centerOffset, 500);
     }
     return pos;
