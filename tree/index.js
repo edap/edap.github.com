@@ -6,6 +6,9 @@ var camera_y_position = -170;
 var nTree = 60;
 var centerOffset = 40;
 var trees = [];
+var barking_dog = false;
+var add_noise = false;
+var speed = 3;
 
 var loadTree = function() {
     var d = $.Deferred();
@@ -81,6 +84,8 @@ function init() {
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
+    document.body.addEventListener("keypress", maybeSpacebarPressed);
+
     //container DOM
     container = document.getElementById( 'container' );
     container.appendChild( renderer.domElement );
@@ -89,6 +94,20 @@ function init() {
     stats.showPanel( 0 );
     container.appendChild(stats.domElement);
     window.addEventListener( 'resize', onWindowResize, false );
+}
+
+function maybeSpacebarPressed(e){
+    if(e.keyCode === 0 || e.keyCode === 32){
+        e.preventDefault();
+        barking_dog = !barking_dog;
+        if(barking_dog){
+            speed = 7;
+            add_noise = true;
+        }else{
+            speed = 3;
+            add_noise = false;
+        }
+    }
 }
 
 function onWindowResize() {
@@ -107,32 +126,33 @@ function animate() {
 }
 
 function render() {
+
     //update displacement
+    if(barking_dog){
+        var time = Date.now() * 0.01;
+        uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
+        uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
+        for ( var i = 0; i < displacement.length; i ++ ) {
+            displacement[ i ] = Math.sin( 0.1 * i + time );
+            noise[ i ] += 0.5 * ( 0.5 - Math.random() );
+            noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
+            displacement[ i ] += noise[ i ];
+        }
 
-     // var time = Date.now() * 0.01;
-     // uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
-     // uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
-     // for ( var i = 0; i < displacement.length; i ++ ) {
-     //     displacement[ i ] = Math.sin( 0.1 * i + time );
-     //     noise[ i ] += 0.5 * ( 0.5 - Math.random() );
-     //     noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
-     //     displacement[ i ] += noise[ i ];
-     // }
-
-     // for(var n = 0, tree; tree = trees[n]; n++){
-     //     tree.geometry.attributes.displacement.needsUpdate = true;
-     // }
+        for(var n = 0, tree; tree = trees[n]; n++){
+            tree.geometry.attributes.displacement.needsUpdate = true;
+        }
+    }
     renderer.render( scene, camera );
 }
 
 function run(){
-     var speed = 4;
-     for(var n = 0, tree; tree = trees[n]; n++){
-         tree.position.z += 1 * speed;
-         if(tree.position.z >= camera_z_position ){
-            tree.position.z = -camera_z_position;
-         }
-     }
+    for(var n = 0, tree; tree = trees[n]; n++){
+        tree.position.z += 1 * speed;
+        if(tree.position.z >= camera_z_position ){
+           tree.position.z = -camera_z_position;
+        }
+    }
 }
 
 
