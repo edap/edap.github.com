@@ -6,13 +6,19 @@ var mesh;
 
 var loadTree = function() {
     var d = $.Deferred();
+
+    uniforms = {
+        amplitude: { type: "f", value: 1.0 },
+        color:     { type: "c", value: new THREE.Color( 0xff2200 ) },
+    };
+
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: uniforms,
         vertexShader: document.getElementById( 'vertexShader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShader' ).textContent
     });
     customMaterial.side = THREE.BackSide;
-    // ply model
+
     var loader = new THREE.PLYLoader();
     loader.load( plyFile, function ( ofMesh ) {
         ofMesh.computeFaceNormals();
@@ -32,10 +38,9 @@ var loadTree = function() {
         mesh.position.y = - 1800.25;
         mesh.position.z = -200;
         mesh.scale.multiplyScalar( 8 );
-
         //mesh.castShadow = true;
         //mesh.receiveShadow = true;
-        //scene.add( mesh);
+        //
         d.resolve();
     });
     return d.promise();
@@ -46,10 +51,10 @@ $.when(loadTree()).then(function(){
         init();
         animate();
     },
-        //if smth went wrong
-        // TODO add error messages
-        function(){
-        console.log(error);
+    //if smth went wrong
+    // TODO add error messages
+    function(){
+        console.log("i was not able to load the assets");
     }
 );
 
@@ -60,24 +65,6 @@ function init() {
     controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
     scene.add(mesh);
-
-    // uniforms
-    uniforms = {
-        amplitude: { type: "f", value: 1.0 },
-        color:     { type: "c", value: new THREE.Color( 0xff2200 ) },
-    };
-
-    // lights
-    light = new THREE.DirectionalLight( 0xD1A6ED );
-    light.position.set( 1, 1, 1 );
-    scene.add( light );
-
-    light = new THREE.DirectionalLight( 0x002288 );
-    light.position.set( -1, -1, -1 );
-    scene.add( light );
-
-    light = new THREE.AmbientLight( 0x99C794 );
-    scene.add( light );
 
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -97,14 +84,15 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame( animate );
-  controls.update();
+  //controls.update();
+  render();
 }
 
 function render() {
     //update displacement
+    var time = Date.now() * 0.01;
     uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
     uniforms.color.value.offsetHSL( 0.0005, 0, 0 );
-    var time = Date.now() * 0.01;
     for ( var i = 0; i < displacement.length; i ++ ) {
         displacement[ i ] = Math.sin( 0.1 * i + time );
         noise[ i ] += 0.5 * ( 0.5 - Math.random() );
@@ -112,5 +100,6 @@ function render() {
         displacement[ i ] += noise[ i ];
     }
     mesh.geometry.attributes.displacement.needsUpdate = true;
+
     renderer.render( scene, camera );
 }
