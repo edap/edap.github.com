@@ -122,12 +122,15 @@ function animate() {
   //controls.update();
   render();
   stats.update();
-  run();
 }
 
 function render() {
+    run();
+    updateDisplacement();
+    renderer.render( scene, camera );
+}
 
-    //update displacement
+function updateDisplacement(){
     if(barking_dog){
         var time = Date.now() * 0.01;
         uniforms.amplitude.value = 2.5 * Math.sin( time * 0.125 );
@@ -138,23 +141,20 @@ function render() {
             noise[ i ] = THREE.Math.clamp( noise[ i ], -5, 5 );
             displacement[ i ] += noise[ i ];
         }
-
-        for(var n = 0, tree; tree = trees[n]; n++){
-            tree.geometry.attributes.displacement.needsUpdate = true;
-        }
     }
-    renderer.render( scene, camera );
 }
 
 function run(){
     for(var n = 0, tree; tree = trees[n]; n++){
+        if(barking_dog){
+            tree.geometry.attributes.displacement.needsUpdate = true;
+        }
         tree.position.z += 1 * speed;
-        if(tree.position.z >= camera_z_position ){
-           tree.position.z = -camera_z_position;
+        if(tree.position.z >= camera_z_position + z_disappear_delay ){
+            tree.position.z = -camera_z_position;
         }
     }
 }
-
 
 //helpers
 function getRandomArbitrary(min, max){
