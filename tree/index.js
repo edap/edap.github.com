@@ -9,14 +9,13 @@ var nTree = 60;
 var centerOffset = 40;
 var trees = [];
 var barking_dog = false;
-var add_noise = false;
 var speed = 3;
 
 var loadTree = function() {
     var d = $.Deferred();
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2( 0xFFFFFF, 0.002 );
+    scene.fog = new THREE.FogExp2( 0x000000, 0.002 );
 
     uniforms = {
         amplitude:  { type: "f", value: 1.0 },
@@ -107,10 +106,8 @@ function maybeSpacebarPressed(e){
         barking_dog = !barking_dog;
         if (barking_dog) {
             speed = 9;
-            add_noise = true;
         } else {
             speed = 3;
-            add_noise = false;
         }
     }
 }
