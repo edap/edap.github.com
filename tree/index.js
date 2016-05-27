@@ -1,5 +1,5 @@
 var plyFile = 'assets/ply/tree.ply';
-var container, camera, controls, scene, renderer, stats;
+var container, camera, scene, renderer, stats;
 var displacement, noise, uniforms;
 var camera_z_position = 800;
 //sometimes the branches disappear too fast because the tree is already behind the camera
@@ -79,8 +79,6 @@ function init() {
     camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
     camera.position.z = camera_z_position;
     camera.position.y = camera_y_position;
-    //controls = new THREE.OrbitControls( camera );
-    //controls.addEventListener( 'change', render );
     for (var n = 0, tree; tree = trees[n]; n++) {
         scene.add(tree);
     }
@@ -121,7 +119,6 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame( animate );
-  //controls.update();
   render();
   stats.update();
 }
