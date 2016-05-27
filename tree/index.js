@@ -1,6 +1,6 @@
 var plyFile = 'assets/ply/tree.ply';
 var container, camera, scene, renderer, stats;
-var displacement, noise, uniforms;
+var displacement, noise, uniforms, light;
 var camera_z_position = 800;
 //sometimes the branches disappear too fast because the tree is already behind the camera
 var z_disappear_delay = 300;
@@ -11,22 +11,38 @@ var trees = [];
 var barking_dog = false;
 var speed = 3;
 
+  // Add to PointLight pprototype so we can see where lights are and their color.
+  THREE.PointLight.prototype.addSphere = function(){
+    this.sphere = new THREE.Mesh( new THREE.SphereGeometry( 50, 16, 16 ), new THREE.MeshBasicMaterial( { color: this.color } ) )
+    this.add(this.sphere);
+  }
+
 var loadTree = function() {
     var d = $.Deferred();
 
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2( 0x000000, 0.002 );
 
-    uniforms = {
+    light = new THREE.PointLight(0xffffff, 1.0);
+    light.addSphere();
+    light.position.set( 0, 100, 200 );
+    scene.add( light );
+
+    var tmp_uniforms = {
         amplitude:  { type: "f", value: 1.0 },
         fogDensity: { type: "f", value: scene.fog.density},
-        fogColor:   { type: "c", value:scene.fog.color},
+        fogColor:   { type: "c", value: scene.fog.color},
         color:      { type: "c", value: new THREE.Color( 0xff2200 ) },
     };
 
+    uniforms = THREE.UniformsUtils.merge([
+        THREE.UniformsLib['lights'],
+        tmp_uniforms
+    ]);
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: uniforms,
         fog: true,
+        lights: true,
         vertexShader: document.getElementById( 'vertexShader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShader' ).textContent
     });
