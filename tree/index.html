@@ -51,7 +51,6 @@
         vec4 col = vec4( vec3( dProd ) * vec3( color ), 1.0 );
 
         #ifdef USE_FOG // only FogExp2 is implemented
-          vec3 outgoingLight = vec3( 0.0 );
           float depth = gl_FragCoord.z / gl_FragCoord.w;
           float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * depth * depth * LOG2 ) );
           gl_FragColor.rgb = mix( col.rgb, fogColor, fogFactor );
@@ -67,7 +66,6 @@
     <script type="text/javascript" src="PLYLoader.js"></script>
     <script type="text/javascript" src="OBJLoader.js"></script>
     <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
-    <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
     <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" src="stats.min.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/style.css">
