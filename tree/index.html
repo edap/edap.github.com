@@ -12,11 +12,11 @@
       attribute float displacement;
 
       void main() {
-        // as the light later will be given in world coordinate space,
-        // vNormal and vPos has to be in coordinate space too
-        vNormal = (modelMatrix * vec4(normal, 0.0)).xyz;
+        vNormal = normalMatrix * normal;
         //here we apply the displacement to the vertex
         vec3 newPosition = position + amplitude * normal * vec3( displacement );
+        // as the light later will be given in world coordinate space,
+        // vPos has to be in world coordinate space too
         vPos = (modelMatrix * vec4(newPosition, 1.0 )).xyz;
 
         gl_Position = projectionMatrix *
@@ -30,6 +30,8 @@
       #define LOG2 1.442695
       #define saturate(a) clamp( a, 0.0, 1.0 )
       #define whiteCompliment(a) ( 1.0 - saturate( a ) )
+      // Comment this line to do not use the point light
+      #define CUSTOM_POINTLIGHTS
 
       varying vec3 vNormal;
       varying vec3 vPos;
@@ -44,33 +46,25 @@
       uniform PointLight pointLights[ NUM_POINT_LIGHTS ];
 
       void main() {
-          vec4 addedLights = vec4(0.1,0.1,0.1, 1.0);
+        #ifdef CUSTOM_POINTLIGHTS
+          vec4 addedLights = vec4(0.5,0.2,0.5, 1.0);
           for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
             vec3 adjustedLight = pointLights[l].position + cameraPosition;
-            //vec3 lightDirection = normalize(vPos - pointLightPosition[l]);
             vec3 lightDirection = normalize(vPos - adjustedLight);
             addedLights.rgb += clamp(dot(-lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
           }
           vec4 col = mix(vec4(color.x, color.y, color.z, 1.0), addedLights, addedLights);
-
-          //if light disabled in the sketch, you can add it uncommenting
-          // the following lines
-          //vec3 light = vec3(0.5, 0.2, 0.5);
-          //light = normalize(light);
+        #else
+          vec3 light = vec3(0.5, 0.2, 0.5);
+          light = normalize(light);
           // calculate the dot product of the light to the vertex normal
-          // higher
-          //float dProd = dot( vNormal, light ) * 0.5 + 0.5;
-          // lower
-
-          //simple lambertian lighting
-          //float dProd = max(0.0,dot(vNormal, light));
+          float dProd = max(0.0,dot(vNormal, light));
 
           // black and white
           //vec4 col = vec4(dProd, dProd, dProd, 1.0);
-          // colors
-          //vec4 col = vec4( vec3( dProd ) * vec3( color ), 1.0 );
-          //vec4 col = vec4(0,0,0,1);
-
+          // or colors
+          vec4 col = vec4( vec3( dProd ) * vec3( color ), 1.0 );
+        #endif
 
         #ifdef USE_FOG // only FogExp2 is implemented
           float depth = gl_FragCoord.z / gl_FragCoord.w;
