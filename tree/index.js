@@ -26,7 +26,7 @@ var loadTree = function() {
 
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: uniforms,
-        fog: false,
+        fog: true,
         vertexShader: document.getElementById( 'vertexShader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShader' ).textContent
     });
