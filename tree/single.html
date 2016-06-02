@@ -1,0 +1,66 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forest</title>
+    <script id="vertexShader" type="x-shader/x-vertex">
+      varying vec3 vNormal;
+      uniform float amplitude;
+      attribute float displacement;
+
+      void main() {
+
+        // set the vNormal value with
+        // the attribute value passed
+        // in by Three.js
+        vNormal = normal;
+        //vec3 newPosition = position + normal * vec3(amplitude * displacement);
+        vec3 newPosition = position + amplitude * normal * vec3( displacement );
+
+        gl_Position = projectionMatrix *
+                      modelViewMatrix *
+                      vec4(newPosition, 1.0);
+      }
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-vertex">
+      // same name and type as VS
+      varying vec3 vNormal;
+      uniform vec3 color;
+
+      void main() {
+
+        // calc the dot product and clamp
+        // 0 -> 1 rather than -1 -> 1
+        vec3 light = vec3(0.5, 0.2, 1.0);
+
+        // ensure it's normalized
+        light = normalize(light);
+
+        // calculate the dot product of
+        // the light to the vertex normal
+
+        // higher
+        // float dProd = dot( vNormal, light ) * 0.5 + 0.5;
+        // lower
+        float dProd = max(0.0,dot(vNormal, light));
+        //black and white
+        gl_FragColor = vec4(dProd, dProd, dProd, 1.0);
+        //color
+        gl_FragColor = vec4( vec3( dProd ) * vec3( color ), 1.0 );
+        }
+    </script>
+  <style type="text/css"></style></head>
+  <body data-pinterest-extension-installed="cr1.39.1">
+    <div id="container"><canvas width="1280" height="339" style="width: 1280px; height: 339px;"></canvas><div style="position: fixed; top: 0px; left: 0px; cursor: pointer; opacity: 0.9; z-index: 10000;"><canvas width="160" height="96" style="width: 80px; height: 48px; display: block;"></canvas><canvas width="160" height="96" style="width: 80px; height: 48px; display: none;"></canvas><canvas width="160" height="96" style="width: 80px; height: 48px; display: none;"></canvas></div></div>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
+    <script type="text/javascript" src="PLYLoader.js"></script>
+    <script type="text/javascript" src="OBJLoader.js"></script>
+    <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+    <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
+    <script type="text/javascript" src="single.js"></script>
+    <script type="text/javascript" src="stats.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+
+
+</body></html>

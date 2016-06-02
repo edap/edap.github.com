@@ -1,11 +1,11 @@
-var plyFile = 'assets/ply/tree.ply';
+var plyFile = 'assets/ply/triangles11.ply';
 var container, camera, scene, renderer, stats;
 var displacement, noise, uniforms, light;
 var camera_z_position = 800;
 //sometimes the branches disappear too fast because the tree is already behind the camera
 var z_disappear_delay = 300;
 var camera_y_position = -100;
-var nTree = 60;
+var nTree = 120;
 var centerOffset = 40;
 var trees = [];
 var barking_dog = false;
@@ -13,7 +13,7 @@ var speed = 3;
 
   // Add to PointLight pprototype so we can see where lights are and their color.
   THREE.PointLight.prototype.addSphere = function(){
-    this.sphere = new THREE.Mesh( new THREE.SphereGeometry( 50, 16, 16 ), new THREE.MeshBasicMaterial( { color: this.color } ) )
+    this.sphere = new THREE.Mesh( new THREE.SphereGeometry( 100, 16, 16 ), new THREE.MeshBasicMaterial( { color: this.color } ) )
     this.add(this.sphere);
   }
 
@@ -21,12 +21,7 @@ var loadTree = function() {
     var d = $.Deferred();
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2( 0x000000, 0.002 );
-
-    light = new THREE.PointLight(0xffffff, 1.0);
-    light.addSphere();
-    light.position.set( 0, 100, 200 );
-    scene.add( light );
+    scene.fog = new THREE.FogExp2( 0x000000, 0.004 );
 
     var tmp_uniforms = {
         amplitude:  { type: "f", value: 1.0 },
@@ -64,7 +59,8 @@ var loadTree = function() {
         //fine displacement
         var n = 0;
         var inc = (camera_z_position * 2) / nTree;
-        for (var zpos = -camera_z_position;zpos < camera_z_position; zpos += inc) {
+        for (var zpos = -camera_z_position; zpos < camera_z_position; zpos += inc) {
+            //debugger
             var tree = new THREE.Mesh( treeGeometry, customMaterial );
             var pos = getRandomPosition();
             tree.position.z = zpos;
@@ -95,6 +91,13 @@ function init() {
     camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
     camera.position.z = camera_z_position;
     camera.position.y = camera_y_position;
+
+    light = new THREE.PointLight(0xFFFF00, 1.0);
+    light.addSphere();
+    light.position.set( 0, 100, 500 );
+    scene.add( light );
+
+
     for (var n = 0, tree; tree = trees[n]; n++) {
         scene.add(tree);
     }
@@ -107,8 +110,8 @@ function init() {
     container.appendChild( renderer.domElement );
 
     stats = new Stats();
-    //stats.showPanel( 1 );
-    //container.appendChild(stats.domElement);
+    stats.showPanel( 0 );
+    container.appendChild(stats.domElement);
 
     document.body.addEventListener("keypress", maybeSpacebarPressed);
     window.addEventListener( 'resize', onWindowResize, false );
@@ -160,6 +163,7 @@ function updateDisplacement(){
 }
 
 function run(){
+    //camera.position.x = Math.sin(Date.now() * 0.01)
     for (var n = 0, tree; tree = trees[n]; n++) {
         if (barking_dog) {
             tree.geometry.attributes.displacement.needsUpdate = true;
