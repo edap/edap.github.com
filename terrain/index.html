@@ -6,7 +6,40 @@
   </head>
   <body >
     <div id="container"></div>
+    <script id="vertexShader" type="x-shader/x-vertex">
+    uniform sampler2D bumpTexture;
+    uniform float bumpScale;
+    varying float vAmount;
+    varying vec2 vUV;
+
+    void main() {
+      vUV = uv;
+      vec4 bumpData = texture2D( bumpTexture, vUV );
+      vAmount = bumpData.r; // assuming map is grayscale it doesn't matter if you use r, g, or b.
+
+      // move the position along the normal
+      vec3 newPosition = position + normal * bumpScale * vAmount;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+    }
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-vertex">
+      varying vec2 vUV;
+      varying float vAmount;
+
+      void main() {
+        //uncomment for colors
+        //vec3 color = vec3( vUV * ( 1. - 0.5 * vAmount ), 0.0 );
+        //gl_FragColor = vec4( color.rgb, 1.0 );
+        //black and white
+        gl_FragColor = vec4(vAmount * 1.);
+
+      }
+    </script>
+
+
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
+    <script type="text/javascript" src="dat.gui.min.js"></script>
     <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
     <script type="text/javascript" src="stats.min.js"></script>
 
