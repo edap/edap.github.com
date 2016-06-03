@@ -6,7 +6,8 @@ var terrain;
 //Path and camera
 var pathGeometry;
 var spline;
-var friction = 5000;
+var t = 0;
+var cameraSpeed = 0.002;
 var current_position_in_path = 0;
 var plane_rotation = Math.PI/2;
 var camera_z_position = 1000;
@@ -94,7 +95,7 @@ function createCurve(){
         vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( - plane_rotation) );
         vertices[i].applyMatrix4( new THREE.Matrix4().makeScale(0.8,0.8,0.8));
     }
-
+    //var curve = new THREE.SplineCurve3( vertices );
     var curve = new THREE.CatmullRomCurve3( vertices );
     return curve;
 }
@@ -149,19 +150,23 @@ function render() {
 }
 
 function moveCamera(){
-    current_position_in_path ++;
-    if(current_position_in_path === friction){
-        current_position_in_path = 0;
-    }
+    var camPos = spline.getPoint(t);
+    var camRot = spline.getTangent(t);
+    camera.position.set(camPos.x,camPos.y,camPos.z);
+    //camera.rotation.set(camRot.x,camRot.y,camRot.z);
+    // var updateMatrix = new THREE.Matrix4();
+    // updateMatrix.setPosition(camPos);
+    // var angle = new THREE.Vector3(0,1,0).dot(spline.getTangent(t).normalize());
 
-    var camPos = spline.getPoint( current_position_in_path / friction);
-    var camRot = spline.getTangent( current_position_in_path / friction);
-    camera.position.x = camPos.x;
-    camera.position.y = camPos.y;
-    camera.position.z = camPos.z;
+    // var quat = new THREE.Quaternion;
+    // quat.setFromAxisAngle(new THREE.Vector3(0,0,1), angle);
+    // updateMatrix.makeRotationFromQuaternion(quat);
 
-    camera.rotation.x = camRot.x;
-    camera.rotation.y = camRot.y;
-    camera.rotation.z = camRot.z;
-    camera.lookAt(spline.getPoint((current_position_in_path + 1) / friction));
+    // camera.rotation.x = camRot.x;
+    // camera.rotation.y = camRot.y;
+    // camera.rotation.z = camRot.z;
+    // camera.lookAt(spline.getPoint(t + cameraSpeed));
+    ////camera.applyMatrix(updateMatrix);
+
+    t = (t >= 1) ? 0 : t += cameraSpeed;
 }
