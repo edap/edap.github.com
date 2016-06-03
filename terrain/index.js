@@ -7,7 +7,7 @@ var terrain;
 var pathGeometry;
 var spline;
 var t = 0;
-var cameraSpeed = 0.002;
+var cameraSpeed = 0.0012;
 var current_position_in_path = 0;
 var plane_rotation = Math.PI/2;
 var camera_z_position = 1000;
@@ -50,7 +50,7 @@ function init() {
     spline = createCurve();
     pathGeometry = createSplineGeometry(spline);
     var splineObject = new THREE.Line( pathGeometry, material );
-    scene.add( splineObject );
+    //scene.add( splineObject );
 
 
     camera.position.set(pathGeometry.vertices[0]);
@@ -150,23 +150,13 @@ function render() {
 }
 
 function moveCamera(){
-    var camPos = spline.getPoint(t);
-    var camRot = spline.getTangent(t);
+    var camPos = spline.getPointAt(t);
     camera.position.set(camPos.x,camPos.y,camPos.z);
+    // no need to roatate beacuse the path is always on y = 0
+    // if in the future you will have a path that goes up and down
+    // use the rotation too
+    //var camRot = spline.getTangent(t);
     //camera.rotation.set(camRot.x,camRot.y,camRot.z);
-    // var updateMatrix = new THREE.Matrix4();
-    // updateMatrix.setPosition(camPos);
-    // var angle = new THREE.Vector3(0,1,0).dot(spline.getTangent(t).normalize());
-
-    // var quat = new THREE.Quaternion;
-    // quat.setFromAxisAngle(new THREE.Vector3(0,0,1), angle);
-    // updateMatrix.makeRotationFromQuaternion(quat);
-
-    // camera.rotation.x = camRot.x;
-    // camera.rotation.y = camRot.y;
-    // camera.rotation.z = camRot.z;
-    // camera.lookAt(spline.getPoint(t + cameraSpeed));
-    ////camera.applyMatrix(updateMatrix);
-
-    t = (t >= 1) ? 0 : t += cameraSpeed;
+    camera.lookAt(spline.getPointAt(t + cameraSpeed * 2));
+    t = (t >= 0.99) ? 0 : t += cameraSpeed;
 }
