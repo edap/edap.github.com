@@ -1,12 +1,16 @@
 var container, camera, controls, scene, renderer, stats, gui;
-var bumpScale;
+//Terrain
+var bumpScale = 200;
+var terrain;
+
+//Path and camera
 var pathGeometry;
 var spline;
 var friction = 5000;
 var current_position_in_path = 0;
+var plane_rotation = Math.PI/2;
 var camera_z_position = 1000;
 
-var terrain;
 
 //if model loaded OK
 init();
@@ -18,8 +22,6 @@ function init() {
     controls = new THREE.OrbitControls( camera );
     controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
-    bumpScale = 200.0;
-
 
     // Create Light
     var light = new THREE.PointLight(0xFFFFFF);
@@ -39,7 +41,7 @@ function init() {
     var customMaterial = createCustomMaterial( bumpTexture );
 
     var geometryPlane = new THREE.PlaneBufferGeometry(2000, 2000, 50, 50);
-    geometryPlane.rotateX( - Math.PI / 2.5);
+    geometryPlane.rotateX( - plane_rotation);
     terrain = new THREE.Mesh( geometryPlane, customMaterial );
     scene.add( terrain );
 
@@ -85,9 +87,11 @@ function createCurve(){
         new THREE.Vector3( 80, 50, 0 ),
         new THREE.Vector3( 180, 0, 0 ),
     ];
+
+    // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
     for (i = 0; i< vertices.length; i++){
         vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, 200 ) );
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( - Math.PI / 2.5) );
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( - plane_rotation) );
         vertices[i].applyMatrix4( new THREE.Matrix4().makeScale(0.8,0.8,0.8));
     }
 
