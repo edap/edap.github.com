@@ -1,6 +1,10 @@
 var container, camera, controls, scene, renderer, stats, gui;
 var bumpScale;
-var camera_z_position = 500;
+var pathGeometry;
+var spline;
+var friction = 5000;
+var current_position_in_path = 0;
+var camera_z_position = 1000;
 
 var terrain;
 
@@ -9,8 +13,8 @@ init();
 animate();
 
 function init() {
-    camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 4000 );
-    camera.position.z = camera_z_position;
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 4000 );
+    //camera.position.z = camera_z_position;
     controls = new THREE.OrbitControls( camera );
     controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
@@ -40,10 +44,13 @@ function init() {
     scene.add( terrain );
 
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-    var splineGeometry = createSplineGeometry();
-    var splineObject = new THREE.Line( splineGeometry, material );
+    spline = createCurve();
+    pathGeometry = createSplineGeometry(spline);
+    var splineObject = new THREE.Line( pathGeometry, material );
     scene.add( splineObject );
 
+
+    camera.position.set(pathGeometry.vertices[0]);
     addGui( customMaterial );
     addStats();
 }
@@ -64,9 +71,8 @@ function createCustomMaterial( texture ) {
     return customMaterial;
 }
 
-function createSplineGeometry(){
-    //Create a closed bent a sine-like wave
-    var curve = new THREE.CatmullRomCurve3( [
+function createCurve(){
+    var vertices =[
         new THREE.Vector3( 180, 0, 0 ),
         new THREE.Vector3( 1800, 0, 0 ),
         new THREE.Vector3( 1800, 1800, 0 ),
@@ -78,12 +84,20 @@ function createSplineGeometry(){
         new THREE.Vector3( 0, 300, 0 ),
         new THREE.Vector3( 80, 50, 0 ),
         new THREE.Vector3( 180, 0, 0 ),
-    ] );
+    ];
+    for (i = 0; i< vertices.length; i++){
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, 200 ) );
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( - Math.PI / 2.5) );
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeScale(0.8,0.8,0.8));
+    }
 
+    var curve = new THREE.CatmullRomCurve3( vertices );
+    return curve;
+}
+
+function createSplineGeometry(curve){
     var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints( 80 );
-    geometry.applyMatrix( new THREE.Matrix4().makeTranslation( -1000, -1000, 0 ) );
-    geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2.5) );
+    geometry.vertices = curve.getPoints( 100 );
     return geometry;
 }
 
@@ -126,5 +140,24 @@ function animate() {
 }
 
 function render() {
+    moveCamera();
     renderer.render( scene, camera );
+}
+
+function moveCamera(){
+    current_position_in_path ++;
+    if(current_position_in_path === friction){
+        current_position_in_path = 0;
+    }
+
+    var camPos = spline.getPoint( current_position_in_path / friction);
+    var camRot = spline.getTangent( current_position_in_path / friction);
+    camera.position.x = camPos.x;
+    camera.position.y = camPos.y;
+    camera.position.z = camPos.z;
+
+    camera.rotation.x = camRot.x;
+    camera.rotation.y = camRot.y;
+    camera.rotation.z = camRot.z;
+    camera.lookAt(spline.getPoint((current_position_in_path + 1) / friction));
 }
