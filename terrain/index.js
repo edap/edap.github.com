@@ -157,6 +157,9 @@ function moveCamera(){
     // use the rotation too
     //var camRot = spline.getTangent(t);
     //camera.rotation.set(camRot.x,camRot.y,camRot.z);
+    // even better, using quaternions
+    // http://stackoverflow.com/questions/18400667/three-js-object-following-a-spline-path-rotation-tanget-issues-constant-sp
+    // http://stackoverflow.com/questions/11179327/orient-objects-rotation-to-a-spline-point-tangent-in-three-js
     camera.lookAt(spline.getPointAt(t + cameraSpeed * 2));
     t = (t >= 0.99) ? 0 : t += cameraSpeed;
 }
