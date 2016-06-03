@@ -39,6 +39,11 @@ function init() {
     terrain = new THREE.Mesh( geometryPlane, customMaterial );
     scene.add( terrain );
 
+    var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+    var splineGeometry = createSplineGeometry();
+    var splineObject = new THREE.Line( splineGeometry, material );
+    scene.add( splineObject );
+
     addGui( customMaterial );
     addStats();
 }
@@ -57,6 +62,29 @@ function createCustomMaterial( texture ) {
     });
 
     return customMaterial;
+}
+
+function createSplineGeometry(){
+    //Create a closed bent a sine-like wave
+    var curve = new THREE.CatmullRomCurve3( [
+        new THREE.Vector3( 180, 0, 0 ),
+        new THREE.Vector3( 1800, 0, 0 ),
+        new THREE.Vector3( 1800, 1800, 0 ),
+        new THREE.Vector3( 0, 1800, 0 ),
+        new THREE.Vector3( 0, 1000, 0 ),
+        new THREE.Vector3( 800, 1000, 0 ),
+        new THREE.Vector3( 1200, 500, 0 ),
+        new THREE.Vector3( 0, 600, 0 ),
+        new THREE.Vector3( 0, 300, 0 ),
+        new THREE.Vector3( 80, 50, 0 ),
+        new THREE.Vector3( 180, 0, 0 ),
+    ] );
+
+    var geometry = new THREE.Geometry();
+    geometry.vertices = curve.getPoints( 80 );
+    geometry.applyMatrix( new THREE.Matrix4().makeTranslation( -1000, -1000, 0 ) );
+    geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2.5) );
+    return geometry;
 }
 
 function loadTexture( filename ){
