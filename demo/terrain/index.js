@@ -122,11 +122,11 @@ function init(svgPath, bumpTexture) {
     scene.add( terrain );
 
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-    spline = createCurve();
+    //spline = createCurve();
+    spline = readSvg(svgPath);
     pathGeometry = createSplineGeometry(spline);
     var splineObject = new THREE.Line( pathGeometry, material );
-    //scene.add( splineObject );
-
+    scene.add( splineObject );
 
     camera.position.set(pathGeometry.vertices[0]);
     addGui( customMaterial );
@@ -203,13 +203,13 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame( animate );
-  //controls.update();
+  controls.update();
   render();
   stats.update();
 }
 
 function render() {
-    moveCamera();
+    //moveCamera();
     renderer.render( scene, camera );
 }
 
