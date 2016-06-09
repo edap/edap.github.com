@@ -19,13 +19,11 @@ var loadSvg = function ( filename ) {
         filename,
         //success callback
         function( svg ){
-            console.log('done');
-            d.resolve();
+            d.resolve(svg);
         },
         //progress callback
         function ( xhr ) {
-            //d.notify();
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
         },
         //error callback
         function( error ){
@@ -36,10 +34,33 @@ var loadSvg = function ( filename ) {
     return d.promise();
 };
 
-//if model loaded OK
-$.when(loadSvg('path.svg')).then(
-        function() {
-            init();
+var loadTexture = function( filename ){
+    var d = $.Deferred();
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.load(
+            filename,
+            //success callback
+            function( texture ){
+                d.resolve(texture);
+            },
+            //progress callback
+            function ( xhr ) {
+                d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            //error callback
+            function( error ){
+                console.log( 'error while loading texture' );
+                d.reject(error);
+            }
+
+    );
+    return d.promise();
+}
+
+$.when(loadSvg('path.svg'), loadTexture('terrain.png')).then(
+        function(svg, texture) {
+            init(svg, texture);
+            terrain.visible = true;
             animate();
         },
         function(error) {
@@ -47,7 +68,31 @@ $.when(loadSvg('path.svg')).then(
         }
 );
 
-function init() {
+function readSvg(svgPath){
+    var vertices = [];
+    var points = svgPath.getElementById('Unnamed #1').getAttribute('d').split("            ");
+    var position = points[0];
+    var curvePoints = points.slice(1);
+    for(var i = 0; i< curvePoints.length; i++){
+        var arc = curvePoints[i].trim();
+        var coordinates = arc.split(' ');
+        for(var x = 0; x < coordinates.length; x++ ){
+            var point = coordinates[x];
+            // remove C and Z. We already know that is a curve and that is
+            // closes
+            if(point.length > 1){
+                var pointCoord = point.split(',');
+                vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
+            }
+        }
+    }
+    var spline = new THREE.CatmullRomCurve3( vertices );
+    spline.closed = true;
+    return spline;
+}
+
+function init(svgPath, bumpTexture) {
+    //readSvg(svgPath);
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 4000 );
     //camera.position.z = camera_z_position;
     controls = new THREE.OrbitControls( camera );
@@ -68,7 +113,7 @@ function init() {
 
     window.addEventListener( 'resize', onWindowResize, false );
 
-    var bumpTexture = loadTexture( 'terrain.png' );
+    bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
     var customMaterial = createCustomMaterial( bumpTexture );
 
     var geometryPlane = new THREE.PlaneBufferGeometry(1024, 1024, 50, 50);
@@ -133,17 +178,6 @@ function createSplineGeometry(curve){
     var geometry = new THREE.Geometry();
     geometry.vertices = curve.getPoints( 100 );
     return geometry;
-}
-
-function loadTexture( filename ){
-    var loadingManager = new THREE.LoadingManager( function(){
-        terrain.visible = true;
-    });
-    var textureLoader = new THREE.TextureLoader( loadingManager );
-    var bumpTexture = textureLoader.load(filename);
-    bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
-
-    return bumpTexture;
 }
 
 
