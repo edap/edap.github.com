@@ -105,8 +105,39 @@ void main() {
 }
 ```
 
-
 ## Create the path
+
+Now we will load the svg file to create the spline along which the camera will move. You have to scale your gimp xfc project to have the same dimension of the geometry plane, if they are differents. In my case I've a plane that is 2000x2000, and I've scaled my gimp image accordingly (click on image -> scale, the path will automatically scaled too). 
+
+We first have to load the svg file (see the code in the demo about how to load resources using promises), then we have to parse the svg file to find out the coordinates of the vertices that will compose the path.
+Inspecting the loaded element, we can see how the svg is structured.
+![no-path](/assets/media/posts/get_svg.png)
+The points are stored in the `d` attribute. `M` is the position of the origin, `C` is the curve [command](https://www.w3.org/TR/SVG/paths.html#PathDataCurveCommands) and `Z` means [close the path](https://www.w3.org/TR/SVG/paths.html#PathDataClosePathCommand).
+
+There are many javascript libraries to parse svg, the popular one is probably [raphael](http://dmitrybaranovskiy.github.io/raphael/),  will use this library in the future because I don't like my solution but for now I've simply written this function. 
+
+```javascript
+function readVerticesInSvg(svgPath){
+    var vertices = [];
+    var points = svgPath.getElementById('Unnamed #1').getAttribute('d').split("            ");
+    var position = points[0];
+    var curvePoints = points.slice(1);
+    for(var i = 0; i< curvePoints.length; i++){
+        var arc = curvePoints[i].trim();
+        var coordinates = arc.split(' ');
+        for(var x = 0; x < coordinates.length; x++ ){
+            var point = coordinates[x];
+            // remove C and Z. We already know that is a curve and that is
+            // closes
+            if(point.length > 1){
+                var pointCoord = point.split(',');
+                vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
+            }
+        }
+    }
+    return vertices;
+}
+```
 
 ## Move camera along the path
 

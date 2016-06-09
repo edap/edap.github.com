@@ -7,7 +7,7 @@ var terrain;
 var pathGeometry;
 var spline;
 var t = 0;
-var cameraSpeed = 0.0006;
+var cameraSpeed = 0.0003;
 var current_position_in_path = 0;
 var plane_rotation = Math.PI/2;
 var camera_z_position = 2000;
@@ -78,8 +78,6 @@ function readVerticesInSvg(svgPath){
         var coordinates = arc.split(' ');
         for(var x = 0; x < coordinates.length; x++ ){
             var point = coordinates[x];
-            // remove C and Z. We already know that is a curve and that is
-            // closes
             if(point.length > 1){
                 var pointCoord = point.split(',');
                 vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
@@ -89,6 +87,44 @@ function readVerticesInSvg(svgPath){
 
     return vertices;
 }
+
+//copia filter da questa funzione, usa solo il middle point e vedi cosa ottieni
+// scrivi cosa hai imparato sulle curve
+function createClosedCurveSvg(svgPath){
+    var path = new THREE.CurvePath();
+    path.autoClose = true;
+    var points = svgPath.getElementById('Unnamed #1').getAttribute('d').split("            ");
+    var position = points[0];
+    var curvePoints = points.slice(1);
+    for(var i = 0; i< curvePoints.length; i++){
+        var arc = curvePoints[i].trim();
+        var coordinates = arc.split(' ');
+        // remove C and Z. We already know that is a curve and that is
+        // closed
+        var points = coordinates.filter(function(e){ return e.length > 1;});
+        var point1 = points[0].split(',');
+        var point2 = points[1].split(',');
+        var point3 = points[2].split(',');
+
+        var offset = 0;
+
+        var curve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(point1[0], point1[1], 0)
+                .applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, offset ) )
+                .applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) ),
+            new THREE.Vector3(point2[0], point2[1], 0)
+                .applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, offset ) )
+                .applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) ),
+            new THREE.Vector3(point3[0], point3[1], 0)
+                .applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, offset ) )
+                .applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) )
+        );
+
+        path.add(curve);
+    }
+    return path;
+}
+
 
 function init(svgPath, bumpTexture) {
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 4000 );
@@ -161,10 +197,9 @@ function createCurveFromVertices(vertices){
 
 function createSplineGeometry(curve){
     var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints( 100 );
+    geometry.vertices = curve.getPoints( 1000 );
     return geometry;
 }
-
 
 function addGui(customMaterial){
     gui = new dat.GUI();
