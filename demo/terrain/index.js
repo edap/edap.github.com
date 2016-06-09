@@ -7,10 +7,10 @@ var terrain;
 var pathGeometry;
 var spline;
 var t = 0;
-var cameraSpeed = 0.0012;
+var cameraSpeed = 0.0006;
 var current_position_in_path = 0;
 var plane_rotation = Math.PI/2;
-var camera_z_position = 1000;
+var camera_z_position = 2000;
 
 var loadSvg = function ( filename ) {
     var d = $.Deferred();
@@ -68,7 +68,7 @@ $.when(loadSvg('path.svg'), loadTexture('terrain.png')).then(
         }
 );
 
-function readSvg(svgPath){
+function readVerticesInSvg(svgPath){
     var vertices = [];
     var points = svgPath.getElementById('Unnamed #1').getAttribute('d').split("            ");
     var position = points[0];
@@ -86,15 +86,13 @@ function readSvg(svgPath){
             }
         }
     }
-    var spline = new THREE.CatmullRomCurve3( vertices );
-    spline.closed = true;
-    return spline;
+
+    return vertices;
 }
 
 function init(svgPath, bumpTexture) {
-    //readSvg(svgPath);
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 4000 );
-    //camera.position.z = camera_z_position;
+    camera.position.z = camera_z_position;
     controls = new THREE.OrbitControls( camera );
     controls.addEventListener( 'change', render );
     scene = new THREE.Scene();
@@ -116,19 +114,20 @@ function init(svgPath, bumpTexture) {
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
     var customMaterial = createCustomMaterial( bumpTexture );
 
-    var geometryPlane = new THREE.PlaneBufferGeometry(1024, 1024, 50, 50);
+    var geometryPlane = new THREE.PlaneBufferGeometry(2000, 2000, 50, 50);
     geometryPlane.rotateX( - plane_rotation);
     terrain = new THREE.Mesh( geometryPlane, customMaterial );
     scene.add( terrain );
 
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-    //spline = createCurve();
-    spline = readSvg(svgPath);
+    var splineVertices = readVerticesInSvg(svgPath);
+    spline = createCurveFromVertices(splineVertices);
+
     pathGeometry = createSplineGeometry(spline);
     var splineObject = new THREE.Line( pathGeometry, material );
     scene.add( splineObject );
 
-    camera.position.set(pathGeometry.vertices[0]);
+    //camera.position.set(pathGeometry.vertices[0]);
     addGui( customMaterial );
     addStats();
 }
@@ -148,29 +147,15 @@ function createCustomMaterial( texture ) {
     return customMaterial;
 }
 
-function createCurve(){
-    var vertices =[
-        new THREE.Vector3( 180, 0, 0 ),
-        new THREE.Vector3( 1800, 0, 0 ),
-        new THREE.Vector3( 1800, 1800, 0 ),
-        new THREE.Vector3( 0, 1800, 0 ),
-        new THREE.Vector3( 0, 1000, 0 ),
-        new THREE.Vector3( 800, 1000, 0 ),
-        new THREE.Vector3( 1200, 500, 0 ),
-        new THREE.Vector3( 0, 600, 0 ),
-        new THREE.Vector3( 0, 300, 0 ),
-        new THREE.Vector3( 80, 50, 0 ),
-        new THREE.Vector3( 180, 0, 0 ),
-    ];
-
+function createCurveFromVertices(vertices){
     // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
     for (i = 0; i< vertices.length; i++){
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, 200 ) );
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( - plane_rotation) );
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeScale(0.8,0.8,0.8));
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, -100 ) );
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) );
     }
     //var curve = new THREE.SplineCurve3( vertices );
     var curve = new THREE.CatmullRomCurve3( vertices );
+    curve.closed = true;
     return curve;
 }
 
@@ -203,7 +188,6 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame( animate );
-  controls.update();
   render();
   stats.update();
 }
