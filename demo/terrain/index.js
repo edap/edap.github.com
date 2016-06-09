@@ -12,10 +12,40 @@ var current_position_in_path = 0;
 var plane_rotation = Math.PI/2;
 var camera_z_position = 1000;
 
+var loadSvg = function ( filename ) {
+    var d = $.Deferred();
+    var svgLoader = new THREE.SVGLoader();
+    svgLoader.load(
+        filename,
+        //success callback
+        function( svg ){
+            console.log('done');
+            d.resolve();
+        },
+        //progress callback
+        function ( xhr ) {
+            //d.notify();
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+        //error callback
+        function( error ){
+            console.log( 'error while loading svg' );
+            d.reject(error);
+        }
+    );
+    return d.promise();
+};
 
 //if model loaded OK
-init();
-animate();
+$.when(loadSvg('path.svg')).then(
+        function() {
+            init();
+            animate();
+        },
+        function(error) {
+            console.log(error);
+        }
+);
 
 function init() {
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 4000 );
@@ -45,8 +75,6 @@ function init() {
     geometryPlane.rotateX( - plane_rotation);
     terrain = new THREE.Mesh( geometryPlane, customMaterial );
     scene.add( terrain );
-
-    var path = loadSvg('path.svg');
 
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     spline = createCurve();
@@ -116,23 +144,6 @@ function loadTexture( filename ){
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
 
     return bumpTexture;
-}
-
-function loadSvg( filename ){
-    var svgLoader = new THREE.SVGLoader();
-    svgLoader.load(
-        filename,
-        //success callback
-        function( svg ){
-            console.log('done');
-        },
-        //progress callback
-        function ( xhr ) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-        },
-        //error callback
-        function( xhr ){ console.log( 'error while loading svg' )}
-    );
 }
 
 
