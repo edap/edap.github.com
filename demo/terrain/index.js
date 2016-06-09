@@ -38,13 +38,15 @@ function init() {
 
     window.addEventListener( 'resize', onWindowResize, false );
 
-    var bumpTexture = loadTexture( 'noise.png' );
+    var bumpTexture = loadTexture( 'terrain.png' );
     var customMaterial = createCustomMaterial( bumpTexture );
 
-    var geometryPlane = new THREE.PlaneBufferGeometry(2000, 2000, 50, 50);
+    var geometryPlane = new THREE.PlaneBufferGeometry(1024, 1024, 50, 50);
     geometryPlane.rotateX( - plane_rotation);
     terrain = new THREE.Mesh( geometryPlane, customMaterial );
     scene.add( terrain );
+
+    var path = loadSvg('path.svg');
 
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     spline = createCurve();
@@ -59,7 +61,6 @@ function init() {
 }
 
 function createCustomMaterial( texture ) {
-    //var material = new THREE.MeshBasicMaterial({ map : groundTexture})
     var myUniforms = {
         bumpScale: {type: 'f', value: bumpScale},
         bumpTexture: {type: 't', value: texture}
@@ -111,11 +112,29 @@ function loadTexture( filename ){
         terrain.visible = true;
     });
     var textureLoader = new THREE.TextureLoader( loadingManager );
-    var bumpTexture = textureLoader.load('noise.png');
+    var bumpTexture = textureLoader.load(filename);
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
 
     return bumpTexture;
 }
+
+function loadSvg( filename ){
+    var svgLoader = new THREE.SVGLoader();
+    svgLoader.load(
+        filename,
+        //success callback
+        function( svg ){
+            console.log('done');
+        },
+        //progress callback
+        function ( xhr ) {
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+        //error callback
+        function( xhr ){ console.log( 'error while loading svg' )}
+    );
+}
+
 
 function addGui(customMaterial){
     gui = new dat.GUI();

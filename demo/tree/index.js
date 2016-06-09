@@ -17,7 +17,7 @@ var speed = 3;
     this.add(this.sphere);
   }
 
-var loadTree = function() {
+var loadTree = function(plyFile) {
     var d = $.Deferred();
 
     scene = new THREE.Scene();
@@ -44,46 +44,57 @@ var loadTree = function() {
     customMaterial.side = THREE.BackSide;
 
     var loader = new THREE.PLYLoader();
-    loader.load( plyFile, function ( ofMesh ) {
-        ofMesh.computeFaceNormals();
-        ofMesh.computeVertexNormals();
-        var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
+    loader.load( plyFile,
+        // success callback
+        function ( ofMesh ) {
+            ofMesh.computeFaceNormals();
+            ofMesh.computeVertexNormals();
+            var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
 
-        //displacement
-        displacement = new Float32Array( treeGeometry.attributes.position.count );
-        noise = new Float32Array( treeGeometry.attributes.position.count );
-        for ( var i = 0; i < displacement.length; i ++ ) {
-            noise[ i ] = Math.random() * 5;
+            //displacement
+            displacement = new Float32Array( treeGeometry.attributes.position.count );
+            noise = new Float32Array( treeGeometry.attributes.position.count );
+            for ( var i = 0; i < displacement.length; i ++ ) {
+                noise[ i ] = Math.random() * 5;
+            }
+            treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
+            //fine displacement
+            var n = 0;
+            var inc = (camera_z_position * 2) / nTree;
+            for (var zpos = -camera_z_position; zpos < camera_z_position; zpos += inc) {
+                //debugger
+                var tree = new THREE.Mesh( treeGeometry, customMaterial );
+                var pos = getRandomPosition();
+                tree.position.z = zpos;
+                tree.position.x = pos.x;
+                tree.position.y = pos.y;
+                tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
+                tree.scale.multiplyScalar( 1 );
+                trees.push(tree);
+                n++;
+            }
+            d.resolve();
+        },
+        // progress
+        function(xhr) {
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+        // error
+        function( error ){
+            d.reject(error);
         }
-        treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
-        //fine displacement
-        var n = 0;
-        var inc = (camera_z_position * 2) / nTree;
-        for (var zpos = -camera_z_position; zpos < camera_z_position; zpos += inc) {
-            //debugger
-            var tree = new THREE.Mesh( treeGeometry, customMaterial );
-            var pos = getRandomPosition();
-            tree.position.z = zpos;
-            tree.position.x = pos.x;
-            tree.position.y = pos.y;
-            tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
-            tree.scale.multiplyScalar( 1 );
-            trees.push(tree);
-            n++;
-        }
-        d.resolve();
-    });
+    );
     return d.promise();
 };
 
-$.when(loadTree()).then(function(){
+$.when(loadTree(plyFile)).then(function(){
         init();
         animate();
     },
     //if smth went wrong
     // TODO add error messages
-    function(){
-        console.log("i was not able to load the assets");
+    function(error){
+        console.log(error);
     }
 );
 
