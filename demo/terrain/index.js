@@ -9,9 +9,38 @@ var pathGeometry;
 var spline;
 var t = 0;
 var cameraSpeed = 0.0001;
-var plane_rotation = Math.PI/2;
-var camera_z_position = 2000;
+var jumpFactor = 0.009; // how often is the camera jumping
+var planeRotation = Math.PI/2;
+var cameraZposition = 2000;
 var curveDensity = 600;
+var cameraHeight = 10;
+
+var barkingDog = false;
+var barkingDogSound;
+
+var loadAudio = function (filename) {
+    var d = $.Deferred();
+    var audioLoader = new THREE.AudioLoader();
+    audioLoader.load(
+        filename,
+        //success callback
+        function (audioBuffer) {
+            d.resolve(audioBuffer);
+        },
+        //progress callback
+        function (xhr) {
+            d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        //error callback
+        function (error) {
+            console.log( 'error while loading audio' );
+            d.reject(error);
+        }
+    );
+    return d.promise();
+};
+
+
 
 var loadSvg = function (filename) {
     var d = $.Deferred();
@@ -58,9 +87,12 @@ var loadTexture = function (filename){
     return d.promise();
 };
 
-$.when( loadSvg('path.svg'), loadTexture('terrain.png') ).then(
-        function (svg, texture) {
-            init(svg, texture);
+$.when( loadSvg('path.svg'),
+        loadTexture('terrain.png'),
+        loadAudio('dog.mp3')
+      ).then(
+        function (svg, texture, audioBuffer) {
+            init(svg, texture, audioBuffer);
             terrain.visible = true;
             animate();
         },
@@ -94,21 +126,25 @@ function createCurveFromVertices(vertices){
     // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
     for (i = 0; i< vertices.length; i++) {
         // center the path on the terrain
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -side/2, -side/2, -10 ) );
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -side/2, -side/2, -cameraHeight ) );
         // apply a rotation to the path that is equal to the rotation applied to the plane
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) );
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + planeRotation) );
     }
     var curve = new THREE.CatmullRomCurve3(vertices);
     curve.closed = true;
     return curve;
 }
 
-function init(svgPath, bumpTexture) {
+function init(svgPath, bumpTexture, audioBuffer) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
-    camera.position.z = camera_z_position;
+    camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
     scene = new THREE.Scene();
+
+    initAudio();
+    scene.add( barkingDogSound );
+    barkingDogSound.setBuffer(audioBuffer);
 
     // Create Light
     var light = new THREE.PointLight(0xFFFFFF);
@@ -128,7 +164,7 @@ function init(svgPath, bumpTexture) {
     var customMaterial = createCustomMaterial(bumpTexture);
 
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
-    geometryPlane.rotateX( - plane_rotation);
+    geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
     scene.add(terrain);
 
@@ -140,8 +176,33 @@ function init(svgPath, bumpTexture) {
     scene.add(splineObject);
 
     addGui(customMaterial);
+    document.body.addEventListener("keypress", maybeSpacebarPressed);
     addStats();
 }
+
+function maybeSpacebarPressed(e){
+    if (e.keyCode === 0 || e.keyCode === 32) {
+        e.preventDefault();
+        barkingDog = !barkingDog;
+        if (barkingDog) {
+            cameraSpeed = 0.0003;
+            jumpFactor = 0.02;
+            barkingDogSound.play();
+        } else {
+            cameraSpeed = 0.0001;
+            jumpFactor = 0.009; // how often is the camera jumping
+            barkingDogSound.stop();
+        }
+    }
+}
+
+function initAudio(){
+    var audioListener = new THREE.AudioListener();
+    camera.add( audioListener );
+    barkingDogSound = new THREE.Audio( audioListener );
+    barkingDogSound.setLoop(true);
+}
+
 
 function createCustomMaterial(texture) {
     var myUniforms = {
@@ -197,8 +258,12 @@ function render() {
 
 function moveCamera() {
     var camPos = spline.getPointAt(t);
-    camera.position.set(camPos.x,camPos.y,camPos.z);
-    // no need to roatate beacuse the path is always on y = 0
+    var sinYpos = Math.sin(new Date().getTime() * jumpFactor) * cameraHeight;
+    //console.log(camPos.y);
+    var yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.5));
+    console.log(yPos);
+    camera.position.set(camPos.x, yPos, camPos.z);
+    // no need to rotate beacuse the path is always on y = 0
     // if in the future you will have a path that goes up and down
     // use the rotation too
     // var camRot = spline.getTangent(t);
@@ -206,6 +271,13 @@ function moveCamera() {
     // even better, using quaternions
     // http://stackoverflow.com/questions/18400667/three-js-object-following-a-spline-path-rotation-tanget-issues-constant-sp
     // http://stackoverflow.com/questions/11179327/orient-objects-rotation-to-a-spline-point-tangent-in-three-js
-    camera.lookAt(spline.getPointAt(t + cameraSpeed * 15));
+    var look = spline.getPointAt(t + cameraSpeed * 20);
+    // the lookAt position is just 20 points ahead the current position
+    look.y = yPos;
+    camera.lookAt(look);
     t = (t >= 0.99) ? 0 : t += cameraSpeed;
+}
+
+Number.prototype.map = function (in_min, in_max, out_min, out_max) {
+  return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
