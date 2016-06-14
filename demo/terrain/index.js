@@ -1,6 +1,7 @@
 var container, camera, controls, scene, renderer, stats, gui;
 //Terrain
 var bumpScale = 200;
+var side = 2000;
 var terrain;
 
 //Path and camera
@@ -11,22 +12,23 @@ var cameraSpeed = 0.0003;
 var current_position_in_path = 0;
 var plane_rotation = Math.PI/2;
 var camera_z_position = 2000;
+var curveDensity = 1000;
 
-var loadSvg = function ( filename ) {
+var loadSvg = function (filename) {
     var d = $.Deferred();
     var svgLoader = new THREE.SVGLoader();
     svgLoader.load(
         filename,
         //success callback
-        function( svg ){
+        function (svg) {
             d.resolve(svg);
         },
         //progress callback
-        function ( xhr ) {
+        function (xhr) {
             d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
         },
         //error callback
-        function( error ){
+        function (error) {
             console.log( 'error while loading svg' );
             d.reject(error);
         }
@@ -34,103 +36,79 @@ var loadSvg = function ( filename ) {
     return d.promise();
 };
 
-var loadTexture = function( filename ){
+var loadTexture = function (filename){
     var d = $.Deferred();
     var textureLoader = new THREE.TextureLoader();
     textureLoader.load(
             filename,
             //success callback
-            function( texture ){
+            function (texture) {
                 d.resolve(texture);
             },
             //progress callback
-            function ( xhr ) {
+            function (xhr) {
                 d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
             },
             //error callback
-            function( error ){
+            function (error) {
                 console.log( 'error while loading texture' );
                 d.reject(error);
             }
 
     );
     return d.promise();
-}
+};
 
-$.when(loadSvg('path.svg'), loadTexture('terrain.png')).then(
-        function(svg, texture) {
+$.when( loadSvg('path.svg'), loadTexture('terrain.png') ).then(
+        function (svg, texture) {
             init(svg, texture);
             terrain.visible = true;
             animate();
         },
-        function(error) {
+        function (error) {
             console.log(error);
         }
 );
 
-function readVerticesInSvg(svgPath){
+function readVerticesInSvg(svgPath) {
     var vertices = [];
-    var points = svgPath.getElementById('Unnamed #1').getAttribute('d').split("            ");
+    //this is ugly
+    var points = svgPath.getElementById('Unnamed').getAttribute('d').split("            ");
     var position = points[0];
     var curvePoints = points.slice(1);
-    for(var i = 0; i< curvePoints.length; i++){
+    for (var i = 0; i< curvePoints.length; i++) {
         var arc = curvePoints[i].trim();
         var coordinates = arc.split(' ');
-        for(var x = 0; x < coordinates.length; x++ ){
-            var point = coordinates[x];
-            if(point.length > 1){
-                var pointCoord = point.split(',');
-                vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
-            }
+        //take only the middle point ([1]), discard the handles([0] and [2]) of the point of
+        //the bezier curve. We will use the Catmull-Rom curve
+        var point = coordinates[1];
+        // do not consider values like 'C' and 'Z' that has length == 1. We already know that is a curve and that is closed
+        if (point.length > 1) {
+            var pointCoord = point.split(',');
+            vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
         }
     }
-
     return vertices;
 }
 
-//copia filter da questa funzione, usa solo il middle point e vedi cosa ottieni
-// scrivi cosa hai imparato sulle curve
-function createClosedCurveSvg(svgPath){
-    var path = new THREE.CurvePath();
-    path.autoClose = true;
-    var points = svgPath.getElementById('Unnamed #1').getAttribute('d').split("            ");
-    var position = points[0];
-    var curvePoints = points.slice(1);
-    for(var i = 0; i< curvePoints.length; i++){
-        var arc = curvePoints[i].trim();
-        var coordinates = arc.split(' ');
-        // remove C and Z. We already know that is a curve and that is
-        // closed
-        var points = coordinates.filter(function(e){ return e.length > 1;});
-        var point1 = points[0].split(',');
-        var point2 = points[1].split(',');
-        var point3 = points[2].split(',');
-
-        var offset = 0;
-
-        var curve = new THREE.QuadraticBezierCurve3(
-            new THREE.Vector3(point1[0], point1[1], 0)
-                .applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, offset ) )
-                .applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) ),
-            new THREE.Vector3(point2[0], point2[1], 0)
-                .applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, offset ) )
-                .applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) ),
-            new THREE.Vector3(point3[0], point3[1], 0)
-                .applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, offset ) )
-                .applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) )
-        );
-
-        path.add(curve);
+function createCurveFromVertices(vertices){
+    // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
+    for (i = 0; i< vertices.length; i++) {
+        // center the path on the terrain
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -side/2, -side/2, -10 ) );
+        // apply a rotation to the path that is equal to the rotation applied to the plane
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) );
     }
-    return path;
+    var curve = new THREE.CatmullRomCurve3(vertices);
+    curve.closed = true;
+    return curve;
 }
 
-
 function init(svgPath, bumpTexture) {
-    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 4000 );
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = camera_z_position;
-    controls = new THREE.OrbitControls( camera );
-    controls.addEventListener( 'change', render );
+    controls = new THREE.OrbitControls(camera);
+    controls.addEventListener('change', render);
     scene = new THREE.Scene();
 
     // Create Light
@@ -143,34 +121,32 @@ function init(svgPath, bumpTexture) {
 
     //container DOM
     container = document.getElementById( 'container' );
-    container.appendChild( renderer.domElement );
+    container.appendChild(renderer.domElement);
 
-    window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener('resize', onWindowResize, false);
 
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
-    var customMaterial = createCustomMaterial( bumpTexture );
+    var customMaterial = createCustomMaterial(bumpTexture);
 
-    var geometryPlane = new THREE.PlaneBufferGeometry(2000, 2000, 50, 50);
+    var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - plane_rotation);
-    terrain = new THREE.Mesh( geometryPlane, customMaterial );
-    scene.add( terrain );
+    terrain = new THREE.Mesh(geometryPlane, customMaterial);
+    scene.add(terrain);
 
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
-
     pathGeometry = createSplineGeometry(spline);
-    var splineObject = new THREE.Line( pathGeometry, material );
-    scene.add( splineObject );
+    var splineObject = new THREE.Line(pathGeometry, material);
+    scene.add(splineObject);
 
-    //camera.position.set(pathGeometry.vertices[0]);
-    addGui( customMaterial );
+    addGui(customMaterial);
     addStats();
 }
 
-function createCustomMaterial( texture ) {
+function createCustomMaterial(texture) {
     var myUniforms = {
-        bumpScale: {type: 'f', value: bumpScale},
+        bumpScale:   {type: 'f', value: bumpScale},
         bumpTexture: {type: 't', value: texture}
     };
 
@@ -183,32 +159,20 @@ function createCustomMaterial( texture ) {
     return customMaterial;
 }
 
-function createCurveFromVertices(vertices){
-    // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
-    for (i = 0; i< vertices.length; i++){
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -1000, -1000, -100 ) );
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + plane_rotation) );
-    }
-    //var curve = new THREE.SplineCurve3( vertices );
-    var curve = new THREE.CatmullRomCurve3( vertices );
-    curve.closed = true;
-    return curve;
-}
-
-function createSplineGeometry(curve){
+function createSplineGeometry(curve) {
     var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints( 1000 );
+    geometry.vertices = curve.getPoints( curveDensity );
     return geometry;
 }
 
-function addGui(customMaterial){
+function addGui(customMaterial) {
     gui = new dat.GUI();
     gui.add(customMaterial.uniforms.bumpScale, 'value')
         .name('bumpScale').min(20).max(300).step(1.0);
     gui.close();
 }
 
-function addStats(){
+function addStats() {
     stats = new Stats();
     stats.showPanel( 0 );
     container.appendChild(stats.domElement);
@@ -228,18 +192,18 @@ function animate() {
 }
 
 function render() {
-    //moveCamera();
+    moveCamera();
     renderer.render( scene, camera );
 }
 
-function moveCamera(){
+function moveCamera() {
     var camPos = spline.getPointAt(t);
     camera.position.set(camPos.x,camPos.y,camPos.z);
     // no need to roatate beacuse the path is always on y = 0
     // if in the future you will have a path that goes up and down
     // use the rotation too
-    //var camRot = spline.getTangent(t);
-    //camera.rotation.set(camRot.x,camRot.y,camRot.z);
+    // var camRot = spline.getTangent(t);
+    // camera.rotation.set(camRot.x,camRot.y,camRot.z);
     // even better, using quaternions
     // http://stackoverflow.com/questions/18400667/three-js-object-following-a-spline-path-rotation-tanget-issues-constant-sp
     // http://stackoverflow.com/questions/11179327/orient-objects-rotation-to-a-spline-point-tangent-in-three-js
