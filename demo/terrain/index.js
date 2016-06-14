@@ -1,20 +1,21 @@
 var container, camera, controls, scene, renderer, stats, gui;
 //Terrain
-var bumpScale = 200;
-var side = 2000;
-var terrain;
+var bumpScale = 200; // how much tha bumb affects the heights
+var side = 2000; // side of the plane
+var terrain; // Plane geometry
+var planeRotation = Math.PI/2;
 
 //Path and camera
-var pathGeometry;
-var spline;
-var t = 0;
+var pathGeometry; // path geometry
+var spline; // Catmull-Rom spline, used for the camera
+var t = 0; // value used to calculate the position of the camera along tha path
 var cameraSpeed = 0.0001;
 var jumpFactor = 0.009; // how often is the camera jumping
-var planeRotation = Math.PI/2;
 var cameraZposition = 2000;
-var curveDensity = 600;
-var cameraHeight = 10;
+var curveDensity = 600; // how many points define the path
+var cameraHeight = 10; // how high is the camera on the y axis
 
+//Sound
 var barkingDog = false;
 var barkingDogSound;
 
@@ -190,7 +191,7 @@ function maybeSpacebarPressed(e){
             barkingDogSound.play();
         } else {
             cameraSpeed = 0.0001;
-            jumpFactor = 0.009; // how often is the camera jumping
+            jumpFactor = 0.009;
             barkingDogSound.stop();
         }
     }
