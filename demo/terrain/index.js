@@ -5,6 +5,9 @@ var side = 2000; // side of the plane
 var terrain; // Plane geometry
 var planeRotation = Math.PI/2;
 
+// Background
+var backgroundScene, backgroundCamera, backgroundMesh;
+
 //Path and camera
 var pathGeometry; // path geometry
 var spline; // Catmull-Rom spline, used for the camera
@@ -90,10 +93,11 @@ var loadTexture = function (filename){
 
 $.when( loadSvg('path.svg'),
         loadTexture('terrain.png'),
+        loadTexture('bg.jpg'),
         loadAudio('dog.mp3')
       ).then(
-        function (svg, texture, audioBuffer) {
-            init(svg, texture, audioBuffer);
+        function (svg, texture, backgroundTexture, audioBuffer) {
+            init(svg, texture, backgroundTexture, audioBuffer);
             terrain.visible = true;
             animate();
         },
@@ -136,23 +140,27 @@ function createCurveFromVertices(vertices){
     return curve;
 }
 
-function init(svgPath, bumpTexture, audioBuffer) {
+function init(svgPath, bumpTexture, backgroundTexture, audioBuffer) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
     scene = new THREE.Scene();
 
+    //audio
     initAudio();
     scene.add( barkingDogSound );
     barkingDogSound.setBuffer(audioBuffer);
+
+    //background
+    initBackground(backgroundTexture);
 
     // Create Light
     var light = new THREE.PointLight(0xFFFFFF);
     light.position.set(0, 0, 500);
     scene.add(light);
 
-    renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
+    renderer = new THREE.WebGLRenderer( { antialias: false, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
     //container DOM
@@ -161,14 +169,15 @@ function init(svgPath, bumpTexture, audioBuffer) {
 
     window.addEventListener('resize', onWindowResize, false);
 
+    //terrain
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
     var customMaterial = createCustomMaterial(bumpTexture);
-
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
     scene.add(terrain);
 
+    //path
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
@@ -202,6 +211,21 @@ function initAudio(){
     camera.add( audioListener );
     barkingDogSound = new THREE.Audio( audioListener );
     barkingDogSound.setLoop(true);
+}
+
+function initBackground(backgroundTexture) {
+    var backgroundMesh = new THREE.Mesh(
+        new THREE.PlaneBufferGeometry(2, 2, 0),
+        new THREE.MeshBasicMaterial({
+            map: backgroundTexture
+        }));
+    backgroundMesh.material.depthTest = false;
+    backgroundMesh.material.depthWrite = false;
+
+    backgroundScene = new THREE.Scene();
+    backgroundCamera = new THREE.Camera();
+    backgroundScene.add(backgroundCamera );
+    backgroundScene.add(backgroundMesh );
 }
 
 
@@ -253,16 +277,18 @@ function animate() {
 }
 
 function render() {
+    renderer.autoClear = false;
+    renderer.clear();
     moveCamera();
+//debugger
+    renderer.render(backgroundScene, backgroundCamera);
     renderer.render( scene, camera );
 }
 
 function moveCamera() {
     var camPos = spline.getPointAt(t);
     var sinYpos = Math.sin(new Date().getTime() * jumpFactor) * cameraHeight;
-    //console.log(camPos.y);
     var yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.5));
-    console.log(yPos);
     camera.position.set(camPos.x, yPos, camPos.z);
     // no need to rotate beacuse the path is always on y = 0
     // if in the future you will have a path that goes up and down
