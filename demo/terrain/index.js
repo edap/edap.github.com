@@ -8,11 +8,10 @@ var terrain;
 var pathGeometry;
 var spline;
 var t = 0;
-var cameraSpeed = 0.0003;
-var current_position_in_path = 0;
+var cameraSpeed = 0.0001;
 var plane_rotation = Math.PI/2;
 var camera_z_position = 2000;
-var curveDensity = 1000;
+var curveDensity = 600;
 
 var loadSvg = function (filename) {
     var d = $.Deferred();
@@ -174,7 +173,7 @@ function addGui(customMaterial) {
 
 function addStats() {
     stats = new Stats();
-    stats.showPanel( 0 );
+    stats.showPanel(0);
     container.appendChild(stats.domElement);
 }
 
@@ -207,6 +206,6 @@ function moveCamera() {
     // even better, using quaternions
     // http://stackoverflow.com/questions/18400667/three-js-object-following-a-spline-path-rotation-tanget-issues-constant-sp
     // http://stackoverflow.com/questions/11179327/orient-objects-rotation-to-a-spline-point-tangent-in-three-js
-    camera.lookAt(spline.getPointAt(t + cameraSpeed * 2));
+    camera.lookAt(spline.getPointAt(t + cameraSpeed * 15));
     t = (t >= 0.99) ? 0 : t += cameraSpeed;
 }
