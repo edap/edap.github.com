@@ -154,6 +154,8 @@ function init(svgPath, bumpTexture, backgroundTexture, audioBuffer) {
 
     //background
     initBackground(backgroundTexture);
+    backgroundScene.add(backgroundCamera );
+    backgroundScene.add(backgroundMesh );
 
     // Create Light
     var light = new THREE.PointLight(0xFFFFFF);
@@ -280,7 +282,6 @@ function render() {
     renderer.autoClear = false;
     renderer.clear();
     moveCamera();
-//debugger
     renderer.render(backgroundScene, backgroundCamera);
     renderer.render( scene, camera );
 }
