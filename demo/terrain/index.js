@@ -93,11 +93,13 @@ var loadTexture = function (filename){
 
 $.when( loadSvg('path.svg'),
         loadTexture('terrain.png'),
+        loadTexture('rock-top512.jpg'),
+        loadTexture('rock-bottom512.jpg'),
         loadTexture('bg.jpg'),
         loadAudio('dog.mp3')
       ).then(
-        function (svg, texture, backgroundTexture, audioBuffer) {
-            init(svg, texture, backgroundTexture, audioBuffer);
+        function (svg, texture, rockTop, rockBottom, backgroundTexture, audioBuffer) {
+            init(svg, texture, rockTop, rockBottom, backgroundTexture, audioBuffer);
             terrain.visible = true;
             animate();
         },
@@ -140,7 +142,7 @@ function createCurveFromVertices(vertices){
     return curve;
 }
 
-function init(svgPath, bumpTexture, backgroundTexture, audioBuffer) {
+function init(svgPath, bumpTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
@@ -173,7 +175,11 @@ function init(svgPath, bumpTexture, backgroundTexture, audioBuffer) {
 
     //terrain
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
-    var customMaterial = createCustomMaterial(bumpTexture);
+    rockBottomTexture.wrapS = rockBottomTexture.wrapT = THREE.RepeatWrapping;
+    rockTopTexture.wrapS = rockTopTexture.wrapT = THREE.RepeatWrapping;
+    //grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+    //var customMaterial = createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
+    var customMaterial = createCustomMaterial(bumpTexture, rockBottomTexture, rockTopTexture);
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
@@ -230,11 +236,12 @@ function initBackground(backgroundTexture) {
     backgroundScene.add(backgroundMesh );
 }
 
-
-function createCustomMaterial(texture) {
+function createCustomMaterial(bumpTexture, rockBottomTexture, rockTopTexture) {
     var myUniforms = {
-        bumpScale:   {type: 'f', value: bumpScale},
-        bumpTexture: {type: 't', value: texture}
+        bumpScale:         {type: 'f', value: bumpScale},
+        bumpTexture:       {type: 't', value: bumpTexture},
+        rockTopTexture:    {type: 't', value: rockTopTexture},
+        rockBottomTexture: {type: 't', value: rockBottomTexture}
     };
 
     var customMaterial = new THREE.ShaderMaterial({
@@ -308,4 +315,4 @@ function moveCamera() {
 
 Number.prototype.map = function (in_min, in_max, out_min, out_max) {
   return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
+};
