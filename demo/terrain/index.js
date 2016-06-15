@@ -18,7 +18,7 @@ var cameraSpeed = 0.0001;
 var jumpFactor = 0.009; // how often is the camera jumping
 var cameraZposition = 2000;
 var curveDensity = 600; // how many points define the path
-var cameraHeight = 10; // how high is the camera on the y axis
+var cameraHeight = 15; // how high is the camera on the y axis
 
 //Sound
 var barkingDog = false;
@@ -94,13 +94,14 @@ var loadTexture = function (filename){
 
 $.when( loadSvg('path.svg'),
         loadTexture('terrain.png'),
+        loadTexture('grass512.jpg'),
         loadTexture('rock-top512.jpg'),
         loadTexture('rock-bottom512.jpg'),
         loadTexture('bg.jpg'),
         loadAudio('dog.mp3')
       ).then(
-        function (svg, texture, rockTop, rockBottom, backgroundTexture, audioBuffer) {
-            init(svg, texture, rockTop, rockBottom, backgroundTexture, audioBuffer);
+        function (svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer) {
+            init(svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer);
             terrain.visible = true;
             animate();
         },
@@ -143,7 +144,7 @@ function createCurveFromVertices(vertices){
     return curve;
 }
 
-function init(svgPath, bumpTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer) {
+function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
@@ -157,8 +158,6 @@ function init(svgPath, bumpTexture, rockTopTexture, rockBottomTexture, backgroun
 
     //background
     initBackground(backgroundTexture);
-    backgroundScene.add(backgroundCamera );
-    backgroundScene.add(backgroundMesh );
 
     // Create Light
     var light = new THREE.PointLight(0xFFFFFF);
@@ -178,9 +177,8 @@ function init(svgPath, bumpTexture, rockTopTexture, rockBottomTexture, backgroun
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
     rockBottomTexture.wrapS = rockBottomTexture.wrapT = THREE.RepeatWrapping;
     rockTopTexture.wrapS = rockTopTexture.wrapT = THREE.RepeatWrapping;
-    //grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
-    //var customMaterial = createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
-    var customMaterial = createCustomMaterial(bumpTexture, rockBottomTexture, rockTopTexture);
+    grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+    var customMaterial = createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
@@ -237,10 +235,11 @@ function initBackground(backgroundTexture) {
     backgroundScene.add(backgroundMesh );
 }
 
-function createCustomMaterial(bumpTexture, rockBottomTexture, rockTopTexture) {
+function createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture) {
     var myUniforms = {
         bumpScale:         {type: 'f', value: bumpScale},
         bumpTexture:       {type: 't', value: bumpTexture},
+        grassTexture:      {type: 't', value: grassTexture},
         rockTopTexture:    {type: 't', value: rockTopTexture},
         rockBottomTexture: {type: 't', value: rockBottomTexture}
     };
@@ -296,7 +295,8 @@ function render() {
 
 function moveCamera() {
     var camPos = spline.getPointAt(t);
-    var sinYpos = Math.sin(new Date().getTime() * jumpFactor) * cameraHeight;
+    //var sinYpos = Math.sin(new Date().getTime() * jumpFactor) * cameraHeight;
+    var sinYpos = cameraHeight;
     var yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.5));
     camera.position.set(camPos.x, yPos, camPos.z);
     // no need to rotate beacuse the path is always on y = 0
