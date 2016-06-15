@@ -1,5 +1,7 @@
+// Gereral
 var container, camera, controls, scene, renderer, stats, gui;
-//Terrain
+
+// Terrain
 var bumpScale = 200; // how much tha bumb affects the heights
 var side = 2000; // side of the plane
 var terrain; // Plane geometry
@@ -22,6 +24,7 @@ var cameraHeight = 10; // how high is the camera on the y axis
 var barkingDog = false;
 var barkingDogSound;
 
+// Loaders Promises
 var loadAudio = function (filename) {
     var d = $.Deferred();
     var audioLoader = new THREE.AudioLoader();
