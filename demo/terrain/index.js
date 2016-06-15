@@ -40,14 +40,12 @@ var loadAudio = function (filename) {
         },
         //error callback
         function (error) {
-            console.log( 'error while loading audio' );
+            console.log('error while loading audio: ' + filename);
             d.reject(error);
         }
     );
     return d.promise();
 };
-
-
 
 var loadSvg = function (filename) {
     var d = $.Deferred();
@@ -64,7 +62,7 @@ var loadSvg = function (filename) {
         },
         //error callback
         function (error) {
-            console.log( 'error while loading svg' );
+            console.log('error while loading svg:' + filename);
             d.reject(error);
         }
     );
@@ -86,7 +84,7 @@ var loadTexture = function (filename){
             },
             //error callback
             function (error) {
-                console.log( 'error while loading texture' );
+                console.log('error while loading texture: ' + filename);
                 d.reject(error);
             }
 
