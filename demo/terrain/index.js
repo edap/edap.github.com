@@ -3,7 +3,7 @@ var container, camera, controls, scene, renderer, stats, gui;
 
 // Terrain
 var bumpScale = 200; // how much tha bumb affects the heights
-var side = 2000; // side of the plane
+var side = 2048; // side of the plane
 var terrain; // Plane geometry
 var planeRotation = Math.PI/2;
 
@@ -25,7 +25,7 @@ var barkingDog = false;
 var barkingDogSound;
 
 //Trees
-var maxDistanceFromPath = 200; // how much the position of a tree can be different from the point on the path
+var maxDistanceFromPath = 100; // how much the position of a tree can be different from the point on the path
 
 // Loaders Promises
 var loadAudio = function (filename) {
@@ -186,22 +186,31 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
     pathGeometry = createSplineGeometry(spline);
-    var splineObject = new THREE.Line(pathGeometry, material);
-    scene.add(splineObject);
+    //var splineObject = new THREE.Line(pathGeometry, material);
+    //scene.add(splineObject);
 
     //tree
-    var trees = createTrees(treePly,scene.fog);
+    var trees = createTrees(treePly,scene.fog, bumpTexture);
     for(var n = 0; n < trees.length; n++){
         scene.add(trees[n]);
     }
-    //scene.add(trees);
 
     addGui(customMaterial);
     document.body.addEventListener("keypress", maybeSpacebarPressed);
     addStats();
 }
 
-function createTrees(ofMesh, fog){
+function createTrees(ofMesh, fog, bumpTexture){
+    var img = bumpTexture.image;
+    var canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.width;
+    var context = canvas.getContext('2d');
+    context.drawImage(img, 0, 0 );
+
+    //var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+    //window.location.href=image;
+
     var treeMaterial = createTreeMaterial(fog);
     ofMesh.computeFaceNormals();
     ofMesh.computeVertexNormals();
@@ -216,19 +225,30 @@ function createTrees(ofMesh, fog){
     treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     //fine displacement
     var trees = [];
+    var ratio = side / img.width
     for (var i = 0; i< spline.points.length; i++) {
-        if(i%3 === 0){
-            var tree = new THREE.Mesh( treeGeometry, treeMaterial );
-            var pos = spline.points[i];
-            tree.position.z = pos.z+ getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath);
-            tree.position.x = pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath);
-            tree.position.y = pos.y - cameraHeight;
-            tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
-            tree.scale.multiplyScalar( 0.1 );
-            trees.push(tree);
+        var pos = spline.points[i];
+        var density = 3;
+        for (var d = 0; d <= density; d++) {
+            var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
+            var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
+            var x = Math.floor((randX + side/2) / ratio);
+            var y = Math.floor((randY + side/2) / ratio);
+            // put thress only where there are no mountains (eg, the pixel is black)
+            if (context.getImageData(x, y, 1, 1).data[0] === 0) {
+                var tree = new THREE.Mesh( treeGeometry, treeMaterial );
+                tree.position.z = randY;
+                tree.position.x = randX;
+                tree.position.y = pos.y - cameraHeight;
+                tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
+                tree.scale.multiplyScalar( 0.1 );
+                trees.push(tree);
+            }
         }
 
     }
+
+    console.log(trees.length);
     return trees;
 }
 
