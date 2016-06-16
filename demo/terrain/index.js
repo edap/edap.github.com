@@ -93,7 +93,7 @@ var loadTexture = function (filename){
 };
 
 $.when( loadSvg('path.svg'),
-        loadTexture('terrain.png'),
+        loadTexture('terrain512.png'),
         //loadTexture('grass512.jpg'),
         loadTexture('grass-violet512.jpg'),
         loadTexture('rock-top512.jpg'),
