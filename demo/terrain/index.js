@@ -94,9 +94,12 @@ var loadTexture = function (filename){
 
 $.when( loadSvg('path.svg'),
         loadTexture('terrain.png'),
-        loadTexture('grass512.jpg'),
+        //loadTexture('grass512.jpg'),
+        loadTexture('grass-violet512.jpg'),
         loadTexture('rock-top512.jpg'),
-        loadTexture('rock-bottom512.jpg'),
+        //loadTexture('desertrock-dark512.jpg'),
+        //loadTexture('rock-dark512.jpg'),
+        loadTexture('desertrock-light512.jpg'),
         loadTexture('bg.jpg'),
         loadAudio('dog.mp3')
       ).then(

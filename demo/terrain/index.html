@@ -3,8 +3,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>plane</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
-  <body >
+  <body>
     <div id="container"></div>
     <script id="vertexShader" type="x-shader/x-vertex">
     uniform sampler2D bumpTexture;
@@ -43,13 +44,10 @@
       uniform sampler2D rockTopTexture;
 
       void main() {
-        //uncomment for colors
-        //vec3 color = vec3( vUV * ( 1. - 0.5 * vAmount ), 0.0 );
-        //gl_FragColor = vec4( color.rgb, 1.0 );
         //black and white
         //gl_FragColor = vec4(vAmount * 1.);
-        vec4 grass = (smoothstep(0.003, 0.01, vAmount) - smoothstep(0.006, 0.1, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
-        vec4 rocky = (smoothstep(0.01, 0.15, vAmount) - smoothstep(0.30, 0.55, vAmount)) * texture2D( rockBottomTexture, vUV * 20.0 );
+        vec4 grass = (smoothstep(0.003, 0.01, vAmount) - smoothstep(0.012, 0.19, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
+        vec4 rocky = (smoothstep(0.01, 0.20, vAmount) - smoothstep(0.30, 0.55, vAmount)) * texture2D( rockBottomTexture, vUV * 20.0 );
         vec4 snowy = (smoothstep(0.35, 0.65, vAmount))                                   * texture2D( rockTopTexture, vUV * 10.0 );
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0) + grass + rocky + snowy;
 
@@ -64,7 +62,6 @@
     <script type="text/javascript" src="../js/jquery-2.2.4.min.js"></script>
 
     <script type="text/javascript" src="index.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
 
 
 </body></html>
