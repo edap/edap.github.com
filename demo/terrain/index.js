@@ -24,6 +24,9 @@ var cameraHeight = 15; // how high is the camera on the y axis
 var barkingDog = false;
 var barkingDogSound;
 
+//Trees
+var maxDistanceFromPath = 200; // how much the position of a tree can be different from the point on the path
+
 // Loaders Promises
 var loadAudio = function (filename) {
     var d = $.Deferred();
@@ -162,10 +165,6 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     light.position.set(0, 0, 500);
     scene.add(light);
 
-    //tree
-    var trees = createTrees(treePly,scene.fog);
-    scene.add(trees);
-
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -190,6 +189,13 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     var splineObject = new THREE.Line(pathGeometry, material);
     scene.add(splineObject);
 
+    //tree
+    var trees = createTrees(treePly,scene.fog);
+    for(var n = 0; n < trees.length; n++){
+        scene.add(trees[n]);
+    }
+    //scene.add(trees);
+
     addGui(customMaterial);
     document.body.addEventListener("keypress", maybeSpacebarPressed);
     addStats();
@@ -209,9 +215,21 @@ function createTrees(ofMesh, fog){
     }
     treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     //fine displacement
+    var trees = [];
+    for (var i = 0; i< spline.points.length; i++) {
+        if(i%1 === 0){
+            var tree = new THREE.Mesh( treeGeometry, treeMaterial );
+            var pos = spline.points[i];
+            tree.position.z = pos.z+ getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath);
+            tree.position.x = pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath);
+            tree.position.y = pos.y - cameraHeight;
+            tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
+            tree.scale.multiplyScalar( 0.1 );
+            trees.push(tree);
+        }
 
-    var tree = new THREE.Mesh( treeGeometry, treeMaterial );
-    return tree;
+    }
+    return trees;
 }
 
 function createTreeMaterial(fog){
@@ -412,3 +430,9 @@ function createCurveFromVertices(vertices){
     curve.closed = true;
     return curve;
 }
+
+function getRandomArbitrary(min, max){
+    return Math.random() * (max -min) +min;
+}
+
+

@@ -164,7 +164,7 @@ function moveCamera() {
 
 ## Add the background
 
-To add the background I've created another scene and another camera, called `backgroundScene` and `backgroundCamera`. Everytime the render function is called, the screen get cleaned, then first the backgroundScene is rendered, and then the scene is rendered. Have a look at the `initBackground` function and at the `render` function.
+To add the background I've preferred to use a [skydome](http://www.ianww.com/blog/2014/02/17/making-a-skydome-in-three-dot-js/) instead a [skybox](https://aerotwist.com/tutorials/create-your-own-environment-maps/). It is simpler and and in my case it fits perfectly my needs because most of the time the mountains are covering the sky. It is also possible to obtain nice effect with small texture, in my example the texture is only 128x128 px. The method that take care of the background is called `createSkyBox`.
 
 ## Press the bar to enter the dog
 
