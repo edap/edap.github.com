@@ -141,13 +141,13 @@ $.when( loadSvg('path.svg'),
         }
 );
 
-function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer) {
+function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer, treePly) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
     scene = new THREE.Scene();
-
+    scene.fog = new THREE.FogExp2( 0x000000, 0.004 );
     //audio
     initAudio();
     scene.add( barkingDogSound );
@@ -161,6 +161,10 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     var light = new THREE.PointLight(0xFFFFFF);
     light.position.set(0, 0, 500);
     scene.add(light);
+
+    //tree
+    var trees = createTrees(treePly,scene.fog);
+    scene.add(trees);
 
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -189,6 +193,48 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     addGui(customMaterial);
     document.body.addEventListener("keypress", maybeSpacebarPressed);
     addStats();
+}
+
+function createTrees(ofMesh, fog){
+    var treeMaterial = createTreeMaterial(fog);
+    ofMesh.computeFaceNormals();
+    ofMesh.computeVertexNormals();
+    var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
+
+    //displacement
+    displacement = new Float32Array( treeGeometry.attributes.position.count );
+    noise = new Float32Array( treeGeometry.attributes.position.count );
+    for ( var i = 0; i < displacement.length; i ++ ) {
+        noise[ i ] = Math.random() * 5;
+    }
+    treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
+    //fine displacement
+
+    var tree = new THREE.Mesh( treeGeometry, treeMaterial );
+    return tree;
+}
+
+function createTreeMaterial(fog){
+    var tmp_uniforms = {
+        amplitude:  { type: "f", value: 1.0 },
+        fogDensity: { type: "f", value: fog.density},
+        fogColor:   { type: "c", value: fog.color},
+        color:      { type: "c", value: new THREE.Color( 0xff2200 ) },
+    };
+
+    var uniforms = THREE.UniformsUtils.merge([
+        THREE.UniformsLib['lights'],
+        tmp_uniforms
+    ]);
+    var customMaterial = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        fog: true,
+        lights: true,
+        vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShaderTree' ).textContent
+    });
+    customMaterial.side = THREE.BackSide;
+    return customMaterial;
 }
 
 function maybeSpacebarPressed(e){
