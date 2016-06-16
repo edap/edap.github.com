@@ -178,10 +178,6 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     window.addEventListener('resize', onWindowResize, false);
 
     //terrain
-    bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
-    rockBottomTexture.wrapS = rockBottomTexture.wrapT = THREE.RepeatWrapping;
-    rockTopTexture.wrapS = rockTopTexture.wrapT = THREE.RepeatWrapping;
-    grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
     var customMaterial = createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - planeRotation);
@@ -259,6 +255,11 @@ function initBackground(backgroundTexture) {
 }
 
 function createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture) {
+    bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
+    rockBottomTexture.wrapS = rockBottomTexture.wrapT = THREE.RepeatWrapping;
+    rockTopTexture.wrapS = rockTopTexture.wrapT = THREE.RepeatWrapping;
+    grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+
     var myUniforms = {
         bumpScale:         {type: 'f', value: bumpScale},
         bumpTexture:       {type: 't', value: bumpTexture},
