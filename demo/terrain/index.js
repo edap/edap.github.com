@@ -217,7 +217,7 @@ function createTrees(ofMesh, fog){
     //fine displacement
     var trees = [];
     for (var i = 0; i< spline.points.length; i++) {
-        if(i%1 === 0){
+        if(i%3 === 0){
             var tree = new THREE.Mesh( treeGeometry, treeMaterial );
             var pos = spline.points[i];
             tree.position.z = pos.z+ getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath);
@@ -355,16 +355,16 @@ function addStats() {
 }
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  render();
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    render();
 }
 
 function animate() {
-  requestAnimationFrame( animate );
-  render();
-  stats.update();
+    requestAnimationFrame( animate );
+    render();
+    stats.update();
 }
 
 function render() {
@@ -434,5 +434,3 @@ function createCurveFromVertices(vertices){
 function getRandomArbitrary(min, max){
     return Math.random() * (max -min) +min;
 }
-
-
