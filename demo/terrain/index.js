@@ -160,7 +160,8 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     barkingDogSound.setBuffer(audioBuffer);
 
     //background
-    initBackground(backgroundTexture);
+    var skyBox = createSkyBox(backgroundTexture);
+    scene.add(skyBox);
 
     // Create Light
     var light = new THREE.PointLight(0xFFFFFF);
@@ -214,6 +215,25 @@ function maybeSpacebarPressed(e){
             barkingDogSound.stop();
         }
     }
+}
+
+function createSkyBox(backgroundTexture){
+    var geometry = new THREE.SphereGeometry(3000, 60, 40);
+    var uniforms = {
+      texture: { type: 't', value: backgroundTexture }
+    };
+
+    var material = new THREE.ShaderMaterial( {
+      uniforms:       uniforms,
+      vertexShader:   document.getElementById('sky-vertex').textContent,
+      fragmentShader: document.getElementById('sky-fragment').textContent
+    });
+
+    skyBox = new THREE.Mesh(geometry, material);
+    skyBox.scale.set(-1, 1, 1);
+    skyBox.rotation.order = 'XZY';
+    skyBox.renderDepth = 1000.0;
+    return skyBox;
 }
 
 function initAudio(){
@@ -289,10 +309,7 @@ function animate() {
 }
 
 function render() {
-    renderer.autoClear = false;
-    renderer.clear();
     moveCamera();
-    renderer.render(backgroundScene, backgroundCamera);
     renderer.render( scene, camera );
 }
 
