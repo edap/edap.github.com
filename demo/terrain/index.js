@@ -47,6 +47,28 @@ var loadAudio = function (filename) {
     return d.promise();
 };
 
+var loadPly = function (filename) {
+    var d = $.Deferred();
+    var plyLoader = new THREE.PLYLoader();
+    plyLoader.load(
+        filename,
+        //success callback
+        function (ply) {
+            d.resolve(ply);
+        },
+        //progress callback
+        function (xhr) {
+            d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        //error callback
+        function (error) {
+            console.log('error while loading ply:' + filename);
+            d.reject(error);
+        }
+    );
+    return d.promise();
+};
+
 var loadSvg = function (filename) {
     var d = $.Deferred();
     var svgLoader = new THREE.SVGLoader();
@@ -94,17 +116,23 @@ var loadTexture = function (filename){
 
 $.when( loadSvg('path.svg'),
         loadTexture('terrain512.png'),
+        // street with grass
         //loadTexture('grass512.jpg'),
+        //violet street
         loadTexture('grass-violet512.jpg'),
+        //street with stone
+        //loadTexture('desertrock-dark512.jpg'),
+
         loadTexture('rock-top512.jpg'),
         //loadTexture('desertrock-dark512.jpg'),
         //loadTexture('rock-dark512.jpg'),
         loadTexture('desertrock-light512.jpg'),
         loadTexture('bg.jpg'),
-        loadAudio('dog.mp3')
+        loadAudio('dog.mp3'),
+        loadPly('triangles11.ply')
       ).then(
-        function (svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer) {
-            init(svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer);
+        function (svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer, treePly) {
+            init(svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer, treePly);
             terrain.visible = true;
             animate();
         },

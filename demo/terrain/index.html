@@ -46,8 +46,8 @@
       void main() {
         //black and white
         //gl_FragColor = vec4(vAmount * 1.);
-        vec4 grass = (smoothstep(0.003, 0.01, vAmount) - smoothstep(0.012, 0.19, vAmount)) * texture2D( grassTexture, vUV * 10.0 );
-        vec4 rocky = (smoothstep(0.01, 0.20, vAmount) - smoothstep(0.30, 0.60, vAmount)) * texture2D( rockBottomTexture, vUV * 10.0 );
+        vec4 grass = (smoothstep(0.002, 0.006, vAmount) - smoothstep(0.005, 0.04, vAmount)) * texture2D( grassTexture, vUV * 10.0 );
+        vec4 rocky = (smoothstep(0.005, 0.05, vAmount) - smoothstep(0.30, 0.60, vAmount)) * texture2D( rockBottomTexture, vUV * 10.0 );
         vec4 snowy = (smoothstep(0.35, 0.65, vAmount))                                   * texture2D( rockTopTexture, vUV * 10.0 );
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0) + grass + rocky + snowy;
 
@@ -79,6 +79,7 @@
     <script type="text/javascript" src="../js/OrbitControls.js"></script>
     <script type="text/javascript" src="../js/stats.min.js"></script>
     <script type="text/javascript" src="../js/SVGLoader.js"></script>
+    <script type="text/javascript" src="../js/PLYLoader.js"></script>
     <script type="text/javascript" src="../js/jquery-2.2.4.min.js"></script>
 
     <script type="text/javascript" src="index.js"></script>
