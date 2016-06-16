@@ -141,40 +141,6 @@ $.when( loadSvg('path.svg'),
         }
 );
 
-function readVerticesInSvg(svgPath) {
-    var vertices = [];
-    //this is ugly
-    var points = svgPath.getElementById('Unnamed').getAttribute('d').split("            ");
-    var position = points[0];
-    var curvePoints = points.slice(1);
-    for (var i = 0; i< curvePoints.length; i++) {
-        var arc = curvePoints[i].trim();
-        var coordinates = arc.split(' ');
-        //take only the middle point ([1]), discard the handles([0] and [2]) of the point of
-        //the bezier curve. We will use the Catmull-Rom curve
-        var point = coordinates[1];
-        // do not consider values like 'C' and 'Z' that has length == 1. We already know that is a curve and that is closed
-        if (point.length > 1) {
-            var pointCoord = point.split(',');
-            vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
-        }
-    }
-    return vertices;
-}
-
-function createCurveFromVertices(vertices){
-    // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
-    for (i = 0; i< vertices.length; i++) {
-        // center the path on the terrain
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -side/2, -side/2, -cameraHeight ) );
-        // apply a rotation to the path that is equal to the rotation applied to the plane
-        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + planeRotation) );
-    }
-    var curve = new THREE.CatmullRomCurve3(vertices);
-    curve.closed = true;
-    return curve;
-}
-
 function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = cameraZposition;
@@ -366,3 +332,37 @@ function moveCamera() {
 Number.prototype.map = function (in_min, in_max, out_min, out_max) {
   return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
+
+function readVerticesInSvg(svgPath) {
+    var vertices = [];
+    //this is ugly
+    var points = svgPath.getElementById('Unnamed').getAttribute('d').split("            ");
+    var position = points[0];
+    var curvePoints = points.slice(1);
+    for (var i = 0; i< curvePoints.length; i++) {
+        var arc = curvePoints[i].trim();
+        var coordinates = arc.split(' ');
+        //take only the middle point ([1]), discard the handles([0] and [2]) of the point of
+        //the bezier curve. We will use the Catmull-Rom curve
+        var point = coordinates[1];
+        // do not consider values like 'C' and 'Z' that has length == 1. We already know that is a curve and that is closed
+        if (point.length > 1) {
+            var pointCoord = point.split(',');
+            vertices.push( new THREE.Vector3(pointCoord[0], pointCoord[1], 0));
+        }
+    }
+    return vertices;
+}
+
+function createCurveFromVertices(vertices){
+    // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
+    for (i = 0; i< vertices.length; i++) {
+        // center the path on the terrain
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -side/2, -side/2, -cameraHeight ) );
+        // apply a rotation to the path that is equal to the rotation applied to the plane
+        vertices[i].applyMatrix4( new THREE.Matrix4().makeRotationX( + planeRotation) );
+    }
+    var curve = new THREE.CatmullRomCurve3(vertices);
+    curve.closed = true;
+    return curve;
+}
