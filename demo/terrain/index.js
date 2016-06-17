@@ -175,7 +175,7 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     window.addEventListener('resize', onWindowResize, false);
 
     //terrain
-    var customMaterial = createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
+    var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
@@ -200,16 +200,22 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     addStats();
 }
 
-function createTrees(ofMesh, fog, bumpTexture){
+function createCanvasContext(bumpTexture){
     var img = bumpTexture.image;
     var canvas = document.createElement('canvas');
     canvas.width = img.width;
     canvas.height = img.width;
     var context = canvas.getContext('2d');
     context.drawImage(img, 0, 0 );
+    return context;
+}
 
-    //var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-    //window.location.href=image;
+function createTrees(ofMesh, fog, bumpTexture){
+    var density = 3; // n trees pro point in curve
+    var context = createCanvasContext(bumpTexture);
+    var trees = [];
+    // ratio between the geometry plane and the texture
+    var ratio = side / bumpTexture.image.width;
 
     var treeMaterial = createTreeMaterial(fog);
     ofMesh.computeFaceNormals();
@@ -224,11 +230,8 @@ function createTrees(ofMesh, fog, bumpTexture){
     }
     treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     //fine displacement
-    var trees = [];
-    var ratio = side / img.width
     for (var i = 0; i< spline.points.length; i++) {
         var pos = spline.points[i];
-        var density = 3;
         for (var d = 0; d <= density; d++) {
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
             var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
@@ -245,10 +248,7 @@ function createTrees(ofMesh, fog, bumpTexture){
                 trees.push(tree);
             }
         }
-
     }
-
-    console.log(trees.length);
     return trees;
 }
 
@@ -332,7 +332,7 @@ function initBackground(backgroundTexture) {
     backgroundScene.add(backgroundMesh );
 }
 
-function createCustomMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture) {
+function createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture) {
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
     rockBottomTexture.wrapS = rockBottomTexture.wrapT = THREE.RepeatWrapping;
     rockTopTexture.wrapS = rockTopTexture.wrapT = THREE.RepeatWrapping;
