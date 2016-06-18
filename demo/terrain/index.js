@@ -1,5 +1,10 @@
+var Config = function(){
+    this.lightColor = '#00ff00';
+    this.treeColor = '#0000ff';
+};
 // Gereral
-var container, camera, controls, scene, renderer, stats, gui;
+var container, camera, controls, scene, renderer, stats, gui, light;
+var config = new Config();
 
 // Terrain
 var bumpScale = 200; // how much tha bumb affects the heights
@@ -26,6 +31,7 @@ var barkingDogSound;
 
 //Trees
 var maxDistanceFromPath = 100; // how much the position of a tree can be different from the point on the path
+var treeMaterial;
 
 // Loaders Promises
 var loadAudio = function (filename) {
@@ -150,7 +156,7 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2( 0x000000, 0.004 );
+    scene.fog = new THREE.FogExp2( 0x7a6248, 0.004 );
     //audio
     initAudio();
     scene.add( barkingDogSound );
@@ -161,11 +167,11 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     scene.add(skyDome);
 
     // Create Light
-    var light = new THREE.PointLight(0xFFFFFF);
+    light = new THREE.PointLight(config.lightColor);
     light.position.set(0, 0, 500);
     scene.add(light);
 
-    renderer = new THREE.WebGLRenderer( { antialias: true, depth:true} );
+    renderer = new THREE.WebGLRenderer( { antialias: true, depth:true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
     //container DOM
@@ -217,7 +223,7 @@ function createTrees(ofMesh, fog, bumpTexture){
     // ratio between the geometry plane and the texture
     var ratio = side / bumpTexture.image.width;
 
-    var treeMaterial = createTreeMaterial(fog);
+    treeMaterial = createTreeMaterial(fog);
     ofMesh.computeFaceNormals();
     ofMesh.computeVertexNormals();
     var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
@@ -230,6 +236,7 @@ function createTrees(ofMesh, fog, bumpTexture){
     }
     treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     //fine displacement
+
     for (var i = 0; i< spline.points.length; i++) {
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
@@ -257,7 +264,7 @@ function createTreeMaterial(fog){
         amplitude:  { type: "f", value: 1.0 },
         fogDensity: { type: "f", value: fog.density},
         fogColor:   { type: "c", value: fog.color},
-        color:      { type: "c", value: new THREE.Color( 0xff2200 ) },
+        color:      { type: "c", value: new THREE.Color( config.treeColor ) },
     };
 
     var uniforms = THREE.UniformsUtils.merge([
@@ -365,8 +372,19 @@ function addGui(customMaterial) {
     gui = new dat.GUI();
     gui.add(customMaterial.uniforms.bumpScale, 'value')
         .name('bumpScale').min(20).max(300).step(1.0);
+    gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
+    gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
     gui.close();
 }
+
+var onTreeColorUpdate = function(ev) {
+    treeMaterial.uniforms.color.value.set(config.treeColor);
+};
+
+var onLightColorUpdate = function(ev) {
+    console.log(config.lightColor);
+    light.color.set(config.lightColor);
+};
 
 function addStats() {
     stats = new Stats();
@@ -382,6 +400,7 @@ function onWindowResize() {
 }
 
 function animate() {
+    treeMaterial.uniforms.color.needsUpdate = true;
     requestAnimationFrame( animate );
     render();
     stats.update();
