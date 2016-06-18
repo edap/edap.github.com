@@ -181,7 +181,7 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     window.addEventListener('resize', onWindowResize, false);
 
     //terrain
-    var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture);
+    var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture, scene.fog);
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
@@ -341,13 +341,17 @@ function initBackground(backgroundTexture) {
     backgroundScene.add(backgroundMesh );
 }
 
-function createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture) {
+function createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture, fog) {
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
     rockBottomTexture.wrapS = rockBottomTexture.wrapT = THREE.RepeatWrapping;
     rockTopTexture.wrapS = rockTopTexture.wrapT = THREE.RepeatWrapping;
     grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
 
     var myUniforms = {
+
+        fogDensity: { type: "f", value: fog.density},
+        fogColor:   { type: "c", value: fog.color},
+
         bumpScale:         {type: 'f', value: bumpScale},
         bumpTexture:       {type: 't', value: bumpTexture},
         grassTexture:      {type: 't', value: grassTexture},
@@ -357,6 +361,7 @@ function createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, roc
 
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: myUniforms,
+        fog: true,
         vertexShader: document.getElementById('vertexShader').textContent,
         fragmentShader: document.getElementById('fragmentShader').textContent,
     });
