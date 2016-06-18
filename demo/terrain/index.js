@@ -197,9 +197,7 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
 
     //tree
     var trees = createTrees(treePly,scene.fog, bumpTexture);
-    for(var n = 0; n < trees.length; n++){
-        scene.add(trees[n]);
-    }
+    scene.add(trees);
 
     addGui(customMaterial);
     document.body.addEventListener("keypress", maybeSpacebarPressed);
@@ -217,26 +215,30 @@ function createCanvasContext(bumpTexture){
 }
 
 function createTrees(ofMesh, fog, bumpTexture){
-    var density = 3; // n trees pro point in curve
-    var context = createCanvasContext(bumpTexture);
-    var trees = [];
-    // ratio between the geometry plane and the texture
-    var ratio = side / bumpTexture.image.width;
-
-    treeMaterial = createTreeMaterial(fog);
-    ofMesh.computeFaceNormals();
-    ofMesh.computeVertexNormals();
-    var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
-
+    // it is not possible to merge BufferGeometries, only Geometry instances can be merged
+    var treesGeometry = createTreesGeometry(ofMesh, fog, bumpTexture);
+    var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
     //displacement
-    displacement = new Float32Array( treeGeometry.attributes.position.count );
-    noise = new Float32Array( treeGeometry.attributes.position.count );
+    displacement = new Float32Array( treesBufferGeometry.attributes.position.count );
+    noise = new Float32Array( treesBufferGeometry.attributes.position.count );
     for ( var i = 0; i < displacement.length; i ++ ) {
         noise[ i ] = Math.random() * 5;
     }
-    treeGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
-    //fine displacement
+    treesBufferGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
+    treeMaterial = createTreeMaterial(fog);
+    return new THREE.Mesh( treesBufferGeometry, treeMaterial);
+}
 
+function createTreesGeometry(ofMesh, fog, bumpTexture){
+    var density = 3; // n trees pro point in curve
+    var context = createCanvasContext(bumpTexture);
+    // ratio between the geometry plane and the texture
+    var ratio = side / bumpTexture.image.width;
+
+    ofMesh.computeFaceNormals();
+    ofMesh.computeVertexNormals();
+
+    var geometriesContainer = new THREE.Geometry();
     for (var i = 0; i< spline.points.length; i++) {
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
@@ -246,17 +248,17 @@ function createTrees(ofMesh, fog, bumpTexture){
             var y = Math.floor((randY + side/2) / ratio);
             // put thress only where there are no mountains (eg, the pixel is black)
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
-                var tree = new THREE.Mesh( treeGeometry, treeMaterial );
-                tree.position.z = randY;
-                tree.position.x = randX;
-                tree.position.y = pos.y - cameraHeight;
-                tree.rotation.y = Math.PI / getRandomArbitrary(-3, 3);
-                tree.scale.multiplyScalar( 0.1 );
-                trees.push(tree);
+                var tree = new THREE.Geometry();
+                tree.merge(ofMesh);
+                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( 0.1 ));
+                tree.applyMatrix(
+                    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
+                tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
+                geometriesContainer.merge(tree);
             }
         }
     }
-    return trees;
+    return geometriesContainer;
 }
 
 function createTreeMaterial(fog){
