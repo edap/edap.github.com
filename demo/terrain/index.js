@@ -1,6 +1,6 @@
 var Config = function(){
-    this.lightColor = '#00ff00';
-    this.treeColor = '#0000ff';
+    this.lightColor = '#acac0f';
+    this.treeColor = '#ff3b00';
 };
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
@@ -128,9 +128,9 @@ $.when( loadSvg('path.svg'),
         // street with grass
         //loadTexture('grass512.jpg'),
         //violet street
-        loadTexture('grass-violet512.jpg'),
+        //loadTexture('grass-violet512.jpg'),
         //street with stone
-        //loadTexture('desertrock-dark512.jpg'),
+        loadTexture('desertrock-dark512.jpg'),
 
         loadTexture('rock-top512.jpg'),
         //loadTexture('desertrock-dark512.jpg'),
@@ -250,7 +250,7 @@ function createTreesGeometry(ofMesh, fog, bumpTexture){
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
                 var tree = new THREE.Geometry();
                 tree.merge(ofMesh);
-                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( 0.1 ));
+                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( 0.07 ));
                 tree.applyMatrix(
                     new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
                 tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
