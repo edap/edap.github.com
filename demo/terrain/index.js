@@ -416,11 +416,12 @@ function render() {
 
 function moveCamera() {
     var camPos = spline.getPointAt(t);
+    var yPos;
     if (barkingDog) {
         var sinYpos = Math.sin(new Date().getTime() * jumpFrequency) * cameraHeight;
-        var yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.5));
+        yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.2));
     } else {
-        var yPos = cameraHeight;
+        yPos = cameraHeight;
     }
     camera.position.set(camPos.x, yPos, camPos.z);
 
