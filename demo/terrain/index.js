@@ -133,7 +133,6 @@ $.when( loadSvg('path.svg'),
         //street with stone
         //loadTexture('desertrock-dark512.jpg'),
         loadTexture('desertrock-bottom512.jpg'),
-
         loadTexture('rock-top512.jpg'),
         loadTexture('desertrock-light512.jpg'),
         loadTexture('bg.jpg'),
@@ -150,7 +149,15 @@ $.when( loadSvg('path.svg'),
         }
 );
 
-function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomTexture, backgroundTexture, audioBuffer, treePly) {
+function init(
+        svgPath,
+        bumpTexture,
+        grassTexture,
+        rockTopTexture,
+        rockBottomTexture,
+        backgroundTexture,
+        audioBuffer,
+        treePly) {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
