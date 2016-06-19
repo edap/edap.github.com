@@ -1,6 +1,6 @@
 var Config = function(){
     this.lightColor = '#acac0f';
-    this.treeColor = '#ff3b00';
+    this.treeColor = '#824938';
 };
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
@@ -138,7 +138,7 @@ $.when( loadSvg('path.svg'),
         loadTexture('desertrock-light512.jpg'),
         loadTexture('bg.jpg'),
         loadAudio('dog.mp3'),
-        loadPly('triangles11.ply')
+        loadPly('small.ply')
       ).then(
         function (svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer, treePly) {
             init(svg, texture, grass, rockTop, rockBottom, backgroundTexture, audioBuffer, treePly);
@@ -156,7 +156,7 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2( 0x7a6248, 0.004 );
+    scene.fog = new THREE.FogExp2( 0x824938, 0.008 );
     //audio
     initAudio();
     scene.add( barkingDogSound );
@@ -220,17 +220,17 @@ function createTrees(ofMesh, fog, bumpTexture){
     var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
     //displacement
     displacement = new Float32Array( treesBufferGeometry.attributes.position.count );
-    noise = new Float32Array( treesBufferGeometry.attributes.position.count );
-    for ( var i = 0; i < displacement.length; i ++ ) {
-        noise[ i ] = Math.random() * 5;
-    }
+    // noise = new Float32Array( treesBufferGeometry.attributes.position.count );
+    // for ( var i = 0; i < displacement.length; i ++ ) {
+    //     noise[ i ] = Math.random() * 5;
+    // }
     treesBufferGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     treeMaterial = createTreeMaterial(fog);
     return new THREE.Mesh( treesBufferGeometry, treeMaterial);
 }
 
 function createTreesGeometry(ofMesh, fog, bumpTexture){
-    var density = 3; // n trees pro point in curve
+    var density = 1; // n trees pro point in curve
     var context = createCanvasContext(bumpTexture);
     // ratio between the geometry plane and the texture
     var ratio = side / bumpTexture.image.width;
@@ -240,6 +240,7 @@ function createTreesGeometry(ofMesh, fog, bumpTexture){
 
     var geometriesContainer = new THREE.Geometry();
     for (var i = 0; i< spline.points.length; i++) {
+        if(i%1 === 0){
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
@@ -248,14 +249,16 @@ function createTreesGeometry(ofMesh, fog, bumpTexture){
             var y = Math.floor((randY + side/2) / ratio);
             // put thress only where there are no mountains (eg, the pixel is black)
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
+                var randomScalar = getRandomArbitrary(0.03, 0.07);
                 var tree = new THREE.Geometry();
                 tree.merge(ofMesh);
-                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( 0.07 ));
+                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
                 tree.applyMatrix(
                     new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
                 tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
                 geometriesContainer.merge(tree);
             }
+        }
         }
     }
     return geometriesContainer;
