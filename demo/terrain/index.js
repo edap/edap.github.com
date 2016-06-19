@@ -17,7 +17,6 @@ var planeRotation = Math.PI/2;
 var backgroundScene, backgroundCamera, backgroundMesh;
 
 //Path and camera
-var pathGeometry; // path geometry
 var spline; // Catmull-Rom spline, used for the camera
 var t = 0; // value used to calculate the position of the camera along tha path
 var cameraSpeedDefault = 0.00008;
@@ -177,7 +176,6 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-
     //terrain
     var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture, scene.fog);
     var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
@@ -189,7 +187,6 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
-    pathGeometry = createSplineGeometry(spline);
 
     //tree
     var trees = createTrees(treePly,scene.fog, bumpTexture);
@@ -368,12 +365,6 @@ function createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, roc
     });
 
     return customMaterial;
-}
-
-function createSplineGeometry(curve) {
-    var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getSpacedPoints( curveDensity );
-    return geometry;
 }
 
 function addGui(customMaterial) {
