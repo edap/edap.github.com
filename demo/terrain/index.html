@@ -92,20 +92,16 @@
     <script id="vertexShaderTree" type="x-shader/x-vertex">
       varying vec3 vNormal;
       varying vec3 vPos;
-      uniform float amplitude;
-      attribute float displacement;
 
       void main() {
         vNormal = normalMatrix * normal;
-        //here we apply the displacement to the vertex
-        vec3 newPosition = position + amplitude * normal * vec3( displacement );
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
-        vPos = (modelMatrix * vec4(newPosition, 1.0 )).xyz;
+        vPos = (modelMatrix * vec4(position, 1.0 )).xyz;
 
         gl_Position = projectionMatrix *
                       modelViewMatrix *
-                      vec4(newPosition, 1.0);
+                      vec4(position, 1.0);
       }
     </script>
 

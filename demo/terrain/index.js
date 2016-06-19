@@ -218,13 +218,6 @@ function createTrees(ofMesh, fog, bumpTexture){
     // it is not possible to merge BufferGeometries, only Geometry instances can be merged
     var treesGeometry = createTreesGeometry(ofMesh, fog, bumpTexture);
     var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
-    //displacement
-    displacement = new Float32Array( treesBufferGeometry.attributes.position.count );
-    // noise = new Float32Array( treesBufferGeometry.attributes.position.count );
-    // for ( var i = 0; i < displacement.length; i ++ ) {
-    //     noise[ i ] = Math.random() * 5;
-    // }
-    treesBufferGeometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     treeMaterial = createTreeMaterial(fog);
     return new THREE.Mesh( treesBufferGeometry, treeMaterial);
 }
