@@ -135,8 +135,6 @@ $.when( loadSvg('path.svg'),
         loadTexture('desertrock-bottom512.jpg'),
 
         loadTexture('rock-top512.jpg'),
-        //loadTexture('desertrock-dark512.jpg'),
-        //loadTexture('rock-dark512.jpg'),
         loadTexture('desertrock-light512.jpg'),
         loadTexture('bg.jpg'),
         loadAudio('dog.mp3'),
