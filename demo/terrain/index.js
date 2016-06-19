@@ -235,7 +235,7 @@ function createTreesGeometry(ofMesh, bumpTexture){
 
     var geometriesContainer = new THREE.Geometry();
     for (var i = 0; i< spline.points.length; i++) {
-        if(i%1 === 0){
+        //if(i%3 === 0){
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
@@ -253,7 +253,7 @@ function createTreesGeometry(ofMesh, bumpTexture){
                 tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
                 geometriesContainer.merge(tree);
             }
-        }
+        //}
         }
     }
     return geometriesContainer;
