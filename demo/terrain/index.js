@@ -132,7 +132,8 @@ $.when( loadSvg('path.svg'),
         //violet street
         //loadTexture('grass-violet512.jpg'),
         //street with stone
-        loadTexture('desertrock-dark512.jpg'),
+        //loadTexture('desertrock-dark512.jpg'),
+        loadTexture('desertrock-bottom512.jpg'),
 
         loadTexture('rock-top512.jpg'),
         //loadTexture('desertrock-dark512.jpg'),
