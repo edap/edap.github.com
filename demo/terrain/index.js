@@ -20,7 +20,7 @@ var backgroundScene, backgroundCamera, backgroundMesh;
 var pathGeometry; // path geometry
 var spline; // Catmull-Rom spline, used for the camera
 var t = 0; // value used to calculate the position of the camera along tha path
-var cameraSpeedDefault = 0.00002;
+var cameraSpeedDefault = 0.00008;
 var cameraSpeed = cameraSpeedDefault;
 var jumpFrequency = 0.0009; // how often is the camera jumping
 var cameraZposition = 2000;
