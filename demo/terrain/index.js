@@ -19,8 +19,9 @@ var backgroundScene, backgroundCamera, backgroundMesh;
 var pathGeometry; // path geometry
 var spline; // Catmull-Rom spline, used for the camera
 var t = 0; // value used to calculate the position of the camera along tha path
-var cameraSpeed = 0.00005;
-var jumpFactor = 0.009; // how often is the camera jumping
+var cameraSpeedDefault = 0.00002;
+var cameraSpeed = cameraSpeedDefault;
+var jumpFrequency = 0.0009; // how often is the camera jumping
 var cameraZposition = 2000;
 var curveDensity = 600; // how many points define the path
 var cameraHeight = 15; // how high is the camera on the y axis
@@ -30,7 +31,7 @@ var barkingDog = false;
 var barkingDogSound;
 
 //Trees
-var maxDistanceFromPath = 100; // how much the position of a tree can be different from the point on the path
+var maxDistanceFromPath = 100; // how many pixels the position of a tree can be different from the point on the path
 var treeMaterial;
 
 // Loaders Promises
@@ -217,7 +218,7 @@ function createCanvasContext(bumpTexture){
 function createTrees(ofMesh, fog, bumpTexture){
     treeMaterial = createTreeMaterial(fog);
     // it is not possible to merge BufferGeometries, only Geometry instances can be merged
-    // thats why i need to create a new THREE.Geometry for each new tree in the
+    // that's why i need to create a new THREE.Geometry for each new tree in the
     // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
     // this container to a BufferGeometry
     var treesGeometry = createTreesGeometry(ofMesh, bumpTexture);
@@ -289,11 +290,11 @@ function maybeSpacebarPressed(e){
         barkingDog = !barkingDog;
         if (barkingDog) {
             cameraSpeed = 0.0003;
-            jumpFactor = 0.02;
+            jumpFrequency = 0.02;
             barkingDogSound.play();
         } else {
-            cameraSpeed = 0.0001;
-            jumpFactor = 0.009;
+            cameraSpeed = cameraSpeedDefault;
+            jumpFrequency = 0.009;
             barkingDogSound.stop();
         }
     }
@@ -419,23 +420,25 @@ function render() {
 
 function moveCamera() {
     var camPos = spline.getPointAt(t);
-    //var sinYpos = Math.sin(new Date().getTime() * jumpFactor) * cameraHeight;
-    var sinYpos = cameraHeight;
-    var yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.5));
+    if (barkingDog) {
+        var sinYpos = Math.sin(new Date().getTime() * jumpFrequency) * cameraHeight;
+        var yPos = sinYpos.map(-cameraHeight, cameraHeight, cameraHeight, (cameraHeight * 1.5));
+    } else {
+        var yPos = cameraHeight;
+    }
     camera.position.set(camPos.x, yPos, camPos.z);
-    // no need to rotate beacuse the path is always on y = 0
-    // if in the future you will have a path that goes up and down
-    // use the rotation too
-    // var camRot = spline.getTangent(t);
-    // camera.rotation.set(camRot.x,camRot.y,camRot.z);
-    // even better, using quaternions
-    // http://stackoverflow.com/questions/18400667/three-js-object-following-a-spline-path-rotation-tanget-issues-constant-sp
-    // http://stackoverflow.com/questions/11179327/orient-objects-rotation-to-a-spline-point-tangent-in-three-js
-    var look = spline.getPointAt(t + cameraSpeed * 20);
+
     // the lookAt position is just 20 points ahead the current position
+    // but when we are close to the end of the path, the look at point
+    // is the first point in the curve
+    var next = t + cameraSpeed * 20;
+    var lookAtPoint = (next > 1) ? 0 : next;
+    var look = spline.getPointAt(lookAtPoint);
     look.y = yPos;
     camera.lookAt(look);
-    t = (t >= 0.99) ? 0 : t += cameraSpeed;
+
+    var limit = 1 - cameraSpeed;
+    t = (t >= limit) ? 0 : t += cameraSpeed;
 }
 
 Number.prototype.map = function (in_min, in_max, out_min, out_max) {
