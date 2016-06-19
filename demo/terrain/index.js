@@ -5,6 +5,7 @@ var Config = function(){
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
+var debug = false;
 
 // Terrain
 var bumpScale = 200; // how much tha bumb affects the heights
@@ -371,17 +372,19 @@ function createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, roc
 
 function createSplineGeometry(curve) {
     var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints( curveDensity );
+    geometry.vertices = curve.getSpacedPoints( curveDensity );
     return geometry;
 }
 
 function addGui(customMaterial) {
-    gui = new dat.GUI();
-    gui.add(customMaterial.uniforms.bumpScale, 'value')
-        .name('bumpScale').min(20).max(300).step(1.0);
-    gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
-    gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
-    gui.close();
+    if (debug) {
+        gui = new dat.GUI();
+        gui.add(customMaterial.uniforms.bumpScale, 'value')
+            .name('bumpScale').min(20).max(300).step(1.0);
+        gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
+        gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
+        gui.close();
+    }
 }
 
 var onTreeColorUpdate = function(ev) {
@@ -396,7 +399,9 @@ var onLightColorUpdate = function(ev) {
 function addStats() {
     stats = new Stats();
     stats.showPanel(0);
-    container.appendChild(stats.domElement);
+    if (debug) {
+        container.appendChild(stats.domElement);
+    }
 }
 
 function onWindowResize() {
