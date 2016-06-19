@@ -215,14 +215,17 @@ function createCanvasContext(bumpTexture){
 }
 
 function createTrees(ofMesh, fog, bumpTexture){
-    // it is not possible to merge BufferGeometries, only Geometry instances can be merged
-    var treesGeometry = createTreesGeometry(ofMesh, fog, bumpTexture);
-    var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
     treeMaterial = createTreeMaterial(fog);
+    // it is not possible to merge BufferGeometries, only Geometry instances can be merged
+    // thats why i need to create a new THREE.Geometry for each new tree in the
+    // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
+    // this container to a BufferGeometry
+    var treesGeometry = createTreesGeometry(ofMesh, bumpTexture);
+    var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
     return new THREE.Mesh( treesBufferGeometry, treeMaterial);
 }
 
-function createTreesGeometry(ofMesh, fog, bumpTexture){
+function createTreesGeometry(ofMesh, bumpTexture){
     var density = 1; // n trees pro point in curve
     var context = createCanvasContext(bumpTexture);
     // ratio between the geometry plane and the texture
