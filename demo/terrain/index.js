@@ -177,11 +177,6 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    //container DOM
-    container = document.getElementById( 'container' );
-    container.appendChild(renderer.domElement);
-
-    window.addEventListener('resize', onWindowResize, false);
 
     //terrain
     var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture, scene.fog);
@@ -195,12 +190,16 @@ function init(svgPath, bumpTexture, grassTexture, rockTopTexture, rockBottomText
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
     pathGeometry = createSplineGeometry(spline);
-    //var splineObject = new THREE.Line(pathGeometry, material);
-    //scene.add(splineObject);
 
     //tree
     var trees = createTrees(treePly,scene.fog, bumpTexture);
     scene.add(trees);
+
+    container = document.getElementById( 'spinner' ).remove();
+    //container DOM
+    container = document.getElementById( 'container' );
+    container.appendChild(renderer.domElement);
+    window.addEventListener('resize', onWindowResize, false);
 
     addGui(customMaterial);
     document.body.addEventListener("keypress", maybeSpacebarPressed);
