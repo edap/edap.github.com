@@ -11,7 +11,7 @@ In the last days I was looking for a way to draw a terrain with a closed road we
 * Download an height-map from the web, possible an height-map that contains a street, or a river, and use that street or river as a path for the camera.
 * Generate the terrain from an image containing Perlin noise.
 
-I went for the latter one, mostly because it was easy to draw a path on it and use it for the camera. The demo example is [here]({{site.url}}/demo/terrain). The source code is available on my [github repository](https://github.com/edap/edap.github.com/tree/master/demo/terrain). I've taken some notes during the development, I hope they can be helpful to someone else.
+I went for the latter one, mostly because it was easy to draw a path on it and use it for the camera. The demo example is [here]({{site.url}}/demo/terrain). The source code is available on my [github repository](https://github.com/edap/edap.github.com/tree/master/demo/terrain). I've taken some notes during the development, maybe someone can find them helpful.
 
 ## Generate the texture with gimp
 
