@@ -10,7 +10,7 @@ description: "<a href='https://github.com/edap/poster'>Poster</a> Is a command l
 ![go poster example](/assets/media/go_poster_example.jpg)
 
 
-###Default options and example
+### Default options and example
 Running `poster -h` you have a list of the default options
 {% highlight go %}
 Usage of poster:
@@ -24,7 +24,7 @@ Usage of poster:
 To customize them, do as follow, overriding the default options with yours
 `poster -dest_dir=/home/username/dest -source_dir=/home/username/source -log_file=/home/username/my.log`
 
-###How does it works, packages involved
+### How does it works
 - The program reads list the images located in the folder and creates a map of them.
 - Having the total number of the images and the desired dimension of the thumb, it calculates the dimension of the destination grid, see this [file](https://github.com/edap/poster/blob/master/composer.go) for the details about this part.
 - Each file can now be assigned to a position in the grid, it iterates through the images, it scales them to the given dimension if necessary(i've used [this package](https://github.com/nfnt/resize) for the resize, check it out, it provides a lot of functionalities to work with images), and put each file in the destination image.

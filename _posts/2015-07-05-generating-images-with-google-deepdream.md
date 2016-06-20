@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Generating images with google inception deepdream"
+published: false
 category:
 tags: [deepdream, neural networks, generative design, computer vision]
 description: "Some days ago google published a post about using Artificial Neural Network to generate images, and shortly after they open sourced the code."
