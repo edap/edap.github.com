@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "terrain from texture"
+title: "demo: terrain with road from a texture"
 category: 
 tags: [threejs, openFrameworks]
 ---
@@ -138,7 +138,7 @@ function createSplineGeometry(curve) {
 
 ```
 
-## Move camera along the path
+## Move the camera along the path
 
 To move the camera along the path I've changed the position of the camera a bit forward everytime the function `render` is called.
 When the position of the camera is close to the end of the path, it is repositioned at the beginning.
