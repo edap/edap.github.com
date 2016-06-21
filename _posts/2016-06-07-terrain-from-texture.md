@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "demo: terrain with road from a texture"
+title: "demo: terrain with a road from a texture"
 category: 
 tags: [threejs, openFrameworks]
 ---
