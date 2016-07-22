@@ -1,7 +1,10 @@
 var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#824938';
+    this.ringThickness = 0.2;
 };
+
+var clock = new THREE.Clock(1);
 
 var cameraZposition = 1000;
 
@@ -87,22 +90,34 @@ function init(treePly) {
     // barkingDogSound.setBuffer(audioBuffer);
     // Create Light
     light = new THREE.PointLight(config.lightColor);
-    light.position.set(0, 0, 500);
+    light.position.set(100, 200, 50);
     scene.add(light);
 
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
     //tree
-    //
     treeMaterial = createTreeMaterial(scene.fog);
     var trees = createTrees(treePly,treeMaterial);
-    forestDimension = getForestDimension(trees);
-    treeMaterial.uniforms.forestDimension.needsUpdate = true;
-    //treeMaterial.uniforms.forestDimension.value.set(forestDimension);
-    treeMaterial.uniforms.forestDimension.value.setX(forestDimension.x);
-    treeMaterial.uniforms.forestDimension.value.setY(forestDimension.y);
-    treeMaterial.uniforms.forestDimension.needsUpdate = false;
-    //treeMaterial.uniforms.forestDimension.needsUpdate = false;
+
+    var forestBoundingBox = getForestBoundingBox(trees);
+    treeMaterial.uniforms.forestDimensionMin.needsUpdate = true;
+    treeMaterial.uniforms.forestDimensionMax.needsUpdate = true;
+    treeMaterial.uniforms.forestDimensionMin.value.setX(forestBoundingBox.min.x);
+    treeMaterial.uniforms.forestDimensionMin.value.setY(forestBoundingBox.min.y);
+    treeMaterial.uniforms.forestDimensionMax.value.setX(forestBoundingBox.max.x);
+    treeMaterial.uniforms.forestDimensionMax.value.setY(forestBoundingBox.max.y);
+    treeMaterial.uniforms.forestDimensionMin.needsUpdate = false;
+    treeMaterial.uniforms.forestDimensionMax.needsUpdate = false;
+
+    treeMaterial.uniforms.forestResolution.needsUpdate = true;
+    treeMaterial.uniforms.forestResolution.value.setX(
+        Math.abs(forestBoundingBox.min.x) + forestBoundingBox.max.x);
+    treeMaterial.uniforms.forestResolution.value.setY(
+        Math.abs(forestBoundingBox.min.y) + forestBoundingBox.max.y);
+    treeMaterial.uniforms.forestResolution.needsUpdate = false;
+
+
+
     scene.add(trees);
 
     container = document.getElementById( 'spinner' ).remove();
@@ -114,18 +129,12 @@ function init(treePly) {
     addStats();
 }
 
-function getForestDimension(mesh){
+function getForestBoundingBox(mesh){
     var boundingBox = new THREE.Box3().setFromObject( mesh );
-    var width = boundingBox.max.x - boundingBox.min.x;
-    var height = boundingBox.max.y - boundingBox.min.y;
-    return new THREE.Vector2(width, height);
+    return boundingBox;
 }
 
 function createTrees(ofMesh, treeMaterial){
-    // it is not possible to merge BufferGeometries, only Geometry instances can be merged
-    // that's why i need to create a new THREE.Geometry for each new tree in the
-    // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
-    // this container to a BufferGeometry
     var treesGeometry = createTreesGeometry(ofMesh);
     return new THREE.Mesh( treesGeometry, treeMaterial);
 }
@@ -142,12 +151,16 @@ function createTreesGeometry(ofMesh){
 function createTreeMaterial(fog, forestDimension){
     var tmpDim = new THREE.Vector2(0,0);
     var tmp_uniforms = {
-        forestDimension: {type: "v2", value: tmpDim},
-        amplitude:  { type: "f", value: 1.0 },
-        bumpScale:  {type: ":f", value: bumpScale},
-        fogDensity: { type: "f", value: fog.density},
-        fogColor:   { type: "c", value: fog.color},
-        color:      { type: "c", value: new THREE.Color( config.treeColor ) },
+        time:               { type: "f", value: clock.getDelta() },
+        forestDimensionMin: { type: "v2", value: tmpDim },
+        forestDimensionMax: { type: "v2", value: tmpDim },
+        forestResolution:   { type: "v2", value: tmpDim },
+        amplitude:          { type: "f", value: 1.0 },
+        ringThickness:      { type: "f", value: config.ringThickness },
+        bumpScale:          { type: "f", value: bumpScale },
+        fogDensity:         { type: "f", value: fog.density },
+        fogColor:           { type: "c", value: fog.color },
+        color:              { type: "c", value: new THREE.Color( config.treeColor ) },
     };
 
     var uniforms = THREE.UniformsUtils.merge([
@@ -156,7 +169,7 @@ function createTreeMaterial(fog, forestDimension){
     ]);
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: uniforms,
-        fog: true,
+        fog: false,
         lights: true,
         vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShaderTree' ).textContent
@@ -178,6 +191,7 @@ function addGui() {
         gui = new dat.GUI();
         gui.add(treeMaterial.uniforms.bumpScale, 'value')
             .name('bumpScale').min(20).max(300).step(1.0);
+        gui.add(config, 'ringThickness', 0.05, 1.0).step(0.05).onChange( onThicknessUpdate);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
         gui.close();
@@ -188,8 +202,11 @@ var onTreeColorUpdate = function(ev) {
     treeMaterial.uniforms.color.value.set(config.treeColor);
 };
 
+var onThicknessUpdate = function(ev) {
+    treeMaterial.uniforms.ringThickness.value = config.ringThickness;
+};
+
 var onLightColorUpdate = function(ev) {
-    console.log(config.lightColor);
     light.color.set(config.lightColor);
 };
 
@@ -210,6 +227,8 @@ function onWindowResize() {
 
 function animate() {
     treeMaterial.uniforms.color.needsUpdate = true;
+    treeMaterial.uniforms.time.needsUpdate = true;
+    treeMaterial.uniforms.ringThickness.needsUpdate = true;
     requestAnimationFrame( animate );
     render();
     stats.update();
@@ -218,7 +237,7 @@ function animate() {
 function render() {
     //moveCamera();
     renderer.render( scene, camera );
-    debugger
+    treeMaterial.uniforms.time.value = clock.getElapsedTime() * 5;
 }
 
 function moveCamera() {
