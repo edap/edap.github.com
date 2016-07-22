@@ -6,10 +6,10 @@ Thumbs.db
 .ruby-version
 
 !.gitkeep
+Gemfile.lock
 
 .rbenv-version
 .rvmrc
 *~
-Gemfile*
 demo/rings/*.ply
 demo/rings/*.wav
