@@ -8,97 +8,34 @@
   <body>
     <div id="spinner"></div>
     <div id="container"></div>
-    <script id="vertexShader" type="x-shader/x-vertex">
-    uniform sampler2D bumpTexture;
-    uniform float bumpScale;
-    varying float vAmount;
-    varying vec2 vUV;
-
-    // via http://www.iquilezles.org/www/articles/functions/functions.htm
-    float almostIdentity( float x, float m, float n ) {
-        if( x>m ) return x;
-
-        float a = 2.0*n - m;
-        float b = 2.0*m - 3.0*n;
-        float t = x/m;
-
-        return (a*t + b)*t*t + n;
-    }
-
-    void main() {
-      vUV = uv;
-      vec4 bumpData = texture2D( bumpTexture, vUV );
-      vAmount = almostIdentity(bumpData.r, 0.009, 0.02);
-      // bumpData.r => assuming map is grayscale it doesn't matter if you use r, g, or b.
-
-      // move the position along the normal
-      vec3 newPosition = position + normal * bumpScale * vAmount;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
-    }
-    </script>
-
-    <script id="fragmentShader" type="x-shader/x-vertex">
-
-      #define LOG2 1.442695
-      #define saturate(a) clamp( a, 0.0, 1.0 )
-      #define whiteCompliment(a) ( 1.0 - saturate( a ) )
-      varying vec2 vUV;
-      varying float vAmount;
-      uniform sampler2D grassTexture;
-      uniform sampler2D rockBottomTexture;
-      uniform sampler2D rockTopTexture;
-
-      uniform float fogDensity;
-      uniform vec3 fogColor;
-
-      void main() {
-        //black and white
-        //gl_FragColor = vec4(vAmount * 1.);
-        vec4 grass = (smoothstep(0.002, 0.006, vAmount) - smoothstep(0.005, 0.04, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
-        vec4 rocky = (smoothstep(0.005, 0.05, vAmount) - smoothstep(0.30, 0.60, vAmount)) * texture2D( rockBottomTexture, vUV * 20.0 );
-        vec4 snowy = (smoothstep(0.35, 0.65, vAmount))                                   * texture2D( rockTopTexture, vUV * 20.0 );
-        vec4 col = vec4(0.0, 0.0, 0.0, 1.0) + grass + rocky + snowy;
-
-        #ifdef USE_FOG // only FogExp2 is implemented
-          float depth = gl_FragCoord.z / gl_FragCoord.w;
-          float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * depth * depth * LOG2 ) );
-          gl_FragColor.rgb = mix( col.rgb, fogColor, fogFactor );
-        #else
-          gl_FragColor = col;
-        #endif
-
-      }
-    </script>
-
-    <script type="application/x-glsl" id="sky-vertex">
-    varying vec2 vUV;
-
-    void main() {
-      vUV = uv;
-      vec4 pos = vec4(position, 1.0);
-      gl_Position = projectionMatrix * modelViewMatrix * pos;
-    }
-    </script>
-
-    <script type="application/x-glsl" id="sky-fragment">
-    uniform sampler2D texture;
-    varying vec2 vUV;
-
-    void main() {
-      vec4 sample = texture2D(texture, vUV);
-      gl_FragColor = vec4(sample.xyz, sample.w);
-    }
-    </script>
 
     <script id="vertexShaderTree" type="x-shader/x-vertex">
+      precision mediump float;
       varying vec3 vNormal;
       varying vec3 vPos;
+      //varying vec2 vUV;
+      varying vec2 vSt;
+
+      uniform vec2 forestDimensionMax;
+      uniform vec2 forestDimensionMin;
+      uniform vec2 forestResolution;
+
+      float map(float x, float in_min, float in_max, float out_min, float out_max){
+          return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+      }
 
       void main() {
         vNormal = normalMatrix * normal;
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
         vPos = (modelMatrix * vec4(position, 1.0 )).xyz;
+        float x = map(position.x,forestDimensionMin.x, forestDimensionMax.x, 0.0, forestResolution.x);
+        float y = map(position.y,forestDimensionMin.y, forestDimensionMax.y, 0.0, forestResolution.y);
+        // this variable vSt is like gl_FragCoord.xy/screenResolution, but it
+        // consider each pixel relative to the bounding box of the mesh instead that the
+        // dimension of the screen. This calculation screw up as soon as we move the mesh
+        // because we should recalculate the bounding box too. But it works in this case
+        vSt = vec2(x/forestResolution.x, y/forestResolution.y);
 
         gl_Position = projectionMatrix *
                       modelViewMatrix *
@@ -107,24 +44,37 @@
     </script>
 
     <script id="fragmentShaderTree" type="x-shader/x-vertex">
+      precision mediump float;
       // fog's constant and functions
       #define LOG2 1.442695
       #define saturate(a) clamp( a, 0.0, 1.0 )
       #define whiteCompliment(a) ( 1.0 - saturate( a ) )
       // Comment this line to do not use the point light
       #define CUSTOM_POINTLIGHTS
+      #define NUM_RINGS 2
 
       varying vec3 vNormal;
       varying vec3 vPos;
+      varying vec2 vSt;
+
       uniform vec3 color;
       uniform float fogDensity;
       uniform vec3 fogColor;
+      uniform float time;
+      uniform float ringThickness;
 
       struct PointLight {
         vec3 position;
         vec3 color;
       };
       uniform PointLight pointLights[ NUM_POINT_LIGHTS ];
+
+      float cubicPulse( float c, float w, float x ){
+          x = abs(x - c);
+          if( x>w ) return 0.0;
+          x /= w;
+          return 1.0 - x*x*(3.0-2.0*x);
+      }
 
       void main() {
         #ifdef CUSTOM_POINTLIGHTS
@@ -134,7 +84,22 @@
             vec3 lightDirection = normalize(vPos - adjustedLight);
             addedLights.rgb += clamp(dot(-lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
           }
-          vec4 col = mix(vec4(color.x, color.y, color.z, 1.0), addedLights, addedLights);
+
+          float inc = 1.0/float(NUM_RINGS);
+          float padding = 0.0;
+          vec4 rcolor = vec4(color, 1.0);
+
+          for (int i = 0; i< NUM_RINGS; i++) {
+              //provare con st
+              //float y = cubicPulse(mod(uThreshold*uScale, 1.0),ringThickness,vSt.y-padding);
+              //float y = cubicPulse(mod(time, 1.0),ringThickness,vSt.y-padding);
+              float y = cubicPulse(mod(time, 1.0),0.2,0.5);
+              rcolor += vec4(vec3(1.0,0.0,0.0) * vec3(y), 1.0);
+              padding += 0.2;
+              //padding += inc;
+          }
+          //vec4 col = mix(vec4(rcolor.x, rcolor.y, rcolor.z, 1.0), addedLights, addedLights);
+          vec4 col = vec4(rcolor.x, rcolor.y, rcolor.z, 1.0);
         #else
           vec3 light = vec3(0.5, 0.2, 0.5);
           light = normalize(light);
