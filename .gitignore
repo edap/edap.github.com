@@ -3,6 +3,7 @@ _theme_packages/*
 
 Thumbs.db
 .DS_Store
+.ruby-version
 
 !.gitkeep
 
@@ -10,3 +11,5 @@ Thumbs.db
 .rvmrc
 *~
 Gemfile*
+demo/rings/*.ply
+demo/rings/*.wav

@@ -1,0 +1,171 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rings</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div id="spinner"></div>
+    <div id="container"></div>
+    <script id="vertexShader" type="x-shader/x-vertex">
+    uniform sampler2D bumpTexture;
+    uniform float bumpScale;
+    varying float vAmount;
+    varying vec2 vUV;
+
+    // via http://www.iquilezles.org/www/articles/functions/functions.htm
+    float almostIdentity( float x, float m, float n ) {
+        if( x>m ) return x;
+
+        float a = 2.0*n - m;
+        float b = 2.0*m - 3.0*n;
+        float t = x/m;
+
+        return (a*t + b)*t*t + n;
+    }
+
+    void main() {
+      vUV = uv;
+      vec4 bumpData = texture2D( bumpTexture, vUV );
+      vAmount = almostIdentity(bumpData.r, 0.009, 0.02);
+      // bumpData.r => assuming map is grayscale it doesn't matter if you use r, g, or b.
+
+      // move the position along the normal
+      vec3 newPosition = position + normal * bumpScale * vAmount;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+    }
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-vertex">
+
+      #define LOG2 1.442695
+      #define saturate(a) clamp( a, 0.0, 1.0 )
+      #define whiteCompliment(a) ( 1.0 - saturate( a ) )
+      varying vec2 vUV;
+      varying float vAmount;
+      uniform sampler2D grassTexture;
+      uniform sampler2D rockBottomTexture;
+      uniform sampler2D rockTopTexture;
+
+      uniform float fogDensity;
+      uniform vec3 fogColor;
+
+      void main() {
+        //black and white
+        //gl_FragColor = vec4(vAmount * 1.);
+        vec4 grass = (smoothstep(0.002, 0.006, vAmount) - smoothstep(0.005, 0.04, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
+        vec4 rocky = (smoothstep(0.005, 0.05, vAmount) - smoothstep(0.30, 0.60, vAmount)) * texture2D( rockBottomTexture, vUV * 20.0 );
+        vec4 snowy = (smoothstep(0.35, 0.65, vAmount))                                   * texture2D( rockTopTexture, vUV * 20.0 );
+        vec4 col = vec4(0.0, 0.0, 0.0, 1.0) + grass + rocky + snowy;
+
+        #ifdef USE_FOG // only FogExp2 is implemented
+          float depth = gl_FragCoord.z / gl_FragCoord.w;
+          float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * depth * depth * LOG2 ) );
+          gl_FragColor.rgb = mix( col.rgb, fogColor, fogFactor );
+        #else
+          gl_FragColor = col;
+        #endif
+
+      }
+    </script>
+
+    <script type="application/x-glsl" id="sky-vertex">
+    varying vec2 vUV;
+
+    void main() {
+      vUV = uv;
+      vec4 pos = vec4(position, 1.0);
+      gl_Position = projectionMatrix * modelViewMatrix * pos;
+    }
+    </script>
+
+    <script type="application/x-glsl" id="sky-fragment">
+    uniform sampler2D texture;
+    varying vec2 vUV;
+
+    void main() {
+      vec4 sample = texture2D(texture, vUV);
+      gl_FragColor = vec4(sample.xyz, sample.w);
+    }
+    </script>
+
+    <script id="vertexShaderTree" type="x-shader/x-vertex">
+      varying vec3 vNormal;
+      varying vec3 vPos;
+
+      void main() {
+        vNormal = normalMatrix * normal;
+        // as the light later will be given in world coordinate space,
+        // vPos has to be in world coordinate space too
+        vPos = (modelMatrix * vec4(position, 1.0 )).xyz;
+
+        gl_Position = projectionMatrix *
+                      modelViewMatrix *
+                      vec4(position, 1.0);
+      }
+    </script>
+
+    <script id="fragmentShaderTree" type="x-shader/x-vertex">
+      // fog's constant and functions
+      #define LOG2 1.442695
+      #define saturate(a) clamp( a, 0.0, 1.0 )
+      #define whiteCompliment(a) ( 1.0 - saturate( a ) )
+      // Comment this line to do not use the point light
+      #define CUSTOM_POINTLIGHTS
+
+      varying vec3 vNormal;
+      varying vec3 vPos;
+      uniform vec3 color;
+      uniform float fogDensity;
+      uniform vec3 fogColor;
+
+      struct PointLight {
+        vec3 position;
+        vec3 color;
+      };
+      uniform PointLight pointLights[ NUM_POINT_LIGHTS ];
+
+      void main() {
+        #ifdef CUSTOM_POINTLIGHTS
+          vec4 addedLights = vec4(0.5,0.2,0.5, 1.0);
+          for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
+            vec3 adjustedLight = pointLights[l].position + cameraPosition;
+            vec3 lightDirection = normalize(vPos - adjustedLight);
+            addedLights.rgb += clamp(dot(-lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
+          }
+          vec4 col = mix(vec4(color.x, color.y, color.z, 1.0), addedLights, addedLights);
+        #else
+          vec3 light = vec3(0.5, 0.2, 0.5);
+          light = normalize(light);
+          // calculate the dot product of the light to the vertex normal
+          float dProd = max(0.0,dot(vNormal, light));
+
+          // black and white
+          //vec4 col = vec4(dProd, dProd, dProd, 1.0);
+          // or colors
+          vec4 col = vec4( vec3( dProd ) * vec3( color ), 1.0 );
+        #endif
+
+        #ifdef USE_FOG // only FogExp2 is implemented
+          float depth = gl_FragCoord.z / gl_FragCoord.w;
+          float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * depth * depth * LOG2 ) );
+          gl_FragColor.rgb = mix( col.rgb, fogColor, fogFactor );
+        #else
+          gl_FragColor = col;
+        #endif
+        }
+    </script>
+
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
+    <script type="text/javascript" src="../js/dat.gui.min.js"></script>
+    <script type="text/javascript" src="../js/OrbitControls.js"></script>
+    <script type="text/javascript" src="../js/stats.min.js"></script>
+    <script type="text/javascript" src="../js/PLYLoader.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.2.4.min.js"></script>
+
+    <script type="text/javascript" src="index.js"></script>
+
+
+</body></html>
