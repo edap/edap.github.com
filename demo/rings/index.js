@@ -98,26 +98,6 @@ function init(treePly) {
     //tree
     treeMaterial = createTreeMaterial(scene.fog);
     var trees = createTrees(treePly,treeMaterial);
-
-    var forestBoundingBox = getForestBoundingBox(trees);
-    treeMaterial.uniforms.forestDimensionMin.needsUpdate = true;
-    treeMaterial.uniforms.forestDimensionMax.needsUpdate = true;
-    treeMaterial.uniforms.forestDimensionMin.value.setX(forestBoundingBox.min.x);
-    treeMaterial.uniforms.forestDimensionMin.value.setY(forestBoundingBox.min.y);
-    treeMaterial.uniforms.forestDimensionMax.value.setX(forestBoundingBox.max.x);
-    treeMaterial.uniforms.forestDimensionMax.value.setY(forestBoundingBox.max.y);
-    treeMaterial.uniforms.forestDimensionMin.needsUpdate = false;
-    treeMaterial.uniforms.forestDimensionMax.needsUpdate = false;
-
-    treeMaterial.uniforms.forestResolution.needsUpdate = true;
-    treeMaterial.uniforms.forestResolution.value.setX(
-        Math.abs(forestBoundingBox.min.x) + forestBoundingBox.max.x);
-    treeMaterial.uniforms.forestResolution.value.setY(
-        Math.abs(forestBoundingBox.min.y) + forestBoundingBox.max.y);
-    treeMaterial.uniforms.forestResolution.needsUpdate = false;
-
-
-
     scene.add(trees);
 
     container = document.getElementById( 'spinner' ).remove();
@@ -149,13 +129,9 @@ function createTreesGeometry(ofMesh){
 }
 
 function createTreeMaterial(fog, forestDimension){
-    var tmpDim = new THREE.Vector2(0,0);
     var screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     var tmp_uniforms = {
         time:               { type: "f", value: clock.getDelta() },
-        forestDimensionMin: { type: "v2", value: tmpDim },
-        forestDimensionMax: { type: "v2", value: tmpDim },
-        forestResolution:   { type: "v2", value: tmpDim },
         uResolution:        { type: "v2", value: screenResolution },
         amplitude:          { type: "f", value: 1.0 },
         ringThickness:      { type: "f", value: config.ringThickness },
@@ -193,7 +169,7 @@ function addGui() {
         gui = new dat.GUI();
         gui.add(treeMaterial.uniforms.bumpScale, 'value')
             .name('bumpScale').min(20).max(300).step(1.0);
-        gui.add(config, 'ringThickness', 0.02, 0.5).step(0.05).onChange( onThicknessUpdate);
+        gui.add(config, 'ringThickness', 0.005, 0.5).step(0.005).onChange( onThicknessUpdate);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
         gui.close();
@@ -221,6 +197,7 @@ function addStats() {
 }
 
 function onWindowResize() {
+    //you have also to update the uniforms of the screen resolution
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
