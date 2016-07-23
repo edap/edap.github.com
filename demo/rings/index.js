@@ -150,11 +150,13 @@ function createTreesGeometry(ofMesh){
 
 function createTreeMaterial(fog, forestDimension){
     var tmpDim = new THREE.Vector2(0,0);
+    var screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     var tmp_uniforms = {
         time:               { type: "f", value: clock.getDelta() },
         forestDimensionMin: { type: "v2", value: tmpDim },
         forestDimensionMax: { type: "v2", value: tmpDim },
         forestResolution:   { type: "v2", value: tmpDim },
+        uResolution:        { type: "v2", value: screenResolution },
         amplitude:          { type: "f", value: 1.0 },
         ringThickness:      { type: "f", value: config.ringThickness },
         bumpScale:          { type: "f", value: bumpScale },
