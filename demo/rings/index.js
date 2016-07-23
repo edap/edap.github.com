@@ -66,7 +66,7 @@ var loadPly = function (filename) {
 
 $.when(
         //loadAudio('beat.wav'),
-        loadPly('tree.ply')
+        loadPly('forest_simple.ply')
       ).then(
         function (treePly) {
             init(treePly);
