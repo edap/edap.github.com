@@ -13,8 +13,9 @@
       precision mediump float;
       varying vec3 vNormal;
       varying vec3 vPos;
-      //varying vec2 vUV;
+      varying vec2 vUV;
       varying vec2 vSt;
+      varying vec2 vForestResolution;
 
       uniform vec2 forestDimensionMax;
       uniform vec2 forestDimensionMin;
@@ -25,6 +26,8 @@
       }
 
       void main() {
+        vUV = uv;
+        vForestResolution = forestResolution;
         vNormal = normalMatrix * normal;
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
@@ -56,6 +59,8 @@
       varying vec3 vNormal;
       varying vec3 vPos;
       varying vec2 vSt;
+      varying vec2 vUV;
+      varying vec2 vForestResolution;
 
       uniform vec3 color;
       uniform float fogDensity;
@@ -77,6 +82,9 @@
       }
 
       void main() {
+
+        //vec2 screenUv = gl_FragCoord.xy/vForestResolution ;
+        vec2 screenUv  = -1.0 + 2.0 *vUV;
         #ifdef CUSTOM_POINTLIGHTS
           vec4 addedLights = vec4(0.5,0.2,0.5, 1.0);
           for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
@@ -93,7 +101,7 @@
               //provare con st
               //float y = cubicPulse(mod(uThreshold*uScale, 1.0),ringThickness,vSt.y-padding);
               //float y = cubicPulse(mod(time, 1.0),ringThickness,vSt.y-padding);
-              float y = cubicPulse(mod(time, 1.0),0.2,0.5);
+              float y = cubicPulse(mod(time, 1.0),ringThickness,screenUv.y);
               rcolor += vec4(vec3(1.0,0.0,0.0) * vec3(y), 1.0);
               padding += 0.2;
               //padding += inc;

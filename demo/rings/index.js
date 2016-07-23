@@ -191,7 +191,7 @@ function addGui() {
         gui = new dat.GUI();
         gui.add(treeMaterial.uniforms.bumpScale, 'value')
             .name('bumpScale').min(20).max(300).step(1.0);
-        gui.add(config, 'ringThickness', 0.05, 1.0).step(0.05).onChange( onThicknessUpdate);
+        gui.add(config, 'ringThickness', 0.02, 0.5).step(0.05).onChange( onThicknessUpdate);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
         gui.close();
