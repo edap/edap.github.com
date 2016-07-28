@@ -6,6 +6,10 @@ var Config = function(){
 
 var clock = new THREE.Clock(1);
 
+var maxiAudio = new maximJs.maxiAudio();
+var sample = new maximJs.maxiSample();
+var ctx = new AudioContext();
+
 var cameraZposition = 1000;
 
 var bumpScale = 200; // how much tha bumb affects the heights
@@ -18,29 +22,6 @@ var debug = true;
 
 //Trees
 var treeMaterial;
-
-// Loaders Promises
-var loadAudio = function (filename) {
-    var d = $.Deferred();
-    var audioLoader = new THREE.AudioLoader();
-    audioLoader.load(
-        filename,
-        //success callback
-        function (audioBuffer) {
-            d.resolve(audioBuffer);
-        },
-        //progress callback
-        function (xhr) {
-            d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-        //error callback
-        function (error) {
-            console.log('error while loading audio: ' + filename);
-            d.reject(error);
-        }
-    );
-    return d.promise();
-};
 
 var loadPly = function (filename) {
     var d = $.Deferred();
@@ -65,10 +46,10 @@ var loadPly = function (filename) {
 };
 
 $.when(
-        //loadAudio('beat.wav'),
+        maxiAudio.loadSample('beat.wav', sample, ctx),
         loadPly('forest_simple.ply')
       ).then(
-        function (treePly) {
+        function (_, treePly) {
             init(treePly);
             animate();
         },
@@ -85,7 +66,7 @@ function init(treePly) {
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2( 0x824938, 0.008 );
     //audio
-    // initAudio();
+    initAudio();
     // scene.add( barkingDogSound );
     // barkingDogSound.setBuffer(audioBuffer);
     // Create Light
@@ -157,12 +138,13 @@ function createTreeMaterial(fog, forestDimension){
     return customMaterial;
 }
 
-// function initAudio(){
-//     var audioListener = new THREE.AudioListener();
-//     camera.add( audioListener );
-//     barkingDogSound = new THREE.Audio( audioListener );
-//     barkingDogSound.setLoop(true);
-// }
+function initAudio(){
+    maxiAudio.init();
+    maxiAudio.play = function(){
+        var wave = sample.play();
+        this.output = wave * 0.5;
+    }
+}
 
 function addGui() {
     if (debug) {
@@ -210,9 +192,12 @@ function animate() {
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
     requestAnimationFrame( animate );
     render();
+    calRms();
     stats.update();
 }
 
+function calRms() {
+}
 function render() {
     //moveCamera();
     renderer.render( scene, camera );
