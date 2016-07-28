@@ -15,7 +15,6 @@ var ctx = new AudioContext();
 var counter = 0;
 var bufferCount = 0;
 var bufferOut = [];
-var output;
 
 var cameraZposition = 1000;
 
