@@ -2,6 +2,7 @@ var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#824938';
     this.ringThickness = 0.2;
+    this.volume = 0.5;
 };
 
 var clock = new THREE.Clock(1);
@@ -145,14 +146,13 @@ function createTreeMaterial(fog, forestDimension){
 }
 
 function initAudio(){
-    var volume = 0.5;
     maxiAudio.init();
     maxiAudio.outputIsArray(true, 2);
     maxiAudio.play = function(){
         bufferCount++;
         var wave1 = sample.play();
         //this.output = wave1 * 0.5;
-        var mix = wave1; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
+        var mix = wave1 * config.volume; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
         this.output[0] = mix;
         this.output[1] = this.output[0];
         bufferOut[bufferCount % 1024] = mix;
@@ -165,6 +165,7 @@ function addGui() {
         gui.add(treeMaterial.uniforms.bumpScale, 'value')
             .name('bumpScale').min(20).max(300).step(1.0);
         gui.add(config, 'ringThickness', 0.005, 0.5).step(0.005).onChange( onThicknessUpdate);
+        gui.add(config, 'volume', 0.1, 3.0).step(0.2);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
         gui.close();
