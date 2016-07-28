@@ -10,6 +10,12 @@ var maxiAudio = new maximJs.maxiAudio();
 var sample = new maximJs.maxiSample();
 var ctx = new AudioContext();
 
+//needed for rms calculation
+var counter = 0;
+var bufferCount = 0;
+var bufferOut = [];
+var output;
+
 var cameraZposition = 1000;
 
 var bumpScale = 200; // how much tha bumb affects the heights
@@ -47,7 +53,7 @@ var loadPly = function (filename) {
 
 $.when(
         maxiAudio.loadSample('beat.wav', sample, ctx),
-        loadPly('forest_simple.ply')
+        loadPly('tree.ply')
       ).then(
         function (_, treePly) {
             init(treePly);
@@ -139,10 +145,17 @@ function createTreeMaterial(fog, forestDimension){
 }
 
 function initAudio(){
+    var volume = 0.5;
     maxiAudio.init();
+    //maxiAudio.outputIsArray(true, 2);
     maxiAudio.play = function(){
-        var wave = sample.play();
-        this.output = wave * 0.5;
+        bufferCount++;
+        var wave1 = sample.play();
+        this.output = wave1 * 0.5;
+        // var mix = wave1; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
+        // output[0] = mix;
+        // output[1] = output[0];
+        // bufferOut[bufferCount % 1024] = mix;
     }
 }
 
