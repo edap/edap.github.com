@@ -147,15 +147,15 @@ function createTreeMaterial(fog, forestDimension){
 function initAudio(){
     var volume = 0.5;
     maxiAudio.init();
-    //maxiAudio.outputIsArray(true, 2);
+    maxiAudio.outputIsArray(true, 2);
     maxiAudio.play = function(){
         bufferCount++;
         var wave1 = sample.play();
-        this.output = wave1 * 0.5;
-        // var mix = wave1; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
-        // output[0] = mix;
-        // output[1] = output[0];
-        // bufferOut[bufferCount % 1024] = mix;
+        //this.output = wave1 * 0.5;
+        var mix = wave1; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
+        this.output[0] = mix;
+        this.output[1] = this.output[0];
+        bufferOut[bufferCount % 1024] = mix;
     }
 }
 
