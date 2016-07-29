@@ -111,7 +111,6 @@ function createTreesGeometry(ofMesh){
 function createTreeMaterial(){
     var screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     var tmp_uniforms = {
-        time:               { type: "f", value: clock.getDelta() },
         uResolution:        { type: "v2", value: screenResolution },
         rms:                { type: "f", value: 0.0 },
         scaleRing:          { type: "f", value: 1.0 },
@@ -207,9 +206,8 @@ function onWindowResize() {
 function animate() {
     treeMaterial.uniforms.ringColor.needsUpdate = true;
     treeMaterial.uniforms.treeColor.needsUpdate = true;
-    treeMaterial.uniforms.time.needsUpdate = true;
-    treeMaterial.uniforms.rms.needsUpdate = true;
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
+    treeMaterial.uniforms.rms.needsUpdate = true;
     treeMaterial.uniforms.scaleRing.needsUpdate = true;
     requestAnimationFrame( animate );
     render();
@@ -231,7 +229,6 @@ function calcRms(bufferOut) {
 function render() {
     //moveCamera();
     renderer.render( scene, camera );
-    treeMaterial.uniforms.time.value = clock.getElapsedTime() * 5;
 }
 
 function moveCamera() {

@@ -44,7 +44,6 @@
 
       uniform vec3 ringColor;
       uniform vec3 treeColor;
-      uniform float time;
       uniform float rms;
       uniform float scaleRing;
       uniform float ringThickness;
@@ -79,7 +78,7 @@
           vec4 rcolor = vec4(treeColor, 1.0);
 
           for (int i = 0; i< MAX_NUM_RINGS; i++) {
-              float y = cubicPulse(mod(time * 0.12, 1.0),ringThickness,vFuck - padding);
+              float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck - padding);
               rcolor += vec4(vec3(1.0,0.0,0.0) * vec3(y), 1.0);
               padding += inc;
           }
