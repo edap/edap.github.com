@@ -12,7 +12,7 @@
     <script id="vertexShaderTree" type="x-shader/x-vertex">
       precision mediump float;
       varying vec3 vecNormal;
-      varying vec3 vecPos;
+      varying vec4 vecPos;
       varying float vFuck;
       uniform vec2 uResolution;
 
@@ -24,12 +24,10 @@
         vecNormal = normalMatrix * normal;
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
-        vecPos = (modelMatrix * vec4(position, 1.0 )).xyz;
+        vecPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         vFuck  = position.y/uResolution.y;
-        gl_Position = projectionMatrix *
-                      modelViewMatrix *
-                      vec4(position, 1.0);
-      }
+        gl_Position = vecPos;
+        }
     </script>
 
     <script id="fragmentShaderTree" type="x-shader/x-vertex">
@@ -39,7 +37,7 @@
       #define MAX_NUM_RINGS 5
 
       varying vec3 vecNormal;
-      varying vec3 vecPos;
+      varying vec4 vecPos;
       varying float vFuck;
 
       uniform vec3 ringColor;
@@ -69,7 +67,7 @@
           vec4 addedLights = vec4(0.5,0.2,0.5, 1.0);
           for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
             vec3 adjustedLight = pointLights[l].position + cameraPosition;
-            vec3 lightDirection = normalize(vecPos - adjustedLight);
+            vec3 lightDirection = normalize(vecPos.xyz - adjustedLight);
             addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;
           }
 
