@@ -11,7 +11,7 @@
 
     <script id="vertexShaderTree" type="x-shader/x-vertex">
       precision mediump float;
-      varying vec3 vNormal;
+      varying vec3 vecNormal;
       varying vec3 vecPos;
       varying float vFuck;
       uniform vec2 uResolution;
@@ -21,7 +21,7 @@
       }
 
       void main() {
-        vNormal = normalMatrix * normal;
+        vecNormal = normalMatrix * normal;
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
         vecPos = (modelMatrix * vec4(position, 1.0 )).xyz;
@@ -75,8 +75,8 @@
           vec4 addedLights = vec4(0.5,0.2,0.5, 1.0);
           for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
             vec3 adjustedLight = pointLights[l].position + cameraPosition;
-            vec3 lightDirection = normalize(vPos - adjustedLight);
-            addedLights.rgb += clamp(dot(-lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
+            vec3 lightDirection = normalize(vecPos - adjustedLight);
+            addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;
           }
 
           float inc = 1.0/float(MAX_NUM_RINGS);
