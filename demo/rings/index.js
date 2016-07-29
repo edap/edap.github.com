@@ -26,8 +26,6 @@ var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
 var debug = true;
 
-// Background
-
 //Trees
 var treeMaterial;
 
