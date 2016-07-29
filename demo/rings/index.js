@@ -55,6 +55,7 @@ var loadPly = function (filename) {
 $.when(
         maxiAudio.loadSample('beat.wav', sample, ctx),
         loadPly('tree.ply')
+        //loadPly('forest_simple.ply')
       ).then(
         function (_, treePly) {
             init(treePly);
@@ -221,7 +222,6 @@ function calcRms(bufferOut) {
         rms = Math.sqrt(rms);
         smoothedVolume *= smoothedVolume;
         smoothedVolume = rms;
-        //console.log(smoothedVolume);
         treeMaterial.uniforms.rms.value = smoothedVolume;
     }
 }
