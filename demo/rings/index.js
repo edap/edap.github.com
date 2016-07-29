@@ -1,6 +1,6 @@
 var Config = function(){
     this.lightColor = '#acac0f';
-    this.treeColor = '#824938';
+    this.treeColor = '#000000';
     this.ringColor = '#ff0000';
     this.ringThickness = 0.2;
     this.volume = 0.5;
@@ -128,7 +128,7 @@ function createTreeMaterial(fog, forestDimension){
         ringNumber:         { type: "f", value: config.ringNumber },
         fogDensity:         { type: "f", value: fog.density },
         fogColor:           { type: "c", value: fog.color },
-        color:              { type: "c", value: new THREE.Color( config.treeColor ) },
+        treeColor:          { type: "c", value: new THREE.Color( config.treeColor ) },
     };
 
     var uniforms = THREE.UniformsUtils.merge([
@@ -179,7 +179,7 @@ function addGui() {
 }
 
 var onTreeColorUpdate = function(ev) {
-    treeMaterial.uniforms.color.value.set(config.treeColor);
+    treeMaterial.uniforms.treeColor.value.set(config.treeColor);
 };
 
 var onRingColorUpdate = function(ev) {
@@ -217,8 +217,8 @@ function onWindowResize() {
 }
 
 function animate() {
-    treeMaterial.uniforms.color.needsUpdate = true;
-    treeMaterial.uniforms.color.ringColor = true;
+    treeMaterial.uniforms.ringColor.needsUpdate = true;
+    treeMaterial.uniforms.treeColor.needsUpdate = true;
     treeMaterial.uniforms.time.needsUpdate = true;
     treeMaterial.uniforms.rms.needsUpdate = true;
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
