@@ -1,6 +1,7 @@
 var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#824938';
+    this.ringColor = '#ff0000';
     this.ringThickness = 0.2;
     this.volume = 0.5;
     this.scaleRing = 1.0;
@@ -123,6 +124,7 @@ function createTreeMaterial(fog, forestDimension){
         rms:                { type: "f", value: 0.0 },
         scaleRing:          { type: "f", value: 1.0 },
         ringThickness:      { type: "f", value: config.ringThickness },
+        ringColor:          { type: "c", value: new THREE.Color( config.ringColor ) },
         ringNumber:         { type: "f", value: config.ringNumber },
         fogDensity:         { type: "f", value: fog.density },
         fogColor:           { type: "c", value: fog.color },
@@ -171,6 +173,7 @@ function addGui() {
         gui.add(config, 'scaleRing', 0.5, 3.0).step(0.4).onChange( onScaleRingUpdate);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
+        gui.addColor(config,'ringColor').name('ring color').onChange( onRingColorUpdate );
         gui.close();
     }
 }
@@ -178,6 +181,11 @@ function addGui() {
 var onTreeColorUpdate = function(ev) {
     treeMaterial.uniforms.color.value.set(config.treeColor);
 };
+
+var onRingColorUpdate = function(ev) {
+    treeMaterial.uniforms.ringColor.value.set(config.ringColor);
+};
+
 
 var onThicknessUpdate = function(ev) {
     treeMaterial.uniforms.ringThickness.value = config.ringThickness;
@@ -210,6 +218,7 @@ function onWindowResize() {
 
 function animate() {
     treeMaterial.uniforms.color.needsUpdate = true;
+    treeMaterial.uniforms.color.ringColor = true;
     treeMaterial.uniforms.time.needsUpdate = true;
     treeMaterial.uniforms.rms.needsUpdate = true;
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
