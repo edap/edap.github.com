@@ -12,7 +12,7 @@
     <script id="vertexShaderTree" type="x-shader/x-vertex">
       precision mediump float;
       varying vec3 vNormal;
-      varying vec3 vPos;
+      varying vec3 vecPos;
       varying float vFuck;
       uniform vec2 uResolution;
 
@@ -24,7 +24,7 @@
         vNormal = normalMatrix * normal;
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
-        vPos = (modelMatrix * vec4(position, 1.0 )).xyz;
+        vecPos = (modelMatrix * vec4(position, 1.0 )).xyz;
         vFuck  = position.y/uResolution.y;
         gl_Position = projectionMatrix *
                       modelViewMatrix *
@@ -43,7 +43,7 @@
       #define MAX_NUM_RINGS 5
 
       varying vec3 vNormal;
-      varying vec3 vPos;
+      varying vec3 vecPos;
       varying float vFuck;
 
       uniform vec3 color;
@@ -91,14 +91,14 @@
           vec4 col = mix(vec4(rcolor.xyz, 1.0), addedLights, addedLights);
         #else
           vec3 light = vec3(0.5, 0.2, 0.5);
-          light = normalize(light);
-          float dProd = max(0.0,dot(vNormal, light));
+          vec3 lightDirection = normalize(vecPos.xyz - light);
+          float dProd = max(0.3,dot(vNormal, lightDirection));
           vec3 ringCol = vec3(1.0,0.0,0.0);
           //float y = cubicPulse(mod(time*0.2, 1.0),ringThickness,vFuck);
           float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck);
           // use simple fixed light, or
-          //vec4 col = vec4( vec3( dProd ) * vec3( y ) * ringCol, 1.0 );
-          vec4 col = vec4( vec3( y ) * ringCol, 1.0 );
+          vec4 col = vec4( vec3( dProd ) * vec3( y ) * ringCol, 1.0 );
+          //vec4 col = vec4( vec3( y ) * ringCol, 1.0 );
         #endif
 
         #ifdef USE_FOG // only FogExp2 is implemented
