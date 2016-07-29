@@ -96,11 +96,6 @@ function init(treePly) {
     addStats();
 }
 
-function getForestBoundingBox(mesh){
-    var boundingBox = new THREE.Box3().setFromObject( mesh );
-    return boundingBox;
-}
-
 function createTrees(ofMesh, treeMaterial){
     var treesGeometry = createTreesGeometry(ofMesh);
     return new THREE.Mesh( treesGeometry, treeMaterial);
@@ -183,7 +178,6 @@ var onRingColorUpdate = function(ev) {
     treeMaterial.uniforms.ringColor.value.set(config.ringColor);
 };
 
-
 var onThicknessUpdate = function(ev) {
     treeMaterial.uniforms.ringThickness.value = config.ringThickness;
 };
@@ -191,7 +185,6 @@ var onThicknessUpdate = function(ev) {
 var onScaleRingUpdate = function(ev) {
     treeMaterial.uniforms.scaleRing.value = config.scaleRing;
 };
-
 
 var onLightColorUpdate = function(ev) {
     light.color.set(config.lightColor);
