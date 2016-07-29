@@ -1,8 +1,8 @@
 var Config = function(){
     this.lightColor = '#acac0f';
-    this.treeColor = '#000000';
+    this.treeColor = '#00ff00';
     this.ringColor = '#ff0000';
-    this.ringThickness = 0.2;
+    this.ringThickness = 0.02;
     this.volume = 0.5;
     this.scaleRing = 1.0;
 };
@@ -82,6 +82,7 @@ function init(treePly) {
     scene.add(light);
 
     renderer = new THREE.WebGLRenderer( { antialias: true, depth:true } );
+    renderer.setClearColor( config.treeColor);
     renderer.setSize( window.innerWidth, window.innerHeight );
     //tree
     treeMaterial = createTreeMaterial(scene.fog);
@@ -168,7 +169,7 @@ function initAudio(){
 function addGui() {
     if (debug) {
         gui = new dat.GUI();
-        gui.add(config, 'ringThickness', 0.005, 0.5).step(0.005).onChange( onThicknessUpdate);
+        gui.add(config, 'ringThickness', 0.005, 0.002).step(0.003).onChange( onThicknessUpdate);
         gui.add(config, 'volume', 0.1, 3.0).step(0.2);
         gui.add(config, 'scaleRing', 0.5, 3.0).step(0.4).onChange( onScaleRingUpdate);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
@@ -180,6 +181,7 @@ function addGui() {
 
 var onTreeColorUpdate = function(ev) {
     treeMaterial.uniforms.treeColor.value.set(config.treeColor);
+    renderer.setClearColor( config.treeColor);
 };
 
 var onRingColorUpdate = function(ev) {

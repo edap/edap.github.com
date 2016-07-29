@@ -99,15 +99,17 @@
           float dProd = max(0.3,dot(vecNormal, lightDirection));
           vec3 ringCol = vec3(1.0,0.0,0.0);
 
-          vec4 col = vec4(treeColor, 1.0);
+          vec4 tmpCol = vec4(treeColor, 1.0);
           for (int i = 0; i< MAX_NUM_RINGS; i++) {
             float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck - padding);
-            col += vec4(vec3( y ) * vec3(ringColor), 1.0);
+            tmpCol += vec4(vec3( y ) * vec3(ringColor), 1.0);
             padding +=inc;
           }
 
+          // TODO, se usi la luce devi eliminarla dal tronco.Quando non
+          // ha l'anello, altrimenti non usare la luce
           // Questo usa la luce
-          //vec4 col = vec4( vec3( dProd ) * vec3( y ) * ringCol, 1.0 );
+          vec4 col = vec4( vec3( dProd ) * tmpCol.xyz, 1.0 );
           // QUesto no
           //vec4 col = vec4( vec3( y ) * ringColor, 1.0 );
         #endif
