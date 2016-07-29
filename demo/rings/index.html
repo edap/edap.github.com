@@ -40,7 +40,7 @@
       #define whiteCompliment(a) ( 1.0 - saturate( a ) )
       // Comment this line to do not use the point light
       //#define CUSTOM_POINTLIGHTS
-      #define NUM_RINGS 5
+      #define MAX_NUM_RINGS 5
 
       varying vec3 vNormal;
       varying vec3 vPos;
@@ -77,11 +77,11 @@
             addedLights.rgb += clamp(dot(-lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
           }
 
-          float inc = 1.0/float(NUM_RINGS);
+          float inc = 1.0/float(MAX_NUM_RINGS);
           float padding = 0.0;
           vec4 rcolor = vec4(color, 1.0);
 
-          for (int i = 0; i< NUM_RINGS; i++) {
+          for (int i = 0; i< MAX_NUM_RINGS; i++) {
               float y = cubicPulse(mod(time * 0.12, 1.0),ringThickness,vFuck - padding);
               rcolor += vec4(vec3(1.0,0.0,0.0) * vec3(y), 1.0);
               padding += inc;
