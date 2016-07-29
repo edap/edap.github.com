@@ -12,13 +12,14 @@ var sample = new maximJs.maxiSample();
 var ctx = new AudioContext();
 
 //needed for rms calculation
-var counter = 0;
 var bufferCount = 0;
 var bufferOut = [];
+var rms = 0;
+var examplesCounted = 0;
+var smoothedVolume = 0;
 
 var cameraZposition = 1000;
 
-var bumpScale = 200; // how much tha bumb affects the heights
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
@@ -120,9 +121,8 @@ function createTreeMaterial(fog, forestDimension){
     var tmp_uniforms = {
         time:               { type: "f", value: clock.getDelta() },
         uResolution:        { type: "v2", value: screenResolution },
-        amplitude:          { type: "f", value: 1.0 },
+        rms:                { type: "f", value: 0.0 },
         ringThickness:      { type: "f", value: config.ringThickness },
-        bumpScale:          { type: "f", value: bumpScale },
         fogDensity:         { type: "f", value: fog.density },
         fogColor:           { type: "c", value: fog.color },
         color:              { type: "c", value: new THREE.Color( config.treeColor ) },
@@ -147,22 +147,23 @@ function createTreeMaterial(fog, forestDimension){
 function initAudio(){
     maxiAudio.init();
     maxiAudio.outputIsArray(true, 2);
-    maxiAudio.play = function(){
+    maxiAudio.play = function() {
         bufferCount++;
         var wave1 = sample.play();
-        //this.output = wave1 * 0.5;
         var mix = wave1 * config.volume; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
         this.output[0] = mix;
         this.output[1] = this.output[0];
         bufferOut[bufferCount % 1024] = mix;
+        var left = this.output[0];
+        var right = this.output[1];
+        rms += left * left;
+        examplesCounted += 2;
     }
 }
 
 function addGui() {
     if (debug) {
         gui = new dat.GUI();
-        gui.add(treeMaterial.uniforms.bumpScale, 'value')
-            .name('bumpScale').min(20).max(300).step(1.0);
         gui.add(config, 'ringThickness', 0.005, 0.5).step(0.005).onChange( onThicknessUpdate);
         gui.add(config, 'volume', 0.1, 3.0).step(0.2);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
@@ -205,12 +206,20 @@ function animate() {
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
     requestAnimationFrame( animate );
     render();
-    calRms();
+    calcRms(bufferOut);
     stats.update();
 }
 
-function calRms() {
+function calcRms(bufferOut) {
+    if (bufferOut.length === 1024) {
+        rms /= examplesCounted;
+        rms = Math.sqrt(rms);
+        smoothedVolume *= smoothedVolume;
+        smoothedVolume = rms;
+        console.log(smoothedVolume);
+    }
 }
+
 function render() {
     //moveCamera();
     renderer.render( scene, camera );
