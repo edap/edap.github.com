@@ -1,6 +1,6 @@
 var Config = function(){
     this.lightColor = '#acac0f';
-    this.treeColor = '#00ff00';
+    this.treeColor = '#316431';
     this.ringColor = '#ff0000';
     this.ringThickness = 0.02;
     this.volume = 0.5;
