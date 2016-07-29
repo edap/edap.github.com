@@ -50,6 +50,8 @@
       uniform float fogDensity;
       uniform vec3 fogColor;
       uniform float time;
+      uniform float rms;
+      uniform float scaleRing;
       uniform float ringThickness;
       uniform vec2 uResolution;
 
@@ -92,7 +94,8 @@
           light = normalize(light);
           float dProd = max(0.0,dot(vNormal, light));
           vec3 ringCol = vec3(1.0,0.0,0.0);
-          float y = cubicPulse(mod(time*0.2, 1.0),ringThickness,vFuck);
+          //float y = cubicPulse(mod(time*0.2, 1.0),ringThickness,vFuck);
+          float y = cubicPulse(mod(rms * 3.0, 1.0),ringThickness,vFuck);
           // use simple fixed light, or
           //vec4 col = vec4( vec3( dProd ) * vec3( y ) * ringCol, 1.0 );
           vec4 col = vec4( vec3( y ) * ringCol, 1.0 );

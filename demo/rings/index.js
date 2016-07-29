@@ -157,6 +157,7 @@ function initAudio(){
         var left = this.output[0];
         var right = this.output[1];
         rms += left * left;
+        rms += right * right;
         examplesCounted += 2;
     }
 }
@@ -203,7 +204,9 @@ function onWindowResize() {
 function animate() {
     treeMaterial.uniforms.color.needsUpdate = true;
     treeMaterial.uniforms.time.needsUpdate = true;
+    treeMaterial.uniforms.rms.needsUpdate = true;
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
+    treeMaterial.uniforms.scaleRing.needsUpdate = true;
     requestAnimationFrame( animate );
     render();
     calcRms(bufferOut);
@@ -216,7 +219,8 @@ function calcRms(bufferOut) {
         rms = Math.sqrt(rms);
         smoothedVolume *= smoothedVolume;
         smoothedVolume = rms;
-        console.log(smoothedVolume);
+        //console.log(smoothedVolume);
+        treeMaterial.uniforms.rms.value = smoothedVolume;
     }
 }
 
