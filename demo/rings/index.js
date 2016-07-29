@@ -157,7 +157,7 @@ function initAudio(){
 function addGui() {
     if (debug) {
         gui = new dat.GUI();
-        gui.add(config, 'ringThickness', 0.005, 0.002).step(0.003).onChange( onThicknessUpdate);
+        gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
         gui.add(config, 'volume', 0.1, 3.0).step(0.2);
         gui.add(config, 'scaleRing', 0.5, 3.0).step(0.4).onChange( onScaleRingUpdate);
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
