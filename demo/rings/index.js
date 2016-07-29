@@ -102,8 +102,6 @@ function createTrees(ofMesh, treeMaterial){
 }
 
 function createTreesGeometry(ofMesh){
-    var density = 1; // n trees pro point in curve
-
     ofMesh.computeFaceNormals();
     ofMesh.computeVertexNormals();
     var treeGeometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
