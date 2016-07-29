@@ -71,11 +71,9 @@ function init(treePly) {
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2( 0x824938, 0.008 );
     //audio
     initAudio();
-    // scene.add( barkingDogSound );
-    // barkingDogSound.setBuffer(audioBuffer);
+
     // Create Light
     light = new THREE.PointLight(config.lightColor);
     light.position.set(100, 200, 50);
@@ -85,7 +83,7 @@ function init(treePly) {
     renderer.setClearColor( config.treeColor);
     renderer.setSize( window.innerWidth, window.innerHeight );
     //tree
-    treeMaterial = createTreeMaterial(scene.fog);
+    treeMaterial = createTreeMaterial();
     var trees = createTrees(treePly,treeMaterial);
     scene.add(trees);
 
@@ -117,7 +115,7 @@ function createTreesGeometry(ofMesh){
     return treeGeometry;
 }
 
-function createTreeMaterial(fog, forestDimension){
+function createTreeMaterial(){
     var screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     var tmp_uniforms = {
         time:               { type: "f", value: clock.getDelta() },
@@ -127,8 +125,6 @@ function createTreeMaterial(fog, forestDimension){
         ringThickness:      { type: "f", value: config.ringThickness },
         ringColor:          { type: "c", value: new THREE.Color( config.ringColor ) },
         ringNumber:         { type: "f", value: config.ringNumber },
-        fogDensity:         { type: "f", value: fog.density },
-        fogColor:           { type: "c", value: fog.color },
         treeColor:          { type: "c", value: new THREE.Color( config.treeColor ) },
     };
 
@@ -138,7 +134,6 @@ function createTreeMaterial(fog, forestDimension){
     ]);
     var customMaterial = new THREE.ShaderMaterial({
         uniforms: uniforms,
-        fog: false,
         lights: true,
         vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShaderTree' ).textContent
