@@ -2,6 +2,8 @@ var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#316431';
     this.ringColor = '#ff0000';
+    this.minTreshold = 0.001;
+    this.decayRate = 0.6;
     this.ringNumber = 3;
     this.ringThickness = 0.02;
     this.volume = 0.5;
@@ -15,11 +17,11 @@ var sample = new maximJs.maxiSample();
 var ctx = new AudioContext();
 
 //needed for rms calculation
+var threshold = 0;
 var bufferCount = 0;
 var bufferOut = [];
 var rms = 0;
 var examplesCounted = 0;
-var smoothedVolume = 0;
 
 var cameraZposition = 1000;
 
@@ -159,8 +161,10 @@ function initAudio(){
 function addGui() {
     if (debug) {
         gui = new dat.GUI();
-        gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
         gui.add(config, 'volume', 0.1, 3.0).step(0.2);
+        gui.add(config, 'minTreshold', 0.001, 0.5).step(0.001);
+        gui.add(config, 'decayRate', 0.05, 1.0).step(0.05);
+        gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
         gui.add(config, 'scaleRing', 0.5, 3.0).step(0.4).onChange( onScaleRingUpdate);
         gui.add(config,'ringNumber', 1, 18).step(1).name('ring number').onChange( onRingNumberUpdate );
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
@@ -228,9 +232,12 @@ function calcRms(bufferOut) {
     if (bufferOut.length === 1024) {
         rms /= examplesCounted;
         rms = Math.sqrt(rms);
-        smoothedVolume *= smoothedVolume;
-        smoothedVolume = rms;
-        treeMaterial.uniforms.rms.value = smoothedVolume;
+
+        threshold = lerp(threshold, this.config.minTreshold, this.config.decayRate);
+        if (rms > threshold) {
+            threshold = rms;
+        }
+        treeMaterial.uniforms.rms.value = threshold;
     }
 }
 
@@ -241,4 +248,8 @@ function render() {
 
 function moveCamera() {
     camera.position.set(camPos.x, yPos, camPos.z);
+}
+
+function lerp(start, end, pos){
+    return start + (end - start) * pos;
 }
