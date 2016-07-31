@@ -2,6 +2,7 @@ var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#316431';
     this.ringColor = '#ff0000';
+    this.ringNumber = 3;
     this.ringThickness = 0.02;
     this.volume = 0.5;
     this.scaleRing = 1.0;
@@ -115,6 +116,7 @@ function createTreeMaterial(){
         uResolution:        { type: "v2", value: screenResolution },
         rms:                { type: "f", value: 0.0 },
         scaleRing:          { type: "f", value: 1.0 },
+        ringNumber:         { type: "i", value: config.ringNumber },
         ringThickness:      { type: "f", value: config.ringThickness },
         ringColor:          { type: "c", value: new THREE.Color( config.ringColor ) },
         ringNumber:         { type: "f", value: config.ringNumber },
@@ -160,6 +162,7 @@ function addGui() {
         gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
         gui.add(config, 'volume', 0.1, 3.0).step(0.2);
         gui.add(config, 'scaleRing', 0.5, 3.0).step(0.4).onChange( onScaleRingUpdate);
+        gui.add(config,'ringNumber', 1, 18).step(1).name('ring number').onChange( onRingNumberUpdate );
         gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
         gui.addColor(config,'ringColor').name('ring color').onChange( onRingColorUpdate );
@@ -174,6 +177,10 @@ var onTreeColorUpdate = function(ev) {
 
 var onRingColorUpdate = function(ev) {
     treeMaterial.uniforms.ringColor.value.set(config.ringColor);
+};
+
+var onRingNumberUpdate = function(ev) {
+    treeMaterial.uniforms.ringNumber.value = config.ringNumber;
 };
 
 var onThicknessUpdate = function(ev) {
@@ -208,6 +215,7 @@ function animate() {
     treeMaterial.uniforms.ringColor.needsUpdate = true;
     treeMaterial.uniforms.treeColor.needsUpdate = true;
     treeMaterial.uniforms.ringThickness.needsUpdate = true;
+    treeMaterial.uniforms.ringNumber.needsUpdate = true;
     treeMaterial.uniforms.rms.needsUpdate = true;
     treeMaterial.uniforms.scaleRing.needsUpdate = true;
     requestAnimationFrame( animate );

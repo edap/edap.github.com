@@ -33,14 +33,15 @@
     <script id="fragmentShaderTree" type="x-shader/x-vertex">
       precision mediump float;
       // Comment this line to do not use the point light
-      //#define CUSTOM_POINTLIGHTS
-      #define MAX_NUM_RINGS 5
+      #define CUSTOM_POINTLIGHTS
+      #define MAX_NUM_RINGS 18
 
       varying vec3 vecNormal;
       varying vec4 vecPos;
       varying float vFuck;
 
       uniform vec3 ringColor;
+      uniform int ringNumber;
       uniform vec3 treeColor;
       uniform float rms;
       uniform float scaleRing;
@@ -61,36 +62,46 @@
       }
 
       void main() {
-
-        //vec2 screenUv = gl_FragCoord.xy/vForestResolution ;
         #ifdef CUSTOM_POINTLIGHTS
-          vec4 addedLights = vec4(0.5,0.2,0.5, 1.0);
+          vec4 addedLights = vec4(0.0,0.0,0.0, 1.0);
           for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
             vec3 adjustedLight = pointLights[l].position + cameraPosition;
             vec3 lightDirection = normalize(vecPos.xyz - adjustedLight);
             addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;
           }
 
-          float inc = 1.0/float(MAX_NUM_RINGS);
+          float inc = 1.0/float(ringNumber);
           float padding = 0.0;
-          vec4 rcolor = vec4(treeColor, 1.0);
+          vec4 tmpCol = vec4(treeColor, 1.0);
 
           for (int i = 0; i< MAX_NUM_RINGS; i++) {
+              if (i == ringNumber ) break;
               float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck - padding);
-              rcolor += vec4(vec3(1.0,0.0,0.0) * vec3(y), 1.0);
+              // apply light on the whole tree's mesh
+              //tmpCol += vec4( ringColor.xyz * vec3(y), 1.0);
+              // apply lights only on the rings
+              tmpCol += mix(
+                vec4( ringColor.xyz * vec3(y), 1.0),
+                addedLights * vec4(vec3(y), 1.0),
+                addedLights * vec4(vec3(y), 1.0)
+              );
               padding += inc;
           }
-          vec4 col = mix(vec4(rcolor.xyz, 1.0), addedLights, addedLights);
+          // apply light on the whole tree's mesh
+          //vec4 col = mix(vec4(tmpCol.xyz, 1.0), addedLights, addedLights);
+          // apply lights only on the rings
+          vec4 col = tmpCol;
         #else
-          float inc = 1.0/float(MAX_NUM_RINGS);
+          float inc = 1.0/float(ringNumber);
           float padding = 0.0;
-
+          //arbitrary light position
           vec3 lightPos = vec3(0.5, 0.2, 0.5);
           vec3 lightDirection = normalize(vecPos.xyz - lightPos);
           float dProd = max(0.6,dot(vecNormal, lightDirection));
 
           vec4 tmpCol = vec4(treeColor, 1.0);
           for (int i = 0; i< MAX_NUM_RINGS; i++) {
+            if (i == ringNumber ) break;
             float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck - padding);
             //apply light only to the rings
             tmpCol += vec4( vec3( dProd ) *vec3( y ) * vec3(ringColor), y);
