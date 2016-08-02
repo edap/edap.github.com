@@ -1,4 +1,4 @@
-var debug = false;
+var debug = true;
 var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#316431';
