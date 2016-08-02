@@ -11,6 +11,24 @@ var Config = function(){
     this.scaleRing = 1.0;
 };
 
+//scenes
+//
+var scene1 = {
+    treeColor: '',
+    lightColor: '',
+    ringColor: '',
+};
+
+var scene2 = {
+    treeColor: '',
+    lightColor: '',
+    ringColor: '',
+};
+
+var scenography = [];
+scenography.push(scene1, scene2);
+
+
 var clock = new THREE.Clock(1);
 
 var maxiAudio = new maximJs.maxiAudio();
@@ -160,25 +178,23 @@ function initAudio(){
 }
 
 function addGui() {
-    if (debug) {
-        gui = new dat.GUI();
-        gui.add(config, 'volume', 0.1, 3.0).step(0.2);
-        gui.add(config, 'minTreshold', 0.001, 0.5).step(0.001);
-        gui.add(config, 'decayRate', 0.05, 1.0).step(0.05);
-        gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
-        gui.add(config, 'scaleRing', 0.5, 3.0).step(0.4).onChange( onScaleRingUpdate);
-        gui.add(config,'ringNumber', 1, 18).step(1).name('ring number').onChange( onRingNumberUpdate );
-        gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
-        gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
-        gui.addColor(config,'ringColor').name('ring color').onChange( onRingColorUpdate );
-        gui.close();
-    }
+    gui = new dat.GUI();
+    gui.add(config, 'volume', 0.1, 3.0).step(0.2);
+    gui.add(config, 'minTreshold', 0.001, 0.5).step(0.001);
+    gui.add(config, 'decayRate', 0.05, 1.0).step(0.05);
+    gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
+    gui.add(config, 'scaleRing', 0.5, 8.0).step(0.4).onChange( onScaleRingUpdate);
+    gui.add(config,'ringNumber', 1, 18).step(1).name('ring number').onChange( onRingNumberUpdate );
+    gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
+    gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
+    gui.addColor(config,'ringColor').name('ring color').onChange( onRingColorUpdate );
+    gui.close();
+    dat.GUI.toggleHide();
 }
 
 var maybeGuiPressed = function(ev) {
-    console.log(ev.keyCode);
-    if ( ev === 103) {
-        debug = !debug;
+    if ( ev.keyCode === 103) {
+        dat.GUI.toggleHide();
     }
 }
 
@@ -240,6 +256,7 @@ function calcRms(bufferOut) {
     if (bufferOut.length === 1024) {
         rms /= examplesCounted;
         rms = Math.sqrt(rms);
+        //console.log(rms);
 
         threshold = lerp(threshold, this.config.minTreshold, this.config.decayRate);
         if (rms > threshold) {
