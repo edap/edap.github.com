@@ -13,17 +13,20 @@ var Config = function(){
 
 //scenes
 //
+var rmsTickerTreshold = 0.002;
 var scene1 = {
-    treeColor: '',
-    lightColor: '',
-    ringColor: '',
+    treeColor: '#9b9318',
+    lightColor: '#bb1982',
+    ringColor: '#1d087d',
 };
 
 var scene2 = {
-    treeColor: '',
-    lightColor: '',
-    ringColor: '',
+    treeColor: '#fbff00',
+    lightColor: '#FF6A66',
+    ringColor: '#1b7fcc',
 };
+
+var tick = 0;
 
 var scenography = [];
 scenography.push(scene1, scene2);
@@ -74,7 +77,10 @@ var loadPly = function (filename) {
 };
 
 $.when(
-        maxiAudio.loadSample('beat.wav', sample, ctx),
+        //maxiAudio.loadSample('Beto_Villares_-_Quincas.mp3', sample, ctx),
+        //maxiAudio.loadSample('Met_Met_-_10_-_Ora_I_i_o.mp3', sample, ctx),
+        maxiAudio.loadSample('bigjoedrummer.wav', sample, ctx),
+        //maxiAudio.loadSample('beat.wav', sample, ctx),
         loadPly('tree.ply')
         //loadPly('forest_simple.ply')
       ).then(
@@ -261,9 +267,25 @@ function calcRms(bufferOut) {
         threshold = lerp(threshold, this.config.minTreshold, this.config.decayRate);
         if (rms > threshold) {
             threshold = rms;
+            tickerCounter(threshold);
         }
         treeMaterial.uniforms.rms.value = threshold;
     }
+}
+
+function tickerCounter(currentRms){
+    if (currentRms > rmsTickerTreshold) {
+        tick += 1;
+        if (tick % 3) {
+            changeScene(tick);
+        }
+    }
+}
+
+function changeScene(tick){
+    console.log(tick);
+    var i = scenography.length % tick;
+    console.log(i);
 }
 
 function render() {
