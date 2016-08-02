@@ -1,3 +1,4 @@
+var debug = false;
 var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#316431';
@@ -28,7 +29,6 @@ var cameraZposition = 1000;
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
-var debug = true;
 
 //Trees
 var treeMaterial;
@@ -95,6 +95,7 @@ function init(treePly) {
     container = document.getElementById( 'container' );
     container.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener('keypress', maybeGuiPressed, false);
 
     addGui();
     addStats();
@@ -171,6 +172,13 @@ function addGui() {
         gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
         gui.addColor(config,'ringColor').name('ring color').onChange( onRingColorUpdate );
         gui.close();
+    }
+}
+
+var maybeGuiPressed = function(ev) {
+    console.log(ev.keyCode);
+    if ( ev === 103) {
+        debug = !debug;
     }
 }
 
