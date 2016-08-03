@@ -5,8 +5,8 @@ category:
 tags: [threejs, openFrameworks, GLSL, Maximilian]
 ---
 <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.js"></script>
-
-I was thinking that it could be nice to put some rings moving up and down on the trees, maybe mooving in sync whith some nice beat sound.  
+Some notes about the idea and the process behind this [demo](/demo/rings)
+I've started to work thinking that it could be nice to put some rings that move up and down on the trees, maybe in sync whith music.
 ![draw](/assets/media/posts/rings/draw.jpg)
 Using [ofxLsystem](https://github.com/edap/ofxLSystem) was pretty easy to have a mesh containing a forest of ~80 trees, all I need to do is to put rings on them.
 
@@ -14,7 +14,7 @@ Using [ofxLsystem](https://github.com/edap/ofxLSystem) was pretty easy to have a
 ## The rings
 
 After reading the wonderful [The book of shaders](https://thebookofshaders.com/), and especially the chapter dedicated to the shaping [functions](https://thebookofshaders.com/05/), I've decided to use a shader to draw the ring on the surface of the trees. 
-In the book was linked this [example](https://thebookofshaders.com/edit.php#05/cubicpulse.frag), that uses a function `cubicPulse` by Iñigo Quiles, that create a smooth effect.
+In the book was linked this [example](https://thebookofshaders.com/edit.php#05/cubicpulse.frag), that uses a function called `cubicPulse` by Iñigo Quiles to create a smooth effect.
 <canvas class="glslCanvas" data-fragment-url="/assets/media/posts/rings/cubic_pulse.frag"  width="960" height="300"></canvas>
 ```c
 #ifdef GL_ES
@@ -45,8 +45,8 @@ void main() {
 ```
 
 
-## The mesh
-I did not want to apply a shader for each tree,it could have been slow, also considering that I will need to update a uniform containing the current sound amplitude to have the rings moving in sync with the music, that's why, in openFrameworks, I've merged all the trees in a single mesh.This mesh will be loaded in the threeJS sketch.
+## The mesh containing the trees
+I did not want to apply a shader for each tree because it could have been slow, also considering that I will need to continuously update the uniform containing the current sound amplitude to have the rings moving in sync with the music. That's why, in openFrameworks, I've merged all the trees in a single mesh.This mesh will be later loaded in the threeJS sketch.
 
 ```cpp
 for(int i = 0; i<nTree; i++){
@@ -75,24 +75,19 @@ for(int i = 0; i<nTree; i++){
 ```
 
 In [this repository](https://github.com/edap/ofxLSystem), in the folder "example-rings" you can find the whole openFrameworks application, shaders and on-set detection included.
+The mesh was still pretty big, as I do not need high resolution, I've used meshLab to simplyfy the mesh.
+
 
 ## The sound
 
-I was learning [Maximilian](http://maximilian.strangeloop.co.uk/) recently, and through the course "[creative programming for audiovisual art](kadenze.com/courses/creative-programming-for-audiovisual-art)" I've discovered that there is also a javascript port of that library, that simplify a lot working with sound in the browser. 
+[Maximilian](http://maximilian.strangeloop.co.uk/) is not only a c++ library that can be easily integrated with openFrameworks using ofxMaxim, but it has also a javascript port that simplifies a lot working with sound in the browser.
 
-First, some variables has to be defined and the sample has to be loaded.
+To play a sample in with Maximilian is super easy.
 
 ```javascript
 var maxiAudio = new maximJs.maxiAudio(); // the maxi audio object
 var sample = new maximJs.maxiSample(); // object that will contain the song loaded
 var ctx = new AudioContext(); // the audio context. see http://www.html5rocks.com/en/tutorials/webaudio/intro/
-
-//needed for rms calculation
-var bufferCount = 0;
-var bufferOut = [];
-var rms = 0;
-var examplesCounted = 0;
-var smoothedVolume = 0;
 
 //loading the sound and the mesh
 $.when(
@@ -109,9 +104,29 @@ $.when(
 );
 ```
 
+In the `init` method I've added a method called `initAudio` that plays the sample
+
+```javascript
+
+function initAudio(){
+    maxiAudio.init();
+    maxiAudio.outputIsArray(true, 2);
+    maxiAudio.play = function(scenography) {
+        var wave1 = sample.play();
+        var mix = wave1 * config.volume; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
+        this.output[0] = mix;
+        this.output[1] = this.output[0];
+        var left = this.output[0];
+        var right = this.output[1];
+    }
+}
+
+```
+
 The function `maxiAudio.loadSample` sets the variable `sample`. The third parameter `ctx` is the AudioContext created at the beginning. In the init method of the threejs sketch I call `initAudio`. This function get called only once, but the content of the loop `maxiAudio.play = function() {` get executed until we close the page. This is related to the nature of the `AudioContext`. There is a good introduction of Web Audio API at this [page](http://www.html5rocks.com/en/tutorials/webaudio/intro/)
 
-In this loop I've set the value of `rms`, that means Root Mean Square, and is a roughly way to have onset detection, also knowed as beat detection. There is a simple explanation of it in the [ofBook](http://openframeworks.cc/ofBook/chapters/sound.html). 
+## Beat detection
+What i wanted to do is to move the rings up and down depending on the music. The easiest way is to implement an onset detection, a way to find "the beat", the moment when the sound "kicks". I've used Root Mean Square calculation (RMS), there is a nice explanation of it in the [ofBook](http://openframeworks.cc/ofBook/chapters/sound.html). I've edited the `initAudio` method setting the value of `rms` as follow:
 
 ```javascript
 function initAudio(){
@@ -138,16 +153,22 @@ later, in the `animate` function of the threejs sketch i've smoothed the `rms` v
 
 ```javascript
 function calcRms(bufferOut) {
-    //just check that the buffer is full
     if (bufferOut.length === 1024) {
         rms /= examplesCounted;
         rms = Math.sqrt(rms);
-        smoothedVolume *= smoothedVolume;
-        smoothedVolume = rms;
-        treeMaterial.uniforms.rms.value = smoothedVolume;
+
+        threshold = lerp(threshold, this.config.minTreshold, this.config.decayRate);
+        if (rms > threshold) {
+            threshold = rms;
+        }
+        treeMaterial.uniforms.rms.value = threshold;
     }
 }
 ``` 
+
+Unsing a `sin(u_time)` in the previous shader, the rings are moving like this:
+
+![rings](/assets/media/posts/rings/rings.gif)
 
 ## Sound and shader
 
