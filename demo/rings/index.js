@@ -1,42 +1,66 @@
-var debug = true;
+var debug = false;
 var Config = function(){
     this.lightColor = '#acac0f';
     this.treeColor = '#316431';
     this.ringColor = '#ff0000';
     this.minTreshold = 0.001;
-    this.decayRate = 0.6;
+    this.decayRate = 0.2;
     this.ringNumber = 3;
     this.ringThickness = 0.02;
-    this.volume = 0.5;
-    this.scaleRing = 1.0;
+    this.volume = 0.6;
+    this.scaleRing = 14.0;
+    this.changeAutomaticallyColors = true;
 };
 
 //scenes
 //
 var rmsTickerTreshold = 0.002;
 var scene1 = {
-    treeColor: '#9b9318',
-    lightColor: '#bb1982',
-    ringColor: '#1d087d',
+    treeColor: '#002bb9',
+    lightColor: '#fafa00',
+    ringColor: '#ff0077',
+    ringNumber: 4,
+    cameraPos:{x: y: z:}
 };
 
 var scene2 = {
-    treeColor: '#fbff00',
-    lightColor: '#FF6A66',
-    ringColor: '#1b7fcc',
+    treeColor: '#e80000',
+    lightColor: '#37d970',
+    ringColor: '#e1ff00',
+    ringNumber: 9,
+    cameraPos:{x: y: z:}
+};
+
+var scene3 = {
+    treeColor: '#966900',
+    lightColor: '#953ee3',
+    ringColor: '#0059ff',
+    ringNumber: 4,
+    cameraPos:{x: y: z:}
+};
+
+var scene4 = {
+    treeColor: '#ff8518',
+    lightColor: '#96f7e6',
+    ringColor: '#ff00ff',
+    ringNumber: 6,
+    cameraPos:{x: y: z:}
 };
 
 var tick = 0;
 
 var scenography = [];
-scenography.push(scene1, scene2);
-
-
-var clock = new THREE.Clock(1);
+var currentScene = 0;
+scenography.push(scene1, scene2, scene3, scene4);
 
 var maxiAudio = new maximJs.maxiAudio();
 var sample = new maximJs.maxiSample();
 var ctx = new AudioContext();
+
+var counter = 0;
+var myClock = new maximJs.maxiClock();
+myClock.setTicksPerBeat(1);// number of ticks per beat
+myClock.setTempo(55);// beats Per Minute
 
 //needed for rms calculation
 var threshold = 0;
@@ -81,8 +105,8 @@ $.when(
         //maxiAudio.loadSample('Met_Met_-_10_-_Ora_I_i_o.mp3', sample, ctx),
         maxiAudio.loadSample('bigjoedrummer.wav', sample, ctx),
         //maxiAudio.loadSample('beat.wav', sample, ctx),
-        loadPly('tree.ply')
-        //loadPly('forest_simple.ply')
+        //loadPly('tree.ply')
+        loadPly('forest_simple.ply')
       ).then(
         function (_, treePly) {
             init(treePly);
@@ -168,7 +192,15 @@ function createTreeMaterial(){
 function initAudio(){
     maxiAudio.init();
     maxiAudio.outputIsArray(true, 2);
-    maxiAudio.play = function() {
+    var arraySize = scenography.length;
+    maxiAudio.play = function(scenography) {
+        myClock.ticker();
+        if (myClock.tick) {
+            counter++;
+            if ((counter % 4) == 1 && counter !== 1) {
+                maybeChangeScene(counter);
+            }
+        }
         bufferCount++;
         var wave1 = sample.play();
         var mix = wave1 * config.volume; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
@@ -189,7 +221,7 @@ function addGui() {
     gui.add(config, 'minTreshold', 0.001, 0.5).step(0.001);
     gui.add(config, 'decayRate', 0.05, 1.0).step(0.05);
     gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
-    gui.add(config, 'scaleRing', 0.5, 8.0).step(0.4).onChange( onScaleRingUpdate);
+    gui.add(config, 'scaleRing', 1.0, 20.0).step(1.0).onChange( onScaleRingUpdate);
     gui.add(config,'ringNumber', 1, 18).step(1).name('ring number').onChange( onRingNumberUpdate );
     gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
     gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
@@ -255,37 +287,43 @@ function animate() {
     requestAnimationFrame( animate );
     render();
     calcRms(bufferOut);
-    stats.update();
+    if (debug) {
+        stats.update();
+    }
 }
 
 function calcRms(bufferOut) {
     if (bufferOut.length === 1024) {
         rms /= examplesCounted;
         rms = Math.sqrt(rms);
-        //console.log(rms);
 
         threshold = lerp(threshold, this.config.minTreshold, this.config.decayRate);
         if (rms > threshold) {
             threshold = rms;
-            tickerCounter(threshold);
         }
         treeMaterial.uniforms.rms.value = threshold;
     }
 }
 
-function tickerCounter(currentRms){
-    if (currentRms > rmsTickerTreshold) {
-        tick += 1;
-        if (tick % 3) {
-            changeScene(tick);
-        }
+
+function maybeChangeScene(counter){
+    if (!this.config.changeAutomaticallyColors) return;
+    currentScene += 1;
+    if (currentScene == scenography.length) {
+        currentScene = 0;
     }
+
+    var scene = scenography[currentScene];
+    implementScene(scene)
+
 }
 
-function changeScene(tick){
-    console.log(tick);
-    var i = scenography.length % tick;
-    console.log(i);
+function implementScene(scene){
+    renderer.setClearColor( scene.treeColor);
+    light.color.set(scene.lightColor);
+    this.treeMaterial.uniforms.ringColor.value.set(scene.ringColor);
+    this.treeMaterial.uniforms.treeColor.value.set(scene.treeColor);
+    this.treeMaterial.uniforms.ringNumber.value = scene.ringNumber;
 }
 
 function render() {
