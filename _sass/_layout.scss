@@ -23,6 +23,26 @@
   @include iframe-aspect-ratio;
 }
 
+
+/**
+ * Project
+ */
+
+.project-title {
+    font-size: 42px;
+    letter-spacing: -1px;
+    line-height: 1;
+    text-align: center;
+    text-transform: capitalize;
+
+    @include media-query($on-laptop) {
+        font-size: 36px;
+    }
+    @include media-query($on-phone) {
+        font-size: 28px;
+    }
+}
+
 /**
  * Posts
  */
