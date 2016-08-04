@@ -186,7 +186,7 @@ tmpCol += vec4( vec3( dProd ) *vec3( y ) * vec3(ringColor), y);
 
 `treeColor` is the color of the tree, `rms` is the currently calculated rms, `scaleRing` is a value used to amplify the movement of the ring, `ringThickness` is a value that decide the thickness of the ring, and screenY is a value calculated in the vertex shader with `screenY  = position.y/uResolution.y`, that determinates the initial position of the ring. You can change all these uniforms in the demo, pressing `g` to see how they affect it.
 
-To draw more than one ring I've used a loop. Compared to OpenGL, WebGL has some limitations for loop. In webGL, the upper limit of the loop has to be a declared constant, `MAX_NUM_RINGS` in my shader. When the shader compile, this loop is unrolled as many time as defined in that constant. To execute the instruction contained in the loop as many time as defined in the uniform `ringNumber`, I've to break the loop at the desidered value.
+To draw more than one ring I've used a loop. Compared to OpenGL, WebGL has some limitations for loops. In webGL, the upper limit of the loop has to be a declared constant, `MAX_NUM_RINGS` in my shader. When the shader compile, this loop is unrolled as many time as defined in that constant. To execute the instruction contained in the loop as many time as defined in the uniform `ringNumber`, I've to break the loop at the desidered value.
 
 ```c
 #define MAX_NUM_RINGS 18
