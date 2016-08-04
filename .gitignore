@@ -11,5 +11,3 @@ Gemfile.lock
 .rbenv-version
 .rvmrc
 *~
-demo/rings/*.ply
-demo/rings/*.wav
