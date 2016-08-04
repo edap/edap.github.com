@@ -13,7 +13,7 @@
       precision mediump float;
       varying vec3 vecNormal;
       varying vec4 vecPos;
-      varying float vFuck;
+      varying float screenY;
       uniform vec2 uResolution;
 
       float map(float x, float in_min, float in_max, float out_min, float out_max){
@@ -25,7 +25,7 @@
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
         vecPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        vFuck  = position.y/uResolution.y;
+        screenY  = position.y/uResolution.y;
         gl_Position = vecPos;
         }
     </script>
@@ -38,7 +38,7 @@
 
       varying vec3 vecNormal;
       varying vec4 vecPos;
-      varying float vFuck;
+      varying float screenY;
 
       uniform vec3 ringColor;
       uniform int ringNumber;
@@ -76,7 +76,7 @@
 
           for (int i = 0; i< MAX_NUM_RINGS; i++) {
               if (i == ringNumber ) break;
-              float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck - padding);
+              float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,screenY - padding);
               // apply light on the whole tree's mesh
               //tmpCol += vec4( ringColor.xyz * vec3(y), 1.0);
               // apply lights only on the rings
@@ -102,7 +102,7 @@
           vec4 tmpCol = vec4(treeColor, 1.0);
           for (int i = 0; i< MAX_NUM_RINGS; i++) {
             if (i == ringNumber ) break;
-            float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,vFuck - padding);
+            float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,screenY - padding);
             //apply light only to the rings
             tmpCol += vec4( vec3( dProd ) *vec3( y ) * vec3(ringColor), y);
             padding +=inc;

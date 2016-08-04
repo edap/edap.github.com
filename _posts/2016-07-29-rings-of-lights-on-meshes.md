@@ -7,7 +7,7 @@ description: "Some notes about the idea and the process behind this <a href='/de
 ---
 
 <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.js"></script>
-Some notes about the idea and the process behind this [demo](/demo/rings)
+Some notes about the idea and the process behind this [demo](/demo/rings).
 I've started to work thinking that it could be nice to put some rings that move up and down on the trees, maybe in sync whith music.
 ![draw](/assets/media/posts/rings/draw.jpg)
 Using [ofxLsystem](https://github.com/edap/ofxLSystem) was pretty easy to have a mesh containing a forest of ~80 trees, all I need to do is to put rings on them.
@@ -38,7 +38,7 @@ float cubicPulse( float c, float w, float x ){
 
 void main() {
     vec2 st = gl_FragCoord.xy/u_resolution;
-    // now the ring is moving followin the time, it has to move following the sound!
+    // now the ring is moving following the time, it has to move following the sound!
     float y = cubicPulse(mod(u_time,0.99),0.2,st.y);
     vec3 color = vec3(y);
     color = color*vec3(0.0,1.0,0.0);
@@ -48,7 +48,7 @@ void main() {
 
 
 ## The mesh containing the trees
-I did not want to apply a shader for each tree because it could have been slow, also considering that I will need to continuously update the uniform containing the current sound amplitude to have the rings moving in sync with the music. That's why, in openFrameworks, I've merged all the trees in a single mesh.This mesh will be later loaded in the threeJS sketch.
+I did not want to apply a shader for each tree because it could have been slow, also considering that I will need to continuously update the uniform containing the current sound amplitude to have the rings moving in sync with the music. That's why, in openFrameworks, I've merged all the trees in a single mesh.This mesh will be loaded later in the threeJS sketch.
 
 ```cpp
 for(int i = 0; i<nTree; i++){
@@ -76,13 +76,13 @@ for(int i = 0; i<nTree; i++){
 }
 ```
 
-In [this repository](https://github.com/edap/ofxLSystem), in the folder "example-rings" you can find the whole openFrameworks application, shaders and on-set detection included.
+In [this repository](https://github.com/edap/ofxLSystem), in the folder "example-rings" you can find the whole openFrameworks application, shaders and onset detection included.
 The mesh was still pretty big, as I do not need high resolution, I've used meshLab to simplyfy the mesh.
 
 
 ## The sound
 
-[Maximilian](http://maximilian.strangeloop.co.uk/) is not only a c++ library that can be easily integrated with openFrameworks using ofxMaxim, but it has also a javascript port that simplifies a lot working with sound in the browser.
+[Maximilian](http://maximilian.strangeloop.co.uk/) is not only a c++ library that can be easily integrated with openFrameworks using [ofxMaxim](https://github.com/micknoise/Maximilian/tree/master/openFrameworks/ofxMaxim), but it has also a javascript port that simplifies a lot working with sound in the browser.
 
 To play a sample in with Maximilian is super easy.
 
@@ -112,6 +112,7 @@ In the `init` method I've added a method called `initAudio` that plays the sampl
 
 function initAudio(){
     maxiAudio.init();
+    // I need the output as an array later
     maxiAudio.outputIsArray(true, 2);
     maxiAudio.play = function(scenography) {
         var wave1 = sample.play();
@@ -166,18 +167,56 @@ function calcRms(bufferOut) {
         treeMaterial.uniforms.rms.value = threshold;
     }
 }
-``` 
+```
+
+## Sound and shader
 
 Unsing a `sin(u_time)` in the previous shader, the rings are moving like this:
 
 ![rings](/assets/media/posts/rings/rings.gif)
 
-## Sound and shader
+To move the the ring up and down I've first to identify a 0 value on the y axis, then add a uniform containing the previously calculated `rms` value, decide how tick the ring will be , calculating the padding between the rings and finally draw as many ring as desidered.
+To simply draw a ring at the base of the mesh, that moves up and down following the rms value, i can modify the previuos shader like this:
 
-Position of the ring (screen coordinates)
+```c
+vec4 tmpCol = vec4(treeColor, 1.0);
+float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,screenY);
+tmpCol += vec4( vec3( dProd ) *vec3( y ) * vec3(ringColor), y);
+```
 
-Tuning (ring Thickness, responsiveness)
+`treeColor` is the color of the tree, `rms` is the currently calculated rms, `scaleRing` is a value used to amplify the movement of the ring, `ringThickness` is a value that decide the thickness of the ring, and screenY is a value calculated in the vertex shader with `screenY  = position.y/uResolution.y`, that determinates the initial position of the ring. You can change all these uniforms in the demo, pressing `g` to see how they affect it.
 
-Loop, spiegare il perche' del break
+To draw more than one ring I've used a loop. Compared to OpenGL, WebGL has some limitations for loop. In webGL, the upper limit of the loop has to be a declared constant, `MAX_NUM_RINGS` in my shader. When the shader compile, this loop is unrolled as many time as defined in that constant. To execute the instruction contained in the loop as many time as defined in the uniform `ringNumber`, I've to break the loop at the desidered value.
 
-## All together
+```c
+#define MAX_NUM_RINGS 18
+for (int i = 0; i< MAX_NUM_RINGS; i++) {
+  if (i == ringNumber ) break;
+  //draw the ring!
+end
+```
+
+The distance between each ring is stored in the variable `padding` and it depends on how many rings are currently drawn. It is calculated like this:
+
+```c
+float inc = 1.0/float(ringNumber);
+float padding = 0.0;
+//arbitrary light position
+vec3 lightPos = vec3(0.5, 0.2, 0.5);
+vec3 lightDirection = normalize(vecPos.xyz - lightPos);
+float dProd = max(0.6,dot(vecNormal, lightDirection));
+
+vec4 tmpCol = vec4(treeColor, 1.0);
+for (int i = 0; i< MAX_NUM_RINGS; i++) {
+  if (i == ringNumber ) break;
+  float y = cubicPulse(mod(rms * scaleRing, 1.0),ringThickness,screenY - padding);
+  //apply light only to the rings
+  tmpCol += vec4( vec3( dProd ) *vec3( y ) * vec3(ringColor), y);
+  padding +=inc;
+}
+gl_fragColor = tmpCol;
+```
+
+Fragment and Vertex shaders are both available in the [repository](https://github.com/edap/edap.github.com/blob/master/demo/rings/index.html)
+
+![draw](/assets/media/rings/yellow-medium.png)
