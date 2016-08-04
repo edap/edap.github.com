@@ -3,7 +3,9 @@ layout: post
 title: "rings of lights on meshes"
 category: 
 tags: [threejs, openFrameworks, GLSL, Maximilian]
+description: "Some notes about the idea and the process behind this <a href="/demo/rings">demo</a> I’ve started to work thinking that it could be nice to put some rings that move up and down on the trees, maybe in sync whith music."
 ---
+
 <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.js"></script>
 Some notes about the idea and the process behind this [demo](/demo/rings)
 I've started to work thinking that it could be nice to put some rings that move up and down on the trees, maybe in sync whith music.
