@@ -23,7 +23,6 @@ var spectralFlux;
 //needed for beat detection (using rms) calculation
 var threshold;
 var bufferCount = 0;
-var bufferOut = [];
 var rms = 0;
 var examplesCounted = 0;
 
@@ -100,7 +99,6 @@ function initAudio(){
             fft.magsToDB();
         }
         bufferCount++;
-        bufferOut[bufferCount % 1024] = mix;
         examplesCounted += 2;
     }
 }
@@ -219,9 +217,8 @@ function updateBars(){
 
 function animate() {
     requestAnimationFrame( animate );
-    //onsetDetection();
-
-    if (bufferOut.length === 1024) {
+    // be sure that enough samples are already collected
+    if (bufferCount >= 1024) {
         populateSpectralFlux();
         updateBars();
     }
