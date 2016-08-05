@@ -228,6 +228,7 @@ function initAudio(){
         bufferOut[bufferCount % 1024] = mix;
         var left = this.output[0];
         var right = this.output[1];
+        console.log(rms);
         rms += left * left;
         rms += right * right;
         examplesCounted += 2;
