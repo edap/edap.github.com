@@ -11,3 +11,5 @@ Gemfile.lock
 .rbenv-version
 .rvmrc
 *~
+demo/grass/*.mp3
+demo/grass/*.wav
