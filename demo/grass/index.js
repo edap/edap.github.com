@@ -149,6 +149,43 @@ function initArrayWithZeroValues(size){
     return zeroed;
 }
 
+function onsetDetection(){
+    var flux = 0;
+    for (i = 0; i< fftSize; i++) {
+       lastSpectrum[i] = spectrum[i]
+       spectrum[i] = fft.getMagnitude(i);
+
+       var value = (spectrum[i] - lastSpectrum[i]);
+       flux += (value < 0 ? 0 : value);
+       spectralFlux[i] = flux;
+    }
+
+}
+
+function updateBars(){
+    // fft contains 512 samples (set in fftSize)
+    // the first 256 samples are for the left channel
+    // the other 256 for the right channel
+    // I sum the fft magnitude of the 2 channels
+    for(i = 0; i< barsSize; i++){
+        //i save the previous spectrum values
+        var left = i;
+        var right = barsSize + i;
+        var fftMag = spectralFlux[left] + spectralFlux[right];
+        bars[i].position.setY(fftMag * config.magMult);
+    }
+}
+
+function animate() {
+    requestAnimationFrame( animate );
+    onsetDetection();
+    updateBars();
+    render();
+    if (debug) {
+        stats.update();
+    }
+}
+
 function populateSpectralFlux(){
     for (i = 0; i< fftSize; i++) {
        spectralFlux[i] += fft.getMagnitude(i);
@@ -175,9 +212,6 @@ function updateBars(){
         if (spectralFlux[i]  > threshold[i]) {
             threshold[i] = spectralFlux[i];
         }
-        // if(i==0 || i == 1 || i == 2 || i==3){
-        //     console.log(threshold[i]);
-        // }
 
         bars[i].position.setY(threshold[i] * config.magMult);
     }
