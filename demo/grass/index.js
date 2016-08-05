@@ -56,7 +56,7 @@ function init() {
     spectralFlux = initArrayWithZeroValues(fftSize);
     threshold = initArrayWithZeroValues(fftSize);
     initAudio();
-    initBars();
+    initBars(fftSize);
 
     // Create Light
     light = new THREE.PointLight(config.lightColor);
@@ -77,8 +77,8 @@ function init() {
     addStats();
 }
 
-function initBars(){
-    for(i = 0; i < fftSize; i++){
+function initBars(size){
+    for(i = 0; i < size; i++){
         var y = Math.random(500);
         var geometry = new THREE.BoxBufferGeometry( 1, y, 1 );
         var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
