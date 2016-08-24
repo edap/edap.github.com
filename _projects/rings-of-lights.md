@@ -15,8 +15,11 @@ tags: []
   {% include img.html pngName="orange" assetPath="/assets/media/rings/" gridClass = "grid l3" %}
   {% include img.html pngName="red" assetPath="/assets/media/rings/" gridClass = "grid l3" %}
   {% include img.html pngName="blue" assetPath="/assets/media/rings/" gridClass = "grid l3" %}
-</div>
-</div>
 
-These are some screenshots of the webGL demo available [here](/demo/rings/)
+  <div class = "grid l3">
+  These are some screenshots of the webGL demo available <a href='/demo/rings/'>here</a>
+  </div>
+
+</div>
+</div>
 
