@@ -7,7 +7,16 @@ Dependencies:
 Jquery, Masonry, Picturefill for picture polyfill, imagesLoaded
 
 Images:
-4 Dimensions: small 640, medium 12800, large 1800, big 2600.
+4 Dimensions:
+
+no prefix -> 2600
+-small -> 640
+-medium ->  1280
+-large -> 1940
+
+
+2600 1462 (export from blender)
+
 Every time you insert an image you have to provide all this 4 dimension, define
 the dimension of the grid and the sizes. Regarding the sizes
 `sizes="(max-width: 600px) 96vw, 66.333vw">` means when the screen is small
