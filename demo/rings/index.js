@@ -124,7 +124,7 @@ var loadPly = function (filename) {
 $.when(
         maxiAudio.loadSample('bigjoedrummer.wav', sample, ctx),
         //loadPly('tree.ply')
-        loadPly('forest_simple.ply')
+        loadPly('forest3.ply')
       ).then(
         function (_, treePly) {
             init(treePly);
