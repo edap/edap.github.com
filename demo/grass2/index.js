@@ -14,10 +14,12 @@ var grassMaterial;
 var debug = true;
 var camY = 50;
 var camZ = -200;
-var lightPos = new THREE.Vector3(0,0, raySpheroDome);
+var lightPos = new THREE.Vector3(0,100, raySpheroDome);
 //gui
 var Config = function(){
     this.lightColor = '#7b0dc8';
+    this.lightPower = 0.5;
+    this.ambientLightPower = 0.1;
     this.fogColor = '#ff0000';
     this.magnitude = 0.6;
 };
@@ -56,7 +58,7 @@ function init(bg, grass, ground) {
     geometry.applyMatrix( new THREE.Matrix4().setPosition(lightPos) );
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     var sphere = new THREE.Mesh( geometry, material );
-    scene.add( sphere );
+    //scene.add( sphere );
     // Create Light
     light = new THREE.PointLight(config.lightColor);
     light.position.set(100, 200, 50);
@@ -189,9 +191,11 @@ function setUniforms(texture){
     var maxAnisotropy = renderer.getMaxAnisotropy();
     texture.anisotropy = maxAnisotropy;
     var unif = {
-        lightPos:   { type: "v3", value: new THREE.Vector3(50, 50, 100) },
+        lightPos:   { type: "v3", value: lightPos },
         lightColor: { type: "c", value: new THREE.Color(config.lightColor) },
         magnitude:  { type: "f", value: config.magnitude },
+        lightPower: { type: "f", value: config.lightPower },
+        ambientLightPower: { type: "f", value: config.ambientLightPower },
         texture:    { type: "t", value: texture },
         globalTime: { type: "f", value: 0.0 },
         uvScale:    { type: "v2", value: new THREE.Vector2( 16.0, 1.0 ) }
@@ -236,6 +240,8 @@ function loadTexture(filename){
 function addGui() {
     gui = new dat.GUI();
     gui.add(config, 'magnitude', 0.1, 13.0).step(0.1).onChange( onMagnitudeUpdate );
+    gui.add(config, 'lightPower', 0.1, 8.0).step(0.05).onChange( onLightPowerUpdate );
+    gui.add(config, 'ambientLightPower', 0.0, 1.0).step(0.05).onChange( onAmbientLightPowerUpdate );
     gui.addColor(config, 'lightColor').name('light color').onChange( onLightColorUpdate );
     gui.open();
     dat.GUI.toggleHide();
@@ -267,6 +273,14 @@ function onWindowResize() {
 
 var onMagnitudeUpdate = function(ev) {
     grassMaterial.uniforms.magnitude.value = config.magnitude;
+};
+
+var onLightPowerUpdate = function(ev) {
+    grassMaterial.uniforms.lightPower.value = config.lightPower;
+};
+
+var onAmbientLightPowerUpdate = function(ev) {
+    grassMaterial.uniforms.ambientLightPower.value = config.ambientLightPower;
 };
 
 var onLightColorUpdate = function(ev) {
