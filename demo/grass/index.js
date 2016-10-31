@@ -1,127 +1,256 @@
-var debug = true;
+var controls;
+var container;
+var camera, scene, renderer, targetCamera, gui;
+var plane;
+var delta;
+var time;
+var oldTime;
+var uniforms;
+var n_planes = 250;
+var raySpheroDome = 400;
+var light;
+var grassMaterial;
 
+var debug = false;
+var camY = 50;
+var camZ = -200;
+var lightPos = new THREE.Vector3(0,100, raySpheroDome - 90);
+
+//mouse
+var mouseX = 0;
+var mouseY = 0;
+var mouseXpercent = 0;
+var mouseYpercent = 0;
 //gui
 var Config = function(){
-    this.minTreshold = 0.000000000000000001;
-    this.decayRate = 0.5;
-    this.volume = 0.6;
-    this.magMult = 1000.0;
+    this.lightColor = '#872b17';
+    this.lightPower = 0.2;
+    this.ambientLightPower = 0.15;
+    this.magnitude = 0.6;
 };
 var config = new Config();
 
-//audio
-var maxiAudio = new maximJs.maxiAudio();
-var fftSize = 512;
-var windowSize = 512;
-var hopSize = 256;
-var fft = new maximJs.maxiFFT();
-var sample = new maximJs.maxiSample();
-var ctx = new AudioContext();
-var spectralFlux;
-//use to calculate the overall magnitude for each bin
-
-//needed for beat detection (using rms) calculation
-var threshold;
-var bufferCount = 0;
-var rms = 0;
-var examplesCounted = 0;
-
-// Gereral
-var container, camera, controls, scene, renderer, stats, gui, light;
-var cameraZposition = 1000;
-var bars = [];
-var barsSize = fftSize/2; // fft contains info about left and right channel, i want to visualize the bot merged
-
 $.when(
-        //maxiAudio.loadSample('Met_Met_-_10_-_Ora_I_i_o.mp3', sample, ctx)
-        maxiAudio.loadSample('small.wav', sample, ctx)
-      ).then(
-        function () {
-            init();
-            animate();
-        },
-        function (error) {
-            console.log(error);
-        }
+    loadTexture('images/portugal-seamless-gold.jpg'),
+    //loadTexture('images/thingrass-gold.jpg'),
+    //loadTexture('images/thingrass-gold2.jpg'),
+    loadTexture('images/thingrass-gold3.jpg'),
+    loadTexture('images/ground-diffuse.jpg')
+).then(
+    function(bg, grass, ground) {
+        init(bg, grass, ground);
+        animate();
+    },
+    function(error) {
+        console.log(error);
+    }
 );
 
-function init() {
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
-    camera.position.z = cameraZposition;
+function init(bgTex, grassTex, groundTex) {
+    var bgTexture = bgTex;
+    var grassTexture = grassTex;
+    var groundTexture = groundTex;
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera.position.z = camZ;
+    camera.position.y = camY;
+
+    targetCamera = new THREE.Vector3().clone(scene.position);
+    camera.lookAt(targetCamera);
+
+    // uncomment this part to see the sun
+    //var geometry = new THREE.SphereBufferGeometry( 50, 32, 32 );
+    //geometry.applyMatrix( new THREE.Matrix4().setPosition(lightPos) );
+    //var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    //var sphere = new THREE.Mesh( geometry, material );
+    // scene.add( sphere );
+    // Create Light
+
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
-    scene = new THREE.Scene();
-    //audio
-    spectralFlux = initArrayWithZeroValues(fftSize);
-    threshold = initArrayWithZeroValues(fftSize);
-    initAudio();
-    initBars(fftSize);
+    controls.enableZoom = false;
+    controls.enablePan = false;
 
-    // Create Light
-    light = new THREE.PointLight(config.lightColor);
-    light.position.set(100, 200, 50);
-    scene.add(light);
+    targetCamera = new THREE.Vector3().clone(scene.position);
+    camera.lookAt(targetCamera);
+    scene.add( camera );
 
-    renderer = new THREE.WebGLRenderer( { antialias: true, depth:true } );
-    renderer.setClearColor( config.treeColor);
+    renderer = new THREE.WebGLRenderer({antialias: false});
     renderer.setSize( window.innerWidth, window.innerHeight );
-    //tree
-    container = document.getElementById( 'spinner' ).remove();
-    container = document.getElementById( 'container' );
-    container.appendChild(renderer.domElement);
+    renderer.setClearColor( 0xb04130, 1 );
+
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('keypress', maybeGuiPressed, false);
 
+    //SPHEREDOME
+    var sphereWidth = 400;
+    var bgGeometry = new THREE.SphereBufferGeometry(raySpheroDome, 12, 12, 0, Math.PI*2, 0, Math.PI*0.5);
+    var bgMaterial = new THREE.MeshBasicMaterial(
+        {color: 0x999999, map: bgTexture, fog: false, side: THREE.BackSide});
+    bgGeometry.applyMatrix( new THREE.Matrix4().makeRotationY(-Math.PI-1.25));
+    var sky = new THREE.Mesh(bgGeometry, bgMaterial);
+    sky.position.set(0, -50, 0);
+    sky.rotation.y = Math.PI;
+    sky.matrixAutoUpdate = false;
+    sky.updateMatrix();
+    scene.add(sky);
+
+    //GRASS
+    //materiale di test
+    uniforms = setUniforms(grassTexture);
+    grassMaterial = getGrassShaderMaterial(uniforms);
+    var delMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+    var planesGeometry = createPlanesGeometry(350);
+    planesGeometry.applyMatrix( new THREE.Matrix4().setPosition( new THREE.Vector3( 0, 0, -200 ) ) );
+    var planes = new THREE.Mesh(planesGeometry, grassMaterial);
+    planes.position.set(0, 200, 0);
+    planes.matrixAutoUpdate = false;
+    scene.add(planes);
+
+    //GROUND
+    var groundGeometry = new THREE.PlaneBufferGeometry(3000,3000);
+    var groundMaterial = new THREE.MeshBasicMaterial(
+                                        {color: 0x333333, map: groundTexture });
+    var ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.material.map.wrapS = ground.material.map.wrapT = THREE.RepeatWrapping;
+    ground.material.map.repeat.x = ground.material.map.repeat.y = 100;
+    ground.rotation.y = -Math.PI;
+    ground.rotation.x = Math.PI/2;
+    ground.matrixAutoUpdate = false;
+    ground.updateMatrix();
+    scene.add(ground);
+
+    container = document.getElementById( 'container' );
+    container.appendChild(renderer.domElement);
+    container.appendChild( renderer.domElement );
     addGui();
-    addStats();
-}
-
-function initBars(size){
-    for(i = 0; i < size; i++){
-        var y = Math.random(500);
-        var geometry = new THREE.BoxBufferGeometry( 1, y, 1 );
-        var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-        var cube = new THREE.Mesh( geometry, material );
-        cube.position.setX(i);
-        bars.push(cube);
-        scene.add(bars[i]);
+    if (debug) {
+        addStats();
     }
 }
 
-function initAudio(){
-    maxiAudio.init();
-    fft.setup(fftSize, windowSize, hopSize);
-    maxiAudio.play = function() {
-        var wave1 = sample.play();
-        var mix = wave1 * config.volume; // in case you have other samples, just add them here: var mix =  wave1 +wave2;
-        this.output = mix;
-        if (fft.process(mix)) {
-            fft.magsToDB();
+function animate() {
+    grassMaterial.uniforms.lightColor.needsUpdate = true;
+    requestAnimationFrame( animate );
+    render();
+    if (debug) {
+        stats.update();
+    }
+}
+
+function render() {
+    time = new Date().getTime();
+    delta = time - oldTime;
+    oldTime = time;
+
+    if (isNaN(delta) || delta > 1000 || delta == 0 ) {
+        delta = 1000/60;
+    }
+
+    if (uniforms) {
+        uniforms.globalTime.value += delta * 0.0012;
+    }
+    renderer.render( scene, camera );
+}
+
+function createPlanesGeometry(n_planes){
+    var containerGeometry = new THREE.Geometry();
+    var planeGeometry = new THREE.PlaneGeometry(400, 30, 14, 1);
+    for (var i = 0; i < planeGeometry.vertices.length; i++) {
+        planeGeometry.vertices[i].z = Math.sin(planeGeometry.vertices[i].x)*20;
+    };
+    planeGeometry.applyMatrix( new THREE.Matrix4().setPosition( new THREE.Vector3( 0, 15, 0 ) ) );
+    var x = 0;
+    var z = 0;
+    var rot = (Math.PI*2)/3;
+
+    var mesh = new THREE.Mesh(planeGeometry);
+
+    for (var i = 0; i < n_planes; i++) {
+        mesh.rotation.y = (i%3 * rot) + Math.random()-0.5;
+        mesh.position.set(x*50 -250 , 0, z*80 -180 );
+        mesh.position.x += Math.random()*20 - 10;
+        mesh.position.z += Math.random()*20 - 10;
+        mesh.scale.y = 1.1-Math.random()*0.4;
+
+        if (i%3 == 2) {
+            ++x;
         }
-        bufferCount++;
-        examplesCounted += 2;
-    }
+        if (x == 11) {
+            x = 0;
+            ++z;
+        }
+        mesh.updateMatrix();
+        containerGeometry.merge(mesh.geometry, mesh.matrix);
+    };
+    // I've used a BufferGeometry only here, and not previously, because buffered geometries
+    // do not work with the merge method
+    var bufferedGeometry = new THREE.BufferGeometry().fromGeometry(containerGeometry);
+    return bufferedGeometry;
 }
+
+function setUniforms(texture){
+    texture.wrapS = THREE.RepeatWrapping;
+    var maxAnisotropy = renderer.getMaxAnisotropy();
+    texture.anisotropy = maxAnisotropy;
+    var unif = {
+        lightPos:   { type: "v3", value: lightPos },
+        lightColor: { type: "c", value: new THREE.Color(config.lightColor) },
+        magnitude:  { type: "f", value: config.magnitude },
+        lightPower: { type: "f", value: config.lightPower },
+        ambientLightPower: { type: "f", value: config.ambientLightPower },
+        texture:    { type: "t", value: texture },
+        globalTime: { type: "f", value: 0.0 },
+        uvScale:    { type: "v2", value: new THREE.Vector2( 16.0, 1.0 ) }
+    };
+    return unif;
+}
+
+function getGrassShaderMaterial(uniforms){
+    var material = new THREE.ShaderMaterial( {
+        uniforms:       uniforms,
+        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+        wireframe:      false,
+        side:           THREE.DoubleSide
+    });
+    return material;
+}
+
+function loadTexture(filename){
+    var d = $.Deferred();
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.load(
+        filename,
+        //success callback
+        function (texture) {
+            d.resolve(texture);
+        },
+        //progress callback
+        function (xhr) {
+            d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        //error callback
+        function (error) {
+            console.log('error while loading texture: ' + filename);
+            d.reject(error);
+        }
+
+    );
+    return d.promise();
+};
 
 function addGui() {
     gui = new dat.GUI();
-    gui.add(config, 'volume', 0.1, 3.0).step(0.2);
-    gui.add(config, 'magMult', 0.5, 4.0).step(0.5);
-    gui.add(config, 'minTreshold', 0.001, 0.5).step(0.001);
-    gui.add(config, 'decayRate', 0.05, 1.0).step(0.05);
-    gui.close();
+    gui.add(config, 'magnitude', 0.1, 13.0).step(0.1).onChange( onMagnitudeUpdate );
+    gui.add(config, 'lightPower', 0.02, 2.0).step(0.02).onChange( onLightPowerUpdate );
+    gui.add(config, 'ambientLightPower', 0.0, 1.0).step(0.05).onChange( onAmbientLightPowerUpdate );
+    gui.addColor(config, 'lightColor').name('light color').onChange( onLightColorUpdate );
+    gui.open();
     dat.GUI.toggleHide();
 }
-
-var maybeGuiPressed = function(ev) {
-    if ( ev.keyCode === 103) {
-        dat.GUI.toggleHide();
-    }
-}
-
-var onScaleRingUpdate = function(ev) {
-    treeMaterial.uniforms.scaleRing.value = config.scaleRing;
-};
 
 function addStats() {
     stats = new Stats();
@@ -131,107 +260,34 @@ function addStats() {
     }
 }
 
+
+var maybeGuiPressed = function(ev) {
+    console.log(ev.keyCode);
+    if ( ev.keyCode === 103) {
+        dat.GUI.toggleHide();
+    }
+};
+
 function onWindowResize() {
-    //you have also to update the uniforms of the screen resolution
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
     render();
 }
 
-function initArrayWithZeroValues(size){
-    zeroed = [];
-    for (i = 0; i< fftSize; i++) {
-        zeroed[i] = 0;
-    }
-    return zeroed;
-}
+var onMagnitudeUpdate = function(ev) {
+    grassMaterial.uniforms.magnitude.value = config.magnitude;
+};
 
-function onsetDetection(){
-    var flux = 0;
-    for (i = 0; i< fftSize; i++) {
-       lastSpectrum[i] = spectrum[i]
-       spectrum[i] = fft.getMagnitude(i);
+var onLightPowerUpdate = function(ev) {
+    grassMaterial.uniforms.lightPower.value = config.lightPower;
+};
 
-       var value = (spectrum[i] - lastSpectrum[i]);
-       flux += (value < 0 ? 0 : value);
-       spectralFlux[i] = flux;
-    }
+var onAmbientLightPowerUpdate = function(ev) {
+    grassMaterial.uniforms.ambientLightPower.value = config.ambientLightPower;
+};
 
-}
-
-function updateBars(){
-    // fft contains 512 samples (set in fftSize)
-    // the first 256 samples are for the left channel
-    // the other 256 for the right channel
-    // I sum the fft magnitude of the 2 channels
-    for(i = 0; i< barsSize; i++){
-        //i save the previous spectrum values
-        var left = i;
-        var right = barsSize + i;
-        var fftMag = spectralFlux[left] + spectralFlux[right];
-        bars[i].position.setY(fftMag * config.magMult);
-    }
-}
-
-function animate() {
-    requestAnimationFrame( animate );
-    onsetDetection();
-    updateBars();
-    render();
-    if (debug) {
-        stats.update();
-    }
-}
-
-function populateSpectralFlux(){
-    for (i = 0; i< fftSize; i++) {
-       spectralFlux[i] += fft.getMagnitude(i);
-    }
-}
-
-function updateBars(){
-    // the barSize value has to be tha same as in the spectralflux
-    // fft contains 512 samples (set in fftSize)
-    // the first 256 samples are for the left channel
-    // the other 256 for the right channel
-    // I sum the fft magnitude of the 2 channels
-    //for(i = 0; i< barsSize; i++){
-    for(i = 0; i < fftSize; i++){
-        //i save the previous spectrum values
-        // var left = i;
-        // var right = barsSize + i;
-        // var fftMag = spectralFlux[left] + spectralFlux[right];
-
-        spectralFlux[i] /= examplesCounted;
-        spectralFlux[i] = Math.sqrt(spectralFlux[i]);
-
-        threshold[i] = lerp(threshold[i], this.config.minTreshold, this.config.decayRate);
-        if (spectralFlux[i]  > threshold[i]) {
-            threshold[i] = spectralFlux[i];
-        }
-
-        bars[i].position.setY(threshold[i] * config.magMult);
-    }
-}
-
-function animate() {
-    requestAnimationFrame( animate );
-    // be sure that enough samples are already collected
-    if (bufferCount >= 1024) {
-        populateSpectralFlux();
-        updateBars();
-    }
-    render();
-    if (debug) {
-        stats.update();
-    }
-}
-
-function render() {
-    renderer.render( scene, camera );
-}
-
-function lerp(start, end, pos){
-    return start + (end - start) * pos;
-}
+var onLightColorUpdate = function(ev) {
+    light.color.set(config.lightColor);
+    grassMaterial.uniforms.lightColor.value.set(config.lightColor);
+};

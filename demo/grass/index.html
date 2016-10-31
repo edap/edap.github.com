@@ -1,74 +1,134 @@
-<html><head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rings</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-    <div id="spinner"></div>
-    <div id="container"></div>
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Grass Quads</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi">
+        <style type="text/css">
+            body {
+                background:#b04130;
+                padding:0;
+	              margin:0;
+	              overflow:hidden;
+            }
+        </style>
+    </head>
 
-    <script id="vertexShaderTree" type="x-shader/x-vertex">
-      precision mediump float;
-      varying vec3 vecNormal;
-      varying vec4 vecPos;
-      uniform vec2 uResolution;
+    <body>
+        <div id="container"></div>
+        <script type="x-shader/x-vertex" id="vertexshader">
 
-      void main() {
-        vecNormal = normalMatrix * normal;
-        // as the light later will be given in world coordinate space,
-        // vPos has to be in world coordinate space too
-        vecPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        gl_Position = vecPos;
+        precision mediump float;
+        uniform float globalTime;
+        uniform float magnitude;
+        uniform vec2 uvScale;
+        uniform vec3 lightPos;
+        varying vec2 vUv;
+        varying vec3 vNormal;
+        varying vec4 vLightPos;
+        varying vec4 vecPos;
+
+        float random (in vec2 st) {
+            return fract(sin(dot(st.xy,
+                                vec2(12.9898,78.233)))
+                * 43758.5453123);
         }
-    </script>
-
-    <script id="fragmentShaderTree" type="x-shader/x-vertex">
-      precision mediump float;
-      // Comment this line to do not use the point light
-      #define CUSTOM_POINTLIGHTS
-      #define MAX_NUM_RINGS 18
-
-      varying vec3 vecNormal;
-      varying vec4 vecPos;
-
-      uniform float rms;
-      uniform float scaleRing;
-      uniform vec2 uResolution;
-
-      struct PointLight {
-        vec3 position;
-        vec3 color;
-      };
-      uniform PointLight pointLights[ NUM_POINT_LIGHTS ];
-
-      void main() {
-        #ifdef CUSTOM_POINTLIGHTS
-          vec4 addedLights = vec4(0.0,0.0,0.0, 1.0);
-          for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
-            vec3 adjustedLight = pointLights[l].position + cameraPosition;
-            vec3 lightDirection = normalize(vecPos.xyz - adjustedLight);
-            addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;
-          }
-
-          float inc = 1.0/float(ringNumber);
-          float padding = 0.0;
-          vec4 tmpCol = vec4(treeColor, 1.0);
-
-        gl_FragColor = tmpCol;
-      }
-    </script>
 
 
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
-    <script type="text/javascript" src="../js/maxiLib.js"></script>
-    <script type="text/javascript" src="../js/dat.gui.min.js"></script>
-    <script type="text/javascript" src="../js/OrbitControls.js"></script>
-    <script type="text/javascript" src="../js/stats.min.js"></script>
-    <script type="text/javascript" src="../js/jquery-2.2.4.min.js"></script>
+        // 2D Noise based on Morgan McGuire @morgan3d
+        // https://www.shadertoy.com/view/4dS3Wd
+        float noise (in vec2 st) {
+            vec2 i = floor(st);
+            vec2 f = fract(st);
 
-    <script type="text/javascript" src="index.js"></script>
+            // Four corners in 2D of a tile
+            float a = random(i);
+            float b = random(i + vec2(1.0, 0.0));
+            float c = random(i + vec2(0.0, 1.0));
+            float d = random(i + vec2(1.0, 1.0));
+
+            // Smooth Interpolation
+
+            // Cubic Hermine Curve.  Same as SmoothStep()
+            vec2 u = f*f*(3.0-2.0*f);
+            // u = smoothstep(0.,1.,f);
+
+            // Mix 4 coorners porcentages
+            return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
+            (d - b) * u.x * u.y;
+        }
 
 
-</body></html>
+        void main() {
+            vNormal =  (modelMatrix * vec4(normal, 0.0)).xyz;
+            vec3 pos = position;
+            // animate the pixel that are upon the ground
+            if (pos.y > 1.0) {
+                float noised = noise(pos.xy);
+                pos.y += sin(globalTime * magnitude * noised);
+                pos.z += sin(globalTime * magnitude * noised);
+                if (pos.y > 1.7){
+                    pos.x += sin(globalTime * noised);
+                }
+            }
+            vUv = uvScale * uv;
+            vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
+            vLightPos = projectionMatrix * modelViewMatrix * vec4(lightPos, 1.0);
+            vecPos = projectionMatrix * mvPosition;
+            gl_Position = vecPos;
+        }
+
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            uniform vec3 lightColor;
+            uniform float lightPower;
+            uniform float ambientLightPower;
+            uniform sampler2D texture;
+            varying vec3 vNormal;
+            varying vec2 vUv;
+            varying vec4 vLightPos;
+            varying vec4 vecPos;
+
+            const float threshold = 0.48;
+            void main() {
+                vec4 textureColor = texture2D(texture, vec2(vUv.s, vUv.t));
+                if (textureColor[0] < threshold && textureColor[1] < threshold && textureColor[2] < threshold) {
+                    discard;
+                } else {
+                    // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-8-basic-shading/
+
+                    // shadow at the end of the word, add this value in the final moltiplication
+                    // in order to see it, ex
+                    // depthColor * textureColor * lightColor * lightPower * cosTheta / (dist * dist);
+                    // float depth = gl_FragCoord.z / gl_FragCoord.w;
+                    // float near = 250.0;
+                    // float far = 500.0;
+                    // float depthcolor = 0.8 - smoothstep( near, far, depth );
+                    // float depthcolor = smoothstep( near, far, depth ) - 0.2;
+                    float dist = length(vLightPos - vecPos) * 0.0015;
+                    vec4 lightColor = vec4(lightColor, 1.0);
+                    vec3 lightDirection = normalize(vecPos.xyz - vLightPos.xyz);
+                    float cosTheta = clamp( dot( vNormal,lightDirection ),0.0, 1.0);
+                    vec4 materialAmbientColor = vec4(vec3(ambientLightPower), 1.0) * textureColor;
+                    //float attenuation = 1.0 / (1.0 + 0.2 * pow(length(vLightPos - vecPos), 2.0));
+                    gl_FragColor = materialAmbientColor +
+                                   //attenuation +
+                                   textureColor * lightColor * lightPower * cosTheta / (dist * dist);
+
+
+                }
+            }
+        </script>
+
+        <script src="../js/three.81.min.js"></script>
+        <script type="text/javascript" src="../js/dat.gui.min.js"></script>
+        <script type="text/javascript" src="../js/OrbitControls.js"></script>
+        <script type="text/javascript" src="../js/stats.min.js"></script>
+        <script type="text/javascript" src="../js/jquery-2.2.4.min.js"></script>
+        <script type="text/javascript" src="../js/dat.gui.min.js"></script>
+        <script type="text/javascript" src="index.js"></script>
+
+    </body>
+</html>
