@@ -164,7 +164,7 @@ This is the scene seen from the top, with the light positioned at the border of 
 
 ## Move the blades with the wind
 
-To move the blade I've simply used `sin` and `cos` and a noise function. The noise is strictly not necessary, although i could not find a way to get my way along only using `sin` and `cos`. The noise function comes from [this shadertoy](https://www.shadertoy.com/view/4dS3Wd), the vertex shader code looks like this.
+To move the blade I've simply used `sin` and `cos` and a noise function. Probably there is a way to avoid the use of a noise function and achieve a similar result just usin `sin` and `cos`, but with noise it looks slightly better. The noise function comes from [this shadertoy](https://www.shadertoy.com/view/4dS3Wd), the vertex shader code looks like this.
 
 ```c
 void main() {
