@@ -10,10 +10,10 @@ title: Davide Prati
 email: your-email@domain.com
 description_header: Hi there, I’m Davide Prati, a computational artist based in Berlin.
 description: > # this means to ignore newlines until "baseurl:"
-  I’m interested in how the natural processes that give shape to water, terrains, trees, mountains and clouds are applicable to design, visual art, videogames and interactive installations.
+  I’m interested in how the natural processes that give shape to water, terrains, trees, mountains and clouds are applicable to design, visual art, websites, videogames and interactive installations.
 description_contact: I like hearing about possible new work. Get in touch
 description_metatag: > # this means to ignore newlines until "baseurl:"
-  I'm a freelancer developer working with webGL, openFrameworks, javascript, clojurescript. I'm interested in forms that have the Nature as main inspiration source.
+  I'm a freelancer developer working with webGL, shaders and javascript and occasioanlly 3d printing. I use ThreeJS, blender and openFrameworks as main tools. I'm interested in forms that have the Nature as main inspiration source.
 description_contact: I like hearing about possible new work. Get in touch
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://davideprati.com" # the base hostname & protocol for your site
