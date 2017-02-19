@@ -5,17 +5,26 @@ layout: home
 <div class="index-content">
   <div class="grid-gutter"></div><div class="grid-sizer"></div>
 
-  <!-- Flowers -->
-  <a href="/projects/flowers">
-    {% include img.html pngName="fake-teasel" assetPath="/assets/media/flowers/" gridClass = "grid l2" %}
-  </a>
-
   <!-- Rings -->
-  <a href="/projects/rings-of-lights">
+     <a href = "/projects/palm-generator">
+    <img class="grid l2" srcset =
+    "assets/media/palm-generator/palm-generator-small.png 640w,
+    assets/media/palm-generator/palm-generator-medium.png 1280w,
+    assets/media/palm-generator/palm-generator-large.png 1940w,
+    assets/media/palm-generator/palm-generator.png 2600w"
+    sizes="(max-width: 600px) 96vw, 66.333vw">
+    </a>
+
+    <!-- Flowers -->
+    <a href="/projects/flowers">
+      {% include img.html pngName="fake-teasel" assetPath="/assets/media/flowers/" gridClass = "grid l2" %}
+    </a>
+
+ <a href="/projects/rings-of-lights">
     {% include img.html pngName="blue" assetPath="/assets/media/rings/" gridClass = "grid" %}
   </a>
 
-  <!-- work in progress, portfolio coming soon-->
+
     <a href = "/demo/terrain">
     <img class="grid" srcset =
     "assets/media/terrain-desert/terrain-small.png 640w,
@@ -24,6 +33,7 @@ layout: home
     assets/media/terrain-desert/terrain.png 2600w"
     sizes="(max-width: 600px) 96vw, 32.666vw">
     </a>
+
 
     <a href = "/demo/grass">
     <img class="grid l2" srcset =
