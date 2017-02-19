@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Grass Quads</title>
+        <title>Grass Demo</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi">
         <style type="text/css">
@@ -63,7 +63,7 @@
         void main() {
             vNormal =  (modelMatrix * vec4(normal, 0.0)).xyz;
             vec3 pos = position;
-            // animate the pixel that are upon the ground
+            // animate only the pixels that are upon the ground
             if (pos.y > 1.0) {
                 float noised = noise(pos.xy);
                 pos.y += sin(globalTime * magnitude * noised);

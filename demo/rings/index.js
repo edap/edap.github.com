@@ -242,9 +242,9 @@ function addGui() {
     gui.add(config, 'ringThickness', 0.005, 0.05).step(0.002).onChange( onThicknessUpdate);
     gui.add(config, 'scaleRing', 1.0, 20.0).step(1.0).onChange( onScaleRingUpdate);
     gui.add(config,'ringNumber', 1, 18).step(1).name('ring number').onChange( onRingNumberUpdate );
-    gui.addColor(config,'lightColor').name('light color').onChange( onLightColorUpdate );
-    gui.addColor(config,'treeColor').name('tree color').onChange( onTreeColorUpdate );
-    gui.addColor(config,'ringColor').name('ring color').onChange( onRingColorUpdate );
+    gui.addColor(config, 'lightColor').name('light color').onChange( onLightColorUpdate );
+    gui.addColor(config, 'treeColor').name('tree color').onChange( onTreeColorUpdate );
+    gui.addColor(config, 'ringColor').name('ring color').onChange( onRingColorUpdate );
     gui.close();
     dat.GUI.toggleHide();
 }
@@ -253,7 +253,7 @@ var maybeGuiPressed = function(ev) {
     if ( ev.keyCode === 103) {
         dat.GUI.toggleHide();
     }
-}
+};
 
 var onTreeColorUpdate = function(ev) {
     treeMaterial.uniforms.treeColor.value.set(config.treeColor);
@@ -333,7 +333,7 @@ function maybeChangeScene(){
     }
 
     var scene = scenography[currentScene];
-    implementScene(scene)
+    implementScene(scene);
 }
 
 function implementScene(scene){

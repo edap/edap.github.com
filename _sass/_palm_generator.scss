@@ -11,7 +11,6 @@ h1.palm-title {
 }
 
 h1.palm-title span {
-
     font-family: 'IM Fell English', serif;
     background:#fff;
     padding:0 10px;
@@ -21,6 +20,7 @@ h1.palm-title span {
     width: 98%;
     margin: 0 1% 0 1%;
     max-width: 1240px;
+    // max-width: 98%;
     color: $palm-black;
     border:$border-width solid $palm-black;
     margin-bottom:30px;
@@ -38,6 +38,12 @@ h1.palm-title span {
     font-size: 12px;
     font-family: 'IM Fell English', serif;
 }
+
+.palm-desc-title{
+    font-size:16px;
+    display:none;
+}
+
 .palm-desc-tree{
     width:44%;
     float:left;
@@ -45,6 +51,17 @@ h1.palm-title span {
 .palm-desc-leaves{
     width:44%;
     float:left;
+}
+
+.palm-generator-text{
+    padding-top:30px;
+    text-align:center;
+    font-size: 16px;
+    font-family: 'IM Fell English', serif;
+    padding-bottom:30px;
+}
+.palm-generator-text p{
+    max-width:100%;
 }
 
 
@@ -55,10 +72,7 @@ h1.palm-title span {
 /* ---- grid ---- */
 
 .grid {
-    margin-top:20px;
-    background: #EEE;
-    max-width: 1200px;
-    border:3px solid green;
+
 }
 
 /* clearfix */
@@ -81,11 +95,9 @@ h1.palm-title span {
 }
 
 .grid {
+    max-width: 1200px;
+    margin-top:20px;
     float: left;
-    background: #FFF;
-    border: 2px solid #333;
-    border-color: hsla(0, 0%, 0%, 0.5);
-    border-radius: 5px;
 }
 
 .grid--width2 { width:  810px; }
@@ -99,3 +111,8 @@ h1.palm-title span {
 .grid--height7 { height: 560px; }
 .grid--height8 { height: 700px; }
 .grid--height9 { height: 760px; }
+.grid--height10 { height: 800px; }
+.grid--height11 { height: 860px; }
+.grid--height12 { height: 900px; }
+.grid--height13 { height: 960px; }
+.grid--height14 { height: 1000px; }

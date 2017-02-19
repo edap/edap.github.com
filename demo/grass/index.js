@@ -16,11 +16,6 @@ var camY = 50;
 var camZ = -200;
 var lightPos = new THREE.Vector3(0,100, raySpheroDome - 90);
 
-//mouse
-var mouseX = 0;
-var mouseY = 0;
-var mouseXpercent = 0;
-var mouseYpercent = 0;
 //gui
 var Config = function(){
     this.lightColor = '#872b17';
