@@ -428,6 +428,9 @@ tags: []
      <p>It follows a model that describes the arrangement of leaves on a plant stem, called <a href="https://en.wikipedia.org/wiki/Phyllotaxis">phyllotaxis</a>.</p>
      <p>You can find information about the usage and the license at <a href="https://github.com/edap/PalmGenerator">this repository</a>.</p>
      <p>You can create your palm using the <a href="/demo/palm-generator-editor">PalmGenerator Online Editor</a></p>
+     <br />
+     <br />
+     <p><a href="https://drive.google.com/open?id=0B6sqjMvJRGMtU0FGQndCcUd6cUk">High res images</a> - <a href="https://vimeo.com/204789237">Video</a></p>
   </div>
 </div>
 
