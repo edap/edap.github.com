@@ -430,7 +430,7 @@ tags: []
      <p>You can create your palm using the <a href="/demo/palm-generator-editor">PalmGenerator Online Editor</a></p>
      <br />
      <br />
-     <p><a href="https://drive.google.com/open?id=0B6sqjMvJRGMtU0FGQndCcUd6cUk">High res images</a> - <a href="https://vimeo.com/204789237">Video</a></p>
+     <p><a href="https://drive.google.com/open?id=0B6sqjMvJRGMtU0FGQndCcUd6cUk">High res images</a> - <a href="https://vimeo.com/204789237">Video</a> - <a href="/assets/media/palm-generator/palm-generator-poster.png">Poster</a></p>
   </div>
 </div>
 
