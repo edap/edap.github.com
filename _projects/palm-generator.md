@@ -425,7 +425,7 @@ tags: []
 
   <div class="palm-generator-text">
      <p>The Palm Generator is a Threejs module to generate palms.</p>
-     <p>It follows a model that describes the arrangement of leaves on a plant stem, known as <a href="https://en.wikipedia.org/wiki/Phyllotaxis">phyllotaxis</a>.</p>
+     <p>It follows a model that describes the arrangement of leaves on a plant stem, called <a href="https://en.wikipedia.org/wiki/Phyllotaxis">phyllotaxis</a>.</p>
      <p>You can find information about the usage and the license at <a href="https://github.com/edap/PalmGenerator">this repository</a>.</p>
      <p>You can create your palm using the <a href="/demo/palm-generator-editor">PalmGenerator Online Editor</a></p>
   </div>
