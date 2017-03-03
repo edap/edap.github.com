@@ -150,7 +150,7 @@ function initArrayWithZeroValues(size){
 function onsetDetection(){
     var flux = 0;
     for (i = 0; i< fftSize; i++) {
-        lastSpectrum[i] = spectrum[i];
+       lastSpectrum[i] = spectrum[i];
        spectrum[i] = fft.getMagnitude(i);
 
        var value = (spectrum[i] - lastSpectrum[i]);
