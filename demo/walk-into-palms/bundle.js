@@ -53736,7 +53736,7 @@ var black={cameraHeight:this.cameraLowest,cameraSpeed:this.cameraLowestSpeed,sel
 var intro={cameraHeight:this.cameraLowest,cameraSpeed:0.0001,selectedBin:12,amplitude:0.0,maxColor:0.9,minColor:0.6,saturation:0.9,brightness:0.5,followPath:true};//enter color, run faster
 var middle={cameraHeight:this.cameraLowest,amplitude:0.0,selectedBin:15,speed:0.005,maxColor:0.72,minColor:0.06,saturation:0.9,followPath:true};var lookUp={kopfhoch:true,followPath:true};//fly into leaves
 var end=_defineProperty({kopfhoch:false,selectedBin:19,amplitude:3.0,followPath:false,maxColor:0.53,minColor:0.36,saturation:0.9,cameraHeight:this.cameraHighest,displacement:0.01},'followPath',true);//vertex displacement, slowly back to BN
-var last={amplitude:4.0,cameraHeight:this.cameraLowest,selectedBin:19,followPath:true};var stop={followPath:false,brightness:0.0};return[black,intro,middle,lookUp,end,last,stop];}}]);return Scenography;}();/* harmony default export */ __webpack_exports__["a"] = Scenography;
+var last={amplitude:3.5,cameraHeight:this.cameraLowest,selectedBin:19,followPath:true};var stop={followPath:false,brightness:0.0};return[black,intro,middle,lookUp,end,last,stop];}}]);return Scenography;}();/* harmony default export */ __webpack_exports__["a"] = Scenography;
 
 /***/ }),
 /* 9 */
