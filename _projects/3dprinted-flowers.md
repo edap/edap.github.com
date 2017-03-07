@@ -58,7 +58,7 @@ tags: []
   {% include img.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
 
   <div class = "grid l3">
-  These are some screenshots of the webGL demo available <a href='/demo/3dprinted-flowers/'>here</a>
+  In January 2017 I've 3D printed some object that were created programmatically using [morphogen](https://github.com/thi-ng/morphogen) and the [thi.ng geom](https://github.com/thi-ng/geom) libraries. [Here](https://github.com/edap/flowers) you can find the software used to generate the meshes, and [here](https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs) the code use to generate the first four webGL animations that are in this page.
   </div>
 
 </div>
