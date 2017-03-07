@@ -9,19 +9,19 @@ tags: []
 <div class="grid-gutter"></div><div class="grid-sizer"></div>
 
     <div class="grid">
-    <canvas id="fourth" width="543" height="390"/>
+    <canvas id="fourth" width="543" height="390" style="width:100%" />
     </div>
 
     <div class="grid">
-    <canvas id="second" width="543" height="390"/>
+    <canvas id="second" width="543" height="390" style="width:100%"/>
     </div>
 
     <div class="grid">
-    <canvas id="main" width="543" height="390"/>
+    <canvas id="main" width="543" height="390" style="width:100%"/>
     </div>
 
     <div class="grid">
-    <canvas id="third" width="543" height="390"/>
+    <canvas id="third" width="543" height="390" style="width:100%"/>
     </div>
 
     <div class="grid">
@@ -58,7 +58,7 @@ tags: []
   {% include img.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
 
   <div class = "grid l3">
-  In January 2017 I've 3D printed some object that were created programmatically using <a href="https://github.com/thi-ng/morphogen">morphogen</a> and the <a href="https://github.com/thi-ng/geom">thi/ng geom</a> libraries. <a href ="https://github.com/edap/flowers">Here</a> you can find the software used to generate the meshes, and <a href="https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs">here</a> the code used to generate the first four webGL animations that are at the top of this page.
+  In January 2017 I've 3D printed some objects that were created programmatically using <a href="https://github.com/thi-ng/morphogen">morphogen</a> and the <a href="https://github.com/thi-ng/geom">thi/ng geom</a> libraries. <a href ="https://github.com/edap/flowers">Here</a> you can find the software used to generate the meshes, and <a href="https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs">here</a> the code used to generate the first four webGL animations that are at the top of this page.
   </div>
 
 </div>
