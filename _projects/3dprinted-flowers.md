@@ -1,0 +1,68 @@
+---
+layout: project
+title: "Flowers, from webGL to 3D printing"
+category: 
+tags: []
+---
+<div class="content-container">
+<div class="index-content">
+<div class="grid-gutter"></div><div class="grid-sizer"></div>
+
+    <div class="grid">
+    <canvas id="fourth" width="543" height="390"/>
+    </div>
+
+    <div class="grid">
+    <canvas id="second" width="543" height="390"/>
+    </div>
+
+    <div class="grid">
+    <canvas id="main" width="543" height="390"/>
+    </div>
+
+    <div class="grid">
+    <canvas id="third" width="543" height="390"/>
+    </div>
+
+    <div class="grid">
+      <div class="four-three">
+<iframe width="640" height="360" src="https://www.youtube.com/embed/O86vjf7FDpA?rel=0&autoplay=1&loop=1;showinfo=0" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="four-three">
+<iframe width="640" height="360" src="https://www.youtube.com/embed/1B9BDeb0X30?rel=0&autoplay=1&loop=1;showinfo=0" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="four-three">
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/QoIx8TX2LGA?rel=0&autoplay=1&loop=1;showinfo=0" frameborder="0" allowfullscreen></iframe>
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+  {% include img.html pngName="print" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img.html pngName="1" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img.html pngName="2" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img.html pngName="3" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+
+  <div class = "grid l3">
+  These are some screenshots of the webGL demo available <a href='/demo/3dprinted-flowers/'>here</a>
+  </div>
+
+</div>
+</div>
+<script src="/assets/media/3dprinted-flowers/core.js" type="text/javascript"></script>
+
+
