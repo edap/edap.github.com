@@ -13,3 +13,6 @@ Gemfile.lock
 *~
 demo/grass/*.mp3
 demo/grass/*.wav
+
+demo/3dprinteflowers-webgl/target/*
+demo/3dprinteflowers-webgl/bin/*
