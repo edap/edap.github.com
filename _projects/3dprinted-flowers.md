@@ -9,19 +9,19 @@ tags: []
 <div class="grid-gutter"></div><div class="grid-sizer"></div>
 
     <div class="grid">
-    <canvas id="fourth" width="543" height="390" style="width:100%" />
+    <canvas id="fourth" width="543" height="405" style="width:100%" />
     </div>
 
     <div class="grid">
-    <canvas id="second" width="543" height="390" style="width:100%"/>
+    <canvas id="second" width="543" height="405" style="width:100%"/>
     </div>
 
     <div class="grid">
-    <canvas id="main" width="543" height="390" style="width:100%"/>
+    <canvas id="main" width="543" height="405" style="width:100%"/>
     </div>
 
     <div class="grid">
-    <canvas id="third" width="543" height="390" style="width:100%"/>
+    <canvas id="third" width="543" height="405" style="width:100%"/>
     </div>
 
     <div class="grid">
