@@ -46,16 +46,11 @@ tags: []
 
 
 
-
-
-
-
-
-  {% include img.html pngName="print" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
-  {% include img.html pngName="1" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
-  {% include img.html pngName="2" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
-  {% include img.html pngName="3" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
-  {% include img.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img-small.html pngName="print" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img-small.html pngName="1" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img-small.html pngName="2" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img-small.html pngName="3" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
+  {% include img-small.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
 
   <div class = "grid l3">
   In January 2017 I've 3D printed some objects that were created programmatically using <a href="https://github.com/thi-ng/morphogen">morphogen</a> and the <a href="https://github.com/thi-ng/geom">thi/ng geom</a> libraries. <a href ="https://github.com/edap/flowers">Here</a> you can find the software used to generate the meshes, and <a href="https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs">here</a> the code used to generate the first four webGL animations that are at the top of this page.
