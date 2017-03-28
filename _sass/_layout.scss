@@ -162,6 +162,19 @@
   width: 100%;
 }
 
+.grid.ghcard {
+    min-height:190px;
+    text-align:center;
+}
+.grid.ghcard-intro {
+    text-align:center;
+}
+
+div.tools-intro{
+    padding-bottom:50px;
+    border-bottom: 1px solid $brand-color;
+}
+
 .index-content a:hover {
   opacity: 1;
 }
@@ -180,7 +193,7 @@
 .top {
   width: 100%;
   margin: 0;
-  padding: 3em 0 3em 0;
+  padding: 3em 0 1em 0;
   text-align: left;
 
   a {
