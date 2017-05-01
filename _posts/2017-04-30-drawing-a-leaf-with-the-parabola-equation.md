@@ -53,10 +53,24 @@ Once that we have the border on the top and the border on the bottom defined by 
 
 ![palm leaf](/assets/media/posts/parabola-leaf/schema2.png)
 
+In the followinf demo, the parameter `length` is the equivalent of \\(x\\) in the previous equation, `curvature_border` is \\(a\\), `leaf_width` define the width of each part in which the leaf was subdivided and `density` defines how many times we have divided the leaf, what in my previous sketch was the number 8. Playing around with the sliders gives an idea about how less is needed to change this form.
 
-implementazion vista dall'alto
+
+<div id="palm2d"></div>
 
 ### A third curve, a third dimension
+
+<img align="right" src="/assets/media/posts/parabola-leaf/intro-3d.jpg" width="480px" class="half"/>
+To add the third dimension to this geometry it's easy.
+
+If two parabolas can define how large the leaf should be, another parabola could define the height of the leaf.
+
+We can plot the same equation as before on the x and z axis, and use the y and x axis to plot the parabola that defines the height.
+
+As we did before, we calculate first the position of the point \\(x_0,z_0\\) that allow us to calculate the coordinates of the points in two dimensions. Than we calculate the position of the point \\(x_0,y_0\\) that allow us to know the heigh on the y axis of each point.
+
+<div id="palm3d"></div>
+
 
 
 Aggiungi seconda curva
@@ -92,8 +106,13 @@ brd2.create('functiongraph', [function(t) {
 }],{strokeColor:'#ff0000'}
 );
 
-function getPointZero(a, length){
-    return a * ((length/2.0)*(length/2.0));
-}
-  
+brd2.create('text',[5,9,
+  function() { 
+    return '\\[f(x) = ' + k2.Value() + '(x - x_0)^2' + y0.Value() +' \\]';
+  }], {fontSize:24});
+
+ 
 </script>
+<script type="text/javascript" src="/assets/media/posts/parabola-leaf/js/palm2d.js"></script>
+<script type="text/javascript" src="/assets/media/posts/parabola-leaf/js/palm3d.js"></script>
+

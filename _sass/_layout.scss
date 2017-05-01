@@ -62,6 +62,13 @@
   height: auto;
   max-width: 100%;
 }
+
+.post-content img.half{
+    width: 50%!important;
+    height: auto;
+    max-width: 50%;
+}
+
 .post-content p{
   max-width: $content-width;
 }
