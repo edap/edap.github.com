@@ -67,6 +67,7 @@ function init(bgTex, grassTex, groundTex) {
     controls.addEventListener('change', render);
     controls.enableZoom = false;
     controls.enablePan = false;
+    setOrbitControlsLimits(controls);
 
     targetCamera = new THREE.Vector3().clone(scene.position);
     camera.lookAt(targetCamera);
@@ -286,3 +287,12 @@ var onLightColorUpdate = function(ev) {
     light.color.set(config.lightColor);
     grassMaterial.uniforms.lightColor.value.set(config.lightColor);
 };
+
+function setOrbitControlsLimits(controls){
+    controls.minPolarAngle = 1.2; // radians
+    controls.maxPolarAngle = Math.PI/2.1; // radians
+    //controls.minDistance = 5;
+    //controls.maxDistance = 14;
+}
+
+
