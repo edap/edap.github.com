@@ -286,7 +286,7 @@ var onAmbientLightPowerUpdate = function(ev) {
 var onLightColorUpdate = function(ev) {
     light.color.set(config.lightColor);
     grassMaterial.uniforms.lightColor.value.set(config.lightColor);
-};
+;
 
 function setOrbitControlsLimits(controls){
     controls.minPolarAngle = 1.2; // radians
