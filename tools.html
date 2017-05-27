@@ -12,7 +12,8 @@ layout: default
       </div>
   </div>
   {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis" | split: "," %}
-  {% for repository in site.github.public_repositories  %}
+  {% assign sorted = (site.github.public_repositories | sort: 'stargazers_count') | reverse %}
+  {% for repository in sorted  %}
     {% if selected contains repository.name %}
         {% include card.html repoName=repository.name repoDescription=repository.description repoUrl=repository.html_url ownerUrl=site.github.owner_url ownerAvatar=site.github.owner_gravatar_url stars=repository.stargazers_count forks=repository.forks_count language=repository.language gridClass = "grid" %}
     {% endif %}
