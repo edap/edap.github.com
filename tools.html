@@ -8,33 +8,14 @@ layout: default
   <div class="grid l3 ghcard-intro">
       <h2>Algorithmic Botany Tools</h2>
       <div class="tools-intro">These are the tools that I've used in the last years to generate procedurally trees, leaves and flowers. <br />
-          Feel free to drop me a line if you want to organize a <a href ="/workshops">workshop</a> about how to use them, or more in general on the methods used to represent trees with the computer.</div>
+          Feel free to drop me a line if you want to organize a <a href ="/workshops">workshop</a> about how to use them, or more in general on the methods used to represent trees with the computer.
+      </div>
   </div>
+  {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis" | split: "," %}
+  {% for repository in site.github.public_repositories  %}
+    {% if selected contains repository.name %}
+        {% include card.html repoName=repository.name repoDescription=repository.description repoUrl=repository.html_url ownerUrl=site.github.owner_url ownerAvatar=site.github.owner_gravatar_url stars=repository.stargazers_count forks=repository.forks_count language=repository.language gridClass = "grid" %}
+    {% endif %}
+  {% endfor %}
 
-  <div class="grid ghcard">
-    <div class="github-card" data-user="edap" data-repo="PalmGenerator"></div>
-  </div>
-
-  <div class="grid ghcard">
-    <div class="github-card" data-user="edap" data-repo="ofxLSystem"></div>
-  </div>
-
-  <div class="grid ghcard">
-    <div class="github-card" data-user="edap" data-repo="ofxLSystemGrammar"></div>
-  </div>
-
-  <div class="grid ghcard">
-    <div class="github-card" data-user="edap" data-repo="ofxPhyllotaxis"></div>
-  </div>
-
-  <div class="grid ghcard">
-    <div class="github-card" data-user="edap" data-repo="flowers"></div>
-  </div>
-
-  <div class="grid ghcard">
-    <div class="github-card" data-user="edap" data-repo="LeafGeometry"></div>
-  </div>
-
-  <script src="/js/gh-cards.js"></script>
-
-  </div>
+</div>

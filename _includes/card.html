@@ -1,0 +1,32 @@
+{% capture repoName repoUrl repoDescription repoUrl ownerUrl ownerAvatar stars forks language %}
+    {{ include.repoName include.repoDescription include.repoUrl include.ownerUrl include.ownerAvatar include.stars include.forks include.language}}
+{% endcapture %}
+
+<div class="grid ghcard">
+    <div class="github-card repo-card">
+        <div class="header">
+            <a class="avatar" href={{ include.ownerUrl }} target="_top">
+                <img src={{ include.ownerAvatar }} width="100">
+            </a>
+            <strong class="name">
+                <a href="{{ include.repoUrl }}" target="_top">{{ include.repoName }}</a>
+                <sup class="language">{{ include.language }}</sup>
+            </strong>
+            <span>Created by <a href={{ include.ownerUrl }} target="_top">edap</a></span>
+            <a class="button" href={{ include.repoUrl}} target="_top">Star</a>
+        </div>
+
+        <div class="content">
+            <p>{{ include.repoDescription }}</p>
+        </div>
+
+        <div class="footer">
+            <span class="status">
+                <strong>{{ include.forks }}</strong>Forks
+            </span>
+            <span class="status">
+                <strong>{{ include.stars }}</strong>Stars
+            </span>
+        </div>
+    </div>
+</div>
