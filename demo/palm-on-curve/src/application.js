@@ -34,7 +34,7 @@ const renderer = new THREE.WebGLRenderer({antialias:true});
 const stats = new Stats();
 const controls = new OrbitControls(camera, renderer.domElement);
 const originalCamZ = 230;
-const originalCamY = 150;
+const originalCamY = 190;
 
 function init(){
     controls.target.set( 0, 100, 0 );
@@ -98,9 +98,9 @@ let activateDraw = () => {
     controls.enabled = false;
     addCube(new THREE.Vector3(0,0,0));
 
-	  var spritey = makeTextSprite( " Drag the cube",
+	  var spritey = makeTextSprite( " Drag the cube up",
 		                              { fontsize: 32} );
-	  spritey.position.set(16,10,0);
+	  spritey.position.set(4,10,0);
     spritey.name = "text";
 	  scene.add( spritey );
 }
@@ -247,7 +247,7 @@ var maybeGuiPressed = function(ev) {
 
 function addCube(pos){
     let geom = new THREE.BoxBufferGeometry(5,5,5);
-    let mat = new THREE.MeshLambertMaterial({color: 0xFFccFF});
+    let mat = new THREE.MeshLambertMaterial({color: 0x45ac51});
     let cube = new THREE.Mesh(geom, mat);
     cube.position.setX(pos.x);
     cube.position.setY(pos.y);
@@ -302,7 +302,7 @@ function makeTextSprite( message, parameters ){
 	context.lineWidth = borderThickness;
 	// 1.4 is extra height factor for text below baseline: g,j,p,q.
 	// text color
-	context.fillStyle = "rgba(0, 0, 0, 1.0)";
+	context.fillStyle = "rgba(69, 172, 81, 1.0)";
 	context.fillText( message, borderThickness, fontsize + borderThickness);
 	// canvas contents will be used for a texture
 	let texture = new THREE.Texture(canvas);
