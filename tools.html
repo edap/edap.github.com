@@ -11,7 +11,7 @@ layout: default
           Feel free to drop me a line if you want to organize a <a href ="/workshops">workshop</a> about how to use them, or more in general on the methods used to represent trees with the computer.
       </div>
   </div>
-  {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis" | split: "," %}
+  {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis,ofxSpaceColonization,ofxBranchesPrimitive" | split: "," %}
   {% assign sorted = (site.github.public_repositories | sort: 'stargazers_count') | reverse %}
   {% for repository in sorted  %}
     {% if selected contains repository.name %}
