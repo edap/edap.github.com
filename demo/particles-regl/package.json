@@ -1,0 +1,31 @@
+{
+  "name": "partigles",
+  "version": "1.0.0",
+  "description": "partilce system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "budo --live --open index.js -- -g es2040 -t glslify",
+    "build": "browserify index.js -g es2040 -t glslify | uglifyjs -cm| indexhtmlify > index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "color-convert": "^1.9.0",
+    "control-panel": "^1.2.0",
+    "es2040": "^1.2.5",
+    "glsl-noise": "0.0.0",
+    "glslify": "^6.1.0",
+    "hsv2rgb": "^1.1.0",
+    "isosurface": "^1.0.0",
+    "mouse-change": "^1.4.0",
+    "regl": "^1.3.0",
+    "regl-camera": "^2.1.1",
+    "regl-stats-widget": "0.0.1",
+    "uglify-js": "^3.0.24"
+  },
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "budo": "^10.0.3"
+  }
+}
