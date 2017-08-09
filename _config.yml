@@ -20,6 +20,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://davideprati.com" # the base hostname & protocol for your site
 twitter_username: edapx
 github_username:  edap
+exclude: ['*/node_modules']
 collections:
   projects:
     cover: ""
