@@ -1,0 +1,28 @@
+{
+    "demos":[
+        {
+            "id": "particles-regl",
+            "title": "Particles",
+            "thumb": "/demo/thumbs.jpg",
+            "url": "/demo/particles-regl"
+        },
+        {
+            "id": "palm-editor",
+            "title": "Palm Editor",
+            "thumb": "/demo/thumbs.jpg",
+            "url": "/demo/palm-on-curve/www"
+        },
+        {
+            "id": "LeafGeometry",
+            "title": "Leaf Geometry",
+            "thumb": "/demo/thumbs.jpg",
+            "url": "/demo/LeafGeometry"
+        },
+        {
+            "id": "walk-into-palms",
+            "title": "Walk",
+            "thumb": "/demo/thumbs.jpg",
+            "url": "/demo/walk-into-palms"
+        },
+     ]
+}
