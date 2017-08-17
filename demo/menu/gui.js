@@ -23,7 +23,8 @@ var generateMenu = function(data) {
     menu.setAttribute("id", "demo-menu");
     var nav = document.createElement("nav");
     var counter = 1;
-    var currentDemo = getDemoNameFromUrl();
+    var currentDemo  = window.location.href;
+    console.log(currentDemo);
     demos.forEach(function(demo){
         var demoLink = createLinkEl(demo, counter, currentDemo);
         nav.appendChild(demoLink);
@@ -32,17 +33,6 @@ var generateMenu = function(data) {
 
     menu.appendChild(nav);
     document.getElementsByTagName("body")[0].appendChild(menu);
-};
-
-/* The name from the URL is used to higlight the current demo */
-var getDemoNameFromUrl = function(){
-    var url = window.location.href;
-    var lastLetter = url.charAt(url.length - 1);
-    if (lastLetter === '/') {
-        url = url.slice(0, -1);
-    }
-    var lastPartOfUrl = url.split('/').pop();
-    return lastPartOfUrl;
 };
 
 /* create the DOM element link for the current demo */

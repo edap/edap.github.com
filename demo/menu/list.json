@@ -7,7 +7,7 @@
             "url": "/demo/particles-regl"
         },
         {
-            "id": "palm-editor",
+            "id": "palm-on-curve",
             "title": "Palm Editor",
             "thumb": "/demo/thumbs.jpg",
             "url": "/demo/palm-on-curve/www"
