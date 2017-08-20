@@ -70,8 +70,8 @@ void main(){
     st.x *= iResolution.x/iResolution.y;
     //vec3 draw = elica(st, vec2(0.5), 9.9, 0.02, 3.);
     //vec3 draw = daisy(st, vec2(0.5), 9.9, 0.02, 3.);
-    vec3 draw = fiore(st, vec2(1.0, 0.6), 9.9, 0.02, 3.);
-    //vec3 draw = snowFlake(st, vec2(0.5), 9.9, 0.22, 3., 6., 0.1, .8);
+    //vec3 draw = fiore(st, vec2(1.0, 0.6), 9.9, 0.02, 3.);
+    vec3 draw = snowFlake(st, vec2(0.5), 9.9, 0.22, 3., 6., 0.1, .8);
     //vec3 draw = cog(st, vec2(0.5), 5.9, 0.02, 12.);
     gl_FragColor = vec4(draw,1.0);
 }
