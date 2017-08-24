@@ -1641,7 +1641,7 @@ headtrackr.Ui = function() {
     "hints" : "We seem to have some problems detecting your face. Please make sure that your face is well and evenly lighted, and that your camera is working.",
     "redetecting" : "Lost track of face, trying to detect again..",
     "lost" : "Lost track of face :(",
-    "found" : "Face found! Move your head!"
+    "found" : "Face found. Move your head and shine like the sun"
   };
   
   var override = false;

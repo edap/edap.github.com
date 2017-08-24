@@ -3,14 +3,14 @@
 
     <head>
     <meta charset="utf-8">
-    <title>be the sun</title>
+    <title>Be the sun</title>
     <meta name="description" content="A once in a life-time occasion to be the sun, making sunsets and sunrises whenever you want">
     <meta name="author" content="Davide Prati">
     <script src="js/headtrackr.js"></script>
     <script src="js/regl.min.js"></script>
     </head>
 
-    <body>
+    <body style="margin: 0px; padding: 0px; overflow: hidden;">
     <canvas id="inputCanvas" style="display:none; top:0px"></canvas>
     <canvas id="canvasWebGL" width="1000" height="1000"></canvas>
     <video id="inputVideo" autoplay loop style="display:none; top:0px"></video>
@@ -26,9 +26,11 @@
     htracker.init(videoInput, canvasInput);
     htracker.start();
     var headPosition = [0.0,0.0];
+    var sunSize = 0.05;
 
     function map_range(value, low1, high1, low2, high2) {
-         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+         var mapped =  low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+         return Math.min(Math.max(mapped, low2), high2);
     }
 
     document.addEventListener('headtrackrStatus',
@@ -42,41 +44,24 @@
     document.addEventListener('headtrackingEvent',
         function (event) {
             if (event) {
-                //console.log(event.y);
-                console.log(event.z);
-                
                 var x = map_range(event.x, -7, 7, 0, canvasWebGL.width);
                 var y = map_range(event.y, 0, 12, 0, canvasWebGL.height);
-                /*
-                */
-                if (x < 0) {
-                    x = 0;
-                }
-                if (x > canvasWebGL.width) {
-                    x = canvasWebGL.width;
-                }
-
+                var z = map_range(event.z, 80, 25, 0, 0.7);
                 headPosition[0] = x;
                 headPosition[1] = y;
-                console.log(headPosition);
+                sunSize = z;
             }
         }
     );
-
 
     var regl = createREGL({
          canvas: canvasWebGL
     });
 
     const drawTriangle = regl({
-        // Shaders in regl are just strings.  You can use glslify or whatever you want
-        // to define them.  No need to manually create shader objects.
-
-
         frag: `
         precision mediump float;
-        uniform vec4 color;
-        uniform float iTime;
+        uniform float uSunSize;
         uniform vec2 iResolution;
         uniform vec2 uHead;
 
@@ -105,8 +90,7 @@
         void main() {
             vec2 uv = gl_FragCoord.xy / iResolution.xy;
             vec2 headNorm = uHead/iResolution;
-            vec2 pos = vec2(headNorm.x, parabola(headNorm.x, 1.2));
-            vec2 m = pos;
+            vec2 m = vec2(headNorm.x, parabola(headNorm.x, 1.2));
             vec3 color = vec3(0.1, 0.4, 0.9);
             color += vec3(0.9-m.y,0.6-uv.y, -(1.0-m.y));
             uv.x *= iResolution.x / iResolution.y;
@@ -114,7 +98,7 @@
             vec2 recPos = vec2(0.0, 0.0);
 
             // kind of sun, with a lot of imagination
-            color.rg += circleSmooth(uv, vec2(m), 0.05, 0.15);
+            color.rg += circleSmooth(uv, vec2(m), 0.05, 0.15 + uSunSize);
             float turnOffSky = smoothstep(0.25, 0.27,m.y);
             color*= turnOffSky;
 
@@ -131,8 +115,9 @@
         vert: `
         precision mediump float;
         attribute vec3 position;
+
         void main() {
-        gl_Position = vec4(position, 1);
+            gl_Position = vec4(position, 1);
         }`,
 
         attributes: {
@@ -143,30 +128,19 @@
         },
 
         uniforms: {
-            color: regl.prop('color'),
             iResolution:regl.prop('resolution'),
-            iTime:regl.prop('time'),
+            uSunSize:regl.prop('sunSize'),
+            //iTime:regl.prop('time'),
             uHead:regl.prop('headPosition')
         },
         count: 6
     })
 
     regl.frame(function (context) {
-        var time = context.time;
-        //console.log(context);
-        regl.clear({
-            color: [0, 0, 0, 1]
-        })
-
         drawTriangle({
-            color: [
-                Math.cos(time * 0.001),
-                Math.sin(time * 0.0008),
-                Math.cos(time * 0.003),
-                1
-            ],
             resolution: [context.viewportWidth,context.viewportHeight],
-            time: time,
+            //time: context.timt,
+            sunSize: sunSize,
             headPosition: headPosition
         })
 
