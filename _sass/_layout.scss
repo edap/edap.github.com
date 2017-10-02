@@ -44,6 +44,21 @@
 }
 
 /**
+ * About
+ */
+.about-container {
+    text-align: left;
+    width: $about-width;
+    margin-left: auto ;
+    margin-right: auto ;
+    @include media-query($on-laptop) {
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+}
+
+/**
  * Posts
  */
 .post-container {
