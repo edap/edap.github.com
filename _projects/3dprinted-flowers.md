@@ -1,6 +1,6 @@
 ---
 layout: project
-title: "Flowers, from webGL to 3D printing"
+title: "Flowers"
 category: 
 tags: []
 ---
@@ -53,7 +53,9 @@ tags: []
   {% include img-small.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
 
   <div class = "grid l3">
-  In January 2017 I've 3D printed some objects that were created programmatically using <a href="https://github.com/thi-ng/morphogen">morphogen</a> and the <a href="https://github.com/thi-ng/geom">thi/ng geom</a> libraries. <a href ="https://github.com/edap/flowers">Here</a> you can find the software used to generate the meshes, and <a href="https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs">here</a> the code used to generate the first four webGL animations that are at the top of this page.
+  <a href ="https://github.com/edap/flowers">Code</a> used to generate the meshes
+  
+  <a href="https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs"> Code </a>for the webGL animations at the top of this page.
   </div>
 
 </div>

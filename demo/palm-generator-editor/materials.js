@@ -4,8 +4,8 @@ export default class CollectionMaterials {
     constructor(){
         let materials = {
             "standard": new THREE.MeshStandardMaterial( {
-                color: 0xd94e31,
-                emissive: 0x2d1200,
+                color: 0xdae80d,
+                emissive: 0x2a6448,
                 roughness:0.55,
                 metalness:0.89,
                 vertexColors: THREE.VertexColors

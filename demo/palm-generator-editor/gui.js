@@ -53,7 +53,7 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
         this.add(this.params, "num").min(60).max(1200).step(1).listen();
         this.add(this.params, "growth").min(0.04).max(0.25).step(0.01);
-        this.add(this.params, "foliage_start_at").min(10).max(320);
+        this.add(this.params, "foliage_start_at").min(0).max(320);
         this.add(this.params, "angle_open").min(0).max(80);
         this.add(this.params, "starting_angle_open").min(50).max(100);
         this.add(this.params, "trunk_regular");
@@ -65,7 +65,7 @@ export default class Gui extends DAT.GUI{
         leaf.add(this.params, "width_stem").min(0.2).max(2.4).step(0.1);
         leaf.add(this.params, "leaf_width").min(0.1).max(1.0).step(0.1);
         leaf.add(this.params, "leaf_up").min(0.1).max(6.0).step(0.1);
-        leaf.add(this.params, "density").min(15).max(180).step(1);
+        leaf.add(this.params, "density").min(3).max(180).step(1);
         leaf.add(this.params, "curvature").min(0.01).max(0.06).step(0.01);
         leaf.add(this.params, "curvature_border").min(0.001).max(0.01).step(0.001);
         leaf.add(this.params, "leaf_inclination").min(0.1).max(1.0).step(0.1);
@@ -137,8 +137,3 @@ export default class Gui extends DAT.GUI{
     }
 
 }
-
-
-
-// WEBPACK FOOTER //
-// ./src/gui.js

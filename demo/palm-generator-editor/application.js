@@ -35,6 +35,7 @@ var objects = [];
 var leafGeometry = [];
 var palm = new THREE.Group();
 let n_frames = 0;
+let numbTotObjects = 0;
 
 //add lights to the scene
 let ambientLight = new THREE.AmbientLight( 0x34ac0f );
@@ -44,7 +45,6 @@ gui.addScene(scene, ambientLight, renderer);
 PointLights().map((light) => {
     scene.add( light );
 });
-
 
 window.addEventListener('resize', function() {
     let WIDTH = window.innerWidth,
@@ -70,7 +70,7 @@ function transformIntoLeaf(object, iter, angleInRadians){
     let yrot = (iter/gui.params.angle_open) * gui.params.foliage_start_at;
     // object.rotateY( (yrot ) * -PItoDeg );
     let y_angle = gui.params.angle_open * scaleRatio;
-    object.rotateY( (gui.params.starting_angle_open + y_angle + iter * 200/gui.params.num ) * -PItoDeg );
+    object.rotateY( (gui.params.starting_angle_open + y_angle + iter * 200/numbTotObjects ) * -PItoDeg );
 
     // as they grow up, they become bigger
     object.scale.set(5 * scaleRatio ,1 ,1);
@@ -80,7 +80,7 @@ function transformIntoLeaf(object, iter, angleInRadians){
 function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
-    for (var i = 0; i< gui.params.num; i++) {
+    for (var i = 0; i<numbTotObjects; i++) {
         let isALeaf = (i <= gui.params.foliage_start_at)? true : false;
         let geometry = isALeaf ? foliage_geometry : trunk_geometry;
         let object = new THREE.Mesh(geometry, selected_material);
@@ -92,8 +92,8 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
             object.rotateZ( i* angleInRadians);
             if (gui.params.trunk_regular) {
                 object.rotateY( (90 + gui.params.angle_open ) * -PItoDeg );
-            }else{
-                object.rotateY( (90 + gui.params.angle_open + i * 100/gui.params.num ) * -PItoDeg );
+            } else {
+                object.rotateY( (90 + gui.params.angle_open + i * 100/numbTotObjects ) * -PItoDeg );
             }
         }
         objects.push(object);
@@ -147,19 +147,9 @@ function render(){
         gui.params.spread = Math.abs(Math.sin(n_frames/100) * amp_spread);
     }
     if (gui.params.anim_growth_objects) {
-        let amp_decrease = 900;
-        gui.params.num = Math.abs(Math.sin(n_frames/200) * amp_decrease);
-    }
-    if (gui.params.zoom_x) {
-        camera.position.x = Math.abs(Math.sin(n_frames/gui.params.zoom_velocity) * gui.params.zoom_amplitude);
-    }
-
-    if (gui.params.zoom_y) {
-        camera.position.y = Math.sin(n_frames/gui.params.zoom_velocity) * gui.params.zoom_amplitude;
-    }
-
-    if (gui.params.zoom_z) {
-        camera.position.z = Math.abs(Math.sin(n_frames/gui.params.zoom_velocity) * gui.params.zoom_amplitude);
+        numbTotObjects = Math.abs(Math.sin(n_frames/200) * gui.params.num);
+    } else {
+        numbTotObjects = gui.params.num;
     }
     let leaf = makeLeaf();
     leafGeometry.push(leaf);
@@ -178,8 +168,3 @@ function render(){
 }
 
 render();
-
-
-
-// WEBPACK FOOTER //
-// ./src/application.js

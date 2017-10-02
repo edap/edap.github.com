@@ -2,6 +2,7 @@
 layout: post
 title: "Poster, an image composer"
 category:
+published: false
 tags: [golang, package, poster, image]
 description: "<a href='https://github.com/edap/poster'>Poster</a> Is a command line tool that creates a grid of images"
 ---

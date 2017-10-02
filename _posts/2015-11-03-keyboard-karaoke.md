@@ -2,6 +2,7 @@
 layout: post
 title: "Keyboard Karaoke"
 category:
+published: false
 tags: [openFrameworks, karaoke, keyboard]
 description: "<div class='sixteen-nine'>
 <iframe src='https://player.vimeo.com/video/144209588' width='745' height='466' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>

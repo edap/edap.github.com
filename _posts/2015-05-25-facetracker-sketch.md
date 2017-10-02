@@ -2,6 +2,7 @@
 layout: post
 title: "FaceTracker sketch"
 category:
+published: false
 tags: [openFrameworks, FaceTracker, Box2D, OpenCV]
 description: "OpenFrameworks sketch mixing ofxFaceTracker, ofxBox2D and the audio input.
 <div class='sixteen-nine'>
