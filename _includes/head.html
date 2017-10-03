@@ -5,14 +5,14 @@
 
   <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description_metatag }}{% endif %}">
-  <meta name="keywords" content="webGL, threejs, openFrameworks, creative coder, freelancer, berlin">
+  <meta name="keywords" content="webGL, threejs, openFrameworks, artist, creative coder, freelancer, berlin">
 
   <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
 
 
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
-  <link href="https://fonts.googleapis.com/css?family=Dosis:400,300,500,200,600,700,800" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:bold|Raleway:bold,italic,light" rel="stylesheet">
 
 {% if page.math %}
   {% include mathjax_support.html %}
