@@ -81,7 +81,8 @@ a {
     color: $text-color;
 
     &:visited {
-        color: darken($brand-color, 15%);
+        color: $text-color;
+        /* color: darken($brand-color, 15%); */
     }
 
     &:hover {
