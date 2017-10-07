@@ -1,6 +1,6 @@
 ---
 layout: project
-title: "Flowers"
+title: "Fake Plastic Flowers"
 category: 
 tags: []
 ---
@@ -53,8 +53,7 @@ tags: []
   {% include img-small.html pngName="4" assetPath="/assets/media/3dprinted-flowers/" gridClass = "grid" %}
 
   <div class = "grid l3">
-  <a href ="https://github.com/edap/flowers">Code</a> used to generate the meshes
-  
+  <a href ="https://github.com/edap/flowers">Code</a> used to generate the meshes.<br/>
   <a href="https://github.com/edap/edap.github.com/blob/master/demo/3dprinteflowers-webgl/src/webgl_test/core.cljs"> Code </a>for the webGL animations at the top of this page.
   </div>
 
