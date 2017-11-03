@@ -1,6 +1,6 @@
 ---
 layout: project
-title: "less than a flower, more than a bird"
+title: "less than a flower, more than a bird. <br/> More than a bird, less than a flower"
 category: 
 tags: []
 ---
