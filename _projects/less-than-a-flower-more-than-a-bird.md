@@ -19,7 +19,7 @@ tags: []
 {% include img-small.html pngName="budgeridgar-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="budgeridgar" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
-<a href='/artworks/less-than-a-flower-more-than-a-bird/budgeridgar/'>Budgerigar</a>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/budgerigar/'>Budgerigar</a>
 <hr />
 </div>
 
