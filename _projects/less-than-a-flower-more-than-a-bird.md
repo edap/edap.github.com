@@ -19,7 +19,8 @@ tags: []
 {% include img-small.html pngName="budgeridgar-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="budgeridgar" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
-<a href='/artworks/less-than-a-flower-more-than-a-bird/budgerigar/'>Budgerigar</a>
+Budgerigar<br/>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/budgerigar/'>(open webGL animation)</a>
 <hr />
 </div>
 
@@ -27,7 +28,8 @@ tags: []
 {% include img-small.html pngName="fischers-lovebird-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="fischers-lovebird" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
-<a href='/artworks/less-than-a-flower-more-than-a-bird/fischers-lovebird/'>Fischer's Lovebird</a>
+Fischer's Lovebird <br/>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/fischers-lovebird/'>(open webGL animation)</a>
 <hr />
 
 </div>
@@ -35,7 +37,8 @@ tags: []
 {% include img-small.html pngName="eastern-rosella-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="eastern-rosella" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
-<a href='/artworks/less-than-a-flower-more-than-a-bird/eastern-rosella/'>Eastern Rosella</a>
+Eastern Rosella <br/>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/eastern-rosella/'>(open webGL animation)</a>
 <hr />
 </div>
 
@@ -45,7 +48,8 @@ tags: []
 {% include img-small.html pngName="ring-necked-parakeet-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="ring-necked-parakeet" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
-<a href='/artworks/less-than-a-flower-more-than-a-bird/ring-necked-parakeet/'>Ring-Necked Parakeet</a>
+Ring-Necked Parakeet <br/>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/ring-necked-parakeet/'>(open webGL animation)</a>
 <hr />
 </div>
 
@@ -53,7 +57,8 @@ tags: []
 {% include img-small.html pngName="blue-fronted-parrot-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="blue-fronted-parrot" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
-<a href='/artworks/less-than-a-flower-more-than-a-bird/blue-fronted-parrot/'>Blue Fronted Parrot</a>
+Blue Fronted Parrot <br/>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/blue-fronted-parrot/'>(open webGL animation)</a>
 <hr />
 </div>
 
