@@ -12,7 +12,9 @@ import { materials, makeMaterialBrighter } from './materials.js';
 // for apeunit, increase this value if you want that the scene becomes
 // brighter in less time
 const LIGHT_INCREASE = 0.01;
+const REDIRECT_URL = 'http://www.apeunit.com/en/';
 
+//orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
 const audio = false;
 const debug = true;
@@ -32,13 +34,8 @@ let gui,
 	sprite,
 	light;
 
-//camera
-const cameraZposition = 100;
-const cameraHeight = 27;
-const cameraSpeed = 0.0001;
-const curveDensity = 600; // how many points define the path
-
 //curve
+const curveDensity = 600; // how many points define the path
 const t = 0;
 const radius = 200;
 const radius_offset = 80;
@@ -106,7 +103,7 @@ const init = sound => {
 	addGui(debug, light);
 
 	//scenography
-	scenography = new Scenography(camera, spline, t, cameraHeight, gui.params.cameraSpeed, materials, fadeToWhite);
+	scenography = new Scenography(camera, spline, t, gui.params.cameraSpeed, fadeToWhite);
 	//stats
 	stats = new Stats();
 	stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -161,15 +158,17 @@ const removeLoadingButton = () => {
 };
 
 const fadeToWhite = () => {
-	// increment the bg color from black to white
 	if (bgColor.r < 1.0){
 		bgColor.r += LIGHT_INCREASE;
 		bgColor.g += LIGHT_INCREASE;
 		bgColor.b += LIGHT_INCREASE;
 		renderer.setClearColor(bgColor.getHex());
-	}
-	for (let i = 0; i < materials.length; i++){
-		makeMaterialBrighter(materials[i], LIGHT_INCREASE);
+
+		for (let i = 0; i < materials.length; i++){
+			makeMaterialBrighter(materials[i], LIGHT_INCREASE);
+		}
+	} else if (!debug){
+		window.location.replace(REDIRECT_URL);
 	}
 };
 

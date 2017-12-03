@@ -4,40 +4,21 @@ import { BoxGeometry, Mesh, VertexColors, NoColors } from 'three';
 const DURATION = 15;
 const DURATION_MOVE_UP_PERCENT = 0.5;
 const CAMERA_LOWEST_POSITION = 0;
+const CAMERA_HIGHEST_POSITION = 120;
+const CAMERA_LOOK_FORWARD = 5;
 
 export default class Scenography {
-	constructor(camera, spline, t, cameraHeight, cameraSpeed, materials, fadeCallback){
-		this.dimLight = false;
-		this.debug = false;
-		this.emissiveT = 0x2d1200;
-		this.roughnessT = 0.55;
-		this.metalnessT = 0.89;
-		this.colorF = 0xd94e31;
-		this.emissiveF = 0x2d1200;
-		this.roughnessF = 0.55;
-		this.metalnessF = 0.89;
-		this.kopfhoch = 0;
-		this.cameraHighest = 120;
-		this.cameraLowest = 27;
-		this.current_index_scene = null;
+	constructor(camera, spline, t, cameraSpeed, fadeCallback){
 		this.spline = spline;
 		this.camera = camera;
 		this.t = t;
-		this.cameraHeight = cameraHeight;
 		this.cameraSpeed = cameraSpeed;
-		this.scenes = this._populateScenes();
 		this.fadeCallback = fadeCallback;
 		this.camera = camera;
 	}
 
-	lightShouldDim(){
-		return this.dimLight;
-	}
-
 	update(speed, stop, elapsedSeconds){
-		const sceneId = 1;
 		this.cameraSpeed = speed;
-		const current_schedule = sceneId;
 		if (stop){
 			return;
 		}
@@ -45,10 +26,6 @@ export default class Scenography {
 			this.fadeCallback();
 			//return true;
 			// should we stop the camera? the camera move unless we are voer the duration
-		}
-		if (current_schedule !== this.current_index_scene){
-			this.current_index_scene = current_schedule;
-			this._implementScene(current_schedule);
 		}
 		this._moveCamera(elapsedSeconds);
 	}
@@ -69,27 +46,28 @@ export default class Scenography {
 	}
 
 	_moveDownAndLookUp(camPos, look, elapsedSeconds){
-		const cameraY = this._getCameraY(elapsedSeconds, this.cameraHeight);
+		const cameraY = this._getCameraY(elapsedSeconds);
 		//move camera forward
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
 		// adjust lookup
-		look.y = this.cameraHeight + this.kopfhoch;
+		look.y = CAMERA_HIGHEST_POSITION;
+		look.z += CAMERA_LOOK_FORWARD;
 		this.camera.lookAt(look);
-		//console.log(this.cameraHeight);
 	}
 
-	_getCameraY(elapsedSeconds, cameraHeight){
+	_getCameraY(elapsedSeconds){
 		const timing = this._getTimingLookUp();
 		let cameraY;
 		if (elapsedSeconds > timing.end){
 			cameraY = 0;
 		} else if (elapsedSeconds < timing.start){
-			cameraY = cameraHeight;
+			cameraY = CAMERA_HIGHEST_POSITION;
 		} else {
-			cameraY = map(elapsedSeconds, timing.start, timing.end, cameraHeight, CAMERA_LOWEST_POSITION);
+			cameraY = map(elapsedSeconds, timing.start, timing.end, CAMERA_HIGHEST_POSITION, CAMERA_LOWEST_POSITION);
 		}
 		return cameraY;
 	}
+
 	_getTimingLookUp(){
 		const half = DURATION / 2.0;
 		const durationLookUp = DURATION * DURATION_MOVE_UP_PERCENT;
@@ -99,68 +77,9 @@ export default class Scenography {
 		};
 	}
 
-	_implementScene(scene_id){
-		const scene = this.scenes[scene_id];
-
-		if (scene.hasOwnProperty('kopfhoch')){
-			if (scene.kopfhoch){
-				this.kopfhoch = 6.0;
-			} else {
-				this.kopfhoch = 0.0;
-			}
-		}
-
-		if (scene.hasOwnProperty('cameraHeight')){
-			this.cameraHeight = scene.cameraHeight;
-		}
-
-		if (scene.hasOwnProperty('cameraSpeed') === true){
-			// TODO, re-enable if you want to control the speed through the scenographer
-			//this.cameraSpeed = scene.cameraSpeed;
-		}
-	}
-
 	getCameraPositionOnSpline(){
 		// it returns a value between 0 and 1. O when at the beginning
 		// of the spline, 1 when at the end
 		return this.t;
-	}
-
-	_populateScenes(){
-		const lookUp = {
-			dimLight: true,
-			kopfhoch: true,
-			colorT: '0xff00a5',
-			emissiveT: '0x0f4129',
-			colorF: '0x0077ff',
-			emissiveF: '0xe84444',
-			cameraHeight: this.cameraLowest
-		};
-
-		//fly into leaves
-		const end = {
-			dimLight: false,
-			kopfhoch: false,
-			// colorF: '0xf5a615',
-			// emissiveF: '0x005004',
-			// colorT: '0xf5a615',
-			// emissiveT: '0x005004',
-			cameraHeight: this.cameraHighest
-		};
-
-		//vertex displacement, slowly back to BN
-		//'0xffd100', '0x001c78'
-		// 0xffc741, 0x000000
-		const last = {
-			vertexColorsT: true,
-			dimLight: true,
-			emissiveF: '0x370013',
-			colorF: '0xf1db174',
-			colorT: '0x00ffe1',
-			emissiveT: '0x00192a',
-			cameraHeight: this.cameraLowest
-		};
-
-		return [lookUp, end, last];
 	}
 }
