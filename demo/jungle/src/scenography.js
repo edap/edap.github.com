@@ -1,8 +1,8 @@
 import { map } from './helpers.js';
 import { BoxGeometry, Mesh, MeshBasicMaterial, VertexColors, NoColors } from 'three';
 
-const DURATION = 2;
-const MOVE_DOWN_PERCENTAGE = 0.3;
+const DURATION = 10;
+const DURATION_MOVE_UP_PERCENT = 0.5;
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage, fadeCallback){
@@ -56,20 +56,11 @@ export default class Scenography {
 			this.current_index_scene = current_schedule;
 			this._implementScene(current_schedule);
 		}
-		this._maybeMoveCamera(current_schedule);
+		this._moveCamera(elapsedSeconds);
 	}
 
-	_maybeMoveCamera(scene_id){
-		const scene = this.scenes[scene_id];
-		if (scene.followPath){
-			this._moveCamera();
-		}
-	}
-
-	_moveCamera(){
+	_moveCamera(elapsedSeconds){
 		const camPos = this.spline.getPoint(this.t);
-		this.camera.position.set(camPos.x, this.cameraHeight, camPos.z);
-
 		// the lookAt position is just 20 points ahead the current position
 		// but when we are close to the end of the path, the look at point
 		// is the first point in the curve
@@ -77,18 +68,41 @@ export default class Scenography {
 		const lookAtPoint = next > 1 ? 0 : next;
 		const look = this.spline.getPoint(lookAtPoint);
 
-		// this is the place where the camera goes up and down
-		this._moveDownAndLookUp(look);
-
+		// this is the place where the camera down
+		this._moveDownAndLookUp(camPos, look, elapsedSeconds);
 		const limit = 1 - this.cameraSpeed;
 		this.t = this.t >= limit ? 0 : (this.t += this.cameraSpeed);
 	}
 
-	_moveDownAndLookUp(look){
-		this.cameraHeight -= 0.1;
+	_moveDownAndLookUp(camPos, look, elapsedSeconds){
+		const cameraY = this._getCameraY(elapsedSeconds, this.cameraHeight);
+		//move camera forward
+		this.camera.position.set(camPos.x, cameraY, camPos.z);
+		// adjust lookup
 		look.y = this.cameraHeight + this.kopfhoch;
 		this.camera.lookAt(look);
 		//console.log(this.cameraHeight);
+	}
+
+	_getCameraY(elapsedSeconds, cameraHeight){
+		const timing = this._getTimingLookUp();
+		let cameraY;
+		if (elapsedSeconds > timing.end){
+			cameraY = 0;
+		} else if (elapsedSeconds < timing.start){
+			cameraY = cameraHeight;
+		} else {
+			cameraY = map(elapsedSeconds, timing.start, timing.end, cameraHeight, 0);
+		}
+		return cameraY;
+	}
+	_getTimingLookUp(){
+		const half = DURATION / 2.0;
+		const durationLookUp = DURATION * DURATION_MOVE_UP_PERCENT;
+		return {
+			start: half - durationLookUp / 2.0,
+			end: half + durationLookUp / 2.0
+		};
 	}
 
 	_implementScene(scene_id){
@@ -147,7 +161,7 @@ export default class Scenography {
 			this.cameraHeight = scene.cameraHeight;
 		}
 
-		if (scene.hasOwnProperty('cameraSpeed') && scene.hasOwnProperty('followPath') === true){
+		if (scene.hasOwnProperty('cameraSpeed') === true){
 			// TODO, re-enable if you want to control the speed through the scenographer
 			//this.cameraSpeed = scene.cameraSpeed;
 		}
@@ -163,7 +177,6 @@ export default class Scenography {
 		const lookUp = {
 			dimLight: true,
 			kopfhoch: true,
-			followPath: true,
 			colorT: '0xff00a5',
 			emissiveT: '0x0f4129',
 			colorF: '0x0077ff',
@@ -179,9 +192,7 @@ export default class Scenography {
 			emissiveF: '0x005004',
 			colorT: '0xf5a615',
 			emissiveT: '0x005004',
-			followPath: false,
-			cameraHeight: this.cameraHighest,
-			followPath: true
+			cameraHeight: this.cameraHighest
 		};
 
 		//vertex displacement, slowly back to BN
@@ -194,8 +205,7 @@ export default class Scenography {
 			colorF: '0xf1db174',
 			colorT: '0x00ffe1',
 			emissiveT: '0x00192a',
-			cameraHeight: this.cameraLowest,
-			followPath: true
+			cameraHeight: this.cameraLowest
 		};
 
 		return [lookUp, end, last];
