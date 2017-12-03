@@ -5,7 +5,7 @@ const DURATION = 15;
 const DURATION_MOVE_UP_PERCENT = 0.5;
 const CAMERA_LOWEST_POSITION = 0;
 const CAMERA_HIGHEST_POSITION = 120;
-const CAMERA_LOOK_FORWARD = 5;
+const CAMERA_LOOK_FORWARD = 0.02;
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraSpeed, fadeCallback){
@@ -35,8 +35,9 @@ export default class Scenography {
 		// the lookAt position is just 20 points ahead the current position
 		// but when we are close to the end of the path, the look at point
 		// is the first point in the curve
-		const next = this.t + this.cameraSpeed * 20;
+		const next = this.t + this.cameraSpeed + CAMERA_LOOK_FORWARD;
 		const lookAtPoint = next > 1 ? 0 : next;
+		//console.log(lookAtPoint);
 		const look = this.spline.getPoint(lookAtPoint);
 
 		// this is the place where the camera down
@@ -51,7 +52,7 @@ export default class Scenography {
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
 		// adjust lookup
 		look.y = CAMERA_HIGHEST_POSITION;
-		look.z += CAMERA_LOOK_FORWARD;
+		//look.z += CAMERA_LOOK_FORWARD;
 		this.camera.lookAt(look);
 	}
 
