@@ -1,11 +1,11 @@
 import { map } from './helpers.js';
-import { BoxGeometry, Mesh, MeshBasicMaterial, VertexColors, NoColors } from 'three';
+import { BoxGeometry, Mesh, VertexColors, NoColors } from 'three';
 
 const DURATION = 10;
 const DURATION_MOVE_UP_PERCENT = 0.3;
 
 export default class Scenography {
-	constructor(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage, fadeCallback){
+	constructor(camera, spline, t, cameraHeight, cameraSpeed, materials, fadeCallback){
 		this.dimLight = false;
 		this.debug = false;
 		(this.vertexColorsT = NoColors), (this.vertexColorsF = NoColors), (this.colorT = 0xd94e31);
@@ -19,8 +19,8 @@ export default class Scenography {
 		this.kopfhoch = 0;
 		this.cameraHighest = 120;
 		this.cameraLowest = 27;
-		this.materialTrunk = materialTrunk;
-		this.materialFoliage = materialFoliage;
+		this.materialTrunk = materials[0];
+		this.materialFoliage = materials[1];
 		this.current_index_scene = null;
 		this.spline = spline;
 		this.camera = camera;
@@ -29,24 +29,20 @@ export default class Scenography {
 		this.cameraSpeed = cameraSpeed;
 		this.scenes = this._populateScenes();
 		this.fadeCallback = fadeCallback;
-
-		if (this.debug){
-			const geom = new BoxGeometry(5, 5, 5);
-			const mat = new MeshBasicMaterial();
-			const fakeCamera = new Mesh(geom, mat);
-			this.camera = fakeCamera;
-		} else {
-			this.camera = camera;
-		}
+		this.camera = camera;
 	}
 
 	lightShouldDim(){
 		return this.dimLight;
 	}
 
-	update(speed, sceneId, elapsedSeconds){
+	update(speed, stop, elapsedSeconds){
+		const sceneId = 1;
 		this.cameraSpeed = speed;
 		const current_schedule = sceneId;
+		if (stop){
+			return;
+		}
 		if (elapsedSeconds > DURATION){
 			this.fadeCallback();
 			//return true;

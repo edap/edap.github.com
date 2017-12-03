@@ -7,6 +7,7 @@ import { createPath } from './path.js';
 import Scenography from './scenography.js';
 import Pool from './pool.js';
 import { fragmentShader, vertexShader } from './shaders.js';
+import { materials } from './materials.js';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const audio = false;
@@ -28,21 +29,9 @@ let gui,
 	sprite,
 	light;
 
-const materialTrunk = new THREE.MeshStandardMaterial({
-	color: 0xffffff,
-	emissive: 0x000000,
-	roughness: 0.55,
-	metalness: 0.89,
-	vertexColors: THREE.NoColors
-});
+const materialTrunk = materials[0];
 
-const materialFoliage = new THREE.MeshStandardMaterial({
-	color: 0xffffff,
-	emissive: 0x000000,
-	roughness: 0.55,
-	metalness: 0.89,
-	vertexColors: THREE.NoColors
-});
+const materialFoliage = materials[1];
 
 //camera
 const cameraZposition = 100;
@@ -94,8 +83,7 @@ const loadPlayer = url =>
 const prepareGeometry = () => {
 	spline = createPath(radius, radius_offset);
 	scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.01);
-	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materialFoliage, materialTrunk);
+	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materials);
 	return pool;
 };
 
@@ -108,6 +96,7 @@ const init = sound => {
 	camera.add(listener);
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer.setClearColor(0x000000, 0); // the default
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.style.margin = 0;
 	document.body.appendChild(renderer.domElement);
@@ -119,7 +108,7 @@ const init = sound => {
 	addGui(debug, light);
 
 	//scenography
-	scenography = new Scenography(camera, spline, t, cameraHeight, gui.params.cameraSpeed, materialTrunk, materialFoliage, fadeToWhite);
+	scenography = new Scenography(camera, spline, t, cameraHeight, gui.params.cameraSpeed, materials, fadeToWhite);
 	//stats
 	stats = new Stats();
 	stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -140,7 +129,7 @@ const init = sound => {
 const render = () => {
 	const time = clock.getElapsedTime() - startTime;
 	stats.begin();
-	scenography.update(gui.params.cameraSpeed, gui.params.sceneId, time);
+	scenography.update(gui.params.cameraSpeed, gui.params.stop, time);
 	pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
 	stats.end();
@@ -192,9 +181,9 @@ const fadeToWhite = () => {
 		bgColor.r += inc;
 		bgColor.g += inc;
 		bgColor.b += inc;
-		console.log(bgColor);
 		renderer.setClearColor(bgColor.getHex());
 	}
+	materialTrunk.opacity -= 0.1;
 };
 
 const addPlayButton = () => {

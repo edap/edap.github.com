@@ -11,7 +11,7 @@ export default class Gui extends DAT.GUI {
 		this.material = material;
 		this.trunkMaterial = trunkMaterial;
 		this.params = {
-			sceneId: 1,
+			stop: false,
 			cameraHeight: 80,
 			cameraSpeed: 0.0001,
 			lightIntensity: 1,
@@ -25,7 +25,6 @@ export default class Gui extends DAT.GUI {
 			roughness: 0.55,
 			metalness: 0.89,
 			vertex_colors: true,
-			backgroundColor: '#505050',
 			ambientLight: '#34ac0f',
 
 			colorT: 0xefff00,
@@ -33,17 +32,11 @@ export default class Gui extends DAT.GUI {
 			roughnessT: 0.55,
 			metalnessT: 0.89,
 			vertex_colorsT: true,
-			backgroundColorT: '#505050',
 			ambientLightT: '#34ac0f'
 		};
 
-		//this.add(this.params, 'cameraHeight', 20, 190).step(1);
-		//this.add(this.params, 'lightIntensity', 1, 30)
-		//	.step(1)
-		//	.onChange(this._onLightIntChange());
 		this.add(this.params, 'cameraSpeed', 0.0001, 0.0009).step(0.0001);
-		this.add(this.params, 'sceneId', [0, 1, 2]);
-
+		this.add(this.params, 'stop');
 		const mat = this.addFolder('Foliage Material');
 		mat.closed = true;
 		mat.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.material));
