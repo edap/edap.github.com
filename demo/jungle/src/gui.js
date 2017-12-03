@@ -1,5 +1,5 @@
 import DAT from 'dat-gui';
-import { Color, Fog, VertexColors, NoColors } from 'three';
+import { Color, VertexColors, NoColors } from 'three';
 
 export default class Gui extends DAT.GUI {
 	constructor(material, trunkMaterial){

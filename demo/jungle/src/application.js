@@ -186,9 +186,9 @@ const removeLoadingButton = () => {
 const fadeToWhite = () => {
 	// augment the light intensity
 	light.intensity += 1;
-	const inc = 1;
+	const inc = 0.01;
 	// increment the bg color from black to white
-	if (bgColor.r < 255){
+	if (bgColor.r < 1.0){
 		bgColor.r += inc;
 		bgColor.g += inc;
 		bgColor.b += inc;
@@ -219,32 +219,6 @@ const addPlayButton = () => {
 		return elem.parentNode.removeChild(elem);
 	};
 	document.body.appendChild(div);
-};
-
-const getMaterial = fog => {
-	const screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
-	const tmp_uniforms = {
-		time: { value: 1.0 },
-		magAudio: { value: 0.0 },
-		amplitude: { value: 0.0 },
-		displacement: { value: 0.0 },
-		minColor: { value: 0.6 },
-		maxColor: { value: 0.9 },
-		saturation: { value: 0.2 },
-		fogDensity: { type: 'f', value: fog.density },
-		fogColor: { type: 'c', value: fog.color },
-		brightness: { value: 0.0 },
-		color: { type: 'c', value: new THREE.Color(0xff3322) },
-		uResolution: { value: screenResolution }
-	};
-	const material = new THREE.ShaderMaterial({
-		uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib.lights, tmp_uniforms]),
-		lights: true,
-		fog: true,
-		vertexShader: vertexShader(),
-		fragmentShader: fragmentShader()
-	});
-	return material;
 };
 
 const maybeChangeScene = time => {
