@@ -1,8 +1,8 @@
 import { map } from './helpers.js';
 import { BoxGeometry, Mesh, VertexColors, NoColors } from 'three';
 
-const DURATION = 10;
-const DURATION_MOVE_UP_PERCENT = 0.3;
+const DURATION = 15;
+const DURATION_MOVE_UP_PERCENT = 0.5;
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraHeight, cameraSpeed, materials, fadeCallback){
@@ -103,9 +103,6 @@ export default class Scenography {
 
 	_implementScene(scene_id){
 		const scene = this.scenes[scene_id];
-		if (scene.hasOwnProperty('dimLight')){
-			this.dimLight = scene.dimLight;
-		}
 
 		if (scene.hasOwnProperty('kopfhoch')){
 			if (scene.kopfhoch){

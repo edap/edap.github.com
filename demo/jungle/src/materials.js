@@ -1,51 +1,51 @@
-import * as THREE from 'THREE';
+import { MeshStandardMaterial, NoColors, VertexColors } from 'three';
 
-const materialTrunk = new THREE.MeshStandardMaterial({
-	color: 0xffffff,
-	emissive: 0x000000,
+const materialTrunk = new MeshStandardMaterial({
+	color: 0xefff00,
+	emissive: 0x4ca078,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: THREE.NoColors
+	vertexColors: VertexColors
 });
 
-const materialFoliage = new THREE.MeshStandardMaterial({
-	color: 0xffffff,
-	emissive: 0x000000,
+const materialFoliage = new MeshStandardMaterial({
+	color: 0xefff00,
+	emissive: 0x4ca078,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: THREE.NoColors
+	vertexColors: NoColors
 });
 
-const materialTrunkB = new THREE.MeshStandardMaterial({
-	color: 0x00ffe1,
-	emissive: 0x00192a,
+const materialTrunkB = new MeshStandardMaterial({
+	color: 0xff0000,
+	emissive: 0x2d1b01,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: THREE.NoColors
+	vertexColors: VertexColors
 });
 
-const materialFoliageB = new THREE.MeshStandardMaterial({
-	color: 0xf1db174,
-	emissive: 0x370013,
+const materialFoliageB = new MeshStandardMaterial({
+	color: 0xf3ff39,
+	emissive: 0x410000,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: THREE.NoColors
+	vertexColors: NoColors
 });
 
-const materialTrunkC = new THREE.MeshStandardMaterial({
+const materialTrunkC = new MeshStandardMaterial({
 	color: 0xff00a5,
-	emissive: 0x0f4129,
+	emissive: 0x3e1743,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: THREE.NoColors
+	vertexColors: NoColors
 });
 
-const materialFoliageC = new THREE.MeshStandardMaterial({
+const materialFoliageC = new MeshStandardMaterial({
 	color: 0x0077ff,
 	emissive: 0xe84444,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: THREE.NoColors
+	vertexColors: NoColors
 });
 
 export const materials = [materialTrunk, materialFoliage, materialTrunkB, materialFoliageB, materialTrunkC, materialFoliageC];

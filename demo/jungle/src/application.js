@@ -153,7 +153,7 @@ const addStats = debug => {
 
 const addGui = (debug, ambientLight) => {
 	if (debug){
-		gui = new Gui(materialFoliage, materialTrunk);
+		gui = new Gui(materials);
 		gui.addScene(scene, ambientLight, renderer);
 	}
 };
@@ -174,7 +174,7 @@ const removeLoadingButton = () => {
 
 const fadeToWhite = () => {
 	// augment the light intensity
-	light.intensity += 1;
+	//light.intensity += 1;
 	const inc = 0.01;
 	// increment the bg color from black to white
 	if (bgColor.r < 1.0){
@@ -184,7 +184,7 @@ const fadeToWhite = () => {
 		renderer.setClearColor(bgColor.getHex());
 	}
 	for (let i = 0; i < materials.length; i++){
-		makeMaterialBrighter(materials[i], 0.01);
+		makeMaterialBrighter(materials[i], inc);
 	}
 };
 
