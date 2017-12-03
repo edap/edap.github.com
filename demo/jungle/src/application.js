@@ -43,8 +43,10 @@ const radius_offset = 80;
 // objects
 const poolSize = 28;
 const percent_covered = 0.18; // it means that objects will be placed only in the
-// 20% part of the curve in front of the camera. It has to be tuned with the fog
-const distance_from_path = 30;
+// 18% part of the curve in front of the camera.
+
+// the distance_from_path defines how far away from the path a palm could be
+const distance_from_path = 100;
 
 const listener = new THREE.AudioListener();
 const sound = new THREE.Audio(listener);
