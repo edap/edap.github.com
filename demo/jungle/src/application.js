@@ -12,6 +12,7 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 const audio = false;
 const debug = true;
 const bgColor = new THREE.Color(0, 0, 0);
+const clock = new THREE.Clock();
 
 let gui,
 	scene,
@@ -22,8 +23,8 @@ let gui,
 	controls,
 	camera,
 	spline,
+	startTime,
 	current_time,
-	clock,
 	sprite,
 	light;
 
@@ -98,15 +99,12 @@ const prepareGeometry = () => {
 	return pool;
 };
 
-const counter = () => {
-	++current_time;
-};
 
 const init = sound => {
+	startTime = clock.getElapsedTime();
 	removeLoadingButton();
 	sound.play();
 
-	const timer = setInterval(counter, 1000);
 	camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.3, 260);
 	camera.add(listener);
 
@@ -141,8 +139,9 @@ const init = sound => {
 };
 
 const render = () => {
+	const time = clock.getElapsedTime() - startTime;
 	stats.begin();
-	scenography.update(gui.params.cameraSpeed, gui.params.sceneId, current_time);
+	scenography.update(gui.params.cameraSpeed, gui.params.sceneId, time);
 	pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
 	stats.end();
@@ -186,8 +185,11 @@ const removeLoadingButton = () => {
 };
 
 const fadeToWhite = () => {
+	// augment the light intensity
 	light.intensity += 1;
-	if (bgColor.r < 255){
+	const inc = 1;
+	// increment the bg color from black to white
+	if (bgColor.r <= 255){
 		bgColor.r += 1;
 		bgColor.g += 1;
 		bgColor.b += 1;

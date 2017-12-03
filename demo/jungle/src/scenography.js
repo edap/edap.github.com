@@ -2,6 +2,7 @@ import { map } from './helpers.js';
 import { BoxGeometry, Mesh, MeshBasicMaterial, VertexColors, NoColors } from 'three';
 
 const DURATION = 2;
+const MOVE_DOWN_PERCENTAGE = 0.3;
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage, fadeCallback){
@@ -47,15 +48,13 @@ export default class Scenography {
 		this.cameraSpeed = speed;
 		const current_schedule = sceneId;
 		if (elapsedSeconds > DURATION){
-			console.log('fade');
 			this.fadeCallback();
 			//return true;
+			// should we stop the camera? the camera move unless we are voer the duration
 		}
 		if (current_schedule !== this.current_index_scene){
-			console.log(`Imp scene ${current_schedule}`);
 			this.current_index_scene = current_schedule;
 			this._implementScene(current_schedule);
-			console.log(this.scenes[current_schedule]);
 		}
 		this._maybeMoveCamera(current_schedule);
 	}
@@ -77,11 +76,19 @@ export default class Scenography {
 		const next = this.t + this.cameraSpeed * 20;
 		const lookAtPoint = next > 1 ? 0 : next;
 		const look = this.spline.getPoint(lookAtPoint);
-		look.y = this.cameraHeight + this.kopfhoch;
-		this.camera.lookAt(look);
+
+		// this is the place where the camera goes up and down
+		this._moveDownAndLookUp(look);
 
 		const limit = 1 - this.cameraSpeed;
 		this.t = this.t >= limit ? 0 : (this.t += this.cameraSpeed);
+	}
+
+	_moveDownAndLookUp(look){
+		this.cameraHeight -= 0.1;
+		look.y = this.cameraHeight + this.kopfhoch;
+		this.camera.lookAt(look);
+		//console.log(this.cameraHeight);
 	}
 
 	_implementScene(scene_id){
