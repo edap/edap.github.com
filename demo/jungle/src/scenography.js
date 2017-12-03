@@ -3,12 +3,12 @@ import { BoxGeometry, Mesh, VertexColors, NoColors } from 'three';
 
 const DURATION = 15;
 const DURATION_MOVE_UP_PERCENT = 0.5;
+const CAMERA_LOWEST_POSITION = 0;
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraHeight, cameraSpeed, materials, fadeCallback){
 		this.dimLight = false;
 		this.debug = false;
-		(this.vertexColorsT = NoColors), (this.vertexColorsF = NoColors), (this.colorT = 0xd94e31);
 		this.emissiveT = 0x2d1200;
 		this.roughnessT = 0.55;
 		this.metalnessT = 0.89;
@@ -19,8 +19,6 @@ export default class Scenography {
 		this.kopfhoch = 0;
 		this.cameraHighest = 120;
 		this.cameraLowest = 27;
-		this.materialTrunk = materials[0];
-		this.materialFoliage = materials[1];
 		this.current_index_scene = null;
 		this.spline = spline;
 		this.camera = camera;
@@ -88,7 +86,7 @@ export default class Scenography {
 		} else if (elapsedSeconds < timing.start){
 			cameraY = cameraHeight;
 		} else {
-			cameraY = map(elapsedSeconds, timing.start, timing.end, cameraHeight, 0);
+			cameraY = map(elapsedSeconds, timing.start, timing.end, cameraHeight, CAMERA_LOWEST_POSITION);
 		}
 		return cameraY;
 	}
@@ -110,44 +108,6 @@ export default class Scenography {
 			} else {
 				this.kopfhoch = 0.0;
 			}
-		}
-
-		if (scene.hasOwnProperty('colorT')){
-			this.materialTrunk.color.setHex(scene.colorT);
-			this.materialTrunk.needsUpdate = true;
-		}
-
-		if (scene.hasOwnProperty('emissiveT')){
-			this.materialTrunk.emissive.setHex(scene.emissiveT);
-			this.materialTrunk.needsUpdate = true;
-		}
-
-		if (scene.hasOwnProperty('vertexColorsT')){
-			if (scene.vertexColorsT){
-				this.materialTrunk.vertexColors = VertexColors;
-			} else {
-				this.materialTrunk.vertexColors = NoColors;
-			}
-			this.materialTrunk.needsUpdate = true;
-		}
-
-		if (scene.hasOwnProperty('vertexColorsF')){
-			if (scene.vertexColorsF){
-				this.materialFoliage.vertexColors = VertexColors;
-			} else {
-				this.materialFoliage.vertexColors = NoColors;
-			}
-			this.materialFoliage.needsUpdate = true;
-		}
-
-		if (scene.hasOwnProperty('colorF')){
-			this.materialFoliage.color.setHex(scene.colorF);
-			this.materialFoliage.needsUpdate = true;
-		}
-
-		if (scene.hasOwnProperty('emissiveF')){
-			this.materialFoliage.emissive.setHex(scene.emissiveF);
-			this.materialFoliage.needsUpdate = true;
 		}
 
 		if (scene.hasOwnProperty('cameraHeight')){
@@ -181,10 +141,10 @@ export default class Scenography {
 		const end = {
 			dimLight: false,
 			kopfhoch: false,
-			colorF: '0xf5a615',
-			emissiveF: '0x005004',
-			colorT: '0xf5a615',
-			emissiveT: '0x005004',
+			// colorF: '0xf5a615',
+			// emissiveF: '0x005004',
+			// colorT: '0xf5a615',
+			// emissiveT: '0x005004',
 			cameraHeight: this.cameraHighest
 		};
 

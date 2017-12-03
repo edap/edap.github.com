@@ -1,19 +1,19 @@
 import { MeshStandardMaterial, NoColors, VertexColors } from 'three';
 
 const materialTrunk = new MeshStandardMaterial({
-	color: 0xefff00,
-	emissive: 0x4ca078,
+	color: 0xfff000,
+	emissive: 0x783d3d,
 	roughness: 0.55,
 	metalness: 0.89,
 	vertexColors: VertexColors
 });
 
 const materialFoliage = new MeshStandardMaterial({
-	color: 0xefff00,
-	emissive: 0x4ca078,
+	color: 0xfff000,
+	emissive: 0x783d3d,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: NoColors
+	vertexColors: VertexColors
 });
 
 const materialTrunkB = new MeshStandardMaterial({
@@ -29,12 +29,12 @@ const materialFoliageB = new MeshStandardMaterial({
 	emissive: 0x410000,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: NoColors
+	vertexColors: VertexColors
 });
 
 const materialTrunkC = new MeshStandardMaterial({
-	color: 0xff00a5,
-	emissive: 0x3e1743,
+	color: 0xff00e0,
+	emissive: 0x750202,
 	roughness: 0.55,
 	metalness: 0.89,
 	vertexColors: NoColors

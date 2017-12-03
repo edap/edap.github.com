@@ -8,8 +8,12 @@ import Scenography from './scenography.js';
 import Pool from './pool.js';
 import { fragmentShader, vertexShader } from './shaders.js';
 import { materials, makeMaterialBrighter } from './materials.js';
-const OrbitControls = require('three-orbit-controls')(THREE);
 
+// for apeunit, increase this value if you want that the scene becomes
+// brighter in less time
+const LIGHT_INCREASE = 0.01;
+
+const OrbitControls = require('three-orbit-controls')(THREE);
 const audio = false;
 const debug = true;
 const bgColor = new THREE.Color(0, 0, 0);
@@ -25,13 +29,8 @@ let gui,
 	camera,
 	spline,
 	startTime,
-	current_time,
 	sprite,
 	light;
-
-const materialTrunk = materials[0];
-
-const materialFoliage = materials[1];
 
 //camera
 const cameraZposition = 100;
@@ -50,7 +49,6 @@ const percent_covered = 0.18; // it means that objects will be placed only in th
 // 20% part of the curve in front of the camera. It has to be tuned with the fog
 const distance_from_path = 30;
 
-current_time = 0;
 const listener = new THREE.AudioListener();
 const sound = new THREE.Audio(listener);
 
@@ -122,7 +120,6 @@ const init = sound => {
 	});
 
 	addStats(debug);
-	//addPathToScene(scene, spline);
 	render();
 };
 
@@ -134,15 +131,6 @@ const render = () => {
 	renderer.render(scene, camera);
 	stats.end();
 	requestAnimationFrame(render);
-};
-
-const addPathToScene = (scene, curve) => {
-	const geometry = new THREE.Geometry();
-	geometry.vertices = curve.getPoints(curveDensity);
-	const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
-	// Create the final object to add to the scene
-	const curveObject = new THREE.Line(geometry, material);
-	scene.add(curveObject);
 };
 
 const addStats = debug => {
@@ -173,18 +161,15 @@ const removeLoadingButton = () => {
 };
 
 const fadeToWhite = () => {
-	// augment the light intensity
-	//light.intensity += 1;
-	const inc = 0.01;
 	// increment the bg color from black to white
 	if (bgColor.r < 1.0){
-		bgColor.r += inc;
-		bgColor.g += inc;
-		bgColor.b += inc;
+		bgColor.r += LIGHT_INCREASE;
+		bgColor.g += LIGHT_INCREASE;
+		bgColor.b += LIGHT_INCREASE;
 		renderer.setClearColor(bgColor.getHex());
 	}
 	for (let i = 0; i < materials.length; i++){
-		makeMaterialBrighter(materials[i], inc);
+		makeMaterialBrighter(materials[i], LIGHT_INCREASE);
 	}
 };
 
@@ -210,10 +195,6 @@ const addPlayButton = () => {
 		return elem.parentNode.removeChild(elem);
 	};
 	document.body.appendChild(div);
-};
-
-const maybeChangeScene = time => {
-	current_time = time;
 };
 
 addPlayButton();
