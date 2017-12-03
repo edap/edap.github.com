@@ -81,18 +81,9 @@ export default class Gui extends DAT.GUI {
 	addScene(scene, ambientLight, renderer){
 		const folder = this.addFolder('Scene');
 		const data = {
-			background: '#000000',
 			'ambient light': ambientLight.color.getHex()
 			//'ground Color': ambientLight.groundColor.getHex()
 		};
-
-		const color = new Color();
-		const colorConvert = this._handleColorChange(color);
-
-		folder.addColor(data, 'background').onChange(value => {
-			colorConvert(value);
-			renderer.setClearColor(color.getHex());
-		});
 
 		folder.addColor(data, 'ambient light').onChange(this._handleColorChange(ambientLight.color));
 		//folder.addColor(data, 'ground Color').onChange(this._handleColorChange(ambientLight.groundColor));

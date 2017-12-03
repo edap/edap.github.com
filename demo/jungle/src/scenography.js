@@ -1,8 +1,10 @@
 import { map } from './helpers.js';
 import { BoxGeometry, Mesh, MeshBasicMaterial, VertexColors, NoColors } from 'three';
 
+const DURATION = 2;
+
 export default class Scenography {
-	constructor(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage){
+	constructor(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage, fadeCallback){
 		this.dimLight = false;
 		this.debug = false;
 		(this.vertexColorsT = NoColors), (this.vertexColorsF = NoColors), (this.colorT = 0xd94e31);
@@ -25,6 +27,7 @@ export default class Scenography {
 		this.cameraHeight = cameraHeight;
 		this.cameraSpeed = cameraSpeed;
 		this.scenes = this._populateScenes();
+		this.fadeCallback = fadeCallback;
 
 		if (this.debug){
 			const geom = new BoxGeometry(5, 5, 5);
@@ -40,9 +43,14 @@ export default class Scenography {
 		return this.dimLight;
 	}
 
-	update(speed, sceneId){
+	update(speed, sceneId, elapsedSeconds){
 		this.cameraSpeed = speed;
 		const current_schedule = sceneId;
+		if (elapsedSeconds > DURATION){
+			console.log('fade');
+			this.fadeCallback();
+			//return true;
+		}
 		if (current_schedule !== this.current_index_scene){
 			console.log(`Imp scene ${current_schedule}`);
 			this.current_index_scene = current_schedule;

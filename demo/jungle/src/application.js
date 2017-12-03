@@ -4,15 +4,14 @@ import $ from 'jquery';
 import Gui from './gui.js';
 import Stats from 'stats.js';
 import { createPath } from './path.js';
-//import {loadAudio} from './audio_loader.js';
 import Scenography from './scenography.js';
 import Pool from './pool.js';
 import { fragmentShader, vertexShader } from './shaders.js';
 const OrbitControls = require('three-orbit-controls')(THREE);
-import { PointLights } from './pointLights.js';
 
 const audio = false;
 const debug = true;
+const bgColor = new THREE.Color(0, 0, 0);
 
 let gui,
 	scene,
@@ -123,7 +122,7 @@ const init = sound => {
 	addGui(debug, light);
 
 	//scenography
-	scenography = new Scenography(camera, spline, t, cameraHeight, gui.params.cameraSpeed, materialTrunk, materialFoliage);
+	scenography = new Scenography(camera, spline, t, cameraHeight, gui.params.cameraSpeed, materialTrunk, materialFoliage, fadeToWhite);
 	//stats
 	stats = new Stats();
 	stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -135,9 +134,7 @@ const init = sound => {
 		camera.aspect = WIDTH / HEIGHT;
 		camera.updateProjectionMatrix();
 	});
-	//addGui(debug, ambientLight);
 
-	//addLightPath(spline, 0x00ff00);
 	addStats(debug);
 	//addPathToScene(scene, spline);
 	render();
@@ -145,7 +142,7 @@ const init = sound => {
 
 const render = () => {
 	stats.begin();
-	scenography.update(gui.params.cameraSpeed, gui.params.sceneId);
+	scenography.update(gui.params.cameraSpeed, gui.params.sceneId, current_time);
 	pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
 	stats.end();
@@ -185,6 +182,16 @@ const removeLoadingButton = () => {
 	const elem = document.getElementById('loadingButton');
 	if (elem){
 		elem.parentNode.removeChild(elem);
+	}
+};
+
+const fadeToWhite = () => {
+	light.intensity += 1;
+	if (bgColor.r < 255){
+		bgColor.r += 1;
+		bgColor.g += 1;
+		bgColor.b += 1;
+		renderer.setClearColor(bgColor.getHex());
 	}
 };
 
@@ -236,34 +243,6 @@ const getMaterial = fog => {
 		fragmentShader: fragmentShader()
 	});
 	return material;
-};
-
-const addLightPath = (spline, color) => {
-	const radiusBuffGeom = 3;
-	const radiusSegmentBuffGeom = 5;
-	const geom = new THREE.TubeGeometry(spline, 100, radiusBuffGeom, radiusSegmentBuffGeom, true);
-
-	const starsGeometry = new THREE.Geometry();
-	starsGeometry.vertices = geom.vertices;
-	for (let idx = 0; idx < starsGeometry.vertices.length; idx++){
-		const offset = Math.sin(idx);
-		const v0 = starsGeometry.vertices[idx];
-		v0.y += offset * 3;
-		v0.x += offset * 6;
-		v0.z += offset * 6;
-	}
-
-	const starsMaterial = new THREE.PointsMaterial({
-		color: 0xe0e0e0,
-		size: 10,
-		map: sprite,
-		blending: THREE.AdditiveBlending,
-		transparent: true,
-		sizeAttenuation: false
-	});
-	const starField = new THREE.Points(starsGeometry, starsMaterial);
-	starField.scale.set(1, 0.4, 1);
-	scene.add(starField);
 };
 
 const maybeChangeScene = time => {
