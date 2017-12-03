@@ -99,7 +99,6 @@ const prepareGeometry = () => {
 	return pool;
 };
 
-
 const init = sound => {
 	startTime = clock.getElapsedTime();
 	removeLoadingButton();
@@ -189,10 +188,11 @@ const fadeToWhite = () => {
 	light.intensity += 1;
 	const inc = 1;
 	// increment the bg color from black to white
-	if (bgColor.r <= 255){
-		bgColor.r += 1;
-		bgColor.g += 1;
-		bgColor.b += 1;
+	if (bgColor.r < 255){
+		bgColor.r += inc;
+		bgColor.g += inc;
+		bgColor.b += inc;
+		console.log(bgColor);
 		renderer.setClearColor(bgColor.getHex());
 	}
 };

@@ -84,21 +84,7 @@ export default class Gui extends DAT.GUI {
 			'ambient light': ambientLight.color.getHex()
 			//'ground Color': ambientLight.groundColor.getHex()
 		};
-
 		folder.addColor(data, 'ambient light').onChange(this._handleColorChange(ambientLight.color));
-		//folder.addColor(data, 'ground Color').onChange(this._handleColorChange(ambientLight.groundColor));
-		this.guiSceneFog(folder, scene);
-	}
-
-	guiSceneFog(folder, scene){
-		const fogFolder = folder.addFolder('scene.fog');
-		const fog = scene.fog;
-		const data = {
-			fog: {
-				'scene.fog.color': fog.color.getHex()
-			}
-		};
-		fogFolder.addColor(data.fog, 'scene.fog.color').onChange(this._handleColorChange(fog.color));
 	}
 
 	_handleColorChange(color){

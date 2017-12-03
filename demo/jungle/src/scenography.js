@@ -2,7 +2,7 @@ import { map } from './helpers.js';
 import { BoxGeometry, Mesh, MeshBasicMaterial, VertexColors, NoColors } from 'three';
 
 const DURATION = 10;
-const DURATION_MOVE_UP_PERCENT = 0.5;
+const DURATION_MOVE_UP_PERCENT = 0.3;
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage, fadeCallback){
