@@ -7,7 +7,7 @@ import { createPath } from './path.js';
 import Scenography from './scenography.js';
 import Pool from './pool.js';
 import { fragmentShader, vertexShader } from './shaders.js';
-import { materials } from './materials.js';
+import { materials, makeMaterialBrighter } from './materials.js';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const audio = false;
@@ -183,7 +183,9 @@ const fadeToWhite = () => {
 		bgColor.b += inc;
 		renderer.setClearColor(bgColor.getHex());
 	}
-	materialTrunk.opacity -= 0.1;
+	for (let i = 0; i < materials.length; i++){
+		makeMaterialBrighter(materials[i], 0.01);
+	}
 };
 
 const addPlayButton = () => {
