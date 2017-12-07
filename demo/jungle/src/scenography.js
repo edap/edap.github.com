@@ -5,7 +5,8 @@ import {
 	DURATION_MOVE_UP_PERCENT,
 	CAMERA_LOOK_FORWARD,
 	CAMERA_HIGHEST_POSITION_LOOKAT,
-	CAMERA_LOWEST_POSITION_LOOKAT
+	CAMERA_LOWEST_POSITION_LOOKAT,
+	CAMERA_HEIGHT
 } from './const';
 
 export default class Scenography {
@@ -41,14 +42,14 @@ export default class Scenography {
 		//console.log(lookAtPoint);
 		const look = this.spline.getPoint(lookAtPoint);
 
-		// this is the place where the camera down
+		// this is the place where the camera look up at a certain moment
 		this._setLookUp(camPos, look, elapsedSeconds);
 		const limit = 1 - this.cameraSpeed;
 		this.t = this.t >= limit ? 0 : (this.t += this.cameraSpeed);
 	}
 
 	_setLookUp(camPos, look, elapsedSeconds){
-		const cameraY = 0;
+		const cameraY = CAMERA_HEIGHT;
 		//move camera forward
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
 		look.y = this._getCameraLooKY(elapsedSeconds);
@@ -57,15 +58,15 @@ export default class Scenography {
 
 	_getCameraLooKY(elapsedSeconds){
 		const timing = this._getTimingLookUp();
-		let cameraY;
+		let cameraYLookAt;
 		if (elapsedSeconds > timing.end){
-			cameraY = CAMERA_HIGHEST_POSITION_LOOKAT;
+			cameraYLookAt = CAMERA_HIGHEST_POSITION_LOOKAT;
 		} else if (elapsedSeconds < timing.start){
-			cameraY = CAMERA_LOWEST_POSITION_LOOKAT;
+			cameraYLookAt = CAMERA_LOWEST_POSITION_LOOKAT;
 		} else {
-			cameraY = map(elapsedSeconds, timing.start, timing.end, CAMERA_LOWEST_POSITION_LOOKAT, CAMERA_HIGHEST_POSITION_LOOKAT);
+			cameraYLookAt = map(elapsedSeconds, timing.start, timing.end, CAMERA_LOWEST_POSITION_LOOKAT, CAMERA_HIGHEST_POSITION_LOOKAT);
 		}
-		return cameraY;
+		return cameraYLookAt;
 	}
 
 	_getTimingLookUp(){

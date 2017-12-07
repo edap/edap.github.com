@@ -18,7 +18,7 @@ const REDIRECT_URL = 'http://www.apeunit.com/en/';
 const OrbitControls = require('three-orbit-controls')(THREE);
 const audio = false;
 const debug = true;
-const bgColor = new THREE.Color(0, 0, 0);
+const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
 
 let gui,
@@ -38,7 +38,7 @@ let gui,
 const curveDensity = 600; // how many points define the path
 const t = 0;
 const radius = 200;
-const radius_offset = 80;
+const radius_offset = 30;
 
 // objects
 const poolSize = 28;
@@ -80,6 +80,7 @@ const loadPlayer = url =>
 const prepareGeometry = () => {
 	spline = createPath(radius, radius_offset);
 	scene = new THREE.Scene();
+	scene.background = bgColor;
 	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materials);
 	return pool;
 };
@@ -93,7 +94,7 @@ const init = sound => {
 	camera.add(listener);
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setClearColor(0x000000, 0); // the default
+	//renderer.setClearColor(0xff5050, 0); // the default
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.style.margin = 0;
 	document.body.appendChild(renderer.domElement);
