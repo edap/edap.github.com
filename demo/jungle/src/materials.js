@@ -9,11 +9,11 @@ const materialTrunk = new MeshStandardMaterial({
 });
 
 const materialFoliage = new MeshStandardMaterial({
-	color: 0xfff000,
-	emissive: 0x783d3d,
+	color: 0x9eb338,
+	emissive: 0x101b03,
 	roughness: 0.55,
 	metalness: 0.89,
-	vertexColors: VertexColors
+	vertexColors: NoColors
 });
 
 const materialTrunkB = new MeshStandardMaterial({
