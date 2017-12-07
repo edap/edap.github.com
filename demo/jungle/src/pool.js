@@ -1,6 +1,8 @@
 import { BoxBufferGeometry, Mesh, Vector3 } from 'three';
 import { getRandom, getRandomInt } from './helpers.js';
 import Palms from './palms.js';
+import { PALM_LOWEST_POSITION, PALM_HIGHEST_POSITION } from './const';
+
 export default class Pool {
 	constructor(size, scene, curve, percent_covered, distance_from_path, materials){
 		this.scene = scene;
@@ -41,7 +43,17 @@ export default class Pool {
 			} else {
 				new_pos = point.sub(secantVector);
 			}
-			obj.position.set(new_pos.x, new_pos.y, new_pos.z);
+			let palmY;
+			// the animation start with the camera inside the leaves
+			// to make it easier, I simply set the position of the first n palm down in
+			// the ground
+			if (i < 8){
+				palmY = PALM_LOWEST_POSITION;
+			} else {
+				palmY = PALM_HIGHEST_POSITION;
+			}
+
+			obj.position.set(new_pos.x, palmY, new_pos.z);
 			this.container.push(obj);
 			this.scene.add(obj);
 			flip_direction = !flip_direction;
@@ -119,6 +131,6 @@ export default class Pool {
 		} else {
 			new_pos = point.sub(secantVector);
 		}
-		object.position.set(new_pos.x, new_pos.y, new_pos.z);
+		object.position.set(new_pos.x, PALM_HIGHEST_POSITION, new_pos.z);
 	}
 }

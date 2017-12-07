@@ -1,11 +1,12 @@
 import { map } from './helpers.js';
 import { BoxGeometry, Mesh, VertexColors, NoColors } from 'three';
-
-const DURATION = 15;
-const DURATION_MOVE_UP_PERCENT = 0.5;
-const CAMERA_LOWEST_POSITION = 0;
-const CAMERA_HIGHEST_POSITION = 120;
-const CAMERA_LOOK_FORWARD = 0.02;
+import {
+	DURATION,
+	DURATION_MOVE_UP_PERCENT,
+	CAMERA_LOOK_FORWARD,
+	CAMERA_HIGHEST_POSITION_LOOKAT,
+	CAMERA_LOWEST_POSITION_LOOKAT
+} from './const';
 
 export default class Scenography {
 	constructor(camera, spline, t, cameraSpeed, fadeCallback){
@@ -41,36 +42,35 @@ export default class Scenography {
 		const look = this.spline.getPoint(lookAtPoint);
 
 		// this is the place where the camera down
-		this._moveDownAndLookUp(camPos, look, elapsedSeconds);
+		this._setLookUp(camPos, look, elapsedSeconds);
 		const limit = 1 - this.cameraSpeed;
 		this.t = this.t >= limit ? 0 : (this.t += this.cameraSpeed);
 	}
 
-	_moveDownAndLookUp(camPos, look, elapsedSeconds){
-		const cameraY = this._getCameraY(elapsedSeconds);
+	_setLookUp(camPos, look, elapsedSeconds){
+		const cameraY = 0;
 		//move camera forward
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
-		// adjust lookup
-		look.y = CAMERA_HIGHEST_POSITION;
-		//look.z += CAMERA_LOOK_FORWARD;
+		look.y = this._getCameraLooKY(elapsedSeconds);
 		this.camera.lookAt(look);
 	}
 
-	_getCameraY(elapsedSeconds){
+	_getCameraLooKY(elapsedSeconds){
 		const timing = this._getTimingLookUp();
 		let cameraY;
 		if (elapsedSeconds > timing.end){
-			cameraY = 0;
+			cameraY = CAMERA_HIGHEST_POSITION_LOOKAT;
 		} else if (elapsedSeconds < timing.start){
-			cameraY = CAMERA_HIGHEST_POSITION;
+			cameraY = CAMERA_LOWEST_POSITION_LOOKAT;
 		} else {
-			cameraY = map(elapsedSeconds, timing.start, timing.end, CAMERA_HIGHEST_POSITION, CAMERA_LOWEST_POSITION);
+			cameraY = map(elapsedSeconds, timing.start, timing.end, CAMERA_LOWEST_POSITION_LOOKAT, CAMERA_HIGHEST_POSITION_LOOKAT);
 		}
 		return cameraY;
 	}
 
 	_getTimingLookUp(){
-		const half = DURATION / 2.0;
+		//const half = DURATION / 2.0;
+		const half = DURATION / 3.0; // start the camera movement at one third of the animation
 		const durationLookUp = DURATION * DURATION_MOVE_UP_PERCENT;
 		return {
 			start: half - durationLookUp / 2.0,

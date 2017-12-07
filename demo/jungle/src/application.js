@@ -46,7 +46,7 @@ const percent_covered = 0.18; // it means that objects will be placed only in th
 // 18% part of the curve in front of the camera.
 
 // the distance_from_path defines how far away from the path a palm could be
-const distance_from_path = 100;
+const distance_from_path = 30;
 
 const listener = new THREE.AudioListener();
 const sound = new THREE.Audio(listener);
