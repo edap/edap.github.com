@@ -1,8 +1,8 @@
 import { MeshStandardMaterial, NoColors, VertexColors } from 'three';
 
 const materialTrunk = new MeshStandardMaterial({
-	color: 0xfff000,
-	emissive: 0x783d3d,
+	color: 0x7d8416,
+	emissive: 0x2f0000,
 	roughness: 0.55,
 	metalness: 0.89,
 	vertexColors: VertexColors

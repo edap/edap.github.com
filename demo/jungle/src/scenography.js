@@ -71,7 +71,8 @@ export default class Scenography {
 
 	_getTimingLookUp(){
 		//const half = DURATION / 2.0;
-		const half = DURATION / 3.0; // start the camera movement at one third of the animation
+		const half = DURATION/4.50;
+		// start the camera movement at one third of the animation
 		const durationLookUp = DURATION * DURATION_MOVE_UP_PERCENT;
 		return {
 			start: half - durationLookUp / 2.0,
