@@ -46,17 +46,17 @@ float circleDoubleCenter(in vec2 st, in vec2 first, in vec2 second) {
 
 
 // //usage example
-// void main() {   
-//     vec2 st = gl_FragCoord.xy / iResolution.xy;
-//     vec2 orig = vec2(0.4, 0.8);
+void main() {   
+    vec2 st = gl_FragCoord.xy / iResolution.xy;
+    vec2 orig = vec2(0.4, 0.8);
 
-//     //make it rotate
-//     vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
-//     //float cir = circle(st, orig+circularMovement);
-//     //float cir = circleBg(st, orig);
-//     //float cir = distance(st, orig);
-//     //float cir = circleSmooth(st,vec2(0.5), 0.1, 0.01);
-//     float cir = circleDoubleCenter(st, vec2(0.8,0.6)+circularMovement,
-//                 vec2(0.4,0.4)-circularMovement);
-//     gl_FragColor = vec4(vec3(cir),1.0);
-// }
+    //make it rotate
+    vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
+    //float cir = circle(st, orig+circularMovement);
+    //float cir = circleBg(st, orig);
+    //float cir = distance(st, orig);
+    //float cir = circleSmooth(st,vec2(0.5), 0.1, 0.01);
+    float cir = circleDoubleCenter(st, vec2(0.8,0.6)+circularMovement,
+                vec2(0.4,0.4)-circularMovement);
+    gl_FragColor = vec4(vec3(cir),1.0);
+}

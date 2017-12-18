@@ -44,7 +44,7 @@ void main() {
    //YUV start
     st -= 0.5;  // becomes -0.5 to 0.5
     st *= 2.0;  // becomes -1.0 to 1.0
-    //color = yuv2rgb * vec3(0.5, st.x, st.y);
+    color = yuv2rgb * vec3(0.4, st.x, st.y);
     //YUV end
     gl_FragColor = vec4(color,1.0);
 }

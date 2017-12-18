@@ -12,11 +12,12 @@ void main() {
     //smoothstep
     //float y = smoothstep(0.0, sin(iGlobalTime)*0.5 + 0.5, st.x);
     //float y = smoothstep(0.1, 0.8, abs(sin(iGlobalTime)));
+    float y = smoothstep(0.4, 0.9, st.x);
     //step
     //float y = step(0.5,st.x);
     
     // pow
-    float y = pow(st.x, 2.0);
+    //float y = pow(st.x, 2.0);
     //float y = pow(st.x,(sin(iGlobalTime)*0.5+0.5));
 
 //float y = fract(st.x); // return only the fraction part of a number
@@ -26,7 +27,7 @@ void main() {
 //float y = abs(st.x);   // return the absolute value of x
 //float y = clamp(st.x,0.0,1.0); // constrain x to lie between 0.0 and 1.0
 //float y = min(0.4,st.x);   // return the lesser of x and 0.0
-//float y = max(0.0,x);   // return the greater of x and 0.0 
+//float y = max(0.0,st.x);   // return the greater of x and 0.0 
     vec3 color = vec3(y);
     
     // Plot a line

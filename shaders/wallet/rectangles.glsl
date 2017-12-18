@@ -82,17 +82,17 @@ float rectangleGradientLeft(in vec2 st, in vec2 origin, in vec2 dimensions, floa
 
 
 //usage example
-// void main() {   
-//     //
-//     //vec3 rect = rectSmooth(0.1, 0.2);
-//     //gl_FragColor = vec4(rect,1.0);
-//     vec2 st = gl_FragCoord.xy / iResolution.xy;
-//     vec2 orig = vec2(0.5, 0.5);
-//     vec3 rect = rect(0.1, st);
-//     //float rect = rectangle(st, orig, vec2(0.1,0.1));
-//     //make it rotate
-//     vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
-//     float rect = rectangle(st, orig+circularMovement, vec2(0.1,0.1));
-//     gl_FragColor = vec4(vec3(rect),1.0);
+void main() {   
+    //
+    //vec3 rect = rectSmooth(0.1, 0.2);
+    //gl_FragColor = vec4(rect,1.0);
+    vec2 st = gl_FragCoord.xy / iResolution.xy;
+    vec2 orig = vec2(0.5, 0.5);
+    vec3 rec = rect(0.1, st);
+    //float rect = rectangle(st, orig, vec2(0.1,0.1));
+    //make it rotate
+    vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
+    float rect = rectangle(st, orig+circularMovement, vec2(0.1,0.1));
+    gl_FragColor = vec4(vec3(rect),1.0);
 
-// }
+}
