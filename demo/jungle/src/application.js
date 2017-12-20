@@ -39,12 +39,12 @@ const radius = 200;
 const radius_offset = 30;
 
 // objects
-const poolSize = 15;
+const poolSize = 12;
 const percent_covered = 0.18; // it means that objects will be placed only in the
 // 18% part of the curve in front of the camera.
 
 // the distance_from_path defines how far away from the path a palm could be
-const distance_from_path = 30;
+const distance_from_path = 40;
 
 const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);

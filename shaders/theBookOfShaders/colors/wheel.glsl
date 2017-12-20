@@ -11,6 +11,19 @@ vec3 hsb2rgb( in vec3 c ){
     return c.z * mix(vec3(1.0), rgb, c.y);
 }
 
+//https://thebookofshaders.com/07/
+float circleBg(vec2 st, vec2 end){
+    float pct = 0.0;
+    pct = distance(st, end);
+    return pct;
+}
+
+float circle(in vec2 st, in vec2 end) {
+    float pct = 0.0;
+    pct = step(0.2, distance(st, end));
+    return pct;
+}
+
 //example
 void main(){
     vec2 st = gl_FragCoord.xy / iResolution.xy;
@@ -18,8 +31,9 @@ void main(){
 
     vec2 toCenter = vec2(0.5)-st;
     float angle = atan(toCenter.y,toCenter.x);
-    angle += abs(sin(iGlobalTime)*TWO_PI);
+    angle += fract(iGlobalTime)*TWO_PI;
     float radius = length(toCenter)*2.0;
+    
     color = hsb2rgb(vec3((angle/TWO_PI)+0.5,radius,0.9));
     // We map x (0.0 - 1.0) to the hue (0.0 - 1.0) // And the y (0.0 - 1.0) to the brightness
     gl_FragColor = vec4(color,1.0);
