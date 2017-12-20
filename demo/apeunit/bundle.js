@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -43781,13 +43781,61 @@ function getRandomInt(min,max){min=Math.ceil(min);max=Math.floor(max);return Mat
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dat_gui__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dat_gui__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dat_gui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_dat_gui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_three__ = __webpack_require__(0);
-var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var Gui=function(_DAT$GUI){_inherits(Gui,_DAT$GUI);function Gui(materials){_classCallCheck(this,Gui);var _this=_possibleConstructorReturn(this,(Gui.__proto__||Object.getPrototypeOf(Gui)).call(this,{load:JSON,preset:'Flow'}));_this.material=materials[1];_this.trunkMaterial=materials[0];_this.materialB=materials[3];_this.trunkMaterialB=materials[2];_this.materialC=materials[5];_this.trunkMaterialC=materials[4];_this.params={stop:false,cameraHeight:80,cameraSpeed:0.0005,lightIntensity:1,amplitude:3.5,minColor:0.2,maxColor:0.4,saturation:0.2,brightness:0.0,vertex_colors:true,ambientLight:'#34ac0f',color:0xefff00,emissive:0x4ca078,roughness:0.55,metalness:0.89,colorT:0xefff00,emissiveT:0x4ca078,roughnessT:0.55,metalnessT:0.89,vertex_colorsT:true,colorB:0xf1db174,emissiveB:0x370013,roughnessB:0.55,metalnessB:0.89,colorTB:0x00ffe1,emissiveTB:0x00192a,roughnessTB:0.55,metalnessTB:0.89,vertex_colorsTB:true,colorC:0x0077ff,emissiveC:0xe84444,roughnessC:0.55,metalnessC:0.89,colorTC:0xff00a5,emissiveTC:0x0f4129,roughnessTC:0.55,metalnessTC:0.89,vertex_colorsTC:true};_this.add(_this.params,'cameraSpeed',0.0002,0.0009).step(0.0001);_this.add(_this.params,'stop');// First material GUI
-var mat=_this.addFolder('Foliage Material');mat.closed=true;mat.add(_this.params,'vertex_colors').onChange(_this._handleVertexColorChange(_this.material));mat.addColor(_this.params,'color').onChange(_this._handleColorChange(_this.material.color));mat.addColor(_this.params,'emissive').onChange(_this._handleColorChange(_this.material.emissive));mat.add(_this.params,'metalness',0.0,1.0).onChange(function(val){_this.material.metalness=val;});mat.add(_this.params,'roughness',0.0,1.0).onChange(function(val){_this.material.roughness=val;});var tmat=_this.addFolder('Trunk Material');tmat.closed=true;tmat.add(_this.params,'vertex_colorsT').onChange(_this._handleVertexColorChange(_this.trunkMaterial));tmat.addColor(_this.params,'colorT').onChange(_this._handleColorChange(_this.trunkMaterial.color));tmat.addColor(_this.params,'emissiveT').onChange(_this._handleColorChange(_this.trunkMaterial.emissive));tmat.add(_this.params,'metalnessT',0.0,1.0).onChange(function(val){_this.trunkMaterial.metalness=val;});tmat.add(_this.params,'roughnessT',0.0,1.0).onChange(function(val){_this.trunkMaterial.roughness=val;});// Second material GUI
-var matB=_this.addFolder('Foliage Material B');matB.closed=true;matB.add(_this.params,'vertex_colors').onChange(_this._handleVertexColorChange(_this.materialB));matB.addColor(_this.params,'color').onChange(_this._handleColorChange(_this.materialB.color));matB.addColor(_this.params,'emissive').onChange(_this._handleColorChange(_this.materialB.emissive));matB.add(_this.params,'metalness',0.0,1.0).onChange(function(val){_this.materialB.metalness=val;});matB.add(_this.params,'roughness',0.0,1.0).onChange(function(val){_this.materialB.roughness=val;});var tmatB=_this.addFolder('Trunk Material B');tmatB.closed=true;tmatB.add(_this.params,'vertex_colorsT').onChange(_this._handleVertexColorChange(_this.trunkMaterialB));tmatB.addColor(_this.params,'colorT').onChange(_this._handleColorChange(_this.trunkMaterialB.color));tmatB.addColor(_this.params,'emissiveT').onChange(_this._handleColorChange(_this.trunkMaterialB.emissive));tmatB.add(_this.params,'metalnessT',0.0,1.0).onChange(function(val){_this.trunkMaterialB.metalness=val;});tmatB.add(_this.params,'roughnessT',0.0,1.0).onChange(function(val){_this.trunkMaterialB.roughness=val;});//Third material GUI ONLY TWO MATERIALS FOR NOW
-var matC=_this.addFolder('Foliage Material C');matC.closed=true;matC.add(_this.params,'vertex_colors').onChange(_this._handleVertexColorChange(_this.materialC));matC.addColor(_this.params,'color').onChange(_this._handleColorChange(_this.materialC.color));matC.addColor(_this.params,'emissive').onChange(_this._handleColorChange(_this.materialC.emissive));matC.add(_this.params,'metalness',0.0,1.0).onChange(function(val){_this.materialC.metalness=val;});matC.add(_this.params,'roughness',0.0,1.0).onChange(function(val){_this.materialC.roughness=val;});var tmatC=_this.addFolder('Trunk Material C');tmatC.closed=true;tmatC.add(_this.params,'vertex_colorsT').onChange(_this._handleVertexColorChange(_this.trunkMaterialC));tmatC.addColor(_this.params,'colorT').onChange(_this._handleColorChange(_this.trunkMaterialC.color));tmatC.addColor(_this.params,'emissiveT').onChange(_this._handleColorChange(_this.trunkMaterialC.emissive));tmatC.add(_this.params,'metalnessT',0.0,1.0).onChange(function(val){_this.trunkMaterialC.metalness=val;});tmatC.add(_this.params,'roughnessT',0.0,1.0).onChange(function(val){_this.trunkMaterialC.roughness=val;});return _this;}_createClass(Gui,[{key:'toggleHide',value:function toggleHide(){__WEBPACK_IMPORTED_MODULE_0_dat_gui___default.a.GUI.toggleHide();}},{key:'addMaterial',value:function addMaterial(material){this.material=material;}// credtis to these methods goes to Greg Tatum https://threejs.org/docs/scenes/js/material.js
+var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var Gui=function(_DAT$GUI){_inherits(Gui,_DAT$GUI);function Gui(materials){_classCallCheck(this,Gui);var _this=_possibleConstructorReturn(this,(Gui.__proto__||Object.getPrototypeOf(Gui)).call(this,{load:JSON,preset:'Flow'}));_this.material=materials[1];_this.trunkMaterial=materials[0];// this.materialB = materials[3];
+// this.trunkMaterialB = materials[2];
+// this.materialC = materials[5];
+// this.trunkMaterialC = materials[4];
+_this.params={stop:false,cameraHeight:80,cameraSpeed:0.0005,lightIntensity:1,amplitude:3.5,minColor:0.2,maxColor:0.4,saturation:0.2,brightness:0.0,vertex_colors:true,ambientLight:'#34ac0f',color:0xefff00,emissive:0x4ca078,roughness:0.55,metalness:0.89,colorT:0xefff00,emissiveT:0x4ca078,roughnessT:0.55,metalnessT:0.89,vertex_colorsT:true,colorB:0xf1db174,emissiveB:0x370013,roughnessB:0.55,metalnessB:0.89,colorTB:0x00ffe1,emissiveTB:0x00192a,roughnessTB:0.55,metalnessTB:0.89,vertex_colorsTB:true,colorC:0x0077ff,emissiveC:0xe84444,roughnessC:0.55,metalnessC:0.89,colorTC:0xff00a5,emissiveTC:0x0f4129,roughnessTC:0.55,metalnessTC:0.89,vertex_colorsTC:true};_this.add(_this.params,'cameraSpeed',0.0002,0.0009).step(0.0001);_this.add(_this.params,'stop');// First material GUI
+var mat=_this.addFolder('Foliage Material');mat.closed=true;mat.add(_this.params,'vertex_colors').onChange(_this._handleVertexColorChange(_this.material));mat.addColor(_this.params,'color').onChange(_this._handleColorChange(_this.material.color));mat.addColor(_this.params,'emissive').onChange(_this._handleColorChange(_this.material.emissive));mat.add(_this.params,'metalness',0.0,1.0).onChange(function(val){_this.material.metalness=val;});mat.add(_this.params,'roughness',0.0,1.0).onChange(function(val){_this.material.roughness=val;});var tmat=_this.addFolder('Trunk Material');tmat.closed=true;tmat.add(_this.params,'vertex_colorsT').onChange(_this._handleVertexColorChange(_this.trunkMaterial));tmat.addColor(_this.params,'colorT').onChange(_this._handleColorChange(_this.trunkMaterial.color));tmat.addColor(_this.params,'emissiveT').onChange(_this._handleColorChange(_this.trunkMaterial.emissive));tmat.add(_this.params,'metalnessT',0.0,1.0).onChange(function(val){_this.trunkMaterial.metalness=val;});tmat.add(_this.params,'roughnessT',0.0,1.0).onChange(function(val){_this.trunkMaterial.roughness=val;});// // Second material GUI
+// const matB = this.addFolder('Foliage Material B');
+// matB.closed = true;
+// matB.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.materialB));
+// matB.addColor(this.params, 'color').onChange(this._handleColorChange(this.materialB.color));
+// matB.addColor(this.params, 'emissive').onChange(this._handleColorChange(this.materialB.emissive));
+// matB.add(this.params, 'metalness', 0.0, 1.0).onChange(val => {
+// 	this.materialB.metalness = val;
+// });
+// matB.add(this.params, 'roughness', 0.0, 1.0).onChange(val => {
+// 	this.materialB.roughness = val;
+// });
+// const tmatB = this.addFolder('Trunk Material B');
+// tmatB.closed = true;
+// tmatB.add(this.params, 'vertex_colorsT').onChange(this._handleVertexColorChange(this.trunkMaterialB));
+// tmatB.addColor(this.params, 'colorT').onChange(this._handleColorChange(this.trunkMaterialB.color));
+// tmatB.addColor(this.params, 'emissiveT').onChange(this._handleColorChange(this.trunkMaterialB.emissive));
+// tmatB.add(this.params, 'metalnessT', 0.0, 1.0).onChange(val => {
+// 	this.trunkMaterialB.metalness = val;
+// });
+// tmatB.add(this.params, 'roughnessT', 0.0, 1.0).onChange(val => {
+// 	this.trunkMaterialB.roughness = val;
+// });
+// //Third material GUI ONLY TWO MATERIALS FOR NOW
+// const matC = this.addFolder('Foliage Material C');
+// matC.closed = true;
+// matC.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.materialC));
+// matC.addColor(this.params, 'color').onChange(this._handleColorChange(this.materialC.color));
+// matC.addColor(this.params, 'emissive').onChange(this._handleColorChange(this.materialC.emissive));
+// matC.add(this.params, 'metalness', 0.0, 1.0).onChange(val => {
+// 	this.materialC.metalness = val;
+// });
+// matC.add(this.params, 'roughness', 0.0, 1.0).onChange(val => {
+// 	this.materialC.roughness = val;
+// });
+// const tmatC = this.addFolder('Trunk Material C');
+// tmatC.closed = true;
+// tmatC.add(this.params, 'vertex_colorsT').onChange(this._handleVertexColorChange(this.trunkMaterialC));
+// tmatC.addColor(this.params, 'colorT').onChange(this._handleColorChange(this.trunkMaterialC.color));
+// tmatC.addColor(this.params, 'emissiveT').onChange(this._handleColorChange(this.trunkMaterialC.emissive));
+// tmatC.add(this.params, 'metalnessT', 0.0, 1.0).onChange(val => {
+// 	this.trunkMaterialC.metalness = val;
+// });
+// tmatC.add(this.params, 'roughnessT', 0.0, 1.0).onChange(val => {
+// 	this.trunkMaterialC.roughness = val;
+// });
+return _this;}_createClass(Gui,[{key:'toggleHide',value:function toggleHide(){__WEBPACK_IMPORTED_MODULE_0_dat_gui___default.a.GUI.toggleHide();}},{key:'addMaterial',value:function addMaterial(material){this.material=material;}// credtis to these methods goes to Greg Tatum https://threejs.org/docs/scenes/js/material.js
 },{key:'addScene',value:function addScene(scene,ambientLight,renderer){var folder=this.addFolder('Scene');var data={'ambient light':ambientLight.color.getHex()//'ground Color': ambientLight.groundColor.getHex()
 };folder.addColor(data,'ambient light').onChange(this._handleColorChange(ambientLight.color));}},{key:'_handleColorChange',value:function _handleColorChange(color){return function(value){if(typeof value==='string'){value=value.replace('#','0x');}color.setHex(value);};}},{key:'_handleVertexColorChange',value:function _handleVertexColorChange(material){return function(value){if(value===true){material.vertexColors=__WEBPACK_IMPORTED_MODULE_1_three__["VertexColors"];}else{material.vertexColors=__WEBPACK_IMPORTED_MODULE_1_three__["NoColors"];}material.needsUpdate=true;};}},{key:'_onLightIntChange',value:function _onLightIntChange(){return function(value){this.ambientLight.intensity=value;};}}]);return Gui;}(__WEBPACK_IMPORTED_MODULE_0_dat_gui___default.a.GUI);/* harmony default export */ __webpack_exports__["a"] = (Gui);
 
@@ -43799,7 +43847,35 @@ var matC=_this.addFolder('Foliage Material C');matC.closed=true;matC.add(_this.p
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return materials; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = makeMaterialBrighter;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_three__ = __webpack_require__(0);
-var materialTrunk=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0x7d8416,emissive:0x2f0000,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["VertexColors"]});var materialFoliage=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0x9eb338,emissive:0x101b03,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["NoColors"]});var materialTrunkB=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0xff0000,emissive:0x2d1b01,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["VertexColors"]});var materialFoliageB=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0xf3ff39,emissive:0x410000,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["VertexColors"]});var materialTrunkC=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0xff00e0,emissive:0x750202,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["NoColors"]});var materialFoliageC=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0x0077ff,emissive:0xe84444,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["NoColors"]});var materials=[materialTrunk,materialFoliage,materialTrunkB,materialFoliageB,materialTrunkC,materialFoliageC];function makeMaterialBrighter(material,inc){var color=material.color;var emissive=material.emissive;if(color.r<1){color.r+=inc;}if(color.g<1){color.g+=inc;}if(color.b<1){color.b+=inc;}if(emissive.r<1){emissive.r+=inc;}if(emissive.g<1){emissive.g+=inc;}if(emissive.b<1){emissive.b+=inc;}}
+var materialTrunk=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0x7d8416,emissive:0x2f0000,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["VertexColors"]});var materialFoliage=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"]({color:0x9eb338,emissive:0x101b03,roughness:0.55,metalness:0.89,vertexColors:__WEBPACK_IMPORTED_MODULE_0_three__["NoColors"]});// const materialTrunkB = new MeshStandardMaterial({
+// 	color: 0xff0000,
+// 	emissive: 0x2d1b01,
+// 	roughness: 0.55,
+// 	metalness: 0.89,
+// 	vertexColors: VertexColors
+// });
+// const materialFoliageB = new MeshStandardMaterial({
+// 	color: 0xf3ff39,
+// 	emissive: 0x410000,
+// 	roughness: 0.55,
+// 	metalness: 0.89,
+// 	vertexColors: VertexColors
+// });
+// const materialTrunkC = new MeshStandardMaterial({
+// 	color: 0xff00e0,
+// 	emissive: 0x750202,
+// 	roughness: 0.55,
+// 	metalness: 0.89,
+// 	vertexColors: NoColors
+// });
+// const materialFoliageC = new MeshStandardMaterial({
+// 	color: 0x0077ff,
+// 	emissive: 0xe84444,
+// 	roughness: 0.55,
+// 	metalness: 0.89,
+// 	vertexColors: NoColors
+// });
+var materials=[materialTrunk,materialFoliage];function makeMaterialBrighter(material,inc){var color=material.color;var emissive=material.emissive;if(color.r<1){color.r+=inc;}if(color.g<1){color.g+=inc;}if(color.b<1){color.b+=inc;}if(emissive.r<1){emissive.r+=inc;}if(emissive.g<1){emissive.g+=inc;}if(emissive.b<1){emissive.b+=inc;}}
 
 /***/ }),
 /* 5 */
@@ -43807,7 +43883,7 @@ var materialTrunk=new __WEBPACK_IMPORTED_MODULE_0_three__["MeshStandardMaterial"
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = createPath;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__perlin_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__perlin_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_three__ = __webpack_require__(0);
 function createPath(radius,radius_offset){var definition=arguments.length>2&&arguments[2]!==undefined?arguments[2]:0.05;//definition: the smaller, the higher the definition of the curve
 var complete_round=Math.PI*2;var vertices=[];var perlin=new __WEBPACK_IMPORTED_MODULE_0__perlin_js__["a" /* Perlin */](Math.random());var x_offset=0;for(var angle=0;angle<=complete_round;angle+=definition){var noise=perlin.noise(x_offset,0,0);var smoothed_offset=smoothLastPoints(radius_offset,angle,complete_round);var offset=map(noise,0,1,-smoothed_offset,smoothed_offset);var r=radius+offset;var x=r*Math.cos(angle);var z=r*Math.sin(angle);var v=new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](x,0,z);vertices.push(v);x_offset+=0.1;}var curve=new __WEBPACK_IMPORTED_MODULE_1_three__["CatmullRomCurve3"](vertices);curve.closed=true;return curve;}function smoothLastPoints(offset,angle,round){// this function is to close the circle in a more uniform way
@@ -43820,7 +43896,7 @@ var arc_to_smooth=round*0.92;if(angle>=arc_to_smooth){var smoothed=map(angle,arc
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_three__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__palms_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__palms_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__const__ = __webpack_require__(1);
 var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}var Pool=function(){function Pool(size,scene,curve,percent_covered,distance_from_path,materials){_classCallCheck(this,Pool);this.scene=scene;this.size=size;this.curve=curve;this.container=[];this.index_positions=[];// keep track of the id of the object and its position on the curve
 this.percent_covered=percent_covered;this.distance_from_path=distance_from_path;this.step=this.percent_covered/this.size;this.materials=materials;this.palmTypes=new __WEBPACK_IMPORTED_MODULE_2__palms_js__["a" /* default */]();//this return some different palms, one for each type
@@ -43833,7 +43909,7 @@ var palm=void 0;var index=void 0;if(i<__WEBPACK_IMPORTED_MODULE_3__const__["g" /
 palm=this.palmTypes[index];}//use this to have high trees of the same color
 //const matIndex = i % (this.materials.length / 2);
 //const matIndex = getRandomInt(1, 3);
-var matIndex=0;var mesh=new __WEBPACK_IMPORTED_MODULE_0_three__["Mesh"](palm,[this.materials[matIndex*2+1],this.materials[matIndex*2]]);mesh.rotateY(Math.PI/__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helpers_js__["c" /* getRandom */])(-3,3));return mesh;}},{key:'update',value:function update(camera_position_on_spline){//if camera position on spline is bigger than a palm
+var matIndex=0;var mesh=new __WEBPACK_IMPORTED_MODULE_0_three__["Mesh"](palm,[this.materials[1],this.materials[0]]);mesh.rotateY(Math.PI/__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helpers_js__["c" /* getRandom */])(-3,3));return mesh;}},{key:'update',value:function update(camera_position_on_spline){//if camera position on spline is bigger than a palm
 //it means that this palm is no longer into the scene, put it back
 var flip_direction=true;for(var i=0;i<=this.index_positions.length;i++){var object_position=this.index_positions[i];var horizon=camera_position_on_spline+this.percent_covered;flip_direction=!flip_direction;var delay=0.05;// otherwise object will disapear instanaely, and
 //in case of trees with leaves does not look nice.
@@ -43866,17 +43942,6 @@ return this.t;}}]);return Scenography;}();/* harmony default export */ __webpack
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export vertexShader */
-/* unused harmony export fragmentShader */
-function vertexShader(){var vs="precision mediump float;\n        attribute float angle;\n        varying float fAngle;\n        varying vec3 vecNormal;\n        varying vec4 vecPos;\n        uniform vec2 uResolution;\n        uniform float displacement;\n        uniform float magAudio;\n        void main() {\n        vecNormal = normalMatrix * normal;\n        // as the light later will be given in world coordinate space,\n        // vPos has to be in world coordinate space too\n        vec3 displacedPos = position + vecNormal * displacement * vec3(magAudio);\n        vecPos = projectionMatrix * modelViewMatrix * vec4(displacedPos, 1.0);\n        fAngle = angle;\n        gl_Position = vecPos;\n        }";return vs;}function fragmentShader(){var fs="#define LOG2 1.442695\n"+"#define saturate(a) clamp( a, 0.0, 1.0 )\n"+"#define whiteCompliment(a) ( 1.0 - saturate( a ) )\n"+"precision mediump float;\n"+// Comment this line to do not use the point light
-"varying vec3 vecNormal;\n"+"uniform float fogDensity;\n"+"uniform vec3 fogColor;\n"+"varying float fAngle;\n"+"varying vec4 vecPos;\n"+"uniform float magAudio;\n"+"uniform vec3 color;\n"+"uniform vec2 uResolution;\n"+"uniform float amplitude;\n"+"uniform float minColor;\n"+"uniform float maxColor;\n"+"uniform float saturation;\n"+"uniform float brightness;\n"+"struct PointLight {\n"+"vec3 position;\n"+"vec3 color;\n"+"};\n"+"uniform PointLight pointLights[ NUM_POINT_LIGHTS ];\n"+"float when_gt(float x, float y) {\n"+"return max(sign(x - y), 0.0);\n"+"}\n"+"float when_lt(float x, float y) {\n"+"return max(sign(y - x), 0.0);\n"+"}\n"+"float and(float a, float b) {\n"+"return a * b;\n"+"}\n"+"vec3 hsb2rgb( in vec3 c ){\n"+"vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),\n"+"6.0)-3.0)-1.0,\n"+"0.0,\n"+"1.0 );\n"+"rgb = rgb*rgb*(3.0-2.0*rgb);\n"+"return c.z * mix(vec3(1.0), rgb, c.y);\n"+"}\n"+"void main(){\n"+"vec4 addedLights = vec4(0.0,0.0,0.0, 1.0);\n"+"for(int l = 0; l < 3; l++){\n"+"vec3 adjustedLight = pointLights[l].position + cameraPosition;\n"+"vec3 lightDirection = normalize(vecPos.xyz - adjustedLight);\n"+"addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;\n"+"}\n"+"float correctedMinColor = minColor;\n"+"float correctedMaxColor = maxColor;\n"+"correctedMinColor += (magAudio/amplitude) * when_gt(amplitude, 0.0);\n"+"correctedMaxColor += (magAudio/amplitude) * when_gt(amplitude, 0.0);\n"+"float angleToCol = clamp((fAngle+magAudio)/256.0, correctedMinColor, correctedMaxColor);\n"+// questi due valori definiscono il range
-"vec3 angleHSBColor = vec3(angleToCol, saturation, brightness);\n"+"vec4 col = mix(vec4(hsb2rgb(angleHSBColor), 1.0), vec4(addedLights.rgb, 1.0), 0.2);\n"+"#ifdef USE_FOG // only FogExp2 is implemented\n"+"float depth = gl_FragCoord.z / gl_FragCoord.w;\n"+"float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * depth * depth * LOG2 ) );\n"+"gl_FragColor.rgb = mix( col.rgb, fogColor, fogFactor );\n"+"#else\n"+"gl_FragColor = col;\n"+"#endif\n"+"}";return fs;}
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -54136,7 +54201,7 @@ return jQuery;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // stats.js - http://github.com/mrdoob/stats.js
@@ -54147,7 +54212,7 @@ b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{do
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = function( THREE ) {
@@ -55173,7 +55238,7 @@ module.exports = function( THREE ) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55197,11 +55262,11 @@ faces.push(new __WEBPACK_IMPORTED_MODULE_0_three__["Face3"](key_last_vertex+4,ke
 }}var geom=new __WEBPACK_IMPORTED_MODULE_0_three__["Geometry"]();geom.vertices=vertices;geom.faces=faces;geom.computeFaceNormals();this.assignUVs(geom);return geom;}_createClass(LeafGeometry,[{key:'assignUVs',value:function assignUVs(geometry){geometry.faceVertexUvs[0]=[];geometry.faces.forEach(function(face){var components=['x','y','z'].sort(function(a,b){return Math.abs(face.normal[a])>Math.abs(face.normal[b]);});var v1=geometry.vertices[face.a];var v2=geometry.vertices[face.b];var v3=geometry.vertices[face.c];geometry.faceVertexUvs[0].push([new __WEBPACK_IMPORTED_MODULE_0_three__["Vector2"](v1[components[0]],v1[components[1]]),new __WEBPACK_IMPORTED_MODULE_0_three__["Vector2"](v2[components[0]],v2[components[1]]),new __WEBPACK_IMPORTED_MODULE_0_three__["Vector2"](v3[components[0]],v3[components[1]])]);});geometry.uvsNeedUpdate=true;}},{key:'_getVauleOnParabola',value:function _getVauleOnParabola(curvature,z,z_zero,y_zero){var y=curvature*((z-z_zero)*(z-z_zero))+y_zero;return y;}},{key:'_defaultOptions',value:function _defaultOptions(){return{length:20,length_stem:4,width_stem:2,leaf_width:0.5,leaf_up:1,density:2,curvature:0.05,curvature_border:0.05,leaf_inclination:0.2};}},{key:'_getPointZero',value:function _getPointZero(curvature,length){return-1*curvature*(length/2.0*(length/2.0));}}]);return LeafGeometry;}();/* harmony default export */ __webpack_exports__["a"] = (LeafGeometry);
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phyllotaxis_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phyllotaxis_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_three__ = __webpack_require__(0);
 var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}var PalmGenerator=function(){// keep in mind, palm grows along the z axis. Specifically, from positive
 // z axis to negative z-axis
@@ -55237,56 +55302,54 @@ var vertices_in_leaf=foliage_geometry.faces.length*3;var vertices_in_trunk=trunk
 geometry.rotateX(-Math.PI/2);var box=new __WEBPACK_IMPORTED_MODULE_1_three__["Box3"]().setFromPoints(geometry.vertices);geometry.applyMatrix(new __WEBPACK_IMPORTED_MODULE_1_three__["Matrix4"]().makeTranslation(0,box.min.y*-1,0));}},{key:'_getRandomArbitrary',value:function _getRandomArbitrary(min,max){return Math.random()*(max-min)+min;}},{key:'_assignUVs',value:function _assignUVs(geometry){geometry.faceVertexUvs[0]=[];geometry.faces.forEach(function(face){var components=['x','y','z'].sort(function(a,b){return Math.abs(face.normal[a])>Math.abs(face.normal[b]);});var v1=geometry.vertices[face.a];var v2=geometry.vertices[face.b];var v3=geometry.vertices[face.c];geometry.faceVertexUvs[0].push([new __WEBPACK_IMPORTED_MODULE_1_three__["Vector2"](v1[components[0]],v1[components[1]]),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector2"](v2[components[0]],v2[components[1]]),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector2"](v3[components[0]],v3[components[1]])]);});geometry.uvsNeedUpdate=true;}}]);return PalmGenerator;}();/* harmony default export */ __webpack_exports__["a"] = (PalmGenerator);
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_three__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gui_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_stats_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_stats_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_stats_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_stats_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__path_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__scenography_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pool_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shaders_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__materials_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__materials_js__ = __webpack_require__(4);
 /* eslint-env browser */// for apeunit, increase this value if you want that the scene becomes
 // brighter in less time
 var LIGHT_INCREASE=0.01;var REDIRECT_URL='http://www.apeunit.com/en/';//orbit controls is used just in the debug modus
-var OrbitControls=__webpack_require__(11)(__WEBPACK_IMPORTED_MODULE_0_three__);var audio=false;var debug=true;var bgColor=new __WEBPACK_IMPORTED_MODULE_0_three__["Color"](0.1,0.1,0.1);var clock=new __WEBPACK_IMPORTED_MODULE_0_three__["Clock"]();var gui=void 0,scene=void 0,renderer=void 0,stats=void 0,pool=void 0,scenography=void 0,controls=void 0,camera=void 0,spline=void 0,startTime=void 0,sprite=void 0,light=void 0;//curve
+var OrbitControls=__webpack_require__(10)(__WEBPACK_IMPORTED_MODULE_0_three__);var debug=true;var bgColor=new __WEBPACK_IMPORTED_MODULE_0_three__["Color"](0.1,0.1,0.1);var clock=new __WEBPACK_IMPORTED_MODULE_0_three__["Clock"]();var gui=void 0,scene=void 0,renderer=void 0,stats=void 0,pool=void 0,scenography=void 0,controls=void 0,camera=void 0,spline=void 0,startTime=void 0,sprite=void 0,light=void 0;//curve
 var curveDensity=600;// how many points define the path
 var t=0;var radius=200;var radius_offset=30;// objects
-var poolSize=28;var percent_covered=0.18;// it means that objects will be placed only in the
+var poolSize=12;var percent_covered=0.18;// it means that objects will be placed only in the
 // 18% part of the curve in front of the camera.
 // the distance_from_path defines how far away from the path a palm could be
-var distance_from_path=30;var listener=new __WEBPACK_IMPORTED_MODULE_0_three__["AudioListener"]();var sound=new __WEBPACK_IMPORTED_MODULE_0_three__["Audio"](listener);var loadPlayer=function loadPlayer(url){return new Promise(function(resolve,reject){sprite=new __WEBPACK_IMPORTED_MODULE_0_three__["TextureLoader"]().load('../particle1.jpeg');var audioLoader=new __WEBPACK_IMPORTED_MODULE_0_three__["AudioLoader"]();audioLoader.load(url,//success callback
-function(audioBuffer){prepareGeometry();sound.setBuffer(audioBuffer);sound.setLoop(true);sound.setVolume(1);resolve(sound);},//progress callback
-function(xhr){console.log(xhr.loaded/xhr.total*100+'% loaded');},//error callback
-function(error){console.log('error while loading audio: '+filename);reject(error);});});};var prepareGeometry=function prepareGeometry(){spline=__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__path_js__["a" /* createPath */])(radius,radius_offset);scene=new __WEBPACK_IMPORTED_MODULE_0_three__["Scene"]();scene.background=bgColor;pool=new __WEBPACK_IMPORTED_MODULE_6__pool_js__["a" /* default */](poolSize,scene,spline,percent_covered,distance_from_path,__WEBPACK_IMPORTED_MODULE_8__materials_js__["a" /* materials */]);return pool;};var init=function init(sound){startTime=clock.getElapsedTime();removeLoadingButton();sound.play();camera=new __WEBPACK_IMPORTED_MODULE_0_three__["PerspectiveCamera"](65,window.innerWidth/window.innerHeight,0.3,260);camera.add(listener);renderer=new __WEBPACK_IMPORTED_MODULE_0_three__["WebGLRenderer"]({antialias:true});//renderer.setClearColor(0xff5050, 0); // the default
+var distance_from_path=40;var prepareGeometries=function prepareGeometries(){spline=__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__path_js__["a" /* createPath */])(radius,radius_offset);scene=new __WEBPACK_IMPORTED_MODULE_0_three__["Scene"]();scene.fog=new __WEBPACK_IMPORTED_MODULE_0_three__["FogExp2"](bgColor.getHex(),0.012,100);scene.background=bgColor;pool=new __WEBPACK_IMPORTED_MODULE_6__pool_js__["a" /* default */](poolSize,scene,spline,percent_covered,distance_from_path,__WEBPACK_IMPORTED_MODULE_7__materials_js__["a" /* materials */]);return pool;};var init=function init(){prepareGeometries();startTime=clock.getElapsedTime();camera=new __WEBPACK_IMPORTED_MODULE_0_three__["PerspectiveCamera"](65,window.innerWidth/window.innerHeight,0.3,260);renderer=new __WEBPACK_IMPORTED_MODULE_0_three__["WebGLRenderer"]({antialias:true});//renderer.setClearColor(0xff5050, 0); // the default
 renderer.setSize(window.innerWidth,window.innerHeight);document.body.style.margin=0;document.body.appendChild(renderer.domElement);if(debug){controls=new OrbitControls(camera,renderer.domElement);}light=new __WEBPACK_IMPORTED_MODULE_0_three__["HemisphereLight"](0xe8e8e8,0x000000,10);scene.add(light);addGui(debug,light);//scenography
 scenography=new __WEBPACK_IMPORTED_MODULE_5__scenography_js__["a" /* default */](camera,spline,t,gui.params.cameraSpeed,fadeToWhite);//stats
 stats=new __WEBPACK_IMPORTED_MODULE_3_stats_js___default.a();stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
-window.addEventListener('resize',function(){var WIDTH=window.innerWidth,HEIGHT=window.innerHeight;renderer.setSize(WIDTH,HEIGHT);camera.aspect=WIDTH/HEIGHT;camera.updateProjectionMatrix();});addStats(debug);render();};var render=function render(){var time=clock.getElapsedTime()-startTime;stats.begin();scenography.update(gui.params.cameraSpeed,gui.params.stop,time);pool.update(scenography.getCameraPositionOnSpline());renderer.render(scene,camera);stats.end();requestAnimationFrame(render);};var addStats=function addStats(debug){if(debug){document.body.appendChild(stats.domElement);}};var addGui=function addGui(debug,ambientLight){if(debug){gui=new __WEBPACK_IMPORTED_MODULE_2__gui_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_8__materials_js__["a" /* materials */]);gui.addScene(scene,ambientLight,renderer);}};var addLoadingButton=function addLoadingButton(){var div=document.createElement('div');div.setAttribute('id','loadingButton');div.style.cssText='position:fixed;height:144px;width:144px;z-index:10000;top:44%;left:46%;background-image:url(../spinner.svg)';document.body.appendChild(div);};var removeLoadingButton=function removeLoadingButton(){var elem=document.getElementById('loadingButton');if(elem){elem.parentNode.removeChild(elem);}};var fadeToWhite=function fadeToWhite(){if(bgColor.r<1.0){bgColor.r+=LIGHT_INCREASE;bgColor.g+=LIGHT_INCREASE;bgColor.b+=LIGHT_INCREASE;renderer.setClearColor(bgColor.getHex());for(var i=0;i<__WEBPACK_IMPORTED_MODULE_8__materials_js__["a" /* materials */].length;i++){__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__materials_js__["b" /* makeMaterialBrighter */])(__WEBPACK_IMPORTED_MODULE_8__materials_js__["a" /* materials */][i],LIGHT_INCREASE);}}else if(!debug){window.location.replace(REDIRECT_URL);}};var addPlayButton=function addPlayButton(){var div=document.createElement('div');div.setAttribute('id','startButton');div.style.cssText='position:fixed;height:64px;width:64px;z-index:10000;top:48%;left:48%;background-image:url(../Play.svg)';div.onclick=function(){addLoadingButton();loadPlayer('../apeunit.mp3').then(function(player){init(player);},function(err){console.log(err);})['catch'](function(error){console.error(error.stack);});var elem=document.getElementById('startButton');return elem.parentNode.removeChild(elem);};document.body.appendChild(div);};addPlayButton();
+window.addEventListener('resize',function(){var WIDTH=window.innerWidth,HEIGHT=window.innerHeight;renderer.setSize(WIDTH,HEIGHT);camera.aspect=WIDTH/HEIGHT;camera.updateProjectionMatrix();});addStats(debug);render();};var render=function render(){var time=clock.getElapsedTime()-startTime;stats.begin();scenography.update(gui.params.cameraSpeed,gui.params.stop,time);pool.update(scenography.getCameraPositionOnSpline());renderer.render(scene,camera);stats.end();requestAnimationFrame(render);};var addStats=function addStats(debug){if(debug){document.body.appendChild(stats.domElement);}};var addGui=function addGui(debug,ambientLight){if(debug){gui=new __WEBPACK_IMPORTED_MODULE_2__gui_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_7__materials_js__["a" /* materials */]);gui.addScene(scene,ambientLight,renderer);}};var fadeToWhite=function fadeToWhite(){if(bgColor.r<1.0){bgColor.r+=LIGHT_INCREASE;bgColor.g+=LIGHT_INCREASE;bgColor.b+=LIGHT_INCREASE;renderer.setClearColor(bgColor.getHex());scene.fog.color.r+=LIGHT_INCREASE;scene.fog.color.g+=LIGHT_INCREASE;scene.fog.color.b+=LIGHT_INCREASE;for(var i=0;i<__WEBPACK_IMPORTED_MODULE_7__materials_js__["a" /* materials */].length;i++){__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_7__materials_js__["b" /* makeMaterialBrighter */])(__WEBPACK_IMPORTED_MODULE_7__materials_js__["a" /* materials */][i],LIGHT_INCREASE);}}else if(!debug){window.location.replace(REDIRECT_URL);}};init();
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PalmGenerator_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PalmGenerator_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_three__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LeafGeometry_js__ = __webpack_require__(12);
-var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}var N_PALMS=6;var Palms=function(){//questo file deve generare solo 2 o tre palme e restituirle in un array
-function Palms(){_classCallCheck(this,Palms);this.smallTrunk=new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](2,2,2);this.trunkGeometry=new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](5,5,5);var palms=[];for(var i=0;i<N_PALMS;i++){var trunkGeometry=this._getTrunkGeometry(i);var leafGeometry=new __WEBPACK_IMPORTED_MODULE_2__LeafGeometry_js__["a" /* default */](this.leafOptions()[i]);var curve=this.getCurves()[i];var palm=new __WEBPACK_IMPORTED_MODULE_0__PalmGenerator_js__["a" /* default */](leafGeometry,trunkGeometry,this.palmOptions()[i],curve);var geometry=palm.geometry;var bufGeometry=new __WEBPACK_IMPORTED_MODULE_1_three__["BufferGeometry"]().fromGeometry(geometry);var palmBuffers=palm.buffers;bufGeometry.addAttribute('color',new __WEBPACK_IMPORTED_MODULE_1_three__["BufferAttribute"](palmBuffers.color,3));bufGeometry.attributes.color.needsUpdate=true;var tot_vert=palmBuffers.totVertices;var tot_vert_foliage=palmBuffers.totFoliageVertices;bufGeometry.clearGroups();bufGeometry.addGroup(0,tot_vert_foliage,0);bufGeometry.addGroup(tot_vert_foliage,tot_vert,1);palms.push(bufGeometry);}return palms;}_createClass(Palms,[{key:'_getTrunkGeometry',value:function _getTrunkGeometry(palm_type){//if piccoletto and punta, small cubes
-if([5,1].includes(palm_type)){return this.smallTrunk;}return this.trunkGeometry;}},{key:'leafOptions',value:function leafOptions(){var leaf_one={length:90,length_stem:2,width_stem:0.2,leaf_width:1,leaf_up:6,density:16,curvature:0.01,curvature_border:0.002,leaf_inclination:0.8};var piccoletto_leaf={length:24,length_stem:6,width_stem:0.4,leaf_width:1,leaf_up:1.5,density:15,curvature:0.06,curvature_border:0.007,leaf_inclination:0.9};var leaf_cardo={length:50,length_stem:4,width_stem:0.5,leaf_width:0.5,leaf_up:1.5,density:30,curvature:0.03,curvature_border:0.005,leaf_inclination:0.7};var leaf_bella={length:50,length_stem:20,width_stem:0.2,leaf_width:0.8,leaf_up:1.5,density:11,curvature:0.04,curvature_border:0.005,leaf_inclination:0.9};var leaf_sigaro={length:55,length_stem:2,width_stem:0.5,leaf_width:0.6,leaf_up:1.5,density:80,curvature:0.02,curvature_border:0.004,leaf_inclination:0.1};var punta_leaf={length:24,length_stem:2,width_stem:0.3,leaf_width:0.5,leaf_up:1.5,density:18,curvature:0.01,curvature_border:0.002,leaf_inclination:1.0};return[leaf_one,piccoletto_leaf,leaf_cardo,leaf_bella,leaf_sigaro,punta_leaf];}},{key:'palmOptions',value:function palmOptions(){var palm_one={spread:0.04,angle:137.66,num:528,growth:0.25,foliage_start_at:65,trunk_regular:true,buffers:true,angle_open:75.87,starting_angle_open:51.65};var piccoletto={spread:0.03,angle:137.14,num:100,growth:0.2,buffers:true,foliage_start_at:44,angle_open:0,starting_angle_open:52,trunk_regular:true};//small
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LeafGeometry_js__ = __webpack_require__(11);
+var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}var N_PALMS=3;//const N_PALMS = 6;
+var Palms=function(){//questo file deve generare solo 2 o tre palme e restituirle in un array
+function Palms(){_classCallCheck(this,Palms);this.smallTrunk=new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](2,2,2);this.trunkGeometry=new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](5,5,5);var palms=[];for(var i=0;i<N_PALMS;i++){var trunkGeometry=this._getTrunkGeometry(i);var leafGeometry=new __WEBPACK_IMPORTED_MODULE_2__LeafGeometry_js__["a" /* default */](this.leafOptions()[i]);var curve=this.getCurves()[i];var palm=new __WEBPACK_IMPORTED_MODULE_0__PalmGenerator_js__["a" /* default */](leafGeometry,trunkGeometry,this.palmOptions()[i],curve);var geometry=palm.geometry;var bufGeometry=new __WEBPACK_IMPORTED_MODULE_1_three__["BufferGeometry"]().fromGeometry(geometry);var palmBuffers=palm.buffers;bufGeometry.addAttribute('color',new __WEBPACK_IMPORTED_MODULE_1_three__["BufferAttribute"](palmBuffers.color,3));//bufGeometry.attributes.color.needsUpdate = true;
+var tot_vert=palmBuffers.totVertices;var tot_vert_foliage=palmBuffers.totFoliageVertices;bufGeometry.clearGroups();bufGeometry.addGroup(0,tot_vert_foliage,0);bufGeometry.addGroup(tot_vert_foliage,tot_vert,1);palms.push(bufGeometry);}return palms;}_createClass(Palms,[{key:'_getTrunkGeometry',value:function _getTrunkGeometry(palm_type){//if piccoletto and punta, small cubes
+if([5,1].includes(palm_type)){return this.smallTrunk;}return this.trunkGeometry;}},{key:'leafOptions',value:function leafOptions(){var leaf_one={length:90,length_stem:2,width_stem:0.2,leaf_width:1,leaf_up:6,density:16,curvature:0.01,curvature_border:0.002,leaf_inclination:0.8};var piccoletto_leaf={length:24,length_stem:6,width_stem:0.4,leaf_width:1,leaf_up:1.5,density:15,curvature:0.06,curvature_border:0.007,leaf_inclination:0.9};var leaf_cardo={length:50,length_stem:4,width_stem:0.5,leaf_width:0.5,leaf_up:1.5,density:30,curvature:0.03,curvature_border:0.005,leaf_inclination:0.7};var leaf_bella={length:50,length_stem:20,width_stem:0.2,leaf_width:0.8,leaf_up:1.5,density:11,curvature:0.04,curvature_border:0.005,leaf_inclination:0.9};var leaf_sigaro={length:55,length_stem:2,width_stem:0.5,leaf_width:0.6,leaf_up:1.5,density:80,curvature:0.02,curvature_border:0.004,leaf_inclination:0.1};var punta_leaf={length:24,length_stem:2,width_stem:0.3,leaf_width:0.5,leaf_up:1.5,density:18,curvature:0.01,curvature_border:0.002,leaf_inclination:1.0};return[leaf_one,piccoletto_leaf,leaf_cardo,leaf_bella,leaf_sigaro,punta_leaf];}},{key:'palmOptions',value:function palmOptions(){var palm_one={spread:0.04,angle:137.66,num:428,growth:0.25,foliage_start_at:45,trunk_regular:true,buffers:true,angle_open:75.87,starting_angle_open:51.65};var piccoletto={spread:0.03,angle:137.14,num:100,growth:0.2,buffers:true,foliage_start_at:44,angle_open:0,starting_angle_open:52,trunk_regular:true};//small
 var cardo={spread:0,angle:137.5,num:240,growth:0.01,foliage_start_at:26,trunk_regular:true,buffers:true,angle_open:36.46,starting_angle_open:50};//la piu' bella
 var bella={spread:0.1,angle:137.5,num:406,growth:0.12,foliage_start_at:86,trunk_regular:false,buffers:true,angle_open:36.17,starting_angle_open:50};var sigaro={spread:0.05,angle:137.5,num:431,growth:0.18,foliage_start_at:20,trunk_regular:false,buffers:true,angle_open:0,starting_angle_open:50};var punta={spread:0.03,angle:137.14,num:100,growth:0.05,buffers:true,foliage_start_at:44,angle_open:30,starting_angle_open:12,trunk_regular:false};var options=[palm_one,piccoletto,cardo,bella,sigaro,punta];return options;}},{key:'getRandomInt',value:function getRandomInt(min,max){min=Math.ceil(min);max=Math.floor(max);return Math.floor(Math.random()*(max-min))+min;}},{key:'getCurves',value:function getCurves(){var curve_first=new __WEBPACK_IMPORTED_MODULE_1_three__["CatmullRomCurve3"]([new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-15,120,-11),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-8,90,-9),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,50,-5),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,0,0)]);var curve_piccoletto=new __WEBPACK_IMPORTED_MODULE_1_three__["CatmullRomCurve3"]([new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,35,0),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,0,0)]);var curve_sigaro=new __WEBPACK_IMPORTED_MODULE_1_three__["CatmullRomCurve3"]([new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-7,45,-7),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-7,30,-7),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-2,15,0),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,0,0)]);var curve_bella=new __WEBPACK_IMPORTED_MODULE_1_three__["CatmullRomCurve3"]([new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-20,120,-20),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-10,100,-20),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,60,0),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,0,0)]);var curve_cardo=new __WEBPACK_IMPORTED_MODULE_1_three__["CatmullRomCurve3"]([new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](3,60,3),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](1,45,1),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-2,30,-1),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](-2,15,0),new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0,0,0)]);var curve_punta=curve_piccoletto;return[curve_first,curve_piccoletto,curve_cardo,curve_bella,curve_sigaro,curve_punta];}}]);return Palms;}();/* harmony default export */ __webpack_exports__["a"] = (Palms);
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55393,7 +55456,7 @@ var nxyz=this.mix(nxy0,nxy1,w);return nxyz;};//---------------------------------
 var rand={};rand.random=new Alea(seed);var noise=new ClassicalNoise(rand);this.noise=function(x,y,z){return 0.5*noise.noise(x,y,z)+0.5;};}
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55417,14 +55480,14 @@ function phyllotaxisWrong(i,angle,spread,tot){//let inc = Math.PI / tot;
 var inc=180.0/tot;var current_angle=i*inc;var current_angle_b=i*angle;var radius=spread*Math.sqrt(i);var x=radius*Math.sin(current_angle)*Math.cos(current_angle_b);var y=radius*Math.sin(current_angle)*Math.sin(current_angle_b);var z=radius*Math.cos(current_angle);return{x:x,y:y,z:z};}
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(20)
-module.exports.color = __webpack_require__(19)
+module.exports = __webpack_require__(19)
+module.exports.color = __webpack_require__(18)
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /**
@@ -56184,7 +56247,7 @@ dat.color.toString,
 dat.utils.common);
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /**
