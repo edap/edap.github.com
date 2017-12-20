@@ -1,7 +1,8 @@
 import PalmGenerator from './PalmGenerator.js';
 import { BoxGeometry, BufferAttribute, BufferGeometry, Vector3, CatmullRomCurve3 } from 'three';
 import LeafGeometry from './LeafGeometry.js';
-const N_PALMS = 6;
+const N_PALMS = 3;
+//const N_PALMS = 6;
 
 export default class Palms {
 	//questo file deve generare solo 2 o tre palme e restituirle in un array
@@ -19,7 +20,7 @@ export default class Palms {
 			const bufGeometry = new BufferGeometry().fromGeometry(geometry);
 			const palmBuffers = palm.buffers;
 			bufGeometry.addAttribute('color', new BufferAttribute(palmBuffers.color, 3));
-			bufGeometry.attributes.color.needsUpdate = true;
+			//bufGeometry.attributes.color.needsUpdate = true;
 			const tot_vert = palmBuffers.totVertices;
 			const tot_vert_foliage = palmBuffers.totFoliageVertices;
 
@@ -75,6 +76,7 @@ export default class Palms {
 			curvature_border: 0.005,
 			leaf_inclination: 0.7
 		};
+
 		const leaf_bella = {
 			length: 50,
 			length_stem: 20,
@@ -86,6 +88,7 @@ export default class Palms {
 			curvature_border: 0.005,
 			leaf_inclination: 0.9
 		};
+
 		const leaf_sigaro = {
 			length: 55,
 			length_stem: 2,
@@ -118,7 +121,7 @@ export default class Palms {
 			angle: 137.66,
 			num: 428,
 			growth: 0.25,
-			foliage_start_at: 65,
+			foliage_start_at: 45,
 			trunk_regular: true,
 			buffers: true,
 			angle_open: 75.87,
@@ -210,12 +213,14 @@ export default class Palms {
 			new Vector3(-2, 15, 0),
 			new Vector3(0, 0, 0)
 		]);
+
 		const curve_bella = new CatmullRomCurve3([
 			new Vector3(-20, 120, -20),
 			new Vector3(-10, 100, -20),
 			new Vector3(0, 60, 0),
 			new Vector3(0, 0, 0)
 		]);
+		
 		const curve_cardo = new CatmullRomCurve3([
 			new Vector3(3, 60, 3),
 			new Vector3(1, 45, 1),
