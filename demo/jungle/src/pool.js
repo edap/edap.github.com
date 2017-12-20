@@ -81,7 +81,7 @@ export default class Pool {
 		//const matIndex = i % (this.materials.length / 2);
 		//const matIndex = getRandomInt(1, 3);
 		const matIndex = 0;
-		const mesh = new Mesh(palm, [this.materials[matIndex * 2 + 1], this.materials[matIndex * 2]]);
+		const mesh = new Mesh(palm, [this.materials[1], this.materials[0]]);
 		mesh.rotateY(Math.PI / getRandom(-3, 3));
 
 		return mesh;

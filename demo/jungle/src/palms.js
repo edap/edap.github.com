@@ -116,7 +116,7 @@ export default class Palms {
 		const palm_one = {
 			spread: 0.04,
 			angle: 137.66,
-			num: 528,
+			num: 428,
 			growth: 0.25,
 			foliage_start_at: 65,
 			trunk_regular: true,

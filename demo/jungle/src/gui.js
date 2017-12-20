@@ -10,10 +10,10 @@ export default class Gui extends DAT.GUI {
 
 		this.material = materials[1];
 		this.trunkMaterial = materials[0];
-		this.materialB = materials[3];
-		this.trunkMaterialB = materials[2];
-		this.materialC = materials[5];
-		this.trunkMaterialC = materials[4];
+		// this.materialB = materials[3];
+		// this.trunkMaterialB = materials[2];
+		// this.materialC = materials[5];
+		// this.trunkMaterialC = materials[4];
 		this.params = {
 			stop: false,
 			cameraHeight: 80,
@@ -89,55 +89,55 @@ export default class Gui extends DAT.GUI {
 			this.trunkMaterial.roughness = val;
 		});
 
-		// Second material GUI
-		const matB = this.addFolder('Foliage Material B');
-		matB.closed = true;
-		matB.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.materialB));
-		matB.addColor(this.params, 'color').onChange(this._handleColorChange(this.materialB.color));
-		matB.addColor(this.params, 'emissive').onChange(this._handleColorChange(this.materialB.emissive));
-		matB.add(this.params, 'metalness', 0.0, 1.0).onChange(val => {
-			this.materialB.metalness = val;
-		});
-		matB.add(this.params, 'roughness', 0.0, 1.0).onChange(val => {
-			this.materialB.roughness = val;
-		});
+		// // Second material GUI
+		// const matB = this.addFolder('Foliage Material B');
+		// matB.closed = true;
+		// matB.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.materialB));
+		// matB.addColor(this.params, 'color').onChange(this._handleColorChange(this.materialB.color));
+		// matB.addColor(this.params, 'emissive').onChange(this._handleColorChange(this.materialB.emissive));
+		// matB.add(this.params, 'metalness', 0.0, 1.0).onChange(val => {
+		// 	this.materialB.metalness = val;
+		// });
+		// matB.add(this.params, 'roughness', 0.0, 1.0).onChange(val => {
+		// 	this.materialB.roughness = val;
+		// });
 
-		const tmatB = this.addFolder('Trunk Material B');
-		tmatB.closed = true;
-		tmatB.add(this.params, 'vertex_colorsT').onChange(this._handleVertexColorChange(this.trunkMaterialB));
-		tmatB.addColor(this.params, 'colorT').onChange(this._handleColorChange(this.trunkMaterialB.color));
-		tmatB.addColor(this.params, 'emissiveT').onChange(this._handleColorChange(this.trunkMaterialB.emissive));
-		tmatB.add(this.params, 'metalnessT', 0.0, 1.0).onChange(val => {
-			this.trunkMaterialB.metalness = val;
-		});
-		tmatB.add(this.params, 'roughnessT', 0.0, 1.0).onChange(val => {
-			this.trunkMaterialB.roughness = val;
-		});
+		// const tmatB = this.addFolder('Trunk Material B');
+		// tmatB.closed = true;
+		// tmatB.add(this.params, 'vertex_colorsT').onChange(this._handleVertexColorChange(this.trunkMaterialB));
+		// tmatB.addColor(this.params, 'colorT').onChange(this._handleColorChange(this.trunkMaterialB.color));
+		// tmatB.addColor(this.params, 'emissiveT').onChange(this._handleColorChange(this.trunkMaterialB.emissive));
+		// tmatB.add(this.params, 'metalnessT', 0.0, 1.0).onChange(val => {
+		// 	this.trunkMaterialB.metalness = val;
+		// });
+		// tmatB.add(this.params, 'roughnessT', 0.0, 1.0).onChange(val => {
+		// 	this.trunkMaterialB.roughness = val;
+		// });
 
-		//Third material GUI ONLY TWO MATERIALS FOR NOW
-		const matC = this.addFolder('Foliage Material C');
-		matC.closed = true;
-		matC.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.materialC));
-		matC.addColor(this.params, 'color').onChange(this._handleColorChange(this.materialC.color));
-		matC.addColor(this.params, 'emissive').onChange(this._handleColorChange(this.materialC.emissive));
-		matC.add(this.params, 'metalness', 0.0, 1.0).onChange(val => {
-			this.materialC.metalness = val;
-		});
-		matC.add(this.params, 'roughness', 0.0, 1.0).onChange(val => {
-			this.materialC.roughness = val;
-		});
+		// //Third material GUI ONLY TWO MATERIALS FOR NOW
+		// const matC = this.addFolder('Foliage Material C');
+		// matC.closed = true;
+		// matC.add(this.params, 'vertex_colors').onChange(this._handleVertexColorChange(this.materialC));
+		// matC.addColor(this.params, 'color').onChange(this._handleColorChange(this.materialC.color));
+		// matC.addColor(this.params, 'emissive').onChange(this._handleColorChange(this.materialC.emissive));
+		// matC.add(this.params, 'metalness', 0.0, 1.0).onChange(val => {
+		// 	this.materialC.metalness = val;
+		// });
+		// matC.add(this.params, 'roughness', 0.0, 1.0).onChange(val => {
+		// 	this.materialC.roughness = val;
+		// });
 
-		const tmatC = this.addFolder('Trunk Material C');
-		tmatC.closed = true;
-		tmatC.add(this.params, 'vertex_colorsT').onChange(this._handleVertexColorChange(this.trunkMaterialC));
-		tmatC.addColor(this.params, 'colorT').onChange(this._handleColorChange(this.trunkMaterialC.color));
-		tmatC.addColor(this.params, 'emissiveT').onChange(this._handleColorChange(this.trunkMaterialC.emissive));
-		tmatC.add(this.params, 'metalnessT', 0.0, 1.0).onChange(val => {
-			this.trunkMaterialC.metalness = val;
-		});
-		tmatC.add(this.params, 'roughnessT', 0.0, 1.0).onChange(val => {
-			this.trunkMaterialC.roughness = val;
-		});
+		// const tmatC = this.addFolder('Trunk Material C');
+		// tmatC.closed = true;
+		// tmatC.add(this.params, 'vertex_colorsT').onChange(this._handleVertexColorChange(this.trunkMaterialC));
+		// tmatC.addColor(this.params, 'colorT').onChange(this._handleColorChange(this.trunkMaterialC.color));
+		// tmatC.addColor(this.params, 'emissiveT').onChange(this._handleColorChange(this.trunkMaterialC.emissive));
+		// tmatC.add(this.params, 'metalnessT', 0.0, 1.0).onChange(val => {
+		// 	this.trunkMaterialC.metalness = val;
+		// });
+		// tmatC.add(this.params, 'roughnessT', 0.0, 1.0).onChange(val => {
+		// 	this.trunkMaterialC.roughness = val;
+		// });
 	}
 
 	toggleHide(){

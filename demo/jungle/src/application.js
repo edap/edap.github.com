@@ -6,7 +6,6 @@ import Stats from 'stats.js';
 import { createPath } from './path.js';
 import Scenography from './scenography.js';
 import Pool from './pool.js';
-import { fragmentShader, vertexShader } from './shaders.js';
 import { materials, makeMaterialBrighter } from './materials.js';
 
 // for apeunit, increase this value if you want that the scene becomes
@@ -16,7 +15,6 @@ const REDIRECT_URL = 'http://www.apeunit.com/en/';
 
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
-const audio = false;
 const debug = true;
 const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
@@ -41,57 +39,26 @@ const radius = 200;
 const radius_offset = 30;
 
 // objects
-const poolSize = 28;
+const poolSize = 15;
 const percent_covered = 0.18; // it means that objects will be placed only in the
 // 18% part of the curve in front of the camera.
 
 // the distance_from_path defines how far away from the path a palm could be
 const distance_from_path = 30;
 
-const listener = new THREE.AudioListener();
-const sound = new THREE.Audio(listener);
-
-const loadPlayer = url =>
-	new Promise((resolve, reject) => {
-		sprite = new THREE.TextureLoader().load('../particle1.jpeg');
-		const audioLoader = new THREE.AudioLoader();
-		audioLoader.load(
-			url,
-			//success callback
-			audioBuffer => {
-				prepareGeometry();
-				sound.setBuffer(audioBuffer);
-				sound.setLoop(true);
-				sound.setVolume(1);
-				resolve(sound);
-			},
-			//progress callback
-			xhr => {
-				console.log(`${xhr.loaded / xhr.total * 100}% loaded`);
-			},
-			//error callback
-			error => {
-				console.log(`error while loading audio: ${filename}`);
-				reject(error);
-			}
-		);
-	});
-
-const prepareGeometry = () => {
+const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);
 	scene = new THREE.Scene();
+	scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.012, 100 );
 	scene.background = bgColor;
 	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materials);
 	return pool;
 };
 
-const init = sound => {
+const init = () => {
+	prepareGeometries();
 	startTime = clock.getElapsedTime();
-	removeLoadingButton();
-	sound.play();
-
 	camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.3, 260);
-	camera.add(listener);
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	//renderer.setClearColor(0xff5050, 0); // the default
@@ -146,26 +113,16 @@ const addGui = (debug, ambientLight) => {
 	}
 };
 
-const addLoadingButton = () => {
-	const div = document.createElement('div');
-	div.setAttribute('id', 'loadingButton');
-	div.style.cssText = 'position:fixed;height:144px;width:144px;z-index:10000;top:44%;left:46%;background-image:url(../spinner.svg)';
-	document.body.appendChild(div);
-};
-
-const removeLoadingButton = () => {
-	const elem = document.getElementById('loadingButton');
-	if (elem){
-		elem.parentNode.removeChild(elem);
-	}
-};
-
 const fadeToWhite = () => {
 	if (bgColor.r < 1.0){
 		bgColor.r += LIGHT_INCREASE;
 		bgColor.g += LIGHT_INCREASE;
 		bgColor.b += LIGHT_INCREASE;
 		renderer.setClearColor(bgColor.getHex());
+
+		scene.fog.color.r += LIGHT_INCREASE;
+		scene.fog.color.g += LIGHT_INCREASE;
+		scene.fog.color.b += LIGHT_INCREASE;
 
 		for (let i = 0; i < materials.length; i++){
 			makeMaterialBrighter(materials[i], LIGHT_INCREASE);
@@ -175,28 +132,4 @@ const fadeToWhite = () => {
 	}
 };
 
-const addPlayButton = () => {
-	const div = document.createElement('div');
-	div.setAttribute('id', 'startButton');
-	div.style.cssText = 'position:fixed;height:64px;width:64px;z-index:10000;top:48%;left:48%;background-image:url(../Play.svg)';
-	div.onclick = function(){
-		addLoadingButton();
-		loadPlayer('../apeunit.mp3')
-			.then(
-				player => {
-					init(player);
-				},
-				err => {
-					console.log(err);
-				}
-			)
-			['catch'](error => {
-				console.error(error.stack);
-			});
-		const elem = document.getElementById('startButton');
-		return elem.parentNode.removeChild(elem);
-	};
-	document.body.appendChild(div);
-};
-
-addPlayButton();
+init();
