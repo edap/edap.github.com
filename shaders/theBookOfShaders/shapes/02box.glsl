@@ -80,8 +80,6 @@ float rectangleGradientLeft(in vec2 st, in vec2 origin, in vec2 dimensions, floa
     return pct;
 }
 
-
-
 //usage example
 void main() {   
     //vec3 rect = rect(0.1);
