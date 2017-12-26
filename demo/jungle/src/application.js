@@ -92,12 +92,13 @@ const init = () => {
 
 const render = () => {
 	const time = clock.getElapsedTime() - startTime;
-	stats.begin();
+	//stats.begin();
 	scenography.update(gui.params.cameraSpeed, gui.params.stop, time);
 	pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
-	stats.end();
+	//stats.end();
 	requestAnimationFrame(render);
+	stats.update();
 };
 
 const addStats = debug => {
