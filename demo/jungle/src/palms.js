@@ -1,8 +1,8 @@
 import PalmGenerator from './PalmGenerator.js';
 import { BoxGeometry, BufferAttribute, BufferGeometry, Vector3, CatmullRomCurve3 } from 'three';
 import LeafGeometry from './LeafGeometry.js';
-const N_PALMS = 3;
-//const N_PALMS = 6;
+//const N_PALMS = 3;
+const N_PALMS = 6;
 
 export default class Palms {
 	//questo file deve generare solo 2 o tre palme e restituirle in un array

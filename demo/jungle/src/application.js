@@ -94,7 +94,7 @@ const render = () => {
 	const time = clock.getElapsedTime() - startTime;
 	//stats.begin();
 	scenography.update(gui.params.cameraSpeed, gui.params.stop, time);
-	pool.update(scenography.getCameraPositionOnSpline());
+	//pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
 	//stats.end();
 	requestAnimationFrame(render);
