@@ -73,7 +73,7 @@ const init = () => {
 	addGui(debug, light);
 
 	//scenography
-	scenography = new Scenography(camera, spline, t, gui.params.cameraSpeed, fadeToWhite);
+	scenography = new Scenography(camera, spline, t, fadeToWhite, gui);
 	//stats
 	stats = new Stats();
 	stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -100,7 +100,7 @@ const animate = () => {
 const render = () => {
 	const time = clock.getElapsedTime() - startTime;
 	//stats.begin();
-	scenography.update(gui.params.cameraSpeed, gui.params.stop, time);
+	scenography.update(time, gui);
 	pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
 };

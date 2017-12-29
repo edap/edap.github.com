@@ -6,20 +6,30 @@ import {
 	CAMERA_LOOK_FORWARD,
 	CAMERA_HIGHEST_POSITION_LOOKAT,
 	CAMERA_LOWEST_POSITION_LOOKAT,
-	CAMERA_HEIGHT
+	CAMERA_HEIGHT,
+	DEFAULT_SPEED
 } from './const';
 
 export default class Scenography {
-	constructor(camera, spline, t, cameraSpeed, fadeCallback){
+	constructor(camera, spline, t, fadeCallback, gui){
 		this.spline = spline;
 		this.camera = camera;
 		this.t = t;
-		this.cameraSpeed = cameraSpeed;
+		this.cameraSpeed = (gui !== undefined) ? gui.params.cameraSpeed : DEFAULT_SPEED;
 		this.fadeCallback = fadeCallback;
 		this.camera = camera;
 	}
 
-	update(speed, stop, elapsedSeconds){
+	update(elapsedSeconds, gui){
+		let speed, stop;
+		if(gui){
+			speed = gui.params.cameraSpeed;
+			stop = gui.params.stop;
+		} else {
+			speed = DEFAULT_SPEED;
+			stop = false;
+		}
+
 		this.cameraSpeed = speed;
 		if (stop){
 			return;
