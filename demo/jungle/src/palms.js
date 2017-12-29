@@ -5,7 +5,6 @@ const N_PALMS = 3;
 //const N_PALMS = 6;
 
 export default class Palms {
-	//questo file deve generare solo 2 o tre palme e restituirle in un array
 	constructor(){
 		this.smallTrunk = new BoxGeometry(2, 2, 2);
 		this.trunkGeometry = new BoxGeometry(5, 5, 5);
@@ -47,7 +46,7 @@ export default class Palms {
 			width_stem: 0.2,
 			leaf_width: 1,
 			leaf_up: 6,
-			density: 14,
+			density: 13,
 			curvature: 0.01,
 			curvature_border: 0.002,
 			leaf_inclination: 0.8
@@ -59,7 +58,7 @@ export default class Palms {
 			width_stem: 0.4,
 			leaf_width: 1,
 			leaf_up: 1.5,
-			density: 15,
+			density: 14,
 			curvature: 0.06,
 			curvature_border: 0.007,
 			leaf_inclination: 0.9
@@ -71,7 +70,7 @@ export default class Palms {
 			width_stem: 0.5,
 			leaf_width: 0.5,
 			leaf_up: 1.5,
-			density: 16,
+			density: 15,
 			curvature: 0.03,
 			curvature_border: 0.005,
 			leaf_inclination: 0.7
@@ -83,7 +82,7 @@ export default class Palms {
 			width_stem: 0.2,
 			leaf_width: 0.8,
 			leaf_up: 1.5,
-			density: 11,
+			density: 10,
 			curvature: 0.04,
 			curvature_border: 0.005,
 			leaf_inclination: 0.9
@@ -119,9 +118,9 @@ export default class Palms {
 		const palm_one = {
 			spread: 0.04,
 			angle: 137.66,
-			num: 428,
+			num: 328,
 			growth: 0.25,
-			foliage_start_at: 45,
+			foliage_start_at: 42,
 			trunk_regular: true,
 			buffers: true,
 			angle_open: 75.87,
@@ -133,7 +132,7 @@ export default class Palms {
 			num: 100,
 			growth: 0.2,
 			buffers: true,
-			foliage_start_at: 44,
+			foliage_start_at: 40,
 			angle_open: 0,
 			starting_angle_open: 52,
 			trunk_regular: true
@@ -142,9 +141,9 @@ export default class Palms {
 		const cardo = {
 			spread: 0,
 			angle: 137.5,
-			num: 240,
+			num: 220,
 			growth: 0.01,
-			foliage_start_at: 26,
+			foliage_start_at: 23,
 			trunk_regular: true,
 			buffers: true,
 			angle_open: 36.46,
@@ -154,9 +153,9 @@ export default class Palms {
 		const bella = {
 			spread: 0.1,
 			angle: 137.5,
-			num: 406,
+			num: 366,
 			growth: 0.12,
-			foliage_start_at: 86,
+			foliage_start_at: 66,
 			trunk_regular: false,
 			buffers: true,
 			angle_open: 36.17,
@@ -166,9 +165,9 @@ export default class Palms {
 		const sigaro = {
 			spread: 0.05,
 			angle: 137.5,
-			num: 431,
+			num: 301,
 			growth: 0.18,
-			foliage_start_at: 20,
+			foliage_start_at: 13,
 			trunk_regular: false,
 			buffers: true,
 			angle_open: 0,
@@ -178,10 +177,10 @@ export default class Palms {
 		const punta = {
 			spread: 0.03,
 			angle: 137.14,
-			num: 100,
+			num: 70,
 			growth: 0.05,
 			buffers: true,
-			foliage_start_at: 44,
+			foliage_start_at: 28,
 			angle_open: 30,
 			starting_angle_open: 12,
 			trunk_regular: false
