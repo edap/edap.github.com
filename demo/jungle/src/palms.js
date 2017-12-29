@@ -47,7 +47,7 @@ export default class Palms {
 			width_stem: 0.2,
 			leaf_width: 1,
 			leaf_up: 6,
-			density: 16,
+			density: 14,
 			curvature: 0.01,
 			curvature_border: 0.002,
 			leaf_inclination: 0.8
@@ -71,7 +71,7 @@ export default class Palms {
 			width_stem: 0.5,
 			leaf_width: 0.5,
 			leaf_up: 1.5,
-			density: 30,
+			density: 16,
 			curvature: 0.03,
 			curvature_border: 0.005,
 			leaf_inclination: 0.7
@@ -95,7 +95,7 @@ export default class Palms {
 			width_stem: 0.5,
 			leaf_width: 0.6,
 			leaf_up: 1.5,
-			density: 80,
+			density: 16,
 			curvature: 0.02,
 			curvature_border: 0.004,
 			leaf_inclination: 0.1
@@ -106,7 +106,7 @@ export default class Palms {
 			width_stem: 0.3,
 			leaf_width: 0.5,
 			leaf_up: 1.5,
-			density: 18,
+			density: 10,
 			curvature: 0.01,
 			curvature_border: 0.002,
 			leaf_inclination: 1.0
