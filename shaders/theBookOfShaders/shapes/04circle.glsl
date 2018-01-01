@@ -52,12 +52,13 @@ void main() {
 
     //make it rotate
     vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
+
     //float cir = circle(st, orig+circularMovement);
     //float cir = circleBg(st, orig);
     //float cir = distance(st, orig);
-    //float cir = circleSmooth(st,vec2(0.5), 0.1, 0.01);
+    float cir = circleSmooth(st,vec2(0.5), 0.1, 0.01);
     //float cir = circleOpt(st, orig+circularMovement, 0.2);
-    float cir = circleDoubleCenter(st, vec2(0.8,0.6)+circularMovement,
-                vec2(0.4,0.4)-circularMovement);
+    // float cir = circleDoubleCenter(st, vec2(0.8,0.6)+circularMovement,
+    //             vec2(0.4,0.4)-circularMovement);
     gl_FragColor = vec4(vec3(cir),1.0);
 }

@@ -112,6 +112,24 @@ export default class Pool {
 		}
 	}
 
+	clear(){
+		this.container.forEach((mesh) => {
+			this.scene.remove(mesh);
+		});
+		// Do not remove from the mesh from the scene and dispose the geometry in the same loop
+		this.container.forEach((mesh) => {
+			mesh.geometry.dispose();
+			if(Array.isArray(mesh.material)){
+				let size = mesh.material.length;
+				for(let i = 0; i++; i< size){
+					mesh.material[i].dispose()
+				}
+			}else{
+				mesh.material.dispose();
+			}
+		});
+	}
+
 	putObjectForwardTheCamera(camera_position_on_spline, object_index, flip_direction){
 		const object = this.container[object_index];
 		const new_position_on_curve = this.index_positions[object_index] + this.percent_covered;

@@ -15,7 +15,7 @@ const REDIRECT_URL = 'http://www.apeunit.com/en/';
 
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
-const debug = true;
+const debug = false;
 const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
 
@@ -128,11 +128,11 @@ const fadeToWhite = () => {
 		scene.fog.color.r += LIGHT_INCREASE;
 		scene.fog.color.g += LIGHT_INCREASE;
 		scene.fog.color.b += LIGHT_INCREASE;
-
 		for (let i = 0; i < materials.length; i++){
 			makeMaterialBrighter(materials[i], LIGHT_INCREASE);
 		}
 	} else if (!debug){
+		pool.clear();
 		window.location.replace(REDIRECT_URL);
 	}
 };
