@@ -25,7 +25,7 @@ void main() {
     // questo trick e' abbastanza importante
     // lo trovi spesso
     // prova a rimuoverlo
-    st = st *2.000-1.;
+    st = st *2.-1.;
 
     // Make the distance field
     d = length( abs(st)-0.228 );

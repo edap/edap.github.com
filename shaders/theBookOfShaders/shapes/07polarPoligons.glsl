@@ -7,7 +7,7 @@ precision mediump float;
 
 
 vec3 polygon(vec2 st, vec2 orig, int nSize, float resize, float smoothness){
-    vec2 toCenter = vec2(orig)-st;
+    vec2 toCenter = orig-st;
     float angle = atan(toCenter.y,toCenter.x)+PI;
     float radius = TWO_PI/float(nSize);
     float d = cos(floor(.5+angle/radius)*radius-angle)*length(toCenter * resize);
