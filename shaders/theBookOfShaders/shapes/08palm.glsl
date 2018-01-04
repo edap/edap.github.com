@@ -29,6 +29,6 @@ void main(){
   float s = 0.01; // smoothness of the border
   vec2 center = vec2(0.5);
   
-  col = col *= distortedDaisy(st, center,r,s,p,d,a);
+  col *= distortedDaisy(st, center,r,s,p,d,a);
   gl_FragColor = vec4(col, 1.0);
 }

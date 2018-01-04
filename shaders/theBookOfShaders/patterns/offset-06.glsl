@@ -26,19 +26,13 @@ float box(vec2 _st, vec2 _size, float _smoothEdges){
 }
 
 vec2 offset(vec2 _st, vec2 _offset){
-    vec2 uv;
+    vec2 uv = _st;
 
-    if(_st.x>0.5){
-        uv.x = _st.x - 0.5;
-    } else {
-        uv.x = _st.x + 0.5;
-    }
+    uv.x -= step(_offset.x, _st.x) * _offset.x;
+    uv.x += (step(_st.x, _offset.x) * _offset.x);
 
-    if(_st.y>0.5){
-        uv.y = _st.y - 0.5;
-    } else {
-        uv.y = _st.y + 0.5;
-    }
+    uv.y -= (step(_offset.y, _st.y) * _offset.y);
+    uv.y += (step(_st.y, _offset.y) * _offset.y);
 
     return uv;
 }
@@ -49,7 +43,7 @@ void main(void){
 
     st = tile(st,10.);
 
-    vec2 offsetSt = offset(st,vec2(0.5));
+    vec2 offsetSt = offset(st,vec2(0.5, 0.5));
 
     st = rotate2D(st,PI*0.25);
 
@@ -57,6 +51,8 @@ void main(void){
     float smallWhiteBox = box(st,vec2(0.3),0.1);
     float smallBlackBox = 2.*box(st,vec2(0.2),0.01);
     vec3 color = vec3( bigBox - smallWhiteBox +  smallBlackBox);
+
+    //vec3 color = vec3(step( st.x, 0.5));
 
     gl_FragColor = vec4(color,1.0);
 }
