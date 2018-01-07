@@ -16,8 +16,8 @@ float distortedDaisy(
 void main(){
   vec3 col = vec3(1.0,0.4,0.1);
   vec2 st = gl_FragCoord.xy / iResolution.xy;
-  st *= 2.0;
-  st = fract(st);
+  //st *= 2.0;
+  //st = fract(st);
 
   float d = 150.0; // distorsion
   float r = 0.2;  // resize
@@ -25,6 +25,18 @@ void main(){
   float p = 30.0; // number of petals
   float s = 0.01; // smoothness of the border
   vec2 center = vec2(0.5);
-  col = col *= distortedDaisy(st, center,r,s,p,d,a);
+  col *= distortedDaisy(st, center,r,s,p,d,a);
+  
+  // gambo
+  float gamboThickness = 0.01;
+  float gamboLenght = 0.14;
+  float gambo = 1.0 - (1.0 - smoothstep(gamboThickness, gamboThickness+0.01, abs((center-st).x))) *
+           (1.0 - smoothstep(gamboLenght, 0.01, (center-st).y));
+  col*=gambo;
+
+  //float y = (center-st).y;
+  //float ret = step(0.2,y);
+  //col+=ret;
+
   gl_FragColor = vec4(col, 1.0);
 }

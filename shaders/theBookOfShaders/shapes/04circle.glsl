@@ -15,6 +15,10 @@ float circle(in vec2 st, in vec2 end) {
     return pct;
 }
 
+float circleBorder(vec2 st, float diameter){
+  return length(st - 0.5) * diameter;
+}
+
 float circleSmooth(in vec2 st, in vec2 pos, in float begin, in float end) {
     float pct = 0.0;
     pct = smoothstep(begin, end, distance(st, pos));
@@ -56,7 +60,7 @@ void main() {
     vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
 
     //float cir = circle(st, orig+circularMovement);
-    float cir = circle(st, orig);
+    //float cir = circle(st, orig);
     //float cir = circleBg(st, orig);
     //float cir = distance(st, orig);
     //float cir = circleSmooth(st,vec2(0.5), 0.1, 0.01);
@@ -64,6 +68,7 @@ void main() {
     // float cir = circleDoubleCenter(st, vec2(0.8,0.6)+circularMovement,
     //             vec2(0.4,0.4)-circularMovement);
 
+    float cir = circleBorder(st, 2.);
     // you can use the value of the distance function for the mixing
     // a bacground color with a foreground color
     vec3 col = mix(fgColor, bgColor, cir);
