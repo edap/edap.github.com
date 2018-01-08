@@ -12,6 +12,11 @@ float circleBg(vec2 st, vec2 end){
     return pct;
 }
 
+// as it appears in pixel spirit
+float circleSDF(vec2 st, float diameter){
+  return length(st - 0.5) * diameter;
+}
+
 float circle(in vec2 st, in vec2 end) {
     float pct = 0.0;
     pct = step(0.2, distance(st, end));
@@ -55,6 +60,7 @@ void main() {
     //float cir = circle(st, orig+circularMovement);
     //float cir = circleBg(st, orig);
     //float cir = distance(st, orig);
+    //float cir = circleSDF(st, 0.9);
     //float cir = circleSmooth(st,vec2(0.5), 0.1, 0.01);
     float cir = circleDoubleCenter(st, vec2(0.8,0.6)+circularMovement,
                 vec2(0.4,0.4)-circularMovement);
