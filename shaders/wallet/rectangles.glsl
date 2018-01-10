@@ -79,6 +79,17 @@ float rectangleGradientLeft(in vec2 st, in vec2 origin, in vec2 dimensions, floa
     return pct;
 }
 
+// from patricio's cards
+float rectSDF(vec2 pos, vec2 dim){
+  vec2 _st = pos*2. - 1.;
+  return max(abs(_st.x/dim.x),
+             abs(_st.y/dim.y));
+}
+
+float fill(float sdfVal, float size){
+  return step(size, sdfVal);
+}
+
 
 
 //usage example
@@ -93,6 +104,7 @@ void main() {
     //make it rotate
     vec2 circularMovement = vec2(sin(iGlobalTime)*0.1, cos(iGlobalTime)*0.1);
     float rect = rectangle(st, orig+circularMovement, vec2(0.1,0.1));
+    //float rect = fill(rectSDF(st, vec2(0.2,0.4)), 0.3);
     gl_FragColor = vec4(vec3(rect),1.0);
 
 }

@@ -23,10 +23,20 @@ float wavefySin(float _val, float freq, float amp){
   return sin(_val * freq) * amp;
 }
 
+float flip(float v, float pct){
+  return mix(v, 1. - v, pct);
+}
+
+float strokeSmoot(float x, float pos, float width){
+  return smoothstep(pos, pos+0.01,x+ width*0.5) -
+         smoothstep(pos, pos+0.01,x- width*0.5);
+
+}
+
 void main(){
-  vec3 col = vec3(1.0,0.4,0.1);
+  float col = 1.0;
   vec2 st = gl_FragCoord.xy / iResolution.xy;
-  st *= 2.0;
+  st *= 8.0;
   st = fract(st);
 
   // CANOPY
@@ -34,7 +44,7 @@ void main(){
   float r = 0.2;  // resize
   float a = 0.1;  //addendum
   float p = 30.0; // number of petals
-  float s = 0.01; // smoothness of the border
+  float s = 0.03; // smoothness of the border
   vec2 center = vec2(0.5);
   col *= distortedDaisy(st, center,r,s,p,d,a);
   
@@ -43,8 +53,8 @@ void main(){
   float gamboLenght = 0.14;
   vec2 position = center-st;
   float freq_stem = 40.;
-  float amp_stem = 0.02;
-  gamboThickness += wavefyCos(position.y, 120.0, 0.004);
+  float amp_stem = 0.03;
+  //gamboThickness += wavefyCos(position.y, 120.0, 0.004);
   // changing from + to - change the direction of the curve
   //float curve = abs(position.x  + wavefySin(position.y, freq_stem, amp_stem));
   float curve = abs(position.x  - wavefySin(position.y, freq_stem, amp_stem));
@@ -53,5 +63,9 @@ void main(){
            (1.0 - smoothstep(gamboLenght, 0.01, position.y));
   col*=gambo;
 
-  gl_FragColor = vec4(col, 1.0);
+  float line = (st.x+st.y) * 0.5;
+  float diagLine = strokeSmoot(line, 0.5, 0.2);
+  float flippedCol = flip(col, diagLine);
+
+  gl_FragColor = vec4(vec3(flippedCol), 1.0);
 }
