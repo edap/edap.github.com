@@ -15,6 +15,10 @@ float fill(float sdfVal, float size){
   return step(size, sdfVal);
 }
 
+float fillSmooth(float sdfVal, float size, float smoothness){
+  return smoothstep(size, size+smoothness,sdfVal);
+}
+
 float stroke(float x, float pos, float width){
   return step(pos, x+ width*0.5) - step(pos, x- width*0.5);
 }

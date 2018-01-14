@@ -19,6 +19,7 @@ float elica(vec2 st, vec2 orig, float resize, float smoothness, float nPale){
     vec2 toCenter = vec2(orig)-st;
     float angle = atan(toCenter.y,toCenter.x);
     float radius = length(toCenter)*resize;
+    
 
     float f = cos(angle*nPale);
     return 1.-smoothstep(f,f+smoothness,radius);

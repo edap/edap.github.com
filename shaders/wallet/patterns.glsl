@@ -18,6 +18,32 @@ vec2 tile(vec2 _st, float _zoom){
     return fract(_st);
 }
 
+vec2 tileMoveAlternate(vec2 _st, float _zoom, float time){
+    _st *= _zoom;
+    _st.x += time * step(1.0,mod(_st.y,2.0));
+    _st.x -= time * step(mod(_st.y,2.0), 1.0);
+    return fract(_st);    
+}
+
+vec2 tileMoveCrossed(vec2 _st, float _zoom, float utime, float speed){
+    float time = utime * speed;
+    _st *= _zoom;
+    // horizontal or vertical?
+    float ver = step(.5,fract(time));
+    float hor = step(ver, 0.);
+    // even rows and columns
+    float evenY = step(.5, fract(_st.y * .5));
+    float oddY = step(evenY,0.);
+    float evenX = step(.5, fract(_st.x * .5));
+    float oddX = step(evenX,0.);
+    // apply movement
+    _st.x += ((fract(time) * 2.0) * evenY) * hor;
+    _st.x -= ((fract(time) * 2.0) * oddY) * hor;
+    _st.y += ((fract(time) * 2.0) * evenX) * ver;
+    _st.y -= ((fract(time) * 2.0) * oddX) * ver;
+    return fract(_st);    
+}
+
 vec2 offset(vec2 _st, vec2 _offset){
     vec2 uv = _st;
 
@@ -37,6 +63,7 @@ float box(vec2 _st, vec2 _size){
     return uv.x*uv.y;
 }
 
+
 void main(void){
     vec2 st = gl_FragCoord.xy/iResolution.xy;
     st.y *= iResolution.y/iResolution.x;
@@ -45,11 +72,17 @@ void main(void){
 
     // Apply the brick tiling
     //st = brickTile(st,5.0);
-
     // normal tiling
-    st = tile(st, 5.0);
+    //st = tile(st, 5.0);
 
-    color = vec3(box(st,vec2(0.9)));
+    // tiling with movement
+    //st = tileMoveAlternate(st, 5.0, iGlobalTime);
+
+    // tiling movement crossed
+    st = tileMoveCrossed(st, 5.0, iGlobalTime, 0.5);
+
+
+    color = vec3(box(st,vec2(0.8)));
 
     // start offset example
     // vec2 offsetSt = offset(st, vec2(0.5));
