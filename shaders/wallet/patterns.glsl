@@ -80,8 +80,6 @@ void main(void){
 
     // tiling movement crossed
     st = tileMoveCrossed(st, 5.0, iGlobalTime, 0.5);
-
-
     color = vec3(box(st,vec2(0.8)));
 
     // start offset example

@@ -39,7 +39,7 @@ mat2 rotate2d(float _angle){
 }
 //
 
-float mergedFlower (vec2 st, float diameter){
+float quadrifoglio (vec2 st, float diameter){
   float offset = .25;
   float cross = 2.11;
   float petalsDist = .24;
@@ -172,7 +172,7 @@ void main(){
     vec2 center = vec2(0.5, 0.5);
     //float draw = palmCanopy(st, center,r,s,p,d,a) * stem(st, center);
 
-    float draw = mergedFlower(st, 0.3);
+    float draw = quadrifoglio(st, 0.3);
     
     gl_FragColor = vec4(vec3(draw),1.0);
 }
