@@ -129,23 +129,28 @@ float orcLabels(vec2 st, vec2 orig, float resize, float smoothness, float nPale)
     
 
     float f = cos(angle*nPale);
-    float petals = 1.-smoothstep(f,f+smoothness,radius);
-    // bottom part of the petal on the bottom
-    vec2 posCirc = toCenter;
-    posCirc.y += 0.3;
-    float twoCircles = twoCircles(posCirc, 0.1, 0.02, 0.01);
-    twoCircles = step(twoCircles, 0.1);
-
-    return intersect(petals, twoCircles);
+    return 1.-smoothstep(f,f+smoothness,radius);    
 }
 
+float bocca(vec2 _st, vec2 orig){
+    vec2 posCirc = _st - orig;
+    posCirc.y += 0.3;
+    float twoCircles = twoCircles(posCirc, 0.1, 0.02, 0.01);
+    twoCircles = step(twoCircles, 0.1); 
+    return twoCircles;   
+}
 
 void main(){
   vec2 st = gl_FragCoord.xy / iResolution.xy;
   st.x *= iResolution.x /iResolution.y;
   float pet = orcPetals(st, vec2(0.4, 0.4), 23.9, 0.06, 3.);
   float lab = orcLabels(st, vec2(0.4, 0.5), 23.9, 0.06, 3.);
+  float mund = bocca(st, vec2(0.4, 0.5));
+
+  float bottom = intersect(lab, mund);
+
   //gl_FragColor = vec4(vec3(lab),1.);
   //gl_FragColor = vec4(vec3(pet),1.);
-  gl_FragColor = vec4(vec3(intersect(pet,lab)),1.);
+  gl_FragColor = vec4(vec3(bottom),1.);
+  //gl_FragColor = vec4(vec3(intersect(pet,lab)),1.);
 }
