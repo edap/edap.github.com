@@ -2,6 +2,9 @@
 precision mediump float;
 #endif
 
+
+#define PI 3.14159265358979323846
+
 // this file contains some function useful for patterns
 // keywords: tiles, patterns, brick, cells
 
@@ -16,6 +19,14 @@ vec2 brickTile(vec2 _st, float _zoom){
 vec2 tile(vec2 _st, float _zoom){
     _st *= _zoom;
     return fract(_st);
+}
+
+vec2 rotate2D (vec2 _st, float _angle) {
+    _st -= 0.5;
+    _st =  mat2(cos(_angle),-sin(_angle),
+                sin(_angle),cos(_angle)) * _st;
+    _st += 0.5;
+    return _st;
 }
 
 vec2 tileMoveAlternate(vec2 _st, float _zoom, float time){
@@ -61,6 +72,48 @@ float box(vec2 _st, vec2 _size){
     vec2 uv = smoothstep(_size,_size+vec2(1e-4),_st);
     uv *= smoothstep(_size,_size+vec2(1e-4),vec2(1.0)-_st);
     return uv.x*uv.y;
+}
+
+float when_eq(float x, float y) {
+  return 1.0 - abs(sign(x - y));
+}
+
+// this is the truchet pattern, it is based on a 2x3 cell
+vec2 rotateTilePattern(vec2 _st){
+
+    //  Scale the coordinate system by 2x2
+    _st *= 2.0;
+
+    //  Give each cell an index number
+    //  according to its position
+    float index = 0.0;
+    index += step(1., mod(_st.x,2.0));
+    index += step(1., mod(_st.y,2.0))*2.0;
+
+    //      |
+    //  2   |   3
+    //      |
+    //--------------
+    //      |
+    //  0   |   1
+    //      |
+
+    // Make each cell between 0.0 - 1.0
+    _st = fract(_st);
+
+    //  Rotate cell 1 by 90 degrees
+    float rad = PI*0.5 * when_eq(index, 1.);
+    _st = rotate2D(_st,rad);
+
+    //  Rotate cell 2 by -90 degrees
+    rad = PI*-0.5 * when_eq(index, 2.);
+    _st = rotate2D(_st,rad);
+
+    //  Rotate cell 3 by 180 degrees
+    rad = PI * when_eq(index, 3.);
+    _st = rotate2D(_st,rad);
+
+    return _st;
 }
 
 
