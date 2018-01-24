@@ -1,3 +1,4 @@
+// bool ops
 float merge(float d1, float d2){
 	return min(d1, d2);
 }
@@ -6,18 +7,26 @@ float intersect(float d1, float d2){
 	return max(d1, d2);
 }
 
-float intersectSmooth(float d1, float d2, float k){
-    float h = clamp(0.5 + 0.5*(d2 - d1)/k, 0.0, 1.0);
-    return mix(d2, d1, h) + k * h * (1.0-h);
+float mergeExclude(float d1, float d2){
+	return min(max(-d1, d2), max(-d2, d1));
 }
 
-float smoothMerge(float d1, float d2, float k){
-    float h = clamp(0.5 + 0.5*(d2 - d1)/k, 0.0, 1.0);
-    return mix(d2, d1, h) - k * h * (1.0-h);
+float substract(float d1, float d2){
+	return max(-d1, d2);
 }
 
-float circleDist(vec2 p, float radius){
-  return length(p) - radius;
+float circleSDF(vec2 st, float diameter){
+  return length(st - 0.5) * diameter;
+}
+
+float vesicaSDF(vec2 st, float w){
+  vec2 offset = vec2(w * .5, 0.);
+  return max (circleSDF(st-offset, 0.3),
+              circleSDF(st+offset, 0.3));
+}
+
+float fill(float sdfVal, float w){
+  return step(w, sdfVal);
 }
 
 vec2 translate(vec2 p, vec2 t){
@@ -25,132 +34,68 @@ vec2 translate(vec2 p, vec2 t){
 }
 
 float orcPetals(vec2 st, vec2 orig, float resize, float smoothness, float nPale){
-    // https://thebookofshaders.com/07/
-    // Use polar coordinates instead of cartesian
-    // This technique is a little restrictive but very simple.
-    // It consists of changing the radius of a circle depending 
-    // on the angle to achieve different shapes.
-    vec2 toCenter = vec2(orig)-st;
+    vec2 toCenter = orig-st;
     float angle = atan(toCenter.y,toCenter.x) - 0.5;
 
-
-    // the value of grow affect the curve
     float grow = pow(length(toCenter), 3.);
-    //float grow = exp(length(toCenter)) * 0.029;
-    //float grow = exp2(length(toCenter)) * 0.029;
-    //float grow = sqrt(length(toCenter)) * 0.09;
-    //float grow = sin(length(toCenter)) * 0.12;
-    //float grow = asin(length(toCenter)) * 0.12;
-    //float grow = tan(length(toCenter)) * 0.12;
-    //float grow = atan(length(toCenter)) * 0.12;
-
-
-    // this value affect how much the petals scale depending
-    // on y, x or the combination of both
+    
     float def = 30.;
-
-    // Y
-    //float scale = resize + toCenter.y * def; // def = 30.
-    //float scale = resize - toCenter.y * def; // def = 30.
-    float scale = (resize + asin(toCenter.y) * def); //def - 30.
-
-    // X
-    //float scale = resize - abs(toCenter.x) * def; //def = 30.
-    //float scale = resize + abs(toCenter.x) * def; //def = 80.
-    
-    // or combined
-    //float scale = resize + abs(abs(toCenter.x)- toCenter.y) * def; //def = 80.
-
-    // or mixed, depending if y is pos or neg
-    //float scale = (resize + abs(abs(toCenter.x)- toCenter.y) * def) * step(0., toCenter.y);
-
-    // sin
-    //float scale = resize + asin(toCenter.y) * def;
-
-    float radius =  grow * scale;
-    
+    float scale = resize - (abs(toCenter.x * 1.3) * def); //def = 30.
+    float radius =  grow * scale + toCenter.y * 1.53;
 
     float f = cos(angle*nPale);
     return 1.-smoothstep(f,f+smoothness,radius);
 }
 
-float twoCircles(vec2 _st, float offset, float dim, float smoothness){
-  vec2 transA =  translate(_st, vec2(offset, 0.0));
-  float circA = circleDist(transA, dim);
-
-  vec2 transB =  translate(_st, vec2(-offset, 0.0));
-  float circB = circleDist(transB, dim);
-
-  return smoothMerge(circA, circB, smoothness);
-}
-
-
 float orcLabels(vec2 st, vec2 orig, float resize, float smoothness, float nPale){
-    // https://thebookofshaders.com/07/
-    // Use polar coordinates instead of cartesian
-    // This technique is a little restrictive but very simple.
-    // It consists of changing the radius of a circle depending 
-    // on the angle to achieve different shapes.
-    vec2 toCenter = st - orig;
+    vec2 toCenter = st-orig;
     float angle = atan(toCenter.y,toCenter.x) - 0.5;
-
-
-    // the value of grow affect the curve
-    float grow = pow(length(toCenter), 3.);
-    //float grow = exp(length(toCenter)) * 0.029;
-    //float grow = exp2(length(toCenter)) * 0.029;
-    //float grow = sqrt(length(toCenter)) * 0.09;
-    //float grow = sin(length(toCenter)) * 0.12;
-    //float grow = asin(length(toCenter)) * 0.12;
-    //float grow = tan(length(toCenter)) * 0.12;
-    //float grow = atan(length(toCenter)) * 0.12;
-
-
-    // this value affect how much the petals scale depending
-    // on y, x or the combination of both
-    float def = 35.;
-
-    // Y
-    //float scale = resize + toCenter.y * def;
-    //float scale = resize - toCenter.y * def; // def = 30.
-    //float scale = resize + asin(toCenter.y) * def; //def - 30.
-
-    // X
-    float scale = resize - abs(toCenter.x) * def; //def = 30.
-    //float scale = resize + abs(toCenter.x) * def; //def = 80.
+    float grow = exp(length(toCenter)) * 0.019;
     
-    // or combined
-    //float scale = resize + abs(abs(toCenter.x)- toCenter.y) * def; //def = 80.
-
-    // sin
-    //float scale = resize + asin(toCenter.y) * def;
-
+    float scale = resize + sin(toCenter.y); 
     float radius =  grow * scale;
     
-
     float f = cos(angle*nPale);
     return 1.-smoothstep(f,f+smoothness,radius);    
 }
 
-float bocca(vec2 _st, vec2 orig){
-    vec2 posCirc = _st - orig;
-    posCirc.y += 0.3;
-    float twoCircles = twoCircles(posCirc, 0.1, 0.02, 0.01);
-    twoCircles = step(twoCircles, 0.1); 
-    return twoCircles;   
+float ellipse(vec2 st, vec2 u_centerOval, vec2 u_radiusOval){
+  float e1 =  ( st.x - u_centerOval.x ) / ( u_radiusOval.x );
+  float e2 =  ( st.y - u_centerOval.y ) / ( u_radiusOval.y );
+  float d  = (e1 * e1) + (e2 * e2);
+  return d;
+}
+
+float upperPetals(vec2 st, vec2 pos, vec2 u_radiusOval, float offset){
+  float e1 = ellipse(st, vec2(0.5, 0.4), u_radiusOval);
+  pos.y -= offset;
+  float e2 = ellipse(st, vec2(0.5), u_radiusOval);
+
+  //float p = mergeExclude(e2, e1);
+  float p = substract(e1, e2);
+
+  return e2;
 }
 
 void main(){
   vec2 st = gl_FragCoord.xy / iResolution.xy;
   st.x *= iResolution.x /iResolution.y;
-  float pet = orcPetals(st, vec2(0.4, 0.4), 23.9, 0.06, 3.);
-  float lab = orcLabels(st, vec2(0.4, 0.5), 23.9, 0.06, 3.);
-  float mund = bocca(st, vec2(0.4, 0.5));
+  float resize = 36.9;
+  vec2 pos = vec2(0.5, 0.50);
 
-  float bottom = intersect(lab, mund);
+  float pet = orcPetals(st, pos, resize*0.65, 0.06, 3.);
+  float lab = orcLabels(st, pos, resize, 0.06, 3.);
+  float sdf = fill(vesicaSDF(vec2(0.5,0.5), 0.6), 0.1);
+  float upper = upperPetals(st, vec2(0.5, 0.5), vec2(0.8,0.2), 0.2);
 
+  float bottom = lab+sdf;
   //gl_FragColor = vec4(vec3(lab),1.);
   //gl_FragColor = vec4(vec3(pet),1.);
-  gl_FragColor = vec4(vec3(bottom),1.);
+  //gl_FragColor = vec4(vec3(bottom),1.);
+  float orchids = intersect(lab, pet);
+  gl_FragColor = vec4(vec3(fill(upper, 0.2)), .5);
+  //orchids+=sdf;
+  //gl_FragColor = vec4(vec3(orchids),1.);
+
   //gl_FragColor = vec4(vec3(intersect(pet,lab)),1.);
 }

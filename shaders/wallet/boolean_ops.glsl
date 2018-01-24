@@ -37,6 +37,12 @@ float circleDist(vec2 p, float radius){
   return length(p) - radius;
 }
 
+float ellipseDist(vec2 p, float radius, vec2 dim){
+  p.x = p.x / dim.x;
+  p.y = p.y / dim.y;
+  return length(p) - radius;
+}
+
 //////////////////////////////
 // Rotation and translation //
 //////////////////////////////
@@ -71,25 +77,27 @@ void main(){
   // sposto le coordinate al centro dello schermo
   vec2 st = 2.0 * gl_FragCoord.xy / iResolution.xy - 1.0;
   
-  vec2 transA =  translate(st, vec2(0.3, 0.0));
-  float circA = circleDist(transA, 0.6);
+  vec2 transA =  translate(st, vec2(-0.3, 0.0));
+  //float circA = circleDist(transA, 0.6);
+  float circA = ellipseDist(transA, 0.6,vec2(0.9, 0.9));
 
-  vec2 transB =  translate(st, vec2(-0.3, 0.0));
-  float circB = circleDist(transB, 0.4);
+  vec2 transB =  translate(st, vec2(0.1, 0.0));
+  //float circB = circleDist(transB, 0.6);
+  float circB = ellipseDist(transB, 0.6, vec2(0.9, 0.4));
 
   // union e' un semplice min. La funzione merge ritorna
   // la distanza piu' corta tra i due punti
-  // float operation = merge(circB,circA);
+  //float operation = merge(circB,circA);
 
   // mergeExclude
-  float operation = smoothMerge(circB,circA, 0.1);
+  //float operation = smoothMerge(circB,circA, 0.1);
 
   // mergeExclude
   //float operation = mergeExclude(circB,circA);
 
   // substract
-  // float operation = substract(circA,circB);
-  // float operation = substract(circA,circB);
+  //float operation = substract(circB,circA);
+  float operation = substract(circB,circA);
 
   // intersect
   // float operation = intersect(circA,circB);
