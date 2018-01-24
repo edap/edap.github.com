@@ -94,11 +94,11 @@ void main(){
   // sposto le coordinate al centro dello schermo
   vec2 st = 2.0 * gl_FragCoord.xy / iResolution.xy - 1.0;
   
-  vec2 transA =  translate(st, vec2(-0.3, 0.0));
+  vec2 transA =  translate(st, vec2(-0.1, 0.0));
   float circA = circleDist(transA, 0.6);
   //float circA = ellipseDist(transA, 0.6,vec2(0.9, 0.9));
 
-  vec2 transB =  translate(st, vec2(0.1, 0.0));
+  vec2 transB =  translate(st, vec2(0.1, 0.1));
   float circB = circleDist(transB, 0.6);
   //float circB = ellipseDist(transB, 0.6, vec2(0.9, 0.4));
 
@@ -120,4 +120,5 @@ void main(){
   // float operation = intersect(circA,circB);
   //vec3 col = 
   gl_FragColor = vec4(vec3(fillMask(upper)), 0.1);
+  gl_FragColor = vec4(vec3(fillMask(operation)), 0.1);
 }
