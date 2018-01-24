@@ -3,6 +3,11 @@ float merge(float d1, float d2){
 	return min(d1, d2);
 }
 
+float smoothMerge(float d1, float d2, float k){
+    float h = clamp(0.5 + 0.5*(d2 - d1)/k, 0.0, 1.0);
+    return mix(d2, d1, h) - k * h * (1.0-h);
+}
+
 float intersect(float d1, float d2){
 	return max(d1, d2);
 }
@@ -19,6 +24,13 @@ float circleSDF(vec2 st, float diameter){
   return length(st - 0.5) * diameter;
 }
 
+float ellipseDist(vec2 p, float radius, vec2 dim){
+  vec2 pos = p;
+  pos.x = p.x / dim.x;
+  pos.y = p.y / dim.y;
+  return length(pos) - radius;
+}
+
 float vesicaSDF(vec2 st, float w){
   vec2 offset = vec2(w * .5, 0.);
   return max (circleSDF(st-offset, 0.3),
@@ -29,72 +41,89 @@ float fill(float sdfVal, float w){
   return step(w, sdfVal);
 }
 
+float fillMask(float dist){
+  return step(0.1, dist);
+}
+
 vec2 translate(vec2 p, vec2 t){
 	return p - t;
 }
 
-float orcPetals(vec2 st, vec2 orig, float resize, float smoothness, float nPale){
-    vec2 toCenter = orig-st;
-    float angle = atan(toCenter.y,toCenter.x) - 0.5;
+float orcSepals(vec2 toCenter, float resize, float smoothness, float def, float power, float nPetals){
+    float angle = atan(toCenter.y,toCenter.x) + 0.5;
+    float grow = pow(length(toCenter), power);
+    float deformOnY = toCenter.y * def;
+    float radius = length(toCenter)*resize * (grow-deformOnY);
 
-    float grow = pow(length(toCenter), 3.);
-    
-    float def = 30.;
-    float scale = resize - (abs(toCenter.x * 1.3) * def); //def = 30.
-    float radius =  grow * scale + toCenter.y * 1.53;
-
-    float f = cos(angle*nPale);
-    return 1.-smoothstep(f,f+smoothness,radius);
+    float f = cos(angle*nPetals);
+    return smoothstep(f,f+smoothness,radius);
 }
 
-float orcLabels(vec2 st, vec2 orig, float resize, float smoothness, float nPale){
-    vec2 toCenter = st-orig;
-    float angle = atan(toCenter.y,toCenter.x) - 0.5;
-    float grow = exp(length(toCenter)) * 0.019;
-    
-    float scale = resize + sin(toCenter.y); 
-    float radius =  grow * scale;
-    
-    float f = cos(angle*nPale);
-    return 1.-smoothstep(f,f+smoothness,radius);    
+float halfMoon(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
+  float smoothness = 0.01;
+
+  float A = ellipseDist(pos, radius, oval);
+  vec2 posB = pos;
+  posB.y += offset;
+  float B = ellipseDist(posB, radius, ovalSub);
+  float p = substract(B, A);
+  return p;
 }
 
-float ellipse(vec2 st, vec2 u_centerOval, vec2 u_radiusOval){
-  float e1 =  ( st.x - u_centerOval.x ) / ( u_radiusOval.x );
-  float e2 =  ( st.y - u_centerOval.y ) / ( u_radiusOval.y );
-  float d  = (e1 * e1) + (e2 * e2);
-  return d;
-}
+float lip(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
+  float smoothness = 0.01;
 
-float upperPetals(vec2 st, vec2 pos, vec2 u_radiusOval, float offset){
-  float e1 = ellipse(st, vec2(0.5, 0.4), u_radiusOval);
-  pos.y -= offset;
-  float e2 = ellipse(st, vec2(0.5), u_radiusOval);
-
-  //float p = mergeExclude(e2, e1);
-  float p = substract(e1, e2);
-
-  return e2;
+  float A = ellipseDist(pos, radius, oval);
+  vec2 posB = pos;
+  posB.y += offset;
+  float B = ellipseDist(posB, radius, ovalSub);
+  //float B =  orcSepals(posB, 222222.4, 0.04, 0.0, 8.0, 8.);
+  float p = smoothMerge(B, A, 0.4);
+  //float p = merge(B, A);
+  return p;
 }
 
 void main(){
-  vec2 st = gl_FragCoord.xy / iResolution.xy;
+  vec2 st = 2.0 * gl_FragCoord.xy / iResolution.xy - 1.0;
   st.x *= iResolution.x /iResolution.y;
-  float resize = 36.9;
-  vec2 pos = vec2(0.5, 0.50);
+  // sepals parameters
+  float smoothness = 0.06;
+  float deform = 0.5;
+  float resizePetals = 2.9;
+  float nPetals = 3.;
+  // lateral petals parameter
+  vec2 posHalfMoon = st;
+  posHalfMoon.y -= 0.15;
+  float petYoffset = -0.12;
+  float power = 2.;
+  vec2 hMoonRatio = vec2(0.9, 0.5);
+  vec2 hMoonSubRatio = vec2(1.3, 0.5);
+  float hMoonRadius = 0.4;
+  // lip parameter
+  vec2 posLip = st;
+  posLip.y += 0.54;
+  float lipYoffset = 0.25;
+  float lipPower = 9.;
+  vec2 lipRatio = vec2(0.55, 0.9);
+  vec2 smallLipRatio = vec2(0.4, 0.1);
+  float lipRadius = 0.4;
 
-  float pet = orcPetals(st, pos, resize*0.65, 0.06, 3.);
-  float lab = orcLabels(st, pos, resize, 0.06, 3.);
-  float sdf = fill(vesicaSDF(vec2(0.5,0.5), 0.6), 0.1);
-  float upper = upperPetals(st, vec2(0.5, 0.5), vec2(0.8,0.2), 0.2);
+  float sepal = orcSepals(st,
+                        resizePetals,
+                        smoothness,
+                        deform, power, nPetals);
+  float latPetals = halfMoon(posHalfMoon,
+                        hMoonRatio,
+                        hMoonSubRatio,
+                        hMoonRadius, petYoffset);
+  float lip = lip(posLip,
+                      lipRatio,
+                      smallLipRatio,
+                      lipRadius, lipYoffset);
 
-  float bottom = lab+sdf;
-  //gl_FragColor = vec4(vec3(lab),1.);
-  //gl_FragColor = vec4(vec3(pet),1.);
-  //gl_FragColor = vec4(vec3(bottom),1.);
-  float orchids = intersect(lab, pet);
-  gl_FragColor = vec4(vec3(fill(upper, 0.2)), .5);
-  //orchids+=sdf;
+  float orchids = merge(latPetals, sepal);
+  orchids = merge(orchids, lip);
+  gl_FragColor = vec4(vec3(fillMask(orchids)), 0.1);
   //gl_FragColor = vec4(vec3(orchids),1.);
 
   //gl_FragColor = vec4(vec3(intersect(pet,lab)),1.);
