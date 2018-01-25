@@ -25,7 +25,7 @@ vec3 daisy(vec2 st, vec2 orig, float resize, float smoothness, float nPale){
     float radius = length(toCenter)*resize;
 
     float f = abs(cos(angle*nPale));
-    return vec3( 1.-smoothstep(f,f+smoothness,radius) );;
+    return vec3( 1.-smoothstep(f,f+smoothness,radius) );
 }
 
 vec3 fiore(vec2 st, vec2 orig, float resize, float smoothness, float nPale){

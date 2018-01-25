@@ -49,7 +49,8 @@ float fill(float sdfVal, float w){
 
 float fillSmooth(float sdfVal, float w, float smoothness){
   //return step(w, sdfVal);
-  return smoothstep(w, w+smoothness,sdfVal);
+  //return smoothstep(w, w+smoothness,sdfVal);
+  return smoothstep(sdfVal,sdfVal+smoothness,w);
   //return smoothstep(sdfVal, sdfVal+smoothness,w);
 }
 
@@ -72,7 +73,8 @@ mat2 rotate2d(float _angle){
                 sin(_angle),cos(_angle));
 }
 
-float orcSepals(vec2 toCenter, float resize, float defX, float defY, float power, float nPetals){
+float orcSepals(vec2 toCenter, float resize, float defX, float defY, 
+float power, float nPetals, float smoothness){
     float angle = atan(toCenter.y,toCenter.x) + 0.5;
     // try out different functions for different shapes
     //float grow = pow(length(toCenter), power);
@@ -86,7 +88,7 @@ float orcSepals(vec2 toCenter, float resize, float defX, float defY, float power
     float radius = length(toCenter)*resize * (grow+deformOnY+deformOnX);
 
     float f = cos(angle*nPetals);
-    return step(f, radius);
+    return smoothstep(f, f+smoothness,radius);
 }
 
 float halfMoon(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
@@ -122,15 +124,18 @@ float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
 void main(){
   vec2 st =  gl_FragCoord.xy / iResolution.xy;
   st.x *= iResolution.x /iResolution.y;
+  // general parameters
+  float smoothness = 0.02;
+  float addSmoothnessToSetals = 2.9;
 
-  st *= 1.;
+  st *= 3.;
   st = fract(st);
   st+=vec2(-0.5, -0.5);
   //column parameters
   float colResize = 0.5;
   vec2 posCol = st;
-  posCol.y += 0.07;
-  float colYoffset = 0.017;
+  posCol.y += 0.11;
+  float colYoffset = 0.033;
   float powerCol = 2.;
   vec2 colRatio = vec2(0.3*colResize, 0.3*colResize);
   vec2 colSubRatio = vec2(0.9*colResize, 0.9*colResize);
@@ -138,7 +143,7 @@ void main(){
   // sepals parameters
   float deformX = 0.2;
   float deformY = -0.28;
-  float resizePetals = 18.9;
+  float resizePetals = 21.9;
   float powerSepals = 2.0;
   float nPetals = 3.;
   // lateral petals parameter
@@ -155,7 +160,7 @@ void main(){
   vec2 posLip = st;
   posLip.y += 0.19;
   float lipResize = 0.5;
-  float lipYoffset = 0.18;
+  float lipYoffset = 0.15;
   vec2 lipRatio = vec2(0.35*lipResize, 0.6*lipResize);
   vec2 smallLipRatio = vec2(0.15*lipResize, 0.2*lipResize);
   float lipRadius = 1.*lipResize;
@@ -167,7 +172,8 @@ void main(){
   float sepals = orcSepals(st,
                         resizePetals,
                         deformX,
-                        deformY, powerSepals, nPetals);
+                        deformY, powerSepals, nPetals,
+                        smoothness+addSmoothnessToSetals);
   float latPetals = halfMoon(posHalfMoon,
                         hMoonRatio,
                         hMoonSubRatio,
@@ -175,20 +181,17 @@ void main(){
   float latPetalsVariant = orcSepals(st*rotate2d(TWO_PI/2.),
                         resizePetals,
                         deformX,
-                        deformY, power, nPetals);
+                        deformY, power, nPetals,smoothness);
   float lip = lip(posLip,
                       lipRatio,
                       smallLipRatio,
                       lipRadius, lipYoffset);
 
-  //latPetals = smoothstep(0.6, 0.5,latPetals);
   float orchids = merge(latPetals, sepals);
   //float orchids = merge(latPetalsVariant, sepal);
-  // fillMask is important when applying subtraction
-  // later!
-  orchids = fillSmooth(merge(orchids, lip), 0.1, 0.1);
-  // add smoothness
 
+  orchids = merge(orchids, lip);
   orchids = substract(column, orchids);
-  gl_FragColor = vec4(vec3(fillSmooth(orchids, 0.1, 0.0)), 1.);
+  // add smoothness
+  gl_FragColor = vec4(vec3(fillSmooth(orchids,0.09,smoothness)), 1.);
 }
