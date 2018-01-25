@@ -47,6 +47,12 @@ float fill(float sdfVal, float w){
   return step(w, sdfVal);
 }
 
+float fillSmooth(float sdfVal, float w, float smoothness){
+  //return step(w, sdfVal);
+  return smoothstep(w, w+smoothness,sdfVal);
+  //return smoothstep(sdfVal, sdfVal+smoothness,w);
+}
+
 float fillMask(float dist){
   return step(0.1, dist);
 }
@@ -61,11 +67,6 @@ float strokeSmoot(float x, float pos, float width){
 
 }
 
-// matrices transformations
-vec2 translate(vec2 p, vec2 t){
-	return p - t;
-}
-
 mat2 rotate2d(float _angle){
     return mat2(cos(_angle),-sin(_angle),
                 sin(_angle),cos(_angle));
@@ -73,7 +74,13 @@ mat2 rotate2d(float _angle){
 
 float orcSepals(vec2 toCenter, float resize, float defX, float defY, float power, float nPetals){
     float angle = atan(toCenter.y,toCenter.x) + 0.5;
-    float grow = pow(length(toCenter), power);
+    // try out different functions for different shapes
+    //float grow = pow(length(toCenter), power);
+    //float grow = exp(length(toCenter)) * 0.15;
+    //float grow = exp2(length(toCenter)) * 0.19;
+    //float grow = sqrt(length(toCenter)) * 0.35;
+    float grow = sin(length(toCenter)) * 0.58;
+
     float deformOnY = toCenter.y * defY;
     float deformOnX = abs(toCenter.x) * defX;
     float radius = length(toCenter)*resize * (grow+deformOnY+deformOnX);
@@ -87,7 +94,7 @@ float halfMoon(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   vec2 posB = pos;
   posB.y += offset;
   float B = ellipseDist(posB, radius, ovalSub);
-  float p = substract(B, A);
+  float p = substract(B,A);
   return p;
 }
 
@@ -106,50 +113,62 @@ float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   posB.y -= offset;
   float B = ellipseDist(posB, radius, oval);
   float p = substract(B,A);
+  posB.y += 0.035;
+  float cone = ellipseDist(posB, radius, vec2(0.08, 0.15));
+  p = smoothMerge(cone,p, 0.1);
   return p;
 }
 
 void main(){
-  vec2 st = 2.0 * gl_FragCoord.xy / iResolution.xy - 1.0;
+  vec2 st =  gl_FragCoord.xy / iResolution.xy;
   st.x *= iResolution.x /iResolution.y;
+
+  st *= 1.;
+  st = fract(st);
+  st+=vec2(-0.5, -0.5);
   //column parameters
+  float colResize = 0.5;
   vec2 posCol = st;
-  posCol.y += 0.11;
-  float colYoffset = 0.02;
+  posCol.y += 0.07;
+  float colYoffset = 0.017;
   float powerCol = 2.;
-  vec2 colRatio = vec2(0.3, 0.3);
-  vec2 colSubRatio = vec2(0.6, 0.5);
-  float colRadius = 0.32;
+  vec2 colRatio = vec2(0.3*colResize, 0.3*colResize);
+  vec2 colSubRatio = vec2(0.9*colResize, 0.9*colResize);
+  float colRadius = 0.52*colResize;
   // sepals parameters
-  float deformX = 0.0;
-  float deformY = -0.5;
-  float resizePetals = 2.9;
+  float deformX = 0.2;
+  float deformY = -0.28;
+  float resizePetals = 18.9;
+  float powerSepals = 2.0;
   float nPetals = 3.;
   // lateral petals parameter
+  float lateralPetResize = 1.0;
   vec2 posHalfMoon = st;
-  posHalfMoon.y -= 0.15;
-  float petYoffset = -0.12;
+  posHalfMoon.y += -0.09;
+  float moonResize = 0.41;
+  float petYoffset = -0.12 * moonResize;
   float power = 2.;
-  vec2 hMoonRatio = vec2(0.9, 0.5);
-  vec2 hMoonSubRatio = vec2(1.4, 0.5);
-  float hMoonRadius = 0.4;
+  vec2 hMoonRatio = vec2(0.7*moonResize, 0.5*moonResize);
+  vec2 hMoonSubRatio = vec2(0.98*moonResize, 0.7*moonResize);
+  float hMoonRadius = 1.*moonResize;
   // lip parameter
   vec2 posLip = st;
-  posLip.y += 0.54;
-  float lipYoffset = 0.28;
+  posLip.y += 0.19;
+  float lipResize = 0.5;
+  float lipYoffset = 0.18;
   float lipPower = 9.;
-  vec2 lipRatio = vec2(0.55, 0.9);
-  vec2 smallLipRatio = vec2(0.45, 0.3);
-  float lipRadius = 0.4;
+  vec2 lipRatio = vec2(0.35*lipResize, 0.6*lipResize);
+  vec2 smallLipRatio = vec2(0.15*lipResize, 0.2*lipResize);
+  float lipRadius = 1.*lipResize;
 
-  float column = orcColumn(posCol,
+  float column = orcColumn(posCol*rotate2d(TWO_PI/2.),
                         colRatio,
                         colSubRatio,
                         colRadius, colYoffset);
   float sepal = orcSepals(st,
                         resizePetals,
                         deformX,
-                        deformY, power, nPetals);
+                        deformY, powerSepals, nPetals);
   float latPetals = halfMoon(posHalfMoon,
                         hMoonRatio,
                         hMoonSubRatio,
@@ -167,16 +186,7 @@ void main(){
   //float orchids = merge(latPetalsVariant, sepal);
   // fillMask is important when applying subtraction
   // later!
-  orchids = fillMask(merge(orchids, lip));
-
-  vec2 transA =  translate(st, vec2(-0.1, 0.0));
-  float circA = circleDist(transA, 0.2);
-
-  //orchids = substract(circA, orchids);
+  orchids = fillSmooth(merge(orchids, lip), 0.1, 0.02);
   orchids = substract(column, orchids);
-  //gl_FragColor = vec4(vec3(fill(orchids, 0.1)), 0.1);
-  gl_FragColor = vec4(vec3(stroke(orchids, 0.01, 0.1)), 1.);
-  //gl_FragColor = vec4(vec3(orchids),1.);
-
-  //gl_FragColor = vec4(vec3(intersect(pet,lab)),1.);
+  gl_FragColor = vec4(vec3(fillSmooth(orchids, 0.1, 0.02)), 1.);
 }
