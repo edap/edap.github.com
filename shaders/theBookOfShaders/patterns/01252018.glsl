@@ -221,19 +221,21 @@ void main (void) {
   orchids = substract(column, orchids);
   orchids = fillSmooth(orchids,0.09,smoothness+0.01);
 
-  vec3 black = vec3(0.,0.,0.);
 
 
   sepals = fillSmooth(sepals,0.09,smoothness+0.005);
   vec3 orcColor = mix(lilla, bgCol, sepals);
 
-
-
+  latPetals = merge(latPetals, lip);
   latPetals = fillSmooth(latPetals,0.09,smoothness+0.005);
+  float angle = atan(orcSt.y,orcSt.x) + 0.5;
+  orange = mix(orange,rose, sin(angle * 20.0));
+  orange = mix(orange, rose, abs(orcSt.x)*2.7);
+
   orcColor = mix(orange,orcColor,latPetals);
 
-  lip = fillSmooth(lip,0.09,smoothness+0.005);
-  orcColor = mix(rose, orcColor,lip);
+  //lip = fillSmooth(lip,0.09,smoothness+0.005);
+  //orcColor = mix(rose, orcColor,lip);
 
   // column = fillSmooth(column,0.09,smoothness+0.005);
   // orcColor = mix(orange,orcColor,column);
