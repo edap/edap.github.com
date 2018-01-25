@@ -156,7 +156,6 @@ void main(){
   posLip.y += 0.19;
   float lipResize = 0.5;
   float lipYoffset = 0.18;
-  float lipPower = 9.;
   vec2 lipRatio = vec2(0.35*lipResize, 0.6*lipResize);
   vec2 smallLipRatio = vec2(0.15*lipResize, 0.2*lipResize);
   float lipRadius = 1.*lipResize;
@@ -165,7 +164,7 @@ void main(){
                         colRatio,
                         colSubRatio,
                         colRadius, colYoffset);
-  float sepal = orcSepals(st,
+  float sepals = orcSepals(st,
                         resizePetals,
                         deformX,
                         deformY, powerSepals, nPetals);
@@ -182,11 +181,14 @@ void main(){
                       smallLipRatio,
                       lipRadius, lipYoffset);
 
-  float orchids = merge(latPetals, sepal);
+  //latPetals = smoothstep(0.6, 0.5,latPetals);
+  float orchids = merge(latPetals, sepals);
   //float orchids = merge(latPetalsVariant, sepal);
   // fillMask is important when applying subtraction
   // later!
-  orchids = fillSmooth(merge(orchids, lip), 0.1, 0.02);
+  orchids = fillSmooth(merge(orchids, lip), 0.1, 0.1);
+  // add smoothness
+
   orchids = substract(column, orchids);
-  gl_FragColor = vec4(vec3(fillSmooth(orchids, 0.1, 0.02)), 1.);
+  gl_FragColor = vec4(vec3(fillSmooth(orchids, 0.1, 0.0)), 1.);
 }
