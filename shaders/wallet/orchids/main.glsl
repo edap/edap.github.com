@@ -51,6 +51,16 @@ float fillMask(float dist){
   return step(0.1, dist);
 }
 
+float stroke(float x, float pos, float width){
+  return step(pos, x+ width*0.5) - step(pos, x- width*0.5);
+}
+
+float strokeSmoot(float x, float pos, float width){
+  return smoothstep(pos, pos+0.01,x+ width*0.5) -
+         smoothstep(pos, pos+0.01,x- width*0.5);
+
+}
+
 // matrices transformations
 vec2 translate(vec2 p, vec2 t){
 	return p - t;
@@ -86,16 +96,16 @@ float lip(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   vec2 posB = pos;
   posB.y += offset;
   float B = ellipseDist(posB, radius, ovalSub);
-  float p = smoothMerge(B, A, 0.4);
+  float p = smoothMerge(B, A, 0.1);
   return p;
 }
 
 float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
-  float A = ellipseDist(pos, radius, oval);
+  float A = ellipseDist(pos, radius, ovalSub);
   vec2 posB = pos;
-  posB.y += offset;
-  float B = ellipseDist(posB, radius, ovalSub);
-  float p = substract(B, A);
+  posB.y -= offset;
+  float B = ellipseDist(posB, radius, oval);
+  float p = substract(B,A);
   return p;
 }
 
@@ -104,12 +114,12 @@ void main(){
   st.x *= iResolution.x /iResolution.y;
   //column parameters
   vec2 posCol = st;
-  posCol.y -= 0.15;
-  float colYoffset = 0.09;
+  posCol.y += 0.11;
+  float colYoffset = 0.02;
   float powerCol = 2.;
-  vec2 colRatio = vec2(0.5, 0.5);
-  vec2 colSubRatio = vec2(0.5, 0.5);
-  float colRadius = 0.4;
+  vec2 colRatio = vec2(0.3, 0.3);
+  vec2 colSubRatio = vec2(0.6, 0.5);
+  float colRadius = 0.32;
   // sepals parameters
   float deformX = 0.0;
   float deformY = -0.5;
@@ -129,7 +139,7 @@ void main(){
   float lipYoffset = 0.28;
   float lipPower = 9.;
   vec2 lipRatio = vec2(0.55, 0.9);
-  vec2 smallLipRatio = vec2(0.45, 0.1);
+  vec2 smallLipRatio = vec2(0.45, 0.3);
   float lipRadius = 0.4;
 
   float column = orcColumn(posCol,
@@ -155,14 +165,17 @@ void main(){
 
   float orchids = merge(latPetals, sepal);
   //float orchids = merge(latPetalsVariant, sepal);
-  orchids = merge(orchids, lip);
+  // fillMask is important when applying subtraction
+  // later!
+  orchids = fillMask(merge(orchids, lip));
 
   vec2 transA =  translate(st, vec2(-0.1, 0.0));
   float circA = circleDist(transA, 0.2);
 
   //orchids = substract(circA, orchids);
   orchids = substract(column, orchids);
-  gl_FragColor = vec4(vec3(fillMask(orchids)), 0.1);
+  //gl_FragColor = vec4(vec3(fill(orchids, 0.1)), 0.1);
+  gl_FragColor = vec4(vec3(stroke(orchids, 0.01, 0.1)), 1.);
   //gl_FragColor = vec4(vec3(orchids),1.);
 
   //gl_FragColor = vec4(vec3(intersect(pet,lab)),1.);
