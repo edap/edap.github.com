@@ -10,8 +10,20 @@ float smoothMerge(float d1, float d2, float k){
     return mix(d2, d1, h) - k * h * (1.0-h);
 }
 
+float intersect(float d1, float d2){
+	return max(d1, d2);
+}
+
+float mergeExclude(float d1, float d2){
+	return min(max(-d1, d2), max(-d2, d1));
+}
+
 float substract(float d1, float d2){
 	return max(-d1, d2);
+}
+
+float circleSDF(vec2 st, float diameter){
+  return length(st - 0.5) * diameter;
 }
 
 float ellipseDist(vec2 p, float radius, vec2 dim){
@@ -19,6 +31,41 @@ float ellipseDist(vec2 p, float radius, vec2 dim){
   pos.x = p.x / dim.x;
   pos.y = p.y / dim.y;
   return length(pos) - radius;
+}
+
+float vesicaSDF(vec2 st, float w){
+  vec2 offset = vec2(w * .5, 0.);
+  return max (circleSDF(st-offset, 0.3),
+              circleSDF(st+offset, 0.3));
+}
+
+float circleDist(vec2 p, float radius){
+  return length(p) - radius;
+}
+
+float fill(float sdfVal, float w){
+  return step(w, sdfVal);
+}
+
+float fillSmooth(float sdfVal, float w, float smoothness){
+  //return step(w, sdfVal);
+  //return smoothstep(w, w+smoothness,sdfVal);
+  return smoothstep(sdfVal,sdfVal+smoothness,w);
+  //return smoothstep(sdfVal, sdfVal+smoothness,w);
+}
+
+float fillMask(float dist){
+  return step(0.1, dist);
+}
+
+float stroke(float x, float pos, float width){
+  return step(pos, x+ width*0.5) - step(pos, x- width*0.5);
+}
+
+float strokeSmoot(float x, float pos, float width){
+  return smoothstep(pos, pos+0.01,x+ width*0.5) -
+         smoothstep(pos, pos+0.01,x- width*0.5);
+
 }
 
 mat2 rotate2d(float _angle){
@@ -81,7 +128,7 @@ void main(){
   float smoothness = 0.02;
   float addSmoothnessToSetals = 2.9;
 
-  st *= 2.;
+  st *= 3.;
   st = fract(st);
   st+=vec2(-0.5, -0.5);
   //column parameters
@@ -111,7 +158,7 @@ void main(){
   float hMoonRadius = 1.*moonResize;
   // lip parameter
   vec2 posLip = st;
-  posLip.y += 0.18;
+  posLip.y += 0.19;
   float lipResize = 0.5;
   float lipYoffset = 0.15;
   vec2 lipRatio = vec2(0.35*lipResize, 0.6*lipResize);
@@ -134,18 +181,17 @@ void main(){
   float latPetalsVariant = orcSepals(st*rotate2d(TWO_PI/2.),
                         resizePetals,
                         deformX,
-                        deformY, power, nPetals,
-                        smoothness+addSmoothnessToSetals);
+                        deformY, power, nPetals,smoothness);
   float lip = lip(posLip,
                       lipRatio,
                       smallLipRatio,
                       lipRadius, lipYoffset);
 
   float orchids = merge(latPetals, sepals);
-  //float orchids = merge(latPetalsVariant, sepals);
+  //float orchids = merge(latPetalsVariant, sepal);
+
   orchids = merge(orchids, lip);
   orchids = substract(column, orchids);
   // add smoothness
-  orchids = smoothstep(orchids,orchids+smoothness,0.09);
-  gl_FragColor = vec4(vec3(orchids), 1.);
+  gl_FragColor = vec4(vec3(fillSmooth(orchids,0.09,smoothness)), 1.);
 }
