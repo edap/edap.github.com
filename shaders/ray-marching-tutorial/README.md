@@ -1,6 +1,6 @@
 ## Intro
 
-This files are just the transcript of this [live conding session](https://www.youtube.com/watch?v=s6t0mJsgUKw) by Rémi Papillié.
+These files are just the transcript of this [live conding session](https://www.youtube.com/watch?v=s6t0mJsgUKw) by Rémi Papillié.
 
 You can run each file in Visual Studio Code + [Shader Toy extension](https://marketplace.visualstudio.com/items?itemName=stevensona.shader-toy). After the extension is installed, go to View -> Command Palette -> shoew glsl preview
 
