@@ -18,7 +18,7 @@ Use the intersection function to draw a plane. Set the coordinate system to the 
 
 ![example](img/01.png)
 
-use `fract` to draw the quare on the plane and give the sense of depth. Do not draw the squares if the distance is less than 0, and therefore there wa no intersection
+use `fract` to draw the quare on the plane and give the sense of depth. Do not draw the squares if the distance is less than 0, and therefore there was no intersection
 
 ***
 
