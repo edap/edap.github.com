@@ -1,10 +1,10 @@
-== Intro
+## Intro
 
 This files are just the transcript of this [live conding session](https://www.youtube.com/watch?v=s6t0mJsgUKw) by Rémi Papillié.
 
-You can run each file in Visual Studio Code + Shader Toy extension by Adam Stevenson. After the extension is installed, go to View -> Command Palette -> shoew glsl preview
+You can run each file in Visual Studio Code + [Shader Toy extension](https://marketplace.visualstudio.com/items?itemName=stevensona.shader-toy). After the extension is installed, go to View -> Command Palette -> shoew glsl preview
 
-== Files
+## Files
 
 *00.glsl*
 
@@ -59,4 +59,4 @@ Have a look at the `albedo` function, see how it is used to add white stripes on
 
 ![example](img/08.png)
 
-This file is about light. A light position and direction is defined in `lightDistance` and `lightDirection`. Then there is a method to calculate the normal called `calculateNormale`, a method to calculate the `diffuse` light, and one to calculate the `specular` light. At the end a `fogFactor` is added.
+This file is about light. A light position and direction is defined in `lightDistance` and `lightDirection`. Then there is a method to calculate the normal called `calculateNormal`, a method to calculate the `diffuse` light, and one to calculate the `specular` light. At the end a `fogFactor` is added.
