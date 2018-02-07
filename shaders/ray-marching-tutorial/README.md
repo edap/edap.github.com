@@ -95,7 +95,13 @@ in this file the raymarching algorithm is extracted in a separate function that 
 
 **10.glsl**
 
+In this file, a camera is positioned and moved around. Code from [inigo shadertoy](https://www.shadertoy.com/view/Xds3zN)
+
+***
+
+**11.glsl**
+
 Soft shadows, via [Inigo blog](http://www.iquilezles.org/www/articles/rmshadows/rmshadows.htm)
-And ambient occlusion
+and ambient occlusion
 
 
