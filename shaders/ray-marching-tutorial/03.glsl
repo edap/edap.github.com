@@ -13,9 +13,17 @@ float sphere(vec3 pos, float radius){
     return length(pos) - radius;
 }
 
-// and now merge the plane and the sphere together.
-// simply return the closest point between the two object
+// But the previous approach in 02.glsl can be slow if the step size is small and inaccurate if it is large.
+// So we speed the things up using a step size variable, and its value it is calculated by the distance field of the scene
+// that, in this sketch, is done in the function "map".
+// map return the closest distance to the scene. If the scene is far away, we step forward for that distance. If it is closer, we proceed at smaller steps.
+// Using the words from http://9bitscience.blogspot.de/2013/07/raymarching-distance-fields_14.html :
+// The basic idea is to make sure every surface in our scene is given by a distance estimator (DE), which returns the distance to it from a point p. This way, we can find the distance to the closest surface in the scene, and know that we can step this far without overshooting.
+// At the first point (the eye) there is quite a large distance to the closest surface, so we step that far to the next point. This continues until we get close enough to say we hit the surface.
+
 float map(vec3 pos){
+    // We expect that this function provides us a lower-bound on the closest object
+    // (remember boolean operation with distance field, min is mergin the plane and the sphere)
     return min(plane(pos), sphere(pos, 2.0));
 }
 

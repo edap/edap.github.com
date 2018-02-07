@@ -1,6 +1,15 @@
 ## Intro
 
-These files are just the transcript of this [live conding session](https://www.youtube.com/watch?v=s6t0mJsgUKw) by Rémi Papillié.
+The files from 00.glsl to 08.glsl are just the transcript of this [live conding session](https://www.youtube.com/watch?v=s6t0mJsgUKw) by Rémi Papillié.
+The other files use the previous one as basis and add some other things, like ambient occlusion, shadows, etc...
+At the end the Mercury Library is introduced.
+
+These are the references that I've checked while working at it:
+
+[Íñigo Quílez website](http://iquilezles.org/www/articles/distfunctions/distfunctions.htm)
+[live conding by Rémi Papillié](https://www.youtube.com/watch?v=s6t0mJsgUKw)
+[9bitscience](http://9bitscience.blogspot.de/2013/07/raymarching-distance-fields_14.html)
+[jamie-wong](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 
 You can run each file in Visual Studio Code + [Shader Toy extension](https://marketplace.visualstudio.com/items?itemName=stevensona.shader-toy). After the extension is installed, go to View -> Command Palette -> shoew glsl preview
 
@@ -50,7 +59,7 @@ Move the camera around, using `sin(iGlobalTime)` and make the box rounded.
 
 ![example](img/05.png)
 
-use the modulo function to multiplicate the boxes. See `mod(pos + offset/2., offset) - offset/2.`
+use the modulo function to multiplicate the boxes. This is called "domain repetition". See `mod(pos + offset/2., offset) - offset/2.`
 
 ***
 
@@ -75,3 +84,18 @@ Have a look at the `albedo` function, see how it is used to add white stripes on
 ![example](img/08.png)
 
 This file is about light. A light position and direction is defined in `lightDistance` and `lightDirection`. Then there is a method to calculate the normal called `calculateNormal`, a method to calculate the `diffuse` light, and one to calculate the `specular` light. At the end a `fogFactor` is added.
+
+***
+
+**09.glsl**
+
+in this file the raymarching algorithm is extracted in a separate function that returns just the distance from the eye to the collision with the scene. This distance is used later to calculate the collision and the color.
+
+***
+
+**10.glsl**
+
+Soft shadows, via [Inigo blog](http://www.iquilezles.org/www/articles/rmshadows/rmshadows.htm)
+And ambient occlusion
+
+

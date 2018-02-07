@@ -13,6 +13,7 @@ float map(vec3 pos){
 //     return -pos.y / dir.y;
 // }
 
+
 void main(){
     vec2 uv = 2.0 * gl_FragCoord.xy / iResolution.xy - 1.0;
 
@@ -20,6 +21,11 @@ void main(){
     vec3 dir = normalize(vec3(uv, 1.0));
 
     vec3 color = vec3(0.0);
+    
+    // via http://9bitscience.blogspot.de/2013/07/raymarching-distance-fields_14.html
+    // The raymarching algorithm
+    // In traditional raytracing, a scene is often described by a set of triangles or spheres, making up a mesh. Using some spatial acceleration structure, we can quickly solve for the exact intersections between the rays and the objects.
+    // With raymarching however, we allow for some leeway in the intersection, and accept it when a ray is close enough to a surface. This is done by marching along the ray at step sizes, and checking whether or not the surface is within a given threshold. We can set a limit on the number of steps to prevent marching into oblivion.
 
     for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
         float d = map(pos);
