@@ -69,14 +69,14 @@ vec3 computeNormal(vec3 pos){
 }
 
 float diffuse(vec3 normal){
-    float ambient = 0.4;
-    return dot(normal, lightDirection) * ambient + ambient;
+    float ambient = 0.7;
+    return clamp( dot(normal, lightDirection) * ambient + ambient, 0.0, 1.0 );
 }
 
 float specular(vec3 normal, vec3 dir){
     vec3 h = normalize(normal - dir);
     float specularityCoef = 100.;
-    return pow(max(dot(h, normal), 0.), specularityCoef);
+    return clamp( pow(max(dot(h, normal), 0.), specularityCoef), 0.0, 1.0);
 }
 
 // https://www.shadertoy.com/view/Xds3zN

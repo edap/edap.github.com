@@ -37,6 +37,9 @@ float map(vec3 pos){
     pos.xz = rotate(pos.xz, iGlobalTime * 0.5);
     
     return min(planeDist, roundedBox(pos, vec3(2.0),0.8));
+    
+    //return min(planeDist, roundedBox(pos, vec3(2.0),0.8));
+    return min(planeDist, sphere(pos, 2.));
 }
 
 vec3 albedo(vec3 pos){
@@ -57,16 +60,18 @@ vec3 computeNormal(vec3 pos){
 
 vec3 lightDirection = normalize(vec3(1.0, 0.6, 1.0));
 float diffuse(vec3 normal){
-    //return max(dot(normal, lightDirection), 0.);
-    // 4) add ambient light
-    float ambient = 0.4;
-    return dot(normal, lightDirection) * ambient + ambient;
+    float ambient = 0.7;
+    return clamp( dot(normal, lightDirection) * ambient + ambient, 0.0, 1.0 );
 }
 
 float specular(vec3 normal, vec3 dir){
     vec3 h = normalize(normal - dir);
     float specularityCoef = 100.;
-    return pow(max(dot(h, normal), 0.), specularityCoef);
+    return clamp( pow(max(dot(h, normal), 0.), specularityCoef), 0.0, 1.0);
+}
+
+float fresnel(vec3 normal, vec3 dir){
+    return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
 }
 
 void main(){
@@ -84,9 +89,10 @@ void main(){
             vec3 normal = computeNormal(pos);
             float diffLight = diffuse(normal);
             float specLight = specular(normal, dir);
+            float fresnelLight = fresnel(normal, dir);
             //color = 40. / (lightDistance * lightDistance) * vec3(0.9, 0.7, 0.2) * albedo(pos);
             // this is part of point 5
-            color = (diffLight + specLight) * vec3(0.9, 0.7, 0.2) * albedo(pos);
+            color = (diffLight + specLight+ fresnelLight) * vec3(0.9, 0.7, 0.2) * albedo(pos);
             break;
         }
 

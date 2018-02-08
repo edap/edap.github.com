@@ -56,6 +56,11 @@ float ao( in vec3 pos, in vec3 nor ){
     return clamp( 1.0 - 3.0*occ, 0.0, 1.0 );    
 }
 
+// called fre in https://www.shadertoy.com/view/Xds3zN
+float fresnel(vec3 normal, vec3 dir){
+    return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
+}
+
 // NORMALS
 vec3 computeNormal(vec3 pos) {
 	vec2 eps = vec2(0.01, 0.0);
@@ -77,7 +82,6 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
     vec3 cv = normalize( cross(cu,cw) );
     return mat3( cu, cv, cw );
 }
-
 
 // SHADOW
 float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax ) {

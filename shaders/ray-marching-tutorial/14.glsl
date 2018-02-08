@@ -1,32 +1,51 @@
-// In this file we are going to add shadow
+// In this file we are going to use boolean ops
 
 precision mediump float;
 
 const int MAX_MARCHING_STEPS = 64;
-const float EPSILON = 0.001;
+const float EPSILON = 0.0015;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 100.00;
 
 vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
 
+vec2 rotate(vec2 pos, float angle){
+    float c = cos(angle);
+    float s = sin(angle);
+    return mat2(c, s, -s, c) * pos;
+} 
+
 float plane(vec3 pos){
     return pos.y;
 }
 
-float roundedBox(vec3 pos, vec3 size, float radius){
-    return length(max(abs(pos) - size, 0.0)) - radius;
+float sdBox( vec3 p, vec3 b ){
+    vec3 d = abs(p) - b;
+    return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
 }
 
 float sphere(vec3 pos, float radius){
     return length(pos) - radius;
 }
 
+// operations
+float opS( float d1, float d2 ){
+    return max(-d2,d1);
+}
+
+vec3 opRep( vec3 p, vec3 c ){
+    return mod(p,c)-0.5*c;
+}
+
 float map(vec3 pos){
-    return min(
-        plane(pos),
-        min(
-        roundedBox(pos+vec3(1.5,0.,0.5), vec3(1.0), 0.8),
-        sphere(pos-vec3(2.5,1.,0.), 2.)));
+    float offset = 0.6;
+    float sph = sphere(pos, 7.);
+
+    // repeat the boxes
+    pos = opRep(pos, vec3(offset, offset, offset));
+    float box = sdBox(pos, vec3(0.2, 0.2, 0.2));
+    //return sphere minus boxes;
+    return opS(sph, box);
 }
 
 vec2 squareFrame(vec2 res, vec2 coord){
@@ -52,7 +71,6 @@ float raymarching(vec3 eye, vec3 marchingDirection){
     return FAR_CLIP;
 }
 
-// Inigo http://www.iquilezles.org/www/articles/rmshadows/rmshadows.htm
 float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax ) {
 	float res = 1.0;
     float t = mint;
@@ -65,8 +83,8 @@ float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax ) {
     return clamp( res, 0.0, 1.0 );
 }
 
+
 float ao( in vec3 pos, in vec3 nor ){
-    // ambient occlusion
 	float occ = 0.0;
     float sca = 1.0;
     for( int i=0; i<5; i++ )
@@ -106,11 +124,30 @@ float specular(vec3 normal, vec3 dir){
     return clamp( pow(max(dot(h, normal), 0.), specularityCoef), 0.0, 1.0);
 }
 
+float fresnel(vec3 normal, vec3 dir){
+    return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
+}
+
+mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
+    vec3 cw = normalize(ta-ro);
+    vec3 cp = vec3(sin(cr), cos(cr),0.0);
+    vec3 cu = normalize( cross(cw,cp) );
+    vec3 cv = normalize( cross(cu,cw) );
+    return mat3( cu, cv, cw );
+}
+
 void main(){
     vec2 uv = squareFrame(iResolution.xy, gl_FragCoord.xy);
-    vec3 eye = vec3(0.0, 5.0, -10);
+    float camSpeed = 0.2;
+    vec3 eye = vec3( -0.5+3.5*cos(camSpeed*iGlobalTime + 6.0),
+                3.0,
+                5.5 + 4.0*abs(sin(camSpeed*iGlobalTime + 6.0))
+    );
+
+    vec3 ta = vec3( -0.5, -0.9, 0.5 );
+    mat3 camera = setCamera( eye, ta, 0.0 );
     float fov = 1.;
-    vec3 dir = normalize(vec3(uv, fov));
+    vec3 dir = camera * normalize(vec3(uv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
 
@@ -118,22 +155,22 @@ void main(){
     vec3 bgColor = vec3(0.0);
 
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
-        //vec3 collision = (eye += shortestDistanceToScene * dir );
-        vec3 collision = (eye += (shortestDistanceToScene*0.99) * dir );
+        vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
         float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 );
         float lightDistance = sphere(collision, 1.0);
         vec3 normal = computeNormal(collision);
         float diffLight = diffuse(normal);
         float specLight = specular(normal, dir);
+        float fresnelLight = fresnel(normal, dir);
         float ambientOcc = ao(collision, normal);
-        color = (diffLight + specLight ) * vec3(0.6, 0.7, 0.2) ;
-
-        // moderate shadow
-        shadow = mix(shadow, 1.0, .5);
+        color = (diffLight + specLight + fresnelLight) * vec3(0.2, 0.2, 0.9);
+        
+        shadow = mix(shadow, 1.0, 0.7);
         color = color * ambientOcc * shadow;
+
     } else {
         color = bgColor;
     }
 
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(clamp(color,0.0,1.0) , 1.0);
 }

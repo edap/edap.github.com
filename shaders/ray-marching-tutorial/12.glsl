@@ -3,11 +3,20 @@
 precision mediump float;
 
 const int MAX_MARCHING_STEPS = 64;
-const float EPSILON = 0.001;
+// 1) increase the value of epsilon
+const float EPSILON = 0.016;
+// try to see how it was before
+//const float EPSILON = 0.001;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 100.00;
 
 vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
+
+vec2 rotate(vec2 pos, float angle){
+    float c = cos(angle);
+    float s = sin(angle);
+    return mat2(c, s, -s, c) * pos;
+} 
 
 float plane(vec3 pos){
     return pos.y;
@@ -20,13 +29,23 @@ float roundedBox(vec3 pos, vec3 size, float radius){
 float sphere(vec3 pos, float radius){
     return length(pos) - radius;
 }
+ 	
+// polynomial smooth min (k = 0.1);
+// via http://iquilezles.org/www/articles/smin/smin.htm
+float smin( float a, float b, float k ){
+    float h = clamp( 0.5+0.5*(b-a)/k, 0.0, 1.0 );
+    return mix( b, a, h ) - k*h*(1.0-h);
+}
 
 float map(vec3 pos){
-    return min(
-        plane(pos),
-        min(
-        roundedBox(pos+vec3(1.5,0.,0.5), vec3(1.0), 0.8),
-        sphere(pos-vec3(2.5,1.,0.), 2.)));
+    float planeDist = plane(pos);
+    float offset = 5.;
+
+    pos.x =  mod(pos.x + offset/2., offset) - offset/2.;   
+    pos.z =  mod(pos.z + offset/2., offset) - offset/2.;
+    // 2) use a polynomial smooth 
+    //return min( planeDist,sphere(pos, 2.));
+    return smin( planeDist,sphere(pos, 2.), 0.1);
 }
 
 vec2 squareFrame(vec2 res, vec2 coord){
@@ -64,6 +83,7 @@ float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax ) {
     }
     return clamp( res, 0.0, 1.0 );
 }
+
 
 float ao( in vec3 pos, in vec3 nor ){
     // ambient occlusion
@@ -106,6 +126,10 @@ float specular(vec3 normal, vec3 dir){
     return clamp( pow(max(dot(h, normal), 0.), specularityCoef), 0.0, 1.0);
 }
 
+float fresnel(vec3 normal, vec3 dir){
+    return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
+}
+
 void main(){
     vec2 uv = squareFrame(iResolution.xy, gl_FragCoord.xy);
     vec3 eye = vec3(0.0, 5.0, -10);
@@ -118,22 +142,27 @@ void main(){
     vec3 bgColor = vec3(0.0);
 
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
+        // 3) like in the ray casting project, you can scale the distance a bit,
+        // so that the ray stops a bit before.
+        // This is to avoid artifacts
+        vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
+        // try out withou scaling
         //vec3 collision = (eye += shortestDistanceToScene * dir );
-        vec3 collision = (eye += (shortestDistanceToScene*0.99) * dir );
         float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 );
         float lightDistance = sphere(collision, 1.0);
         vec3 normal = computeNormal(collision);
         float diffLight = diffuse(normal);
         float specLight = specular(normal, dir);
+        float fresnelLight = fresnel(normal, dir);
         float ambientOcc = ao(collision, normal);
-        color = (diffLight + specLight ) * vec3(0.6, 0.7, 0.2) ;
-
-        // moderate shadow
-        shadow = mix(shadow, 1.0, .5);
+        color = (diffLight + specLight + fresnelLight) * vec3(0.2, 0.2, 0.9);
+        
+        shadow = mix(shadow, 1.0, 0.7);
         color = color * ambientOcc * shadow;
+
     } else {
         color = bgColor;
     }
 
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(clamp(color,0.0,1.0) , 1.0);
 }

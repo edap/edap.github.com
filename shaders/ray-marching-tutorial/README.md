@@ -1,7 +1,7 @@
 ## Intro
 
 The files from 00.glsl to 08.glsl are just the transcript of this [live conding session](https://www.youtube.com/watch?v=s6t0mJsgUKw) by Rémi Papillié.
-The other files use the previous one as basis and add some other things, like ambient occlusion, shadows, etc...
+The other files use the previous one as basis and add some other things, like ambient occlusion, shadow, etc...
 At the end the Mercury Library is introduced.
 
 These are the references that I've checked while working at it:
@@ -83,9 +83,13 @@ Have a look at the `albedo` function, see how it is used to add white stripes on
 
 ![example](img/08.png)
 
-This file is about light. A light position and direction is defined in `lightDistance` and `lightDirection`. Then there is a method to calculate the normal called `calculateNormal`, a method to calculate the `diffuse` light, and one to calculate the `specular` light. At the end a `fogFactor` is added.
+This file is about light. A light position and direction is defined in `lightDistance` and `lightDirection`. Then there is a method to calculate the normal called `calculateNormal`, a method to calculate the `diffuse` light, one to calculate the `specular` light and one for the `fresnel`. At the end a `fogFactor` is added.
 
 ***
+
+**13.glsl**
+
+Pong Light via [Jamie Wong](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 
 **09.glsl**
 
@@ -95,7 +99,7 @@ in this file the raymarching algorithm is extracted in a separate function that 
 
 **10.glsl**
 
-In this file, a camera is positioned and moved around. Code from [inigo shadertoy](https://www.shadertoy.com/view/Xds3zN)
+In this file, a camera is positioned and moved around the scene. Code from [inigo shadertoy](https://www.shadertoy.com/view/Xds3zN)
 
 ***
 
@@ -103,5 +107,13 @@ In this file, a camera is positioned and moved around. Code from [inigo shaderto
 
 Soft shadows, via [Inigo blog](http://www.iquilezles.org/www/articles/rmshadows/rmshadows.htm)
 and ambient occlusion
+
+***
+
+**12.glsl**
+
+Removing artifacts scaling the distance, tuning epsilon and using Inigo's smin function
+
+***
 
 
