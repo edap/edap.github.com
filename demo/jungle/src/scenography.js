@@ -42,6 +42,7 @@ export default class Scenography {
 		const lookAtPoint = next > 1 ? 0 : next;
 		//console.log(lookAtPoint);
 		const look = this.spline.getPoint(lookAtPoint);
+		look.y = 30;
 
 		// this is the place where the camera look up at a certain moment
 		this._setLookUp(camPos, look, elapsedSeconds);

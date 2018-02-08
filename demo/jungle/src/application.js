@@ -44,7 +44,7 @@ const percent_covered = 0.18; // it means that objects will be placed only in th
 // 18% part of the curve in front of the camera.
 
 // the distance_from_path defines how far away from the path a palm could be
-const distance_from_path = 40;
+const distance_from_path = 20;
 
 const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);
