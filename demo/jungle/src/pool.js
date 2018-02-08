@@ -80,7 +80,7 @@ export default class Pool {
 		//const matIndex = getRandomInt(1, 3);
 		const matIndex = 0;
 		let mesh;
-		if(palm.buffers !== undefined){
+		if(palm.attributes.isLeaf !== undefined){
 			mesh = new Mesh(palm, [this.materials[1], this.materials[0]]);
 		}else{
 			mesh = new Mesh(palm, this.materials[1]);

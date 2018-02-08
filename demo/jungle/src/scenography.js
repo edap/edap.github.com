@@ -15,7 +15,7 @@ export default class Scenography {
 		this.camera = camera;
 	}
 
-	update(elapsedSeconds, gui){
+	update(gui){
 		let speed, stop;
 		if(gui){
 			speed = gui.params.cameraSpeed;
@@ -30,10 +30,10 @@ export default class Scenography {
 			return;
 		}
 
-		this._moveCamera(elapsedSeconds);
+		this._moveCamera();
 	}
 
-	_moveCamera(elapsedSeconds){
+	_moveCamera(){
 		const camPos = this.spline.getPoint(this.t);
 		// the lookAt position is just 20 points ahead the current position
 		// but when we are close to the end of the path, the look at point
@@ -45,12 +45,12 @@ export default class Scenography {
 		look.y = 30;
 
 		// this is the place where the camera look up at a certain moment
-		this._setLookUp(camPos, look, elapsedSeconds);
+		this._setLookUp(camPos, look);
 		const limit = 1 - this.cameraSpeed;
 		this.t = this.t >= limit ? 0 : (this.t += this.cameraSpeed);
 	}
 
-	_setLookUp(camPos, look, elapsedSeconds){
+	_setLookUp(camPos, look){
 		const cameraY = CAMERA_HEIGHT;
 		//move camera forward
 		this.camera.position.set(camPos.x, cameraY, camPos.z);

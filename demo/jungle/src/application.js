@@ -6,7 +6,8 @@ import Stats from 'stats.js';
 import { createPath } from './path.js';
 import Scenography from './scenography.js';
 import Pool from './pool.js';
-import { materials, makeMaterialBrighter } from './materials.js';
+import { materials } from './materials.js';
+import ColorChanger from './colorChanger.js';
 
 // for apeunit, increase this value if you want that the scene becomes
 // brighter in less time
@@ -15,6 +16,7 @@ const REDIRECT_URL = 'http://www.apeunit.com/en/';
 
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
+const colorChanger = new ColorChanger();
 const debug = true;
 const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
@@ -39,7 +41,7 @@ const radius = 200;
 const radius_offset = 30;
 
 // objects
-const poolSize = 12;
+const poolSize = 5;
 const percent_covered = 0.18; // it means that objects will be placed only in the
 // 18% part of the curve in front of the camera.
 
@@ -49,7 +51,8 @@ const distance_from_path = 20;
 const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);
 	scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.016, 100 );
+	// TODO re-add fog
+	//scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.016, 100 );
 	scene.background = bgColor;
 	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materials);
 	return pool;
@@ -86,6 +89,14 @@ const init = () => {
 		camera.updateProjectionMatrix();
 	});
 
+	window.addEventListener('mousemove', (e) => {
+		let x = e.clientX/window.innerWidth;
+		let y = e.clientY/window.innerHeight;
+		console.log(x);
+		console.log(y);
+		colorChanger.update(x, y);
+	})
+
 	addStats(debug);
 	animate();
 };
@@ -93,15 +104,13 @@ const init = () => {
 const animate = () => {
 	requestAnimationFrame(animate);
 	stats.begin();
+	scenography.update(gui);
+	pool.update(scenography.getCameraPositionOnSpline());
 	render();
 	stats.end();
 }
 
 const render = () => {
-	const time = clock.getElapsedTime() - startTime;
-	//stats.begin();
-	scenography.update(time, gui);
-	pool.update(scenography.getCameraPositionOnSpline());
 	renderer.render(scene, camera);
 };
 

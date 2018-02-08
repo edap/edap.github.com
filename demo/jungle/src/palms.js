@@ -1,7 +1,7 @@
 import PalmGenerator from './PalmGenerator.js';
 import { BoxGeometry, BufferAttribute, BufferGeometry, Vector3, CatmullRomCurve3 } from 'three';
 import LeafGeometry from './LeafGeometry.js';
-const N_PALMS = 3;
+const N_PALMS = 6;
 //const N_PALMS = 6;
 
 export default class Palms {
@@ -17,6 +17,7 @@ export default class Palms {
 
 			const geometry = palm.geometry;
 			const bufGeometry = new BufferGeometry().fromGeometry(geometry);
+
 			const palmBuffers = palm.buffers;
 			bufGeometry.clearGroups();
 			if(palmBuffers !== undefined){
