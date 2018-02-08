@@ -34,27 +34,38 @@ export default class Scenography {
 	}
 
 	_moveCamera(){
-		const camPos = this.spline.getPoint(this.t);
-		// the lookAt position is just 20 points ahead the current position
-		// but when we are close to the end of the path, the look at point
-		// is the first point in the curve
-		const next = this.t + this.cameraSpeed + CAMERA_LOOK_FORWARD;
-		const lookAtPoint = next > 1 ? 0 : next;
-		//console.log(lookAtPoint);
-		const look = this.spline.getPoint(lookAtPoint);
-		look.y = 30;
+		let resetValue = this.cameraSpeed; // once the circuit is finished, the camera 
+		// is moved back to the original point
 
-		// this is the place where the camera look up at a certain moment
+		// the lookAt position is just CAMERA_LOOK_FORWARD points ahead the current position
+		const next = this.t + CAMERA_LOOK_FORWARD;
+		let look;
+		let camPos;
+
+		// lookAt position
+		if (next >= 1.0) {
+			let diff = 1.0 - this.t;
+			look = this.spline.getPoint(CAMERA_LOOK_FORWARD-diff);
+		} else {
+			look = this.spline.getPoint(next);
+		}
+		
+		// camera position
+		if (this.t >= 1.0) {
+			this.t = resetValue;
+		} else {
+			this.t += this.cameraSpeed
+		}
+		camPos = this.spline.getPoint(this.t);
+
 		this._setLookUp(camPos, look);
-		const limit = 1 - this.cameraSpeed;
-		this.t = this.t >= limit ? 0 : (this.t += this.cameraSpeed);
 	}
 
 	_setLookUp(camPos, look){
 		const cameraY = CAMERA_HEIGHT;
-		//move camera forward
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
-		//look.y = this._getCameraLooKY(elapsedSeconds);
+		// the camera always look a but up
+		look.y = 30;
 		this.camera.lookAt(look);
 	}
 

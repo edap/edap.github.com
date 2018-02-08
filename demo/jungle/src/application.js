@@ -9,11 +9,6 @@ import Pool from './pool.js';
 import { materials } from './materials.js';
 import ColorChanger from './colorChanger.js';
 
-// for apeunit, increase this value if you want that the scene becomes
-// brighter in less time
-const LIGHT_INCREASE = 0.01;
-const REDIRECT_URL = 'http://www.apeunit.com/en/';
-
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
 const colorChanger = new ColorChanger();
@@ -92,8 +87,6 @@ const init = () => {
 	window.addEventListener('mousemove', (e) => {
 		let x = e.clientX/window.innerWidth;
 		let y = e.clientY/window.innerHeight;
-		console.log(x);
-		console.log(y);
 		colorChanger.update(x, y);
 	})
 

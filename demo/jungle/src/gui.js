@@ -61,7 +61,7 @@ export default class Gui extends DAT.GUI {
 			vertex_colorsTC: true
 		};
 
-		this.add(this.params, 'cameraSpeed', 0.0002, 0.0009).step(0.0001);
+		this.add(this.params, 'cameraSpeed', 0.0002, 0.0049).step(0.0001);
 		this.add(this.params, 'stop');
 
 		// First material GUI
