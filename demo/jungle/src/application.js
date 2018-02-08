@@ -15,7 +15,7 @@ const REDIRECT_URL = 'http://www.apeunit.com/en/';
 
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
-const debug = false;
+const debug = true;
 const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
 
@@ -73,7 +73,7 @@ const init = () => {
 	addGui(debug, light);
 
 	//scenography
-	scenography = new Scenography(camera, spline, t, fadeToWhite, gui);
+	scenography = new Scenography(camera, spline, t, gui);
 	//stats
 	stats = new Stats();
 	stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -115,25 +115,6 @@ const addGui = (debug, ambientLight) => {
 	if (debug){
 		gui = new Gui(materials);
 		gui.addScene(scene, ambientLight, renderer);
-	}
-};
-
-const fadeToWhite = () => {
-	if (bgColor.r < 1.0){
-		bgColor.r += LIGHT_INCREASE;
-		bgColor.g += LIGHT_INCREASE;
-		bgColor.b += LIGHT_INCREASE;
-		renderer.setClearColor(bgColor.getHex());
-
-		scene.fog.color.r += LIGHT_INCREASE;
-		scene.fog.color.g += LIGHT_INCREASE;
-		scene.fog.color.b += LIGHT_INCREASE;
-		for (let i = 0; i < materials.length; i++){
-			makeMaterialBrighter(materials[i], LIGHT_INCREASE);
-		}
-	} else if (!debug){
-		pool.clear();
-		window.location.replace(REDIRECT_URL);
 	}
 };
 
