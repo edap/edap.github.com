@@ -27,6 +27,7 @@ let gui,
 	spline,
 	startTime,
 	sprite,
+	mouseY,
 	light;
 
 //curve
@@ -47,7 +48,7 @@ const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);
 	scene = new THREE.Scene();
 	// TODO re-add fog
-	//scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.016, 100 );
+	scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.016, 100 );
 	scene.background = bgColor;
 	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materials);
 	return pool;
@@ -56,7 +57,7 @@ const prepareGeometries = () => {
 const init = () => {
 	prepareGeometries();
 	startTime = clock.getElapsedTime();
-	camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.3, 260);
+	camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.3, 260);
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	//renderer.setClearColor(0xff5050, 0); // the default
@@ -71,7 +72,7 @@ const init = () => {
 	addGui(debug, light);
 
 	//scenography
-	scenography = new Scenography(camera, spline, t, gui);
+	scenography = new Scenography(camera, spline, t, gui, mouseY);
 	//stats
 	stats = new Stats();
 	stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -87,6 +88,7 @@ const init = () => {
 	window.addEventListener('mousemove', (e) => {
 		let x = e.clientX/window.innerWidth;
 		let y = e.clientY/window.innerHeight;
+		mouseY = y;
 		colorChanger.update(x, y);
 	})
 
@@ -97,7 +99,7 @@ const init = () => {
 const animate = () => {
 	requestAnimationFrame(animate);
 	stats.begin();
-	scenography.update(gui);
+	scenography.update(gui, mouseY);
 	pool.update(scenography.getCameraPositionOnSpline());
 	render();
 	stats.end();

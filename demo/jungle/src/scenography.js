@@ -15,7 +15,7 @@ export default class Scenography {
 		this.camera = camera;
 	}
 
-	update(gui){
+	update(gui, mouseY){
 		let speed, stop;
 		if(gui){
 			speed = gui.params.cameraSpeed;
@@ -30,10 +30,10 @@ export default class Scenography {
 			return;
 		}
 
-		this._moveCamera();
+		this._moveCamera(mouseY);
 	}
 
-	_moveCamera(){
+	_moveCamera(mouseY){
 		let resetValue = this.cameraSpeed; // once the circuit is finished, the camera 
 		// is moved back to the original point
 
@@ -58,15 +58,26 @@ export default class Scenography {
 		}
 		camPos = this.spline.getPoint(this.t);
 
-		this._setLookUp(camPos, look);
+		this._setLookUp(camPos, look, mouseY);
 	}
 
-	_setLookUp(camPos, look){
+	_setLookUp(camPos, look, mouseY){
+		
+		console.log(mouseY);
 		const cameraY = CAMERA_HEIGHT;
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
-		// the camera always look a but up
-		look.y = 30;
+		// the camera always look a bit depending on mouse y position
+		let y = this._calcHeight(mouseY);
+		look.y = y;
 		this.camera.lookAt(look);
+	}
+
+	_calcHeight(mouseY){
+		if (mouseY === undefined) {
+			return 30;
+		}else{
+			return map(mouseY, 0, 1, 60, 20);
+		}
 	}
 
 	getCameraPositionOnSpline(){
