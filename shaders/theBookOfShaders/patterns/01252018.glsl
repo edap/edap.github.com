@@ -19,6 +19,14 @@ float substract(float d1, float d2){
 	return max(-d1, d2);
 }
 
+float intersect(float d1, float d2){
+	return max(d1, d2);
+}
+
+float mergeExclude(float d1, float d2){
+	return min(max(-d1, d2), max(-d2, d1));
+}
+
 float ellipseDist(vec2 p, float radius, vec2 dim){
   vec2 pos = p;
   pos.x = p.x / dim.x;
@@ -71,7 +79,6 @@ float lip(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   float B = ellipseDist(posB, radius, ovalSub);
   float p = smoothMerge(B, A, 0.5);
   return p;
-  //return 1.-smoothstep(p, p+0.001,radius);
 }
 
 float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
@@ -81,8 +88,12 @@ float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   float B = ellipseDist(posB, radius, oval);
   float p = substract(B,A);
   posB.y += 0.035;
-  float cone = ellipseDist(posB, radius, vec2(0.08, 0.55));
-  p = smoothMerge(cone,p, 0.3);
+  float cone = ellipseDist(posB, radius, vec2(0.055, 0.30));
+  p = smoothMerge(cone,p, 0.4);
+  float s = ellipseDist(posB, radius, vec2(0.2, 0.20));
+  //p = smoothMerge(cone,p, 0.4);
+  //p = mergeExclude(cone,p);
+  //p = intersect(cone,p);
   return p;
 }
 
@@ -125,6 +136,12 @@ float strokeSmoot(float x, float pos, float width, float smtness){
 
 }
 
+float rand(vec2 uv){
+    //return fract(cos(dot(uv, vec2(3.9898, 3.233))) * 437.5453);
+    return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+
 void main (void) {
   // General parameters
   float smoothness = 0.03;
@@ -136,9 +153,10 @@ void main (void) {
 
   // Tiling
   vec2 st = gl_FragCoord.xy/iResolution.xy;
+  st.x *= iResolution.x / iResolution.y;
   vec2 stBg = tile(st,3.0);
   stBg = rotateTilePattern(stBg);
-  vec2 orcSt = tile(st,4.0);
+  vec2 orcSt = tile(st,2.0);
 
   // Make more interesting combinations
   //st = tile(st,2.0);
@@ -147,28 +165,25 @@ void main (void) {
 
   // Background
   float sdf = rectSDF(stBg, vec2(.3,1.));
-  // fill example
   float rect = fillSmooth(sdf, 0.7, smoothness);
   float diag = (stBg.x+stBg.y) * 0.5;
   float diagLine = strokeSmoot(diag, 0.5, 0.02,smoothness);
-
-  //float col = flip(rect, diagLine);
   float rectAndLine = flip(rect, diagLine);
   vec3 bgCol = mix(green, blue, rectAndLine);
 
-  // Orchid
-  float addSmoothnessToSetals = 2.9;
+  // Orchid parameters. The orchid is composed by sepals, petals, lip and column
   orcSt+=vec2(-0.5, -0.5);
   //column parameters
-  float colResize = 0.55;
+  float colResize = 0.45;
   vec2 posCol = orcSt;
-  posCol.y += 0.07;
-  float colYoffset = -0.04;
+  posCol.y += 0.035;
+  float colYoffset = -0.051;
   float powerCol = 2.;
-  vec2 colRatio = vec2(0.4*colResize, 0.4*colResize);
+  vec2 colRatio = vec2(0.7*colResize, 0.7*colResize);
   vec2 colSubRatio = vec2(0.9*colResize, 0.9*colResize);
   float colRadius = 0.52*colResize;
   // sepals parameters
+  float addSmoothnessToSetals = 2.9;
   float deformX = 0.;
   float deformY = 0.;
   float resizePetals = 11.9;
@@ -219,27 +234,42 @@ void main (void) {
   float orchids = merge(latPetals, sepals);
   orchids = merge(orchids, lip);
   orchids = substract(column, orchids);
-  orchids = fillSmooth(orchids,0.09,smoothness+0.01);
+  //orchids = fillSmooth(orchids,0.09,smoothness+0.01);
 
-
-
-  sepals = fillSmooth(sepals,0.09,smoothness+0.005);
-  vec3 orcColor = mix(lilla, bgCol, sepals);
-
-  latPetals = merge(latPetals, lip);
-  latPetals = fillSmooth(latPetals,0.09,smoothness+0.005);
+  // the black color is used just for debugging
+  vec3 black = vec3(0.,0.,0.);
+  // this angle is using while creating the colors
   float angle = atan(orcSt.y,orcSt.x) + 0.5;
-  orange = mix(orange,rose, sin(angle * 20.0));
-  orange = mix(orange, rose, abs(orcSt.x)*2.7);
 
-  orcColor = mix(orange,orcColor,latPetals);
+  // Sepals color:
+  sepals = fillSmooth(sepals,0.09,smoothness+0.005);
+  vec3 sepalsColor = mix(lilla, blue,rand(orcSt));
+  vec3 orcColor = mix(sepalsColor, bgCol, sepals);
 
-  //lip = fillSmooth(lip,0.09,smoothness+0.005);
-  //orcColor = mix(rose, orcColor,lip);
+  // Lip color:
+  // 1) create the space coord for the points
+  vec2 lipSt = orcSt;
+  lipSt = fract(lipSt *= 20.);
+  lipSt -=vec2(0.5,0.5);
+  // 2 create the color pois
+  float points = circleDist(lipSt, 0.1);
+  points = smoothstep(points, points+0.05, 0.2);
+  vec3 colorPoints = mix(orange, blue, points);
+  // 3 mix the color with the orchid
+  lip = fillSmooth(lip,0.09,smoothness+0.005);
+  orcColor = mix(colorPoints, orcColor, lip);
 
-  // column = fillSmooth(column,0.09,smoothness+0.005);
-  // orcColor = mix(orange,orcColor,column);
+  // Petals color
+  latPetals = fillSmooth(latPetals,0.09,smoothness+0.005);
+  vec3 latPetalsColor = mix(lilla,rose, sin(angle * 40.0));
+  latPetalsColor = mix(latPetalsColor, rose, abs(orcSt.x)*2.7);
+  orcColor = mix(latPetalsColor,orcColor,latPetals);
 
-  vec3 finalColor = mix(orcColor, bgCol, orchids);
-  gl_FragColor = vec4(vec3(orcColor),1.0);
+  //column color
+  column = fillSmooth(column,0.01,0.02);
+  vec3 columnColor = orange;
+  orcColor = mix(columnColor, orcColor, column);
+
+  //finalColor+= columnColor;
+  gl_FragColor = vec4(vec3(column),1.0);
 }

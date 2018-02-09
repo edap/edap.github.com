@@ -2,7 +2,7 @@ import {BoxBufferGeometry, Mesh, Vector3} from 'three';
 import {getRandom, getRandomInt} from './helpers.js';
 import Palms from './palms.js';
 export default class Pool {
-    constructor(size, scene, curve, percent_covered, distance_from_path, materialTrunk, materialFoliage){
+    constructor(size, scene, curve, percent_covered, distance_from_path, material){
         this.scene = scene;
         this.size = size;
         this.curve = curve;
@@ -11,7 +11,8 @@ export default class Pool {
         this.percent_covered = percent_covered;
         this.distance_from_path = distance_from_path;
         this.step = this.percent_covered / this.size;
-        this.materials = [materialTrunk,materialFoliage];
+        this.material = material;
+
         this.palmTypes = new Palms(); //this return some different palms, one for each type
         this.populatePool();
     }
@@ -39,7 +40,7 @@ export default class Pool {
             let new_pos;
             if (flip_direction) {
                 new_pos = point.add(secantVector);
-            } else {
+            }else{
                 new_pos = point.sub(secantVector);
             }
             obj.position.set(new_pos.x, new_pos.y, new_pos.z);
@@ -51,6 +52,7 @@ export default class Pool {
 
     _pointsOnTheCurveWithObjects(){
         let validPoints = Math.abs(this.curve.points * this.percent_covered);
+
     }
 
     createObject(i){
@@ -59,7 +61,7 @@ export default class Pool {
         //let randomIndex = 5;
         let index = i% this.palmTypes.length;
         let palm = this.palmTypes[index];
-        let mesh = new Mesh(palm, this.materials);
+        let mesh = new Mesh(palm, this.material);
         mesh.rotateY(Math.PI / getRandom(-3, 3));
 
         return mesh;
@@ -119,5 +121,6 @@ export default class Pool {
             new_pos = point.sub(secantVector);
         }
         object.position.set(new_pos.x, new_pos.y, new_pos.z);
+
     }
 }

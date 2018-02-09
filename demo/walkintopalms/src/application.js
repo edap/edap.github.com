@@ -1,6 +1,7 @@
 /* eslint-env browser */
 import * as THREE from 'three';
 import $ from "jquery";
+import Tone from 'tone';
 import Gui from './gui.js';
 import Stats from 'stats.js';
 import {createPath} from './path.js';
@@ -10,26 +11,10 @@ import Pool from './pool.js';
 import {fragmentShader, vertexShader} from './shaders.js';
 const OrbitControls = require('three-orbit-controls')(THREE);
 import {PointLights} from './pointLights.js';
-import average from 'analyser-frequency-average';
 
-const debug = true;
-let gui, scene, renderer, stats, pool, scenography, controls, camera, spline, current_time, clock, sprite, light;
-
-let materialTrunk = new THREE.MeshStandardMaterial( {
-    color: 0xFFFFFF,
-    emissive: 0x000000,
-    roughness:0.55,
-    metalness:0.89,
-    vertexColors: THREE.NoColors
-});
-
-let materialFoliage = new THREE.MeshStandardMaterial( {
-    color: 0xFFFFFF,
-    emissive: 0x000000,
-    roughness:0.55,
-    metalness:0.89,
-    vertexColors: THREE.NoColors
-});
+const debug = false;
+let gui, scene, renderer, stats, pool, scenography, controls, camera, spline, current_time, clock, sprite;
+let palmMaterial;
 
 //camera
 let cameraZposition = 100;
@@ -49,63 +34,23 @@ const percent_covered = 0.18; // it means that objects will be placed only in th
 const distance_from_path = 30;
 
 // AUDIO
-// Bands taken from flowen https://medium.com/@flowen/bridging-the-gap-between-design-and-code-and-learn-three-js-in-less-than-4-days-f67d258244cb
-import createAnalyser from 'web-audio-analyser';
-
-/* create audio analyser */
-var audioUtil;
-var analyser;
-
-
-var bands = {
-    sub: {
-        from: 20,
-        to: 250
-    },
-
-    low: {
-        from: 251,
-        to: 500
-    },
-
-    mid: {
-        from: 501,
-        to: 3000
-    },
-
-    high: {
-        from: 3001,
-        to: 6000
-    }
-};
 current_time = 0;
-let listener = new THREE.AudioListener();
-let sound = new THREE.Audio(listener);
-
+let fftSize=32;
+let fft = new Tone.Analyser("fft", fftSize);
 function loadPlayer(url){
     return new Promise(function(resolve, reject){
+        let player = new Tone.Player(url).fan(fft).toMaster();
         sprite = new THREE.TextureLoader().load( "../particle1.jpeg" );
-        let audioLoader = new THREE.AudioLoader();
-        audioLoader.load(
-            url,
-            //success callback
-            function (audioBuffer) {
-                prepareGeometry();
-                sound.setBuffer(audioBuffer);
-                sound.setLoop(false);
-                sound.setVolume(1);
-                resolve(sound);
-            },
-            //progress callback
-            function (xhr) {
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            //error callback
-            function (error) {
-                console.log('error while loading audio: ' + filename);
-                reject(error);
-            }
-        );
+        player.loop = false;
+        player.autstart = false;
+        Tone.Buffer.on("load", function(){
+            console.log("tutt");
+            //tutte cose
+            prepareGeometry();
+            resolve(player);
+        }, function(){
+            reject("smth went wrong");
+        });
     });
 };
 
@@ -115,7 +60,8 @@ function prepareGeometry(){
     spline = createPath(radius, radius_offset);
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2( 0x000000, 0.01 );
-    pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materialFoliage, materialTrunk);
+    palmMaterial = getMaterial(scene.fog);
+    pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, palmMaterial);
     return pool;
 }
 
@@ -123,18 +69,11 @@ let counter = () => {
     ++current_time;
 };
 
-function init(sound){
+function init(player){
     removeLoadingButton();
-    sound.play();
-    audioUtil = createAnalyser(sound.source, sound.context, {
-        stereo: false
-    });
-    analyser = audioUtil.analyser;
-
-
+    player.start();
     let timer = setInterval(counter, 1000);
     camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.3, 260);
-    camera.add(listener);
 
     renderer = new THREE.WebGLRenderer({antialias:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -145,13 +84,19 @@ function init(sound){
     }
 
     //scenography
-    scenography = new Scenography(camera, spline, t, cameraHeight, cameraSpeed, materialTrunk, materialFoliage);
+    scenography = new Scenography(camera, spline, t, cameraHeight, cameraSpeed, palmMaterial);
     //stats
     stats = new Stats();
     stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 
-    light = new THREE.HemisphereLight( 0xe8e8e8, 0x000000, 10 );
-    scene.add( light );
+    //lights
+    let ambientLight = new THREE.AmbientLight( 0x000000 );
+    scene.add( ambientLight );
+
+    PointLights().map((light) => {
+        scene.add( light );
+    });
+
     window.addEventListener('resize', function() {
         let WIDTH = window.innerWidth,
             HEIGHT = window.innerHeight;
@@ -159,8 +104,7 @@ function init(sound){
         camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
     });
-    //addGui(debug, ambientLight);
-    addGui(debug, light);
+    addGui(debug, ambientLight);
 
     addLightPath(spline, 0x00FF00);
     addStats(debug);
@@ -170,43 +114,31 @@ function init(sound){
 
 function passAudioToMaterial(values, n_bin){
     let magAudio;
-    let freqs = audioUtil.frequencies();
-    let bin = scenography.getSelectedBin();
-
-    if (scenography.lightShouldDim()) {
-    //if (false) {
-        //let bin = gui.params.selectedBin;
-        switch(bin){
-        case 0:
-	          magAudio = average(analyser, freqs, bands.sub.from, bands.sub.to);
-            break;
-        case 1:
-	          magAudio = average(analyser, freqs, bands.low.from, bands.low.to);
-            break;
-        case 2:
-	          magAudio = average(analyser, freqs, bands.mid.from, bands.mid.to);
-            break;
-        case 3:
-	          magAudio = average(analyser, freqs, bands.high.from, bands.high.to);
-            break;
-        };
-
-        light.intensity = 40*magAudio;
-    } else {
-        light.intensity = 10;
-    }
-    //mat.color.setRGB(magAudio, magAudioa, magAudiob);
-    //palmMaterial.uniforms.magAudio.value = magAudio;
+		for (let i = 0, len = values.length; i < len; i++){
+				let fftVal = values[i] / 255;
+        fftVal = fftVal === 0 ? 0.05 : fftVal;
+        fftVal = fftVal;
+        if (i === n_bin) {
+            magAudio = fftVal;
+        }
+		}
+    palmMaterial.uniforms.magAudio.value = magAudio;
 }
 
 function render(){
     stats.begin();
+    palmMaterial.uniforms.magAudio.needUpdate = true;
+    palmMaterial.uniforms.amplitude.needUpdate = true;
+    palmMaterial.uniforms.minColor.needUpdate = true;
+    palmMaterial.uniforms.maxColor.needUpdate = true;
+    palmMaterial.uniforms.saturation.needUpdate = true;
+    palmMaterial.uniforms.brightness.needUpdate = true;
+    palmMaterial.uniforms.displacement.needUpdate = true;
     scenography.update(current_time);
     pool.update(scenography.getCameraPositionOnSpline());
 	  renderer.render(scene, camera);
-    if (sound.isPlaying && analyser){
-        passAudioToMaterial();
-    }
+    let bin = scenography.getSelectedBin();
+    passAudioToMaterial(fft.analyse(),bin);
     stats.end();
 	  requestAnimationFrame(render);
 }
@@ -228,7 +160,7 @@ function addStats(debug) {
 
 function addGui(debug, ambientLight){
     if (debug) {
-        gui = new Gui(materialFoliage,materialTrunk);
+        gui = new Gui(palmMaterial);
         gui.addScene(scene, ambientLight, renderer);
     }
 }

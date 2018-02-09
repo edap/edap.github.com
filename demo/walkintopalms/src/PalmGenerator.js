@@ -18,7 +18,7 @@ export default class PalmGenerator{
                                                       cleaned_options.num,
                                                       cleaned_options.foliage_start_at);
 
-            buffers = this._createBuffers(hash_vertex_info.tot_vertices, hash_vertex_info.tot_vertices_in_leafs);
+            buffers = this._createBuffers(hash_vertex_info.tot_vertices);
             objects = this._buildPalm(leaf_geometry,
                                       trunk_geometry,
                                       cleaned_options,
@@ -28,8 +28,6 @@ export default class PalmGenerator{
                                                                            hash_vertex_info,
                                                                            buffers);
             this._repositionGeometryAndRotateIt(geometry);
-            this._assignUVs(geometry);
-            geometry.computeFaceNormals();
             result =  { geometry:geometry, buffers: buffers };
         } else {
             objects = this._buildPalm(leaf_geometry,
@@ -38,8 +36,6 @@ export default class PalmGenerator{
                                       curve);
             geometry = this._mergeObjectsInOneGeometry(objects, cleaned_options);
             this._repositionGeometryAndRotateIt(geometry);
-            this._assignUVs(geometry);
-            geometry.computeFaceNormals();
             result =  { geometry:geometry };
         }
         return result;
@@ -115,7 +111,7 @@ export default class PalmGenerator{
             let isALeaf = (i <= options.foliage_start_at)? true : false;
             let geometry = isALeaf ? foliage_geometry : trunk_geometry;
             let object = new THREE.Mesh(geometry, material);
-            object.angle = (options.angle * i) % 256;
+            object.angle = (options.angle * i ) % 256;
             let coord = phyllotaxisOnCurve(i, angleInRadians, options.spread, curve_geometry);
             object.position.set(coord.x, coord.y, coord.z);
             object.lookAt(coord.prev);
@@ -128,7 +124,11 @@ export default class PalmGenerator{
             } else {
                 object.lookAt(coord.prev);
                 object.rotateZ(i* angleInRadians);
-                object.rotateY((90 + options.angle_open + i * 100/options.num ) * -PItoDeg);
+                if(options.trunk_regular){
+                    object.rotateY( (90 + options.angle_open ) * -PItoDeg );
+                }else{
+                    object.rotateY( (90 + options.angle_open + i * 100/options.num ) * -PItoDeg );
+                }
             }
             objects.push(object);
         }
@@ -154,8 +154,6 @@ export default class PalmGenerator{
 
 
     _transformIntoLeaf(object, iter, angleInRadians, options){
-        let random = false;
-        let randomDivergence = 0.2;
         let PItoDeg = (Math.PI/180.0);
         // The scale ratio is a value between 0.001 and 1.
         // It is 0.0001 for the first leaves, and 1 for the last one
@@ -163,19 +161,11 @@ export default class PalmGenerator{
         // This is to avaoid a scaleRatio of 0, that would cause a warning while scaling
         // an object for 0
         let scaleRatio = ratio === 0 ? 0.001 : ratio;
-        //TODO implement random rotation
-        if (random) {
-            let angleRandomizedZ = this._getRandomArbitrary(angleInRadians, (angleInRadians + randomDivergence));
-            object.rotateZ( iter* angleRandomizedZ);
-
-            let y_angle = options.angle_open * scaleRatio;
-            let angleRandomizedY = this._getRandomArbitrary(angleInRadians, (y_angle + randomDivergence));
-            object.rotateY( (options.starting_angle_open + angleRandomizedY + iter * 200/options.num ) * -PItoDeg );
-        } else {
-            object.rotateZ( iter* angleInRadians);
-            let y_angle = options.angle_open * scaleRatio;
-            object.rotateY( (options.starting_angle_open + y_angle + iter * 200/options.num ) * -PItoDeg );
-        }
+        object.rotateZ( iter* angleInRadians);
+        let yrot = (iter/options.angle_open) * options.foliage_start_at;
+        //object.rotateY( (yrot ) * -PItoDeg );
+        let y_angle = options.angle_open * scaleRatio;
+        object.rotateY( (options.starting_angle_open + y_angle + iter * 200/options.num ) * -PItoDeg );
         // as leaves grow up, they become bigger
         object.scale.set(5 * scaleRatio ,1 ,1);
         object.rotateZ(-(Math.PI/2));
@@ -187,20 +177,12 @@ export default class PalmGenerator{
         for (let i = 0; i < objs.length; i++){
             if (i <= opt.foliage_start_at) {
                 for(let pos=0; pos < vertex_info.n_vertices_leaf; pos++){
-                    let angleColor = new THREE.Color().setHSL((objs[i].angle / 360.0), 0.5, 0.5);
-                    buffers.color[current_pos*3] = angleColor.r;
-                    buffers.color[current_pos*3 +1] = angleColor.g;
-                    buffers.color[current_pos*3 +2] = angleColor.b;
                     buffers.angle[current_pos] = objs[i].angle;
                     buffers.isLeaf[current_pos] = 1.0;
                     current_pos ++;
                 }
             } else {
                 for(let pos=0; pos < vertex_info.n_vertices_trunk; pos++){
-                    let angleColor = new THREE.Color().setHSL((objs[i].angle / 360.0), 0.5, 0.5);
-                    buffers.color[current_pos*3] = angleColor.r;
-                    buffers.color[current_pos*3 +1] = angleColor.g;
-                    buffers.color[current_pos*3 +2] = angleColor.b;
                     buffers.angle[current_pos] = objs[i].angle;
                     buffers.isLeaf[current_pos] = 0.0;
                     current_pos ++;
@@ -223,13 +205,10 @@ export default class PalmGenerator{
         return geometry;
     }
 
-    _createBuffers(n_vert, n_foliage_vertices){
+    _createBuffers(n_vert){
         return {
             angle: new Float32Array(n_vert),
-            color: new Float32Array(n_vert * 3),
-            isLeaf: new Float32Array(n_vert),
-            totVertices: n_vert,
-            totFoliageVertices: n_foliage_vertices
+            isLeaf: new Float32Array(n_vert)
         };
     }
 
@@ -242,8 +221,7 @@ export default class PalmGenerator{
         return{
             tot_vertices: (n_vertices_in_trunk + n_vertices_in_leaf),
             n_vertices_leaf: vertices_in_leaf,
-            n_vertices_trunk: vertices_in_trunk,
-            tot_vertices_in_leafs: n_vertices_in_leaf
+            n_vertices_trunk: vertices_in_trunk
         };
     }
 
@@ -257,28 +235,5 @@ export default class PalmGenerator{
         geometry.rotateX(-Math.PI/2);
         let box = new THREE.Box3().setFromPoints(geometry.vertices);
         geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
-    }
-
-    _getRandomArbitrary(min, max){
-        return Math.random() * (max -min) +min;
-    }
-    _assignUVs(geometry) {
-        geometry.faceVertexUvs[0] = [];
-        geometry.faces.forEach(function(face) {
-            var components = ['x', 'y', 'z'].sort(function(a, b) {
-                return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
-            });
-
-            var v1 = geometry.vertices[face.a];
-            var v2 = geometry.vertices[face.b];
-            var v3 = geometry.vertices[face.c];
-            geometry.faceVertexUvs[0].push([
-                new THREE.Vector2(v1[components[0]], v1[components[1]]),
-                new THREE.Vector2(v2[components[0]], v2[components[1]]),
-                new THREE.Vector2(v3[components[0]], v3[components[1]])
-            ]);
-        });
-
-        geometry.uvsNeedUpdate = true;
     }
 }

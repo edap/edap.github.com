@@ -2,7 +2,7 @@ import PalmGenerator from './PalmGenerator.js';
 import {BoxGeometry, BufferAttribute, BufferGeometry, Vector3, CatmullRomCurve3} from 'three';
 import LeafGeometry from './LeafGeometry.js';
 
-export default class Palms {
+export default class Palms{
     //questo file deve generare solo 2 o tre palme e restituirle in un array
     constructor(){
         this.smallTrunk =  new BoxGeometry(2,2,2);
@@ -18,18 +18,13 @@ export default class Palms {
                                          this.palmOptions()[i],
                                          curve
                                         );
-
             let geometry = palm.geometry;
             let bufGeometry = new BufferGeometry().fromGeometry(geometry);
             let palmBuffers = palm.buffers;
-            bufGeometry.addAttribute( 'color', new BufferAttribute(palmBuffers.color,3));
-            bufGeometry.attributes.color.needsUpdate = true;
-            let tot_vert = palmBuffers.totVertices;
-            let tot_vert_foliage = palmBuffers.totFoliageVertices;
+            bufGeometry.addAttribute( 'angle', new BufferAttribute(
+                palmBuffers.angle,
+                1));
 
-            bufGeometry.clearGroups();
-            bufGeometry.addGroup(0,tot_vert_foliage,0);
-            bufGeometry.addGroup((tot_vert_foliage),tot_vert,1);
             palms.push(bufGeometry);
         }
         return palms;
@@ -119,11 +114,11 @@ export default class Palms {
 
     palmOptions(){
         let palm_one = {
-            spread: 0.04,
+            spread: 0.2,
             angle: 137.66,
-            num: 528,
+            num: 628,
             growth: 0.25,
-            foliage_start_at: 65,
+            foliage_start_at: 65.64,
             trunk_regular: true,
             buffers: true,
             angle_open: 75.87,
@@ -146,7 +141,7 @@ export default class Palms {
             angle: 137.5,
             num: 240,
             growth: 0.01,
-            foliage_start_at: 26,
+            foliage_start_at: 26.12,
             trunk_regular: true,
             buffers: true,
             angle_open: 36.46,
@@ -158,7 +153,7 @@ export default class Palms {
             angle: 137.5,
             num: 406,
             growth: 0.12,
-            foliage_start_at: 86,
+            foliage_start_at: 86.19,
             trunk_regular: false,
             buffers: true,
             angle_open: 36.17,
@@ -170,7 +165,7 @@ export default class Palms {
             angle: 137.5,
             num: 431,
             growth: 0.18,
-            foliage_start_at: 20,
+            foliage_start_at: 20.84,
             trunk_regular: false,
             buffers: true,
             angle_open: 0,
