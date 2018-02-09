@@ -18,9 +18,9 @@ const materialTrunk = new MeshStandardMaterial({
 
 const materialFoliage  = new MeshPhongMaterial({
 	color: 0x073c00,
-	emissive: 0x1e4100,
+	emissive: 0x000000,
 	specular: 0x413e0f,
-	shininess: 26
+	shininess: 10
 })
 
 // const materialTrunkB = new MeshStandardMaterial({
