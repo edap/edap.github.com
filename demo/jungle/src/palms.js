@@ -36,6 +36,7 @@ export default class Palms {
 	}
 
 	_getTrunkGeometry(palm_type){
+		console.log(palm_type)
 		//if piccoletto and punta, small cubes
 		if ([5, 1].includes(palm_type)){
 			return this.smallTrunk;

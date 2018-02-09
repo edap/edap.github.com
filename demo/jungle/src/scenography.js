@@ -62,21 +62,18 @@ export default class Scenography {
 	}
 
 	_setLookUp(camPos, look, mouseY){
-		
-		console.log(mouseY);
 		const cameraY = CAMERA_HEIGHT;
 		this.camera.position.set(camPos.x, cameraY, camPos.z);
 		// the camera always look a bit depending on mouse y position
-		let y = this._calcHeight(mouseY);
-		look.y = y;
+		look.y = this._calcHeight(mouseY);
 		this.camera.lookAt(look);
 	}
 
 	_calcHeight(mouseY){
 		if (mouseY === undefined) {
-			return 30;
+			return 25;
 		}else{
-			return map(mouseY, 0, 1, 60, 20);
+			return map(mouseY, 0, 1, 35, 20);
 		}
 	}
 

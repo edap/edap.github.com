@@ -12,7 +12,7 @@ import ColorChanger from './colorChanger.js';
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
 const colorChanger = new ColorChanger();
-const debug = false;
+const debug = true;
 const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
 
@@ -37,12 +37,12 @@ const radius = 200;
 const radius_offset = 30;
 
 // objects
-const poolSize = 5;
+const poolSize = 3;
 const percent_covered = 0.18; // it means that objects will be placed only in the
 // 18% part of the curve in front of the camera.
 
 // the distance_from_path defines how far away from the path a palm could be
-const distance_from_path = 20;
+const distance_from_path = 25;
 
 const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);
