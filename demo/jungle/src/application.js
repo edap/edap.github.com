@@ -12,7 +12,7 @@ import ColorChanger from './colorChanger.js';
 //orbit controls is used just in the debug modus
 const OrbitControls = require('three-orbit-controls')(THREE);
 const colorChanger = new ColorChanger();
-const debug = true;
+const debug = false;
 const bgColor = new THREE.Color(0.1, 0.1, 0.1);
 const clock = new THREE.Clock();
 
