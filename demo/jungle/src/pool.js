@@ -95,8 +95,8 @@ export default class Pool {
 		//if camera position on spline is bigger than a palm
 		//it means that this palm is no longer into the scene, put it back
 		let flip_direction = true;
-		console.log(camera_position_on_spline);
-		console.log(this.index_positions);
+		// console.log(camera_position_on_spline);
+		// console.log(this.index_positions);
 		for (let i = 0; i <= this.index_positions.length; i++){
 			const object_position = this.index_positions[i];
 			let horizon = camera_position_on_spline + this.percent_covered;

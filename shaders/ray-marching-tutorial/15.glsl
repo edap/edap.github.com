@@ -1,5 +1,4 @@
-// In this file we are going to use boolean ops
-
+// textures
 precision mediump float;
 
 const int MAX_MARCHING_STEPS = 64;
@@ -7,6 +6,7 @@ const float EPSILON = 0.0015;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 100.00;
 
+//vec3(1.0, 1.0, -1.0);
 vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
 
 vec2 rotate(vec2 pos, float angle){
@@ -15,16 +15,16 @@ vec2 rotate(vec2 pos, float angle){
     return mat2(c, s, -s, c) * pos;
 } 
 
-float plane(vec3 pos){
-    return pos.y;
+float smin( float a, float b, float k ){
+    float res = exp( -k*a ) + exp( -k*b );
+    return -log( res )/k;
 }
 
-float sdBox( vec3 p, vec3 b ){
-    vec3 d = abs(p) - b;
-    return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
+float smins( float a, float b ){
+    return smin(a, b, 3.0);
 }
 
-float sphere(vec3 pos, float radius){
+float sdfSphere(vec3 pos, float radius){
     return length(pos) - radius;
 }
 
@@ -38,15 +38,28 @@ vec3 opRep( vec3 p, vec3 c ){
 }
 
 float map(vec3 pos){
-    float offset = 0.6;
-    float sph = sphere(pos, 7.);
-//return sph;
-    // repeat the boxes
-    pos = opRep(pos, vec3(offset, offset, offset));
-    float box = sdBox(pos, vec3(0.2, 0.2, 0.2));
-    //return sphere minus boxes;
-    //return box;
-    return opS(sph, box);
+    float freqOnYZ = .2;
+    float freqOnXZ = .8;
+    pos.xz = rotate(pos.xz, sin(iGlobalTime*freqOnXZ)*.7);
+	pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
+    
+    // try out different movements
+    vec3 s1pos = vec3(sin(iGlobalTime*.55)*1.85, cos(iGlobalTime*.19) * 0.95, sin(iGlobalTime*.91) * 1.21) * 1.0;
+    vec3 s2pos = vec3(cos(iGlobalTime*.43)*1.55, sin(iGlobalTime*.38) * 1.12, cos(iGlobalTime*.76) * 1.67) * 1.4;
+    vec3 s3pos = vec3(sin(iGlobalTime*.26)*2.52, cos(iGlobalTime*.57) * 0.56, sin(iGlobalTime*.12) * 1.58) * 1.2;
+    vec3 s4pos = vec3(sin(iGlobalTime*.97)*1.72, sin(iGlobalTime*.22) * 0.81, cos(iGlobalTime*.34) * 0.97) * 1.5;
+    vec3 s5pos = vec3(sin(iGlobalTime*.62)*1.47, cos(iGlobalTime*.76) * 0.73, sin(iGlobalTime*.75) * 1.45) * 1.7;
+
+
+    float s1 = sdfSphere(pos - s1pos, 2.4);
+    float s2 = sdfSphere(pos - s2pos, 2.3);
+    float s3 = sdfSphere(pos - s3pos, 1.5);
+    float s4 = sdfSphere(pos - s4pos, 2.66);
+    float s5 = sdfSphere(pos - s5pos, 2.9);
+
+    //return s3;
+    //return smins(s1, s2);
+    return smins(s1, smins(s2, smins(s3, smins(s4, s5))));
 }
 
 vec2 squareFrame(vec2 res, vec2 coord){
@@ -129,6 +142,27 @@ float fresnel(vec3 normal, vec3 dir){
     return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
 }
 
+vec3 getTextureCol(vec3 normal, vec3 dir) {
+	vec3 eye = -dir;
+	vec3 r = reflect( eye, normal );
+    vec4 color = texture2D(iChannel0, r.xy);
+    return color.xyz;
+}
+
+vec3 calculateColor(vec3 pos, vec3 dir){
+  vec3 normal = computeNormal(pos);
+  vec3 color;
+  float lightDistance = sdfSphere(pos, 1.0);
+
+  vec3 colTex = getTextureCol(normal, dir);
+  float diffLight = diffuse(normal);
+  float specLight = specular(normal, dir);
+  float fresnelLight = fresnel(normal, dir);
+  float ambientOcc = ao(pos, normal);
+  color = (diffLight + specLight + fresnelLight) * colTex;
+  return color * ambientOcc;
+}
+
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
     vec3 cw = normalize(ta-ro);
     vec3 cp = vec3(sin(cr), cos(cr),0.0);
@@ -140,14 +174,15 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
 void main(){
     vec2 uv = squareFrame(iResolution.xy, gl_FragCoord.xy);
     float camSpeed = 0.2;
-    vec3 eye = vec3( -0.5+3.5*cos(camSpeed*iGlobalTime + 6.0),
-                3.0,
-                5.5 + 4.0*abs(sin(camSpeed*iGlobalTime + 6.0))
-    );
+    // vec3 eye = vec3( -0.5+3.5*cos(camSpeed*iGlobalTime + 6.0),
+    //             3.0,
+    //             5.5 + 4.0*abs(sin(camSpeed*iGlobalTime + 6.0))
+    // );
+    vec3 eye = vec3(0.5, 3.0,5.5);
 
     vec3 ta = vec3( -0.5, -0.9, 0.5 );
     mat3 camera = setCamera( eye, ta, 0.0 );
-    float fov = 1.;
+    float fov = 1.4;
     vec3 dir = camera * normalize(vec3(uv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
@@ -158,17 +193,10 @@ void main(){
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
         vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
         float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 );
-        float lightDistance = sphere(collision, 1.0);
-        vec3 normal = computeNormal(collision);
-        float diffLight = diffuse(normal);
-        float specLight = specular(normal, dir);
-        float fresnelLight = fresnel(normal, dir);
-        float ambientOcc = ao(collision, normal);
-        color = (diffLight + specLight + fresnelLight) * vec3(0.2, 0.2, 0.9);
+        color = calculateColor(collision, dir);
         
         shadow = mix(shadow, 1.0, 0.7);
-        color = color * ambientOcc * shadow;
-
+        color = color * shadow;
     } else {
         color = bgColor;
     }

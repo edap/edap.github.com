@@ -30,7 +30,7 @@ float map(vec3 pos){
     // 2) ok, now pay attention. here we are getting the plane as we did beofre
     // but we get the position of the box using the modulo function
     float planeDist = plane(pos);
-    float offset = 10.;
+    float offset = 20.;
     //pos = mod(pos, offset);
     
     // 3) as you see, the boxes are messed up, because the position of the box is
