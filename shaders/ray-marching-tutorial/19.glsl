@@ -5,8 +5,8 @@ const float EPSILON = 0.0011;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 100.00;
 
-vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
-
+//vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
+vec3 lightDirection = normalize(vec3(1.0, 0.6, 1.));
 vec2 rotate(vec2 pos, float angle){
     float c = cos(angle);
     float s = sin(angle);
@@ -42,30 +42,24 @@ float bendTorus( vec3 p, vec2 dim ){
     return sdTorus(q, dim);
 }
 
-vec3 opRep( vec3 p, vec3 c ){
-    return mod(p,c)-0.5*c;
-}
-
 float map(vec3 pos){
     float freqOnYZ = .1;
     float freqOnXZ = .4;
     
     pos.xz = rotate(pos.xz, sin(iGlobalTime*freqOnXZ)*.7);
-	  pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
+	pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
 
     float yOscFreq = 0.2;
-    vec3 s3pos = vec3(0., cos(iGlobalTime*(yOscFreq*2.)+11.) * 0.56,  sin(iGlobalTime*.12) * -2.2) * 1.2;
-    vec3 s4pos = vec3(2.55, sin(iGlobalTime*(yOscFreq*2.)+2.) * 0.81, cos(iGlobalTime*.3) * 0.4) * 1.5;
-    vec3 s5pos = vec3(-2.55, cos(iGlobalTime*(yOscFreq*4.)) * 0.73,   sin(iGlobalTime*.76) * 0.4) * 1.7;
+    vec3 s3pos = vec3(0.,    cos(iGlobalTime*(yOscFreq*2.)+11.) * 0.56,  sin(iGlobalTime*.12) * -2.2) * 1.2;
+    vec3 s4pos = vec3(2.55,  sin(iGlobalTime*(yOscFreq*2.)+2.) * 0.81,   cos(iGlobalTime*.3) * 0.4)   * 1.5;
+    vec3 s5pos = vec3(-2.55, cos(iGlobalTime*(yOscFreq*4.)) * 0.73,      sin(iGlobalTime*.76) * 0.4)  * 1.7;
 
     float sRadius = 3.5;
-    float s3 = bendTorus(pos - s3pos,vec2(sRadius+0.5, 0.5)); //2.5
-    float s4 = bendTorus(pos - s4pos,vec2(sRadius-1.2, 0.5)); //2.5
-    float s5 = bendTorus(pos - s5pos,vec2(sRadius-1., 0.5)); //2.5
+    float s3 = bendTorus(pos - s3pos,vec2(sRadius+0.5, 0.5));
+    float s4 = bendTorus(pos - s4pos,vec2(sRadius-1.2, 0.5));
+    float s5 = bendTorus(pos - s5pos,vec2(sRadius-1., 0.5));
     float s6 = bendTorus(pos,vec2(sRadius-1., 0.5));
     return smins(s5, smins(s4, smins(s3, s6)));
-    //return smins(s1, s2);
-    //return smins(s1, smins(s2, smins(s3, smins(s4, s5))));
 }
 
 vec2 squareFrame(vec2 res, vec2 coord){
@@ -143,16 +137,16 @@ float fresnel(vec3 normal, vec3 dir){
 }
 
 vec3 getRefTexture(vec3 normal, vec3 dir) {
-	vec3 eye = -dir;
+    vec3 eye = -dir;
 	vec3 r = reflect( eye, normal );
-  vec4 color = texture2D(iChannel1, r.xy);
-  return color.xyz;
+    //eastern-rosella-big.jpg
+    vec4 color = texture2D(iChannel0, (0.5 * (r.xy) + .5));
+    return color.xyz;
 }
 
 vec3 calculateColor(vec3 pos, vec3 dir){
   vec3 normal = computeNormal(pos);
   vec3 color;
-  float lightDistance = sdfSphere(pos, 1.0);
 
   vec3 colTex = getRefTexture(normal, dir);
   float diffLight = diffuse(normal);
@@ -160,8 +154,8 @@ vec3 calculateColor(vec3 pos, vec3 dir){
   float fresnelLight = fresnel(normal, dir);
   float ambientOcc = ao(pos, normal);
   color = (diffLight + specLight + fresnelLight) * colTex;
-  //return color * ambientOcc;
-  return color;
+  return color * ambientOcc;
+  //return color;
 }
 
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){

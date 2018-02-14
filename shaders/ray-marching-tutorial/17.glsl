@@ -149,13 +149,11 @@ float fresnel(vec3 normal, vec3 dir){
 }
 
 vec3 getRefTexture(vec3 normal, vec3 dir) {
-	vec3 eye = -dir;
+    vec3 eye = -dir;
 	vec3 r = reflect( eye, normal );
-  //r.xy * = 3.0;
-  float m = 2. * sqrt( pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2. ) );
-  //vec4 color = texture2D(iChannel0, r.xy);
-  vec4 color = texture2D(iChannel1, (0.5 * (r.xy) + .5));
-  return color.xyz;
+    //vec4 color = texture2D(iChannel0, r.xy);
+    vec4 color = texture2D(iChannel1, (0.5 * (r.xy) + .5));
+    return color.xyz;
 }
 
 vec3 calculateColor(vec3 pos, vec3 dir){

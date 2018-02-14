@@ -87,9 +87,6 @@ This file is about light. A light position and direction is defined in `lightDis
 
 ***
 
-**13.glsl**
-
-Pong Light via [Jamie Wong](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 
 **09.glsl**
 
@@ -115,5 +112,46 @@ and ambient occlusion
 Removing artifacts scaling the distance, tuning epsilon and using Inigo's smin function
 
 ***
+
+**13.glsl**
+Use Phong shading, via [Jamie Wong tutorial](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
+
+*** 
+
+**14.glsl**
+Domain repetition and boolean operations
+
+*** 
+
+**15.glsl**
+Add textures
+
+*** 
+
+**16.glsl**
+Change movement a bit
+
+*** 
+
+**17.glsl**
+Rings and sphere
+
+*** 
+
+**18.glsl**
+Bend and animate.
+
+*** 
+
+**19.glsl**
+Scale the texture
+
+*** 
+
+**20.glsl**
+Debug for OF
+
+*** 
+
 
 

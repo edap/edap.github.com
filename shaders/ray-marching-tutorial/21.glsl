@@ -1,12 +1,12 @@
 precision mediump float;
 
 const int MAX_MARCHING_STEPS = 64;
-const float EPSILON = 0.0001;
+const float EPSILON = 0.0011;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 100.00;
 
-vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
-
+//vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
+vec3 lightDirection = normalize(vec3(1.0, 0.6, 1.));
 vec2 rotate(vec2 pos, float angle){
     float c = cos(angle);
     float s = sin(angle);
@@ -22,50 +22,40 @@ float smins( float a, float b ){
     return smin(a, b, 3.0);
 }
 
-float sdfSphere(vec3 pos, float radius){
-    return length(pos) - radius;
+//Twist
+vec3 opTwist( vec3 p ){
+    float  c = cos(1.0*p.y+10.0);
+    float  s = sin(1.0*p.y+10.0);
+    mat2   m = mat2(c,-s,s,c);
+    return vec3(m*p.xz,p.y);
 }
 
-// operations
-float opS( float d1, float d2 ){
-    return max(-d2,d1);
+float sdTorus( vec3 p, vec2 t ){
+    return length( vec2(length(p.xz)-t.x,p.y) )-t.y;
 }
 
-vec3 opRep( vec3 p, vec3 c ){
-    return mod(p,c)-0.5*c;
+float sdHexPrism( vec3 p, vec2 h ){
+    vec3 q = abs(p);
+    return max(q.z-h.y,max((q.x*0.866025+q.y*0.5),q.y)-h.x);
 }
+
 
 float map(vec3 pos){
-    float freqOnYZ = .2;
-    float freqOnXZ = .8;
+    float freqOnYZ = .1;
+    float freqOnXZ = .4;
     
-    pos.xz = rotate(pos.xz, sin(iGlobalTime*freqOnXZ)*.7);
-	pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
-    
-    // try out different movements
-    // vec3 s1pos = vec3(sin(iGlobalTime*.55)*1.85, cos(iGlobalTime*.19) * 0.95, sin(iGlobalTime*.91) * 1.21) * 1.0;
-    // vec3 s2pos = vec3(cos(iGlobalTime*.43)*1.55, sin(iGlobalTime*.38) * 1.12, cos(iGlobalTime*.76) * 1.67) * 1.4;
-    // vec3 s3pos = vec3(sin(iGlobalTime*.26)*2.52, cos(iGlobalTime*.57) * 0.56, sin(iGlobalTime*.12) * 1.58) * 1.2;
-    // vec3 s4pos = vec3(sin(iGlobalTime*.97)*1.72, sin(iGlobalTime*.22) * 0.81, cos(iGlobalTime*.34) * 0.97) * 1.5;
-    // vec3 s5pos = vec3(sin(iGlobalTime*.62)*1.47, cos(iGlobalTime*.76) * 0.73, sin(iGlobalTime*.75) * 1.45) * 1.7;
+    //pos.xz = rotate(pos.xz, sin(iGlobalTime*freqOnXZ)*.7);
+	//pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
+    //pos = opTwist(pos);
+    float prism = sdHexPrism(pos, vec2(3., 3.) );
 
-    float yOscFreq = 0.6;
-    vec3 s1pos = vec3(2.85, cos(iGlobalTime*yOscFreq) * 0.95, -4.8) * 1.0;
-    vec3 s2pos = vec3(-2.85, sin(iGlobalTime*(yOscFreq*2.)) * 1.12, -4.8) * 1.4;
-    vec3 s3pos = vec3(0., cos(iGlobalTime*(yOscFreq*2.)+11.) * 0.56, -2.2) * 1.2;
-    vec3 s4pos = vec3(2.85, sin(iGlobalTime*(yOscFreq*2.)+2.) * 0.81, 0.4) * 1.5;
-    vec3 s5pos = vec3(-2.85, cos(iGlobalTime*(yOscFreq*4.)) * 0.73, 0.4) * 1.7;
-
+    pos.yz = rotate(pos.yz, );
     float sRadius = 3.5;
-    float s1 = sdfSphere(pos - s1pos, sRadius+0.1); //2.4
-    float s2 = sdfSphere(pos - s2pos, sRadius+0.3); //2.3
-    float s3 = sdfSphere(pos - s3pos,sRadius+0.5); //2.5
-    float s4 = sdfSphere(pos - s4pos, sRadius-1.2); //2.66
-    float s5 = sdfSphere(pos - s5pos, sRadius-1.); //2.9
-
-    //return s3;
-    //return smins(s1, s2);
-    return smins(s1, smins(s2, smins(s3, smins(s4, s5))));
+    float s3 = sdTorus(pos,vec2(sRadius, 0.5));
+    //return prism;
+    return smins(s3, prism);
+    
+    //return smins(s5, smins(s4, smins(s3, s6)));
 }
 
 vec2 squareFrame(vec2 res, vec2 coord){
@@ -118,12 +108,6 @@ float ao( in vec3 pos, in vec3 nor ){
     return clamp( 1.0 - 3.0*occ, 0.0, 1.0 );    
 }
 
-vec3 albedo(vec3 pos){
-    pos *= 0.5;
-    float f = smoothstep(0.27, 0.3, fract(pos.x + sin(pos.z) * 0.4));
-    return f * vec3(1.0);
-}
-
 vec3 computeNormal(vec3 pos){
     vec2 eps = vec2(0.01, 0.);
     return normalize(vec3(
@@ -149,19 +133,15 @@ float fresnel(vec3 normal, vec3 dir){
 }
 
 vec3 getRefTexture(vec3 normal, vec3 dir) {
-	vec3 eye = -dir;
+    vec3 eye = -dir;
 	vec3 r = reflect( eye, normal );
-  //r.xy * = 3.0;
-    float m = 2. * sqrt( pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2. ) );
-    //vec4 color = texture2D(iChannel0, r.xy);
-    vec4 color = texture2D(iChannel0, r.xy); // m augments brightness and contrast
+    vec4 color = texture2D(iChannel1, (0.5 * (r.xy) + .5));
     return color.xyz;
 }
 
 vec3 calculateColor(vec3 pos, vec3 dir){
   vec3 normal = computeNormal(pos);
   vec3 color;
-  float lightDistance = sdfSphere(pos, 1.0);
 
   vec3 colTex = getRefTexture(normal, dir);
   float diffLight = diffuse(normal);
@@ -170,6 +150,7 @@ vec3 calculateColor(vec3 pos, vec3 dir){
   float ambientOcc = ao(pos, normal);
   color = (diffLight + specLight + fresnelLight) * colTex;
   return color * ambientOcc;
+  //return color;
 }
 
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
@@ -182,22 +163,17 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
 
 void main(){
     vec2 uv = squareFrame(iResolution.xy, gl_FragCoord.xy);
-    float camSpeed = 0.2;
-    vec3 eye = vec3( -0.5+3.5*cos(camSpeed*iGlobalTime + 6.0),
-                3.0,
-                5.5 + 4.0*abs(sin(camSpeed*iGlobalTime + 6.0))
-    );
-    //vec3 eye = vec3(0.5, 3.0,5.5);
+    vec3 eye = vec3(0.5, 3.0,19.5);
 
     vec3 ta = vec3( -0.5, -0.9, 0.5 );
     mat3 camera = setCamera( eye, ta, 0.0 );
-    float fov = 2.4;
+    float fov = 4.6;
     vec3 dir = camera * normalize(vec3(uv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
 
     vec3 color;
-    vec3 bgColor = vec3(0.0);
+    vec3 bgColor = vec3(0.1, 0.35, 0.75);
 
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
         vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
@@ -206,9 +182,12 @@ void main(){
         
         shadow = mix(shadow, 1.0, 0.7);
         color = color * shadow;
+        float fogFactor = exp(collision.z * 0.04);
+        color = mix(bgColor, color, fogFactor);
     } else {
         color = bgColor;
     }
 
-    gl_FragColor = vec4(clamp(color,0.0,1.0) , 1.0);
+    //gl_FragColor = vec4(clamp(color,0.0,1.0) , 1.0);
+    gl_FragColor = vec4(color , 1.0);
 }
