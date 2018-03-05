@@ -17,7 +17,7 @@ export default class Gui extends DAT.GUI {
 		this.params = {
 			stop: false,
 			cameraHeight: 80,
-			cameraSpeed: 0.0005,
+			cameraSpeed: 0.0003,
 			lightIntensity: 1,
 			amplitude: 3.5,
 			minColor: 0.2,

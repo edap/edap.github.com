@@ -59,12 +59,7 @@ export default class Pool {
 
 	createObject(){
 		let palm = this.palmGeometry;
-		let mesh;
-		if(palm.attributes.isLeaf !== undefined){
-			mesh = new Mesh(palm, [this.materials[1], this.materials[0]]);
-		}else{
-			mesh = new Mesh(palm, this.materials[1]);
-		}
+		let mesh = new Mesh(palm, this.materials[1]);
 		mesh.rotateY(Math.PI / getRandom(-3, 3));
 
 		return mesh;

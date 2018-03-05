@@ -67,7 +67,7 @@ const init = () => {
 	if (debug){
 		controls = new OrbitControls(camera, renderer.domElement);
 	}
-	light = new THREE.HemisphereLight(0xe8e8e8, 0x000000, 10);
+	light = new THREE.HemisphereLight(0xe8e8e8, 0x000000, 2);
 	scene.add(light);
 	addGui(debug, light);
 
