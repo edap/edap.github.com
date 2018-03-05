@@ -23,7 +23,7 @@ export default class Palms {
 			width_stem: 0.2,
 			leaf_width: 1,
 			leaf_up: 6,
-			density: 8,
+			density: 11,
 			curvature: 0.01,
 			curvature_border: 0.002,
 			leaf_inclination: 0.8
@@ -32,14 +32,14 @@ export default class Palms {
 
 	palmOptions(){
 		return {
-			spread: 0.03,
+			spread: 0.04,
 			angle: 137.66,
-			num: 140,
+			num: 150,
 			growth: 0.25,
 			foliage_start_at: 42,
-			trunk_regular: true,
+			trunk_regular: false,
 			buffers: false,
-			angle_open: 16.87,
+			angle_open: 32.0,
 			starting_angle_open: 51.65
 		};
 	}
