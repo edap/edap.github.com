@@ -14,7 +14,7 @@ export default class Pool {
 		this.distance_from_path = distance_from_path;
 		this.step = this.percent_covered / this.size;
 		this.materials = materials;
-		this.palmTypes = new Palms(); //this return some different palms, one for each type
+		this.palmGeometry = new Palms(); //this return some different palms, one for each type
 		this.populatePool();
 	}
 
@@ -61,7 +61,7 @@ export default class Pool {
 		let palm;
 		let index;
 		//we use just the palm type number 0
-		palm = this.palmTypes[0];
+		palm = this.palmGeometry;
 		const matIndex = 0;
 		let mesh;
 		if(palm.attributes.isLeaf !== undefined){

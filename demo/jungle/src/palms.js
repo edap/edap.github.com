@@ -4,22 +4,16 @@ import LeafGeometry from './LeafGeometry.js';
 
 export default class Palms {
 	constructor(){
-		this.trunkGeometry = new BoxGeometry(5, 5, 5);
-		const palms = [];
-
-		const trunkGeometry = this.trunkGeometry;;
+		const trunkGeometry = new BoxGeometry(5, 5, 5);
 		const leafGeometry = new LeafGeometry(this.leafOptions());
 		const curve = this.getCurve();
 		const palm = new PalmGenerator(leafGeometry, trunkGeometry, this.palmOptions(), curve);
 
 		const geometry = palm.geometry;
 		const bufGeometry = new BufferGeometry().fromGeometry(geometry);
-
-		const palmBuffers = palm.buffers;
 		bufGeometry.clearGroups();
-		palms.push(bufGeometry);
 
-		return palms;
+		return bufGeometry;
 	}
 
 	leafOptions(){
