@@ -31,7 +31,7 @@ export default class Palms {
 	}
 
 	palmOptions(){
-		const palm_one = {
+		return {
 			spread: 0.04,
 			angle: 137.66,
 			num: 178,
@@ -42,7 +42,6 @@ export default class Palms {
 			angle_open: 75.87,
 			starting_angle_open: 51.65
 		};
-		return palm_one;
 	}
 
 	getCurve(){

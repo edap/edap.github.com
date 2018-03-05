@@ -14,7 +14,7 @@ export default class Pool {
 		this.distance_from_path = distance_from_path;
 		this.step = this.percent_covered / this.size;
 		this.materials = materials;
-		this.palmGeometry = new Palms(); //this return some different palms, one for each type
+		this.palmGeometry = new Palms();
 		this.populatePool();
 	}
 
@@ -25,7 +25,7 @@ export default class Pool {
 			tot_lenght_steps += this.step;
 			this.index_positions.push(tot_lenght_steps);
 
-			const obj = this.createObject(i);
+			const obj = this.createObject();
 			obj.name = i;
 			obj.position_on_curve = tot_lenght_steps;
 			const point = this.curve.getPoint(tot_lenght_steps);
@@ -57,19 +57,14 @@ export default class Pool {
 		const validPoints = Math.abs(this.curve.points * this.percent_covered);
 	}
 
-	createObject(i){
-		let palm;
-		let index;
-		//we use just the palm type number 0
-		palm = this.palmGeometry;
-		const matIndex = 0;
+	createObject(){
+		let palm = this.palmGeometry;
 		let mesh;
 		if(palm.attributes.isLeaf !== undefined){
 			mesh = new Mesh(palm, [this.materials[1], this.materials[0]]);
 		}else{
 			mesh = new Mesh(palm, this.materials[1]);
 		}
-		
 		mesh.rotateY(Math.PI / getRandom(-3, 3));
 
 		return mesh;
