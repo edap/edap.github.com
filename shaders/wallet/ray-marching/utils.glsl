@@ -73,6 +73,24 @@ vec3 computeNormal(vec3 pos) {
 	return normalize(normal);
 }
 
+// Kind of phong material
+vec3 calculateColor2(vec3 pos, vec3 dir){
+  //light via https://vimeo.com/124721382
+  vec3 nor = computeNormal(pos);
+
+  //vec3 lig = normalize(vec3(1.,1.,1.));
+  vec3 lig = normalize(vec3(1.,sin(iGlobalTime*5.)*3.+.5, 1.));
+  float NL = max(dot(nor, lig),0.);
+  float NV = max(dot(nor, -dir),0.);
+  NV =  pow(1.-NV, 3.);
+  
+  float bli =  max(dot(normalize(lig+-dir), nor), 0.);
+  bli = pow(bli, 80.);
+
+  float c = NL + NV * 0.5 + bli;
+  return vec3(c);
+}
+
 // camera
 // https://www.shadertoy.com/view/Xds3zN
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
