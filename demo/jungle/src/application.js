@@ -48,7 +48,7 @@ const prepareGeometries = () => {
 	spline = createPath(radius, radius_offset);
 	scene = new THREE.Scene();
 	// TODO re-add fog
-	scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.016, 100 );
+	scene.fog = new THREE.FogExp2( bgColor.getHex(), 0.016, 600 );
 	scene.background = bgColor;
 	pool = new Pool(poolSize, scene, spline, percent_covered, distance_from_path, materials);
 	return pool;
