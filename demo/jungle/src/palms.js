@@ -4,7 +4,7 @@ import LeafGeometry from './LeafGeometry.js';
 
 export default class Palms {
 	constructor(){
-		const trunkGeometry = new BoxGeometry(4, 4, 4);
+		const trunkGeometry = new BoxGeometry(5, 5, 5);
 		const leafGeometry = new LeafGeometry(this.leafOptions());
 		const curve = this.getCurve();
 		const palm = new PalmGenerator(leafGeometry, trunkGeometry, this.palmOptions(), curve);
@@ -34,7 +34,7 @@ export default class Palms {
 		return {
 			spread: 0.03,
 			angle: 137.66,
-			num: 150,
+			num: 140,
 			growth: 0.25,
 			foliage_start_at: 42,
 			trunk_regular: true,
