@@ -1,7 +1,7 @@
 import { BoxBufferGeometry, Mesh, Vector3 } from 'three';
 import { getRandom, getRandomInt } from './helpers.js';
 import Palms from './palms.js';
-import { PALM_INITIAL_Y_POSITION, N_LOW_PALMS } from './const';
+import { PALM_INITIAL_Y_POSITION } from './const';
 
 export default class Pool {
 	constructor(size, scene, curve, percent_covered, distance_from_path, materials){
@@ -44,13 +44,8 @@ export default class Pool {
 				new_pos = point.sub(secantVector);
 			}
 			let palmY;
-			// the animation start with the camera inside the leaves
-			// to make it easier, I simply set the position of the first n palm down in
-			// the ground
-
 			palmY = PALM_INITIAL_Y_POSITION;
 			
-
 			obj.position.set(new_pos.x, palmY, new_pos.z);
 			this.container.push(obj);
 			this.scene.add(obj);
@@ -63,21 +58,10 @@ export default class Pool {
 	}
 
 	createObject(i){
-		const randomIndex = getRandomInt(0, 6);
-		//let randomIndex = 5;
 		let palm;
 		let index;
-		if (i < N_LOW_PALMS){
-			palm = this.palmTypes[0];
-		} else {
-			index = i % this.palmTypes.length;
-			// the model with index 0 has nice leaves that looks like a bush
-			palm = this.palmTypes[index];
-		}
-
-		//use this to have high trees of the same color
-		//const matIndex = i % (this.materials.length / 2);
-		//const matIndex = getRandomInt(1, 3);
+		//we use just the palm type number 0
+		palm = this.palmTypes[0];
 		const matIndex = 0;
 		let mesh;
 		if(palm.attributes.isLeaf !== undefined){
