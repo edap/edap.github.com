@@ -30,6 +30,8 @@ let gui,
 	mouseY,
 	light;
 
+let isPlay = true;
+
 //curve
 const curveDensity = 600; // how many points define the path
 const t = 0;
@@ -97,12 +99,22 @@ const init = () => {
 };
 
 const animate = () => {
+	if (!isPlay) return;
+
 	requestAnimationFrame(animate);
 	stats.begin();
 	scenography.update(gui, mouseY);
 	pool.update(scenography.getCameraPositionOnSpline());
 	render();
 	stats.end();
+}
+
+const pause = () => {
+	isPlay = false;
+}
+
+const resume = () => {
+	isPlay = true;
 }
 
 const render = () => {
