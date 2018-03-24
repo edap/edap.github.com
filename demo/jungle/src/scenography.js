@@ -71,9 +71,9 @@ export default class Scenography {
 
 	_calcHeight(mouseY){
 		if (mouseY === undefined) {
-			return 25;
+			return 26;
 		}else{
-			return map(mouseY, 0, 1, 35, 20);
+			return map(mouseY, 0, 1, 30, 22);
 		}
 	}
 
