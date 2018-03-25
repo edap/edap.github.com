@@ -64,7 +64,7 @@ vec2 sminsMat(vec2 d1, vec2 d2){
 }
 
 // multiple materials. The x component returns the distance
-// field value. The y the material
+// field value. The y component returns the material
 vec2 map(vec3 pos){
     vec2 res = vec2(0.,0.);
     float diam = 3.;
