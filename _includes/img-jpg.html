@@ -1,0 +1,8 @@
+{% capture pngName assetPath gridClass %}
+    {{ include.pngName include.assetPath include.gridClass }}
+{% endcapture %}
+<img class ="{{ include.gridClass }}" srcset =
+"{{ include.assetPath }}{{ include.pngName }}-small.jpg 640w,
+{{ include.assetPath }}{{ include.pngName }}-medium.jpg 1280w,
+{{ include.assetPath }}{{ include.pngName }}-large.jpg 1940w,
+{{ include.assetPath }}{{ include.pngName }}.jpg 2600w" sizes="(max-width: 600px) 66vw, 66.333vw">
