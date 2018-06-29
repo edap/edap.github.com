@@ -46,7 +46,7 @@ void main(){
 
         // if you use the check before fract, it does not work
         // because it is
-        float check = inCell(3.0, 2.0, st);
+        float check = inCell(2.0, 2.0, st);
 
         // try to multiply just the x or the y
         st = fract(st);

@@ -43,7 +43,6 @@ mat2 rotate2d(float _angle){
                 sin(_angle),cos(_angle));
 }
 
-
 vec2 rotate2D (vec2 _st, float _angle) {
     _st -= 0.5;
     _st =  mat2(cos(_angle),-sin(_angle),
@@ -141,7 +140,6 @@ float rand(vec2 uv){
     return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-
 void main (void) {
   // General parameters
   float smoothness = 0.03;
@@ -181,7 +179,7 @@ void main (void) {
   float powerCol = 2.;
   vec2 colRatio = vec2(0.7*colResize, 0.7*colResize);
   vec2 colSubRatio = vec2(0.9*colResize, 0.9*colResize);
-  float colRadius = 0.52*colResize;
+  float colRadius = 0.42*colResize;
   // sepals parameters
   float addSmoothnessToSetals = 2.9;
   float deformX = 0.;
@@ -239,22 +237,26 @@ void main (void) {
   // the black color is used just for debugging
   vec3 black = vec3(0.,0.,0.);
   // this angle is using while creating the colors
-  float angle = atan(orcSt.y,orcSt.x) + 0.5;
+  float angle = atan(orcSt.x,orcSt.y)*0.10 + 0.2;
+  //float angle = atan(orcSt.x,orcSt.y) + 0.2;
 
   // Sepals color:
   sepals = fillSmooth(sepals,0.09,smoothness+0.005);
-  vec3 sepalsColor = mix(lilla, blue,rand(orcSt));
+  // old random colors
+  //vec3 sepalsColor = mix(lilla, blue,rand(orcSt));
+  vec3 sepalsColor = mix(lilla, rose,sin((angle+0.1)*100.)+0.9);
   vec3 orcColor = mix(sepalsColor, bgCol, sepals);
 
   // Lip color:
   // 1) create the space coord for the points
   vec2 lipSt = orcSt;
-  lipSt = fract(lipSt *= 20.);
+  lipSt = fract(lipSt *= 7.5);
   lipSt -=vec2(0.5,0.5);
   // 2 create the color pois
-  float points = circleDist(lipSt, 0.1);
-  points = smoothstep(points, points+0.05, 0.2);
-  vec3 colorPoints = mix(orange, blue, points);
+  //float points = circleDist(lipSt, 0.32);
+  float points = ellipseDist(lipSt, 0.4, vec2(0.2, 0.9));
+  points = smoothstep(points, points+0.09, 0.21);
+  vec3 colorPoints = mix(sepalsColor, rose, points);
   // 3 mix the color with the orchid
   lip = fillSmooth(lip,0.09,smoothness+0.005);
   orcColor = mix(colorPoints, orcColor, lip);
@@ -271,5 +273,6 @@ void main (void) {
   orcColor = mix(columnColor, orcColor, column);
 
   //finalColor+= columnColor;
-  gl_FragColor = vec4(vec3(column),1.0);
+  //gl_FragColor = finalColor;
+  gl_FragColor = vec4(vec3(orcColor),1.0);
 }

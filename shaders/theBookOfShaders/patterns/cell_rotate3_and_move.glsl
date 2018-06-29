@@ -42,7 +42,7 @@ void main(){
         float n_tile = 3.0;
 
         st *= n_tile;
-
+        
         float x = ceil(mod(iGlobalTime, n_tile));
         float checkFirst = inCell(x, 2.0, st);
         float checkSecond = inCell(2.0, 1.0, st);
