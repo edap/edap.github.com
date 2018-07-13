@@ -26,6 +26,7 @@ mat2 rotate2d(float _angle){
                 sin(_angle),cos(_angle));
 }
 
+
 float orcSepals(vec2 toCenter, float resize, float defX, float defY, 
 float power, float nPetals, float smoothness){
     float angle = atan(toCenter.y,toCenter.x) + 0.5;

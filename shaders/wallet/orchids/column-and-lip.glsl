@@ -22,33 +22,61 @@ float ellipseDist(vec2 p, float radius, vec2 dim){
   return length(pos) - radius;
 }
 
+float merge(float d1, float d2){
+	return min(d1, d2);
+}
 
-float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
-  float A = ellipseDist(pos, radius, ovalSub);
+//
+float column(vec2 pos){
+  // nuovi parametri:
+  vec2 punta = vec2(0.2,0.1);
+  vec2 oval = vec2(0.06,0.36);
+  vec2 ovalBase = vec2(0.15, 0.08);
+  float r = 0.3;
+
+  float A = ellipseDist(pos, r, ovalBase);
   vec2 posB = pos;
-  posB.y -= offset;
-  float B = ellipseDist(posB, radius, oval);
-  float p = substract(B,A);
-  posB.y += 0.035;
-  float cone = ellipseDist(posB, radius, vec2(0.055, 0.30));
-  p = smoothMerge(cone,p, 0.4);
-  float s = ellipseDist(posB, radius, vec2(0.2, 0.20));
-  //p = smoothMerge(cone,p, 0.4);
-  //p = mergeExclude(cone,p);
-  //p = intersect(cone,p);
-  return p;
+  posB.y -= 0.19; //da 0.1 a 0.33
+  float B = ellipseDist(posB, r, oval);
+  float pistillo = smoothMerge(B,A, 0.8);
+
+  vec2 posZ = pos;
+  posZ.y -=0.25;
+  float Z = ellipseDist(posZ, r, punta);
+  pistillo = smoothMerge(pistillo, Z, 0.55);
+
+  //petali sotto
+  vec2 posC = posB;
+  vec2 posD = posC;
+  posC.y += 0.05;
+  posD.y += 0.085;
+  vec2 baffoUp = vec2(0.8,0.77);
+  // baffoBottom should be an heart upside down
+  vec2 baffoBottom = vec2(0.6,0.45);
+
+  float C = ellipseDist(posC, r, baffoUp);
+  float D = ellipseDist(posD, r, baffoBottom);
+  float petals = substract(C,D);
+
+
+  float pa = merge(petals,pistillo);
+
+  return pa;
 }
 
 void main(){
   vec2 st = gl_FragCoord.xy/iResolution.xy;
+  st*= 1.;
+  st = fract(st);
+  st.y *= iResolution.y/ iResolution.x;
   st += vec2(-0.5, -0.5);
+  
 
-  // old column
-  vec2 oval = vec2(0.5,0.5);
-  vec2 ovalSub = vec2(0.3, 0.4);
-  float radius = 0.6;
-  float offset = 0.3;
-  float orcColumn = orcColumn(st, oval, ovalSub, radius, offset);
-  vec3 col = vec3(smoothstep(orcColumn, orcColumn+0.05, 0.1));
-  gl_FragColor = vec4(col, 1.0);
+
+  
+  float theCol = column(st);
+  vec3 finalCol = vec3(smoothstep(theCol, theCol+0.05, 0.1));
+
+
+  gl_FragColor = vec4(vec3(finalCol), 1.0);
 }

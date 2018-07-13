@@ -65,6 +65,7 @@ float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   float cone = ellipseDist(posB, radius, vec2(0.08, 0.55));
   p = smoothMerge(cone,p, 0.3);
   return p;
+  
 }
 
 void main(){
