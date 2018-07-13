@@ -194,6 +194,24 @@ div.tools-intro{
     padding-bottom:50px;
     border-bottom: 1px solid $brand-color;
 }
+div.statement, div.bio, div.events{
+    text-align: left;
+    padding-bottom:50px;
+    border-bottom: 1px solid $brand-color;
+    padding-top: 50px;
+}
+div.event{
+    padding-bottom: 15px;
+}
+div.event-title{
+    font-style: italic;
+}
+
+div.event-type{
+    padding-top:15px;
+    padding-bottom: 15px;
+    font-weight: bold;
+}
 
 .index-content a:hover {
   opacity: 1;
