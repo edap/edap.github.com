@@ -7,9 +7,13 @@ At the end the Mercury Library is introduced.
 These are the references that I've checked while working at it:
 
 [Íñigo Quílez website](http://iquilezles.org/www/articles/distfunctions/distfunctions.htm)
+
 [live conding by Rémi Papillié](https://www.youtube.com/watch?v=s6t0mJsgUKw)
+
 [9bitscience](http://9bitscience.blogspot.de/2013/07/raymarching-distance-fields_14.html)
+
 [jamie-wong](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
+
 
 You can run each file in Visual Studio Code + [Shader Toy extension](https://marketplace.visualstudio.com/items?itemName=stevensona.shader-toy). After the extension is installed, go to View -> Command Palette -> shoew glsl preview
 
