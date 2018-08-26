@@ -4,6 +4,18 @@ precision mediump float;
 
 //https://thebookofshaders.com/07/
 
+
+float box(in vec2 _st, in vec2 _size){
+    _size = vec2(0.5) - _size*0.5;
+    vec2 uv = smoothstep(_size,
+                        _size+vec2(0.001),
+                        _st);
+    uv *= smoothstep(_size,
+                    _size+vec2(0.001),
+vec2(1.0)-_st); return uv.x*uv.y;
+}
+
+
 //this could be useful for a vignette background
 vec3 rect(float margin){
     vec3 pct;
@@ -80,6 +92,7 @@ float rectangleGradientLeft(in vec2 st, in vec2 origin, in vec2 dimensions, floa
     return pct;
 }
 
+
 //usage example
 void main() {   
     //vec3 rect = rect(0.1);
@@ -97,7 +110,8 @@ void main() {
     float rectBottom = rectangleGradientBottom(st, vec2(0.2, 0.4), vec2(0.1,0.1), 0.05);
     float rectLeft = rectangleGradientLeft(st, vec2(0.1, 0.5), vec2(0.1,0.1), 0.00);
     float rectRight = rectangleGradientRight(st, vec2(0.8, 0.1), vec2(0.1,0.1), 0.05);
-    col+= rectTop + rectBottom + rectLeft + rectRight;
+    float box = box(st, vec2(0.2, 0.1));
+    col+= rectTop + rectBottom + rectLeft + rectRight + box;
     gl_FragColor = vec4(vec3(col),1.0);
     //gl_FragColor = vec4(vec3(rect*0.4,rect*0.7,rect*0.2),1.0);
 

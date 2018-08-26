@@ -27,41 +27,42 @@ float merge(float d1, float d2){
 }
 
 //
-float column(vec2 pos){
+float column(vec2 pos, float _h, float _hole){
   // nuovi parametri:
-  vec2 punta = vec2(0.2,0.1);
-  vec2 oval = vec2(0.06,0.36);
-  vec2 ovalBase = vec2(0.15, 0.08);
+  float h = clamp(_h, 0.1, 0.65);
+  float hole = clamp(_hole ,0.3, 1.0);
   float r = 0.3;
 
-  float A = ellipseDist(pos, r, ovalBase);
+  // central part
+  vec2 punta = vec2(r*0.5,h*0.35);
+  vec2 cent = vec2(r*0.14,h*1.2);
+  vec2 base = vec2(r*0.35, h*0.22);
+
+  float A = ellipseDist(pos, r, base);
   vec2 posB = pos;
-  posB.y -= 0.19; //da 0.1 a 0.33
-  float B = ellipseDist(posB, r, oval);
-  float pistillo = smoothMerge(B,A, 0.8);
+  posB.y -= h*0.48;
+  float B = ellipseDist(posB, r, cent);
+  float pistillo = merge(B,A);
 
   vec2 posZ = pos;
-  posZ.y -=0.25;
+  posZ.y -=h*0.7;
   float Z = ellipseDist(posZ, r, punta);
-  pistillo = smoothMerge(pistillo, Z, 0.55);
+  pistillo = merge(pistillo, Z);
 
-  //petali sotto
-  vec2 posC = posB;
-  vec2 posD = posC;
-  posC.y += 0.05;
-  posD.y += 0.085;
-  vec2 baffoUp = vec2(0.8,0.77);
-  // baffoBottom should be an heart upside down
-  vec2 baffoBottom = vec2(0.6,0.45);
+  //baffi
+  vec2 baffoUp = vec2(0.9*hole,h*3.);
+  vec2 baffoBottom = vec2(r*2.0,h*1.2);
+
+  vec2 posD = posB;
+  posD.y += h*0.11;
+  vec2 posC = posD;
+  posC.y -= h*0.3;
 
   float C = ellipseDist(posC, r, baffoUp);
   float D = ellipseDist(posD, r, baffoBottom);
-  float petals = substract(C,D);
+  float baffi = substract(C,D);
 
-
-  float pa = merge(petals,pistillo);
-
-  return pa;
+  return merge(baffi,pistillo);
 }
 
 void main(){
@@ -71,10 +72,7 @@ void main(){
   st.y *= iResolution.y/ iResolution.x;
   st += vec2(-0.5, -0.5);
   
-
-
-  
-  float theCol = column(st);
+  float theCol = column(st, 0.24, 0.6);
   vec3 finalCol = vec3(smoothstep(theCol, theCol+0.05, 0.1));
 
 

@@ -55,19 +55,43 @@ float lip(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
   return p;
 }
 
-float orcColumn(vec2 pos, vec2 oval, vec2 ovalSub,float radius, float offset){
-  float A = ellipseDist(pos, radius, ovalSub);
-  vec2 posB = pos;
-  posB.y -= offset;
-  float B = ellipseDist(posB, radius, oval);
-  float p = substract(B,A);
-  posB.y += 0.035;
-  float cone = ellipseDist(posB, radius, vec2(0.08, 0.55));
-  p = smoothMerge(cone,p, 0.3);
-  return p;
-  
-}
+float column(vec2 pos, float _h, float _hole){
+  // nuovi parametri:
+  float h = clamp(_h, 0.1, 0.65);
+  float hole = clamp(_hole ,0.3, 1.0);
+  float r = 0.3;
 
+  // central part
+  vec2 punta = vec2(r*0.5,h*0.35);
+  vec2 cent = vec2(r*0.23,h*1.8);
+  vec2 base = vec2(r*0.35, h*0.22);
+
+  float A = ellipseDist(pos, r, base);
+  vec2 posB = pos;
+  posB.y -= h*0.48;
+  float B = ellipseDist(posB, r, cent);
+  float pistillo = merge(B,A);
+
+  vec2 posZ = pos;
+  posZ.y -=h*0.7;
+  float Z = ellipseDist(posZ, r, punta);
+  pistillo = merge(pistillo, Z);
+
+  //baffi
+  vec2 baffoUp = vec2((r*3.)*hole,h*3.);
+  vec2 baffoBottom = vec2(r*2.0,h*1.2);
+
+  vec2 posD = posB;
+  posD.y += h*0.11;
+  vec2 posC = posD;
+  posC.y -= h*0.33;
+
+  float C = ellipseDist(posC, r*0.66, baffoUp);
+  float D = ellipseDist(posD, r*1.4, baffoBottom);
+  float baffi = substract(C,D);
+  //return baffi;
+  return merge(baffi,pistillo);
+}
 
 void main(){
   vec2 st =  gl_FragCoord.xy / iResolution.xy;
@@ -79,15 +103,7 @@ void main(){
   st *= 1.;
   st = fract(st);
   st+=vec2(-0.5, -0.5);
-  //column parameters
-  float colResize = 0.55;
-  vec2 posCol = st;
-  posCol.y += 0.07;
-  float colYoffset = -0.04;
-  float powerCol = 2.;
-  vec2 colRatio = vec2(0.4*colResize, 0.4*colResize);
-  vec2 colSubRatio = vec2(0.9*colResize, 0.9*colResize);
-  float colRadius = 0.52*colResize;
+
   // sepals parameters
   float deformX = 0.;
   float deformY = 0.;
@@ -117,10 +133,10 @@ void main(){
   vec2 smallLipRatio = vec2(0.3*lipResize, 0.15*lipResize);
   float lipRadius = 1.*lipResize;
 
-  float column = orcColumn(posCol*rotate2d(TWO_PI/2.),
-                        colRatio,
-                        colSubRatio,
-                        colRadius, colYoffset);
+  vec2 posCol = st;
+  posCol.y += 0.1;
+  float theCol = column(posCol, 0.24, 0.6);
+
   float sepals = orcSepals(st,
                         resizePetals,
                         deformX,
@@ -139,7 +155,7 @@ void main(){
   float orchids = merge(latPetals, sepals);
 
   orchids = merge(orchids, lip);
-  orchids = substract(column, orchids);
+  orchids = substract(theCol, orchids);
   // add smoothness
-  gl_FragColor = vec4(vec3(fillSmooth(orchids,0.09,smoothness)), 1.);
+  gl_FragColor = vec4(vec3(fillSmooth(orchids,0.05,smoothness)), 1.);
 }
