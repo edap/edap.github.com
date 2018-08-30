@@ -387,7 +387,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         // ray direction
         vec3 rd = ca * normalize( vec3(p.xy,2.0) );
 
-        // render	
+        // render
         vec3 col = render( ro, rd );
 
 		// gamma
@@ -399,6 +399,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     tot /= float(AA*AA);
 #endif
 
-    
     fragColor = vec4( tot, 1.0 );
 }
