@@ -30,7 +30,6 @@ float noise (in vec2 st) {
             (d - b) * u.x * u.y;
 }
 
-
 vec2 vectorField(vec2 uv){
   vec2 res = uv;
   float n = noise(res*vec2(3.0));
@@ -39,7 +38,6 @@ vec2 vectorField(vec2 uv){
   res += vec2(n);
   return res;
 }
-
 
 void main(){
   vec2 st = gl_FragCoord.xy / iResolution.xy;

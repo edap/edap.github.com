@@ -11,7 +11,6 @@ float noise (in vec2 st) {
     vec2 i = floor(st);
     vec2 f = fract(st);
 
-
     // Four corners in 2D of a tile
     float a = random(i);
     float b = random(i + vec2(1.0, 0.0));
@@ -19,7 +18,6 @@ float noise (in vec2 st) {
     float d = random(i + vec2(1.0, 1.0));
 
     // Smooth Interpolation
-
     // Cubic Hermine Curve.  Same as SmoothStep()
     vec2 u = f*f*(3.0-2.0*f);
     // u = smoothstep(0.,1.,f);
@@ -30,30 +28,36 @@ float noise (in vec2 st) {
             (d - b) * u.x * u.y;
 }
 
-
 vec2 vectorField(vec2 uv){
   vec2 res = uv;
   float n = noise(res*vec2(3.0));
-  //res.x += iGlobalTime*0.1;
+  res.y -= iGlobalTime*0.1;
   res += sin(res.yx*40.5) * 0.02;
-  //res += vec2(n);
+  res += vec2(n);
   return res;
 }
 
+float plot(float val, float c, float t){
+  float l = smoothstep(c,c-t,val);
+  float r = smoothstep(c,c-t/5.,val);
+  return r-l;
+}
 
 void main(){
   vec2 st = gl_FragCoord.xy / iResolution.xy;
   st.y *= iResolution.y / iResolution.x;
   st = vectorField(st);
 
-  float cell = 0.5;
+  float cell = 0.2;
   vec2 modSt = mod(st, vec2(cell));
-  vec2 stepped = step(vec2(0.49), modSt);
 
+  float x = plot(modSt.x, cell, 0.1);
+  float y = plot(modSt.y, cell, 0.1);
 
-  //vec3 col = vec3(0.1,0.9,0.9);
-  //col  *= (1.0-min(stepped.x + stepped.y, 1.0));
-  vec3 col = vec3(0.9,0.45,0.03) * (stepped.x);
-  //col += vec3(0.95,0.3,0.) * (stepped.y);
+  vec3 col = vec3(0.9,0.5,0.03) * x;
+  col += vec3(0.95,0.3,0.) * y;
+  vec3 bgCol = vec3(0.1,0.9,0.9);
+  col+= bgCol*vec3(smoothstep(1.7, .01,x+y));
+
   gl_FragColor = vec4(col,1.0);
 }
