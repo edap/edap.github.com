@@ -168,7 +168,7 @@
 
 .index-content {
   width: 96%;
-  margin: 0 2% 0 2%;
+  //margin: 0 2% 0 2%;
 }
 .grid, .grid-sizer{
   width: 32.666%;
@@ -194,7 +194,7 @@ div.tools-intro{
     padding-bottom:50px;
     border-bottom: 1px solid $brand-color;
 }
-div.statement, div.bio, div.events{
+div.statement, div.bio, div.events, div.separation-line{
     text-align: left;
     padding-bottom:50px;
     border-bottom: 1px solid $brand-color;
