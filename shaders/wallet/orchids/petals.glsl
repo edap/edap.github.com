@@ -8,7 +8,6 @@ float orcPetals(vec2 st, vec2 orig, float resize, float smoothness, float nPale)
     vec2 toCenter = vec2(orig)-st;
     float angle = atan(toCenter.y,toCenter.x) - 0.5;
 
-
     // the value of grow affect the curve
     float grow = pow(length(toCenter), 3.);
     //float grow = exp(length(toCenter)) * 0.029;

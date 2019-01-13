@@ -51,6 +51,7 @@ float quadrifoglio (vec2 st, float diameter){
   float radiusA = length(petAcen);
   float petA = circle(petAcen,radiusA*cross);
 
+
   vec2 petBcen = rotate2d(TWO_PI/4.) * petAcen;
   petBcen -= vec2(0., -.5);
   float radiusB = length(petBcen);

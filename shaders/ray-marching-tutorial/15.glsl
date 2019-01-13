@@ -6,8 +6,8 @@ const float EPSILON = 0.0015;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 100.00;
 
-//vec3(1.0, 1.0, -1.0);
-vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
+vec3 lightDirection = vec3(1.0, 1.0, -1.0);
+//vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
 
 vec2 rotate(vec2 pos, float angle){
     float c = cos(angle);

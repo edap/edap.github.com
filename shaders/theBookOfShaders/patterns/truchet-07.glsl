@@ -6,9 +6,6 @@ precision mediump float;
 
 #define PI 3.14159265358979323846
 
-
-
-
 vec2 rotate2D (vec2 _st, float _angle) {
     _st -= 0.5;
     _st =  mat2(cos(_angle),-sin(_angle),
@@ -66,14 +63,14 @@ vec2 rotateTilePattern(vec2 _st){
 void main (void) {
     vec2 st = gl_FragCoord.xy/iResolution.xy;
 
-    st = tile(st,1.0);
+    st = tile(st,2.0);
     st = rotateTilePattern(st);
 
     // Make more interesting combinations
     //st = tile(st,2.0);
     //st = rotate2D(st,-PI*iGlobalTime*0.25);
     //st = rotateTilePattern(st*2.);
-    //st = rotate2D(st,PI*iGlobalTime*0.25);
+    st = rotate2D(st,PI*iGlobalTime*0.25);
 
     // step(st.x,st.y) just makes a b&w triangles
     // but you can use whatever design you want.

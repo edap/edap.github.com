@@ -8,5 +8,6 @@ void main () {
   float sdf = stroke(st.x, 0.5, 0.15);
   float line = clamp(sdf,0.,1.);
   vec3 color = vec3(line);
+  
   gl_FragColor = vec4(color, 1.0);
 }

@@ -44,8 +44,9 @@ float map(vec3 pos){
     float freqOnYZ = .1;
     float freqOnXZ = .4;
     
+    
     pos.xz = rotate(pos.xz, sin(iGlobalTime*freqOnXZ)*.7);
-	  pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
+	pos.yz = rotate(pos.yz, cos(iGlobalTime*freqOnYZ)*.7);
 
     float yOscFreq = 0.2;
     vec3 s3pos = vec3(0., cos(iGlobalTime*(yOscFreq*2.)+11.) * 0.56,  sin(iGlobalTime*.12) * -2.2) * 1.2;
