@@ -271,5 +271,5 @@ void main (void) {
   orcColor = mix(columnColor, orcColor, column);
 
   //finalColor+= columnColor;
-  gl_FragColor = vec4(vec3(column),1.0);
+  gl_FragColor = vec4(vec3(orcColor),1.0);
 }
