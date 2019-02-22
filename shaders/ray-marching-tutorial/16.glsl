@@ -7,6 +7,7 @@ const float FAR_CLIP = 100.00;
 
 vec3 lightDirection = normalize(vec3(sin(iGlobalTime), 0.6, 1.));
 
+
 vec2 rotate(vec2 pos, float angle){
     float c = cos(angle);
     float s = sin(angle);
