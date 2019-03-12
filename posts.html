@@ -3,9 +3,11 @@ layout: default
 ---
 
 <div class="index-content">
-<div class="grid-gutter"></div><div class="grid-sizer"></div>
+<div class="grid-gutter"></div>
 {% for post in site.posts %}
-      <div class="grid">
+      <!-- All the post have the same size, the grid sizer class
+      can therefore be applied to all of them   -->
+      <div class="grid grid-sizer">
       <span class="post-meta">
           {% assign d = post.date | date: "%d" | plus:'0' %}
           {{ post.date | date: "%B" }}
