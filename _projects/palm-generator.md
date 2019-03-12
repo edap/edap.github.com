@@ -9,13 +9,12 @@ tags: []
   <div class="index-content palm">
 
   <h1 class="palm-title"><span>PALM GENERATOR</span></h1>
-  <div class="grid-sizer"></div>
   <div class="grid-gutter"></div>
   
   
-  <div class="grid grid--height">
+  <div class="grid grid--height grid-sizer">
   <a href="/demo/palm-generator/5">
-      <img src="/assets/media/palm-generator/5.png" width="405px">
+      <img src="/assets/media/palm-generator/5.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">CHIATTAFLORA</div>
@@ -47,7 +46,7 @@ tags: []
 
   <div class="grid grid--height12">
   <a href="/demo/palm-generator/12">
-      <img src="/assets/media/palm-generator/12.png" width="405px">
+      <img src="/assets/media/palm-generator/12.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">SPIRALIPALMENS</div>
@@ -78,7 +77,7 @@ tags: []
 
   <div class="grid grid--height10">
   <a href="/demo/palm-generator/13">
-      <img src="/assets/media/palm-generator/13.png" width="405px">
+      <img src="/assets/media/palm-generator/13.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PALMA ROBUSTA</div>
@@ -111,7 +110,7 @@ tags: []
 
   <div class="grid grid--height4">
   <a href="/demo/palm-generator/3">
-      <img src="/assets/media/palm-generator/3.png" width="405px">
+      <img src="/assets/media/palm-generator/3.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PUNGIFILIUM</div>
@@ -142,7 +141,7 @@ tags: []
  
   <div class="grid grid--height9">
   <a href="/demo/palm-generator/2">
-      <img src="/assets/media/palm-generator/2.png" width="405px">
+      <img src="/assets/media/palm-generator/2.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">CIGARILLOTORUM</div>
@@ -173,7 +172,7 @@ tags: []
 
   <div class="grid grid--height5">
   <a href="/demo/palm-generator/8">
-      <img src="/assets/media/palm-generator/8.png" width="405px">
+      <img src="/assets/media/palm-generator/8.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PALMASTIDONTE</div>
@@ -204,7 +203,7 @@ tags: []
 
   <div class="grid grid--height11">
   <a href="/demo/palm-generator/6">
-      <img src="/assets/media/palm-generator/6.png" width="405px">
+      <img src="/assets/media/palm-generator/6.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PALMENSUM</div>
@@ -236,7 +235,7 @@ tags: []
 
   <div class="grid grid--height11">
   <a href="/demo/palm-generator/4">
-      <img src="/assets/media/palm-generator/4.png" width="405px">
+      <img src="/assets/media/palm-generator/4.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PALMA PALMENS</div>
@@ -267,7 +266,7 @@ tags: []
 
   <div class="grid grid--height8">
   <a href="/demo/palm-generator/9">
-      <img src="/assets/media/palm-generator/9.png" width="405px">
+      <img src="/assets/media/palm-generator/9.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">SANTIPALMINUM</div>
@@ -298,7 +297,7 @@ tags: []
 
   <div class="grid grid--height8">
   <a href="/demo/palm-generator/10">
-      <img src="/assets/media/palm-generator/10.png" width="405px">
+      <img src="/assets/media/palm-generator/10.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PALMA RIDENS</div>
@@ -329,7 +328,7 @@ tags: []
 
   <div class="grid grid--height6">
   <a href="/demo/palm-generator/7">
-      <img src="/assets/media/palm-generator/7.png" width="405px">
+      <img src="/assets/media/palm-generator/7.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">PALMIFOLIUM</div>
@@ -361,7 +360,7 @@ tags: []
 
   <div class="grid grid--height9">
   <a href="/demo/palm-generator/11">
-      <img src="/assets/media/palm-generator/11.png" width="405px">
+      <img src="/assets/media/palm-generator/11.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">SINTORICUS</div>
@@ -392,7 +391,7 @@ tags: []
 
 <div class="grid grid--height5">
   <a href="/demo/palm-generator/1">
-      <img src="/assets/media/palm-generator/1.png" width="405px">
+      <img src="/assets/media/palm-generator/1.png" width="382px">
   </a>
   <div class="palm-desc">
       <div class="palm-desc-title">CENTOPALMI</div>
@@ -426,11 +425,11 @@ tags: []
   <div class="palm-generator-text">
      <p>The Palm Generator is a Threejs module to generate palms.</p>
      <p>It follows a model that describes the arrangement of leaves on a plant stem, called <a href="https://en.wikipedia.org/wiki/Phyllotaxis">phyllotaxis</a>.</p>
-     <p>You can find information about the usage and the license at <a href="https://github.com/edap/PalmGenerator">this repository</a>.</p>
+     <p><a href="https://github.com/edap/PalmGenerator">Here</a> you can find information about the usage and the license.</p>
      <p>You can create your palm using the <a href="/demo/palm-generator-editor">PalmGenerator Online Editor</a></p>
      <br />
      <br />
-     <p><a href="https://drive.google.com/open?id=0B6sqjMvJRGMtU0FGQndCcUd6cUk">High res images</a> - <a href="https://vimeo.com/204789237">Video</a> - <a href="/assets/media/palm-generator/palm-generator-poster.png">Poster</a></p>
+     <p><a href="https://vimeo.com/204789237">Video</a> - <a href="/assets/media/palm-generator/palm-generator-poster.png">Poster</a></p>
   </div>
 </div>
 

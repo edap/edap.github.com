@@ -17,17 +17,14 @@ h1.palm-title span {
 }
 
 .index-content {
-    width: 98%;
-    margin: 0 1% 0 1%;
-    max-width: 1240px;
-    // max-width: 98%;
+    width: 100%;
+    max-width: 1160px;
     color: $palm-black;
     border:$border-width solid $palm-black;
     margin-bottom:30px;
     margin-top:30px;
 }
 .palm{
-    width: 100%;
     margin: auto;
     margin-top:30px;
 }
@@ -84,10 +81,9 @@ h1.palm-title span {
 
 /* ---- grid ---- */
 
-.grid-sizer,
 .grid {
-    //width: 32.6%;
-    width:405px;
+    width: 32.6%;
+    //width:405px;
 }
 
 .grid-gutter {
