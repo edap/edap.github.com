@@ -6,9 +6,9 @@ tags: []
 ---
 <div class="content-container">
 <div class="index-content">
-<div class="grid-gutter"></div><div class="grid-sizer"></div>
+<div class="grid-gutter"></div>
 
-    <div class="grid">
+    <div class="grid grid-sizer">
     <canvas id="fourth" width="543" height="405" style="width:100%" />
     </div>
 

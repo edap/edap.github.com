@@ -8,14 +8,14 @@ tags: []
 <div class="index-content">
 
 
-<div class="grid-gutter"></div><div class="grid-sizer"></div>
+<div class="grid-gutter"></div>
 
 <div class = "grid l3">
 <!-- -->
 
 </div>
 
-{% include img-small.html pngName="budgeridgar-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
+{% include img-small.html pngName="budgeridgar-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid grid-sizer" %}
 {% include img-small.html pngName="budgeridgar-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 {% include img-small.html pngName="budgeridgar" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
 <div class = "grid l3">
