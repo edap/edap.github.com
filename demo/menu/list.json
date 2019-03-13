@@ -17,6 +17,12 @@
             "title": "Leaf Geometry",
             "thumb": "/demo/thumbs.jpg",
             "url": "/demo/LeafGeometry"
+        },
+        {
+            "id": "amazona-estiva",
+            "title": "Amazona",
+            "thumb": "/demo/thumbs.jpg",
+            "url": "/demo/amazona-estiva/"
         }
      ]
 }
