@@ -25,7 +25,7 @@ layout: default
         <h2>General tools 3D tools</h2>
     </div>
 
-    {% assign selected = "ofxRaycaster,ofxLathePrimitive" | split: "," %}
+    {% assign selected = "ofxRaycaster,ofxLatheMesh" | split: "," %}
     {% assign sorted = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
     {% for repository in sorted  %}
         {% if selected contains repository.name %}
