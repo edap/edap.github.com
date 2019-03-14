@@ -200,6 +200,14 @@ div.statement, div.bio, div.events, div.freelancing, div.separation-line{
     border-bottom: 1px solid $brand-color;
     padding-top: 50px;
 }
+
+div.header-freelancing{
+  float:left;
+
+}
+div.header-portfolio{
+  float: right;
+}
 div.event{
     padding-bottom: 15px;
 }
