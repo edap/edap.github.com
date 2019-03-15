@@ -11,7 +11,8 @@ tags: []
 <div class="index-content">
 <div class="grid-gutter"></div>
 <div class = "grid l3">
-Stills from the visuals for the track <a href="https://www.youtube.com/watch?v=p_qtiPz5bUw">"Außer Betrieb"</a> by Composite Profuse AKA <a href="http://www.heinrichdressel.com/">Heinrich Dressel</a>, distributed by the electronic music label <a href="https://mechatronica.bandcamp.com/">"Mechatronica"</a>.
+Stills from the visuals for the track <a href="https://www.youtube.com/watch?v=p_qtiPz5bUw">"Außer Betrieb"</a> by Composite Profuse AKA <a href="http://www.heinrichdressel.com/">Heinrich Dressel</a>, distributed by the electronic music label <a href="https://mechatronica.bandcamp.com/">"Mechatronica"</a>. <br/>
+Full-color version 🌈 available <a href="https://vimeo.com/324155852">here</a>
 </div>
 
   {% include img-jpg.html pngName="1" assetPath="/assets/media/ausser-betrieb/" gridClass = "grid grid-sizer" %}
@@ -39,7 +40,7 @@ Stills from the visuals for the track <a href="https://www.youtube.com/watch?v=p
   {% include img-jpg.html pngName="11" assetPath="/assets/media/ausser-betrieb/" gridClass = "grid" %}
 
   <div class = "grid l3">
-  Realized with openFrameworks. Full-color version available <a href="https://vimeo.com/324155852">here</a>
+  Realized with openFrameworks. 
   </div>
 
 </div>
