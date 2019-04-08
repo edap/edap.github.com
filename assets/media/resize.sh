@@ -8,6 +8,10 @@ PROJECT=$1
 # 1-large.jpg (1940 x)
 # 1-medium.jpg (1280 x)
 # 1-small.jpg (640 x)
+# 2.jpg (2600 x)
+# 2-large.jpg (1940 x)
+# 2-medium.jpg (1280 x)
+# 2-small.jpg (640 x)
 
 
 # via http://www.algissalys.com/how-to/how-to-quickly-rename-modify-and-scale-all-images-in-a-directory-using-linux
