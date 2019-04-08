@@ -65,12 +65,14 @@ float smins( float a, float b ){
 }
 
 float bendTorus( vec3 p, vec2 dim ){
-    float wave = sin(u_time * 1.2) * 3.2;
+    float wave = sin(u_time * 1.2) * 0.1;
     //float wave = 7.2;
-    float c = cos(wave*p.y);
-    float s = sin(wave*p.y);
+    float c = cos(wave*p.x);
+    float s = sin(wave*p.x);
     mat2  m = mat2(c,-s,s,c);
-    vec3  q = vec3(m*p.xy,p.z);
+    //vec3  q = vec3(m*p.xy,p.z);
+    //vec3  q = vec3( p.x, m*p.yz);
+    vec3  q = vec3( p.xy*m, p.z);
     return sdTorus(q, dim);
 }
 
@@ -110,32 +112,33 @@ float map(vec3 pos){
 #else
     // triple onion torus
     //d = min( d, onion(onion(onion(bendTorus( q.xzy, vec2(0.9,0.6) ), 0.19), 0.19), 0.03) );
-    float d = onion(sdTorus( pos.xzy, vec2(1.0,0.2) ), 0.08);
+    float d = onion(bendTorus( pos.xzy, vec2(1.0,0.2) ), 0.08);
     // cut it all in half so we can see the interiors
-    d = max( d, pos.y+cos(u_time));
+    d = max( d, pos.y+cos(u_time+1.2));
 
-    float d1 = min(d, onion(sdTorus( pos.xzy, vec2(1.1,0.5) ), 0.07));
+    float d1 = min(d, onion(bendTorus( pos.xzy, vec2(1.1,0.5) ), 0.07));
     d1 = max( d1, pos.x+sin(u_time+0.3));
 
-    float d2 = min(d1,onion(sdTorus( pos.xzy, vec2(1.2,0.8) ), 0.06));
-    d2 = max( d2, pos.y+cos(u_time+0.4));
+    float d2 = min(d1,onion(bendTorus( pos.xzy, vec2(1.2,0.8) ), 0.06));
+    d2 = max( d2, pos.y+cos(u_time-0.9));
     //d2 = max( d2, pos.y);
 
-    float d3 = min(d2,onion(sdTorus( pos.xzy, vec2(1.3,1.1) ), 0.05));
-    d3 = max( d3, pos.x+sin(u_time));
+    float d3 = min(d2,onion(bendTorus( pos.xzy, vec2(1.3,1.1) ), 0.05));
+    d3 = max( d3, pos.x+sin(u_time+0.5));
     //d3 = max( d3, pos.y);
     //return d;
     vec3 posBox = pos;
-    //posBox.x -= 3.0;
+    posBox.x -= 8.0;
+    posBox.z -= 0.3;
     //float box = sdBox(posBox, vec3(0.5, 2.1, 4.4));
-    posBox.z -= 1.0;
-    float box = sdBox(posBox, vec3(12.5, 2.1, 0.3));
+    float box = sdBox(posBox, vec3(12.5, 3.1, 0.1));
     
     //return box;
-    //return d2;
-    return min(d3,min(d2,min(d1, d)));
+    ////return d2;
+    float sp = min(d3,min(d2,min(d1, d)));
+    //return min(d3,min(d2,min(d1, d)));
     //return d3;
-    //return opSubtraction(box,d);
+    return opSubtraction(box,sp);
 #endif
 }
     
@@ -243,17 +246,16 @@ void main(void){
 
     vec2 uv = squareFrame(u_resolution.xy, gl_FragCoord.xy);
     float camSpeed = 0.2;
-    // vec3 eye = vec3( -0.5+3.5*cos(camSpeed*u_time + 6.0),
-    //             3.0,
-    //             5.5 + 4.0*sin(camSpeed*u_time + 6.0)
-    // );
-
-    vec3 eye = vec3( 8.0,
+    vec3 eye = vec3( -0.5+3.5*cos(camSpeed*u_time + 6.0),
                 3.0,
-                3.0
+                5.5 + 4.0*sin(camSpeed*u_time + 6.0)
     );
 
-    
+    // vec3 eye = vec3( 8.0,
+    //             3.0,
+    //             11.0
+    // );
+
     vec3 ta = vec3(2.0, 0.0, 0.0 );
     
     mat3 camera = setCamera( eye, ta, 0.0 );

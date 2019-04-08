@@ -14,6 +14,12 @@ These are the references that I've checked while working at it:
 
 [jamie-wong](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 
+Other resources:
+
+[short video intro](https://www.youtube.com/watch?v=Cp5WWtMoeKg)
+
+[Ray Marching workshop](https://github.com/ajweeks/RaymarchingWorkshop)
+
 
 You can run each file in Visual Studio Code + [Shader Toy extension](https://marketplace.visualstudio.com/items?itemName=stevensona.shader-toy). After the extension is installed, go to View -> Command Palette -> shoew glsl preview
 
