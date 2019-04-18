@@ -65,26 +65,26 @@ float smins( float a, float b ){
 }
 
 float bendTorus( vec3 p, vec2 dim ){
-    float wave = sin(u_time * 1.2) * 0.1;
+    float wave = sin(u_time * 2.0) * 0.2;
     //float wave = 7.2;
     float c = cos(wave*p.x);
     float s = sin(wave*p.x);
     mat2  m = mat2(c,-s,s,c);
     //vec3  q = vec3(m*p.xy,p.z);
-    //vec3  q = vec3( p.x, m*p.yz);
-    vec3  q = vec3( p.xy*m, p.z);
+    vec3  q = vec3( p.x, m*p.yz);
+    //vec3  q = vec3( p.xy*m, p.z);
     return sdTorus(q, dim);
 }
 
 float bendBox( vec3 p, vec3 dim ){
-    float wave = sin(u_time * 1.2) * 0.1;
+    float wave = sin(u_time * 2.0) * 0.2;
     //float wave = 7.2;
     float c = cos(wave*p.x);
     float s = sin(wave*p.x);
     mat2  m = mat2(c,-s,s,c);
     //vec3  q = vec3(m*p.xy,p.z);
-    //vec3  q = vec3( p.x, m*p.yz);
-    vec3  q = vec3( p.xy*m, p.z);
+    vec3  q = vec3( p.x, m*p.yz);
+    //vec3  q = vec3( p.xy*m, p.z);
     return sdBox(q, dim);
 }
 
@@ -106,34 +106,34 @@ float map(vec3 pos){
 
     // triple onion torus
     //d = min( d, onion(onion(onion(bendTorus( q.xzy, vec2(0.9,0.6) ), 0.19), 0.19), 0.03) );
-    float d = onion(bendTorus( pos.xzy, vec2(1.0,0.2) ), 0.08);
+    float thick = 0.08;
+    float d = onion(bendTorus( pos.xzy, vec2(1.0,0.2) ), thick);
     // cut it all in half so we can see the interiors
-    d = max( d, pos.y+cos(u_time+1.2));
+    //d = max( d, pos.y+cos(u_time+1.2));
+    d = max( d, pos.y + 0.1);
 
-    float d1 = min(d, onion(bendTorus( pos.xzy, vec2(1.1,0.5) ), 0.07));
+    float d1 = min(d, onion(bendTorus( pos.xzy, vec2(1.1,0.5) ), thick-0.01));
     d1 = max( d1, pos.x+sin(u_time+0.3));
 
-    float d2 = min(d1,onion(bendTorus( pos.xzy, vec2(1.2,0.8) ), 0.06));
+    float d2 = min(d1,onion(bendTorus( pos.xzy, vec2(1.2,0.8) ), thick-0.02));
     d2 = max( d2, pos.y+cos(u_time-0.9));
     //d2 = max( d2, pos.y);
 
-    float d3 = min(d2,onion(bendTorus( pos.xzy, vec2(1.3,1.1) ), 0.05));
+    float d3 = min(d2,onion(bendTorus( pos.xzy, vec2(1.3,1.1) ), thick-0.03));
     d3 = max( d3, pos.x+sin(u_time+0.5));
     //d3 = max( d3, pos.y);
     //return d;
     vec3 posBox = pos;
     float boxZ = 0.1;
-    posBox.x -= 8.0;
-    posBox.z -= boxZ/2.0;
+    //posBox.x -= 8.0;
+    //posBox.z -= boxZ/2.0;
     //float box = sdBox(posBox, vec3(0.5, 2.1, 4.4));
-    float box = sdBox(posBox, vec3(12.5, 3.1, boxZ));
+    float box = bendBox(posBox, vec3(12.5, 3.1, boxZ));
     
     //return box;
-    ////return d2;
+    return d;
     float sp = min(d3,min(d2,min(d1, d)));
-    //return min(d3,min(d2,min(d1, d)));
-    //return d3;
-    return opSubtraction(box,sp);
+    //return opSubtraction(box,sp);
 }
     
     
@@ -239,12 +239,12 @@ vec3 getTextureCol(vec3 normal, vec3 dir) {
 void main(void){
 
     vec2 uv = squareFrame(u_resolution.xy, gl_FragCoord.xy);
-    float camSpeed = 0.2;
+    float camSpeed = 1.0;
     vec3 eye = vec3( 
-               //9.5-5.5*sin(camSpeed*u_time + 6.0),
-               5.5,
+               4.5-3.5*sin(camSpeed*u_time + 6.0),
+               //5.5,
                 3.0,
-                3.5 - 9.0*cos(camSpeed*u_time + 6.0)
+                3.5 - 6.0*cos(camSpeed*u_time + 6.0)
                 //3.0
                 //0.3
     );
