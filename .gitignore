@@ -18,3 +18,5 @@ node_modules/
 demo/3dprinteflowers-webgl/target/*
 demo/3dprinteflowers-webgl/bin/*
 shaders/glslV/videos/*
+shaders/glslV/textures/*
+shaders/glslV/rider.md
