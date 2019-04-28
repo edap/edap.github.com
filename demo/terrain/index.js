@@ -229,6 +229,8 @@ function createTrees(ofMesh, fog, bumpTexture){
     return new THREE.Mesh( treesBufferGeometry, treeMaterial);
 }
 
+// TODO, implement instance geometry
+// https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 function createTreesGeometry(ofMesh, bumpTexture){
     var density = 1; // n trees pro point in curve
     var context = createCanvasContext(bumpTexture);

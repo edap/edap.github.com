@@ -28,6 +28,22 @@ float onion( in float d, in float h )
 {
     return abs(d)-h;
 }
+float sdBox( vec3 p, vec3 b ){
+    vec3 d = abs(p) - b;
+    return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
+}
+
+float bendBox( vec3 p, vec3 dim ){
+    float wave = sin(u_time * 4.0) * 0.02;
+    //float wave = 7.2;
+    float c = cos(wave*p.x);
+    float s = sin(wave*p.x);
+    mat2  m = mat2(c,-s,s,c);
+    //vec3  q = vec3(m*p.xy,p.z);
+    //vec3  q = vec3( p.x, m*p.yz);
+    vec3  q = vec3( p.xy*m, p.z);
+    return sdBox(q, dim);
+}
 
 float sdTorus( vec3 p, vec2 t ){
   vec2 q = vec2(length(p.xz)-t.x,p.y);
@@ -70,8 +86,8 @@ float bendTorus( vec3 p, vec2 dim ){
 }
 
 float nestedRings(vec3 _pos){
-    float speed = 2.0;
-    float thick = 0.06;
+    float speed = 1.0;
+    float thick = 0.10;
     float diametro = 4.3;
     float off = 0.2;
     float off1 = 0.6;
@@ -104,9 +120,17 @@ float map(vec3 pos){
     vertPos.xz = vertPos.xz * rotate2d(-PI);
     vertPos.x -= diametro;
     
-    float v = nestedRings(vertPos);
+
     float o = nestedRings(pos);
-    float vo = smin(o,v, 0.2);
+    float box = bendBox(pos, vec3(8.5, 13.1, 0.9));
+    float boxRingO = opSubtraction(box, o);
+
+    float v = nestedRings(vertPos); 
+    float boxV = bendBox(vertPos, vec3(8.5, 13.1, 0.9)); 
+    float boxRingV = opSubtraction(boxV, v);
+
+    float vo = smin(boxRingO,boxRingV, 1.3);
+
     return vo;
 }
     
@@ -202,7 +226,7 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
 vec3 getTextureCol(vec3 normal, vec3 dir) {
     vec3 eye = -dir;
     vec3 r = reflect( eye, normal );
-    vec4 c = texture2D(u_tex1, (0.5 * (r.xy) + .5));
+    vec4 c = texture2D(u_tex0, (0.5 * (r.xy) + .5));
     return c.xyz;
 }
 
@@ -221,9 +245,10 @@ void main(void){
     //             9.0
     //             //0.3
     // );
+    //float u_time = 4.1;
 
     vec2 rotEye = vec2(10.0,10.0);
-    rotEye = rotEye * rotate2d(-cos(u_time*0.5)* 3.0);
+    rotEye = rotEye * rotate2d(-sin(u_time*0.2)* 2.0);
     vec3 eye = vec3( rotEye.x,5.0, rotEye.y);
     vec3 ta = vec3(-3.0, 0.0, -1.0);
     
@@ -236,7 +261,7 @@ void main(void){
     // BG
     vec2 tuv = (gl_FragCoord.xy/1.8)/ u_resolution.xy;
     tuv.x *= u_resolution.x / u_resolution.y;
-    vec3 bgColor = texture2D(u_tex2, tuv).xyz;
+    vec3 bgColor = texture2D(u_tex1, tuv).xyz;
     //vec3 bgColor = vec3(0.086, 0.290, 0.800);
 
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
@@ -261,7 +286,7 @@ void main(void){
     
     
     //fragColor = vec4(color);
-    float fogFactor = exp(eye.z * 0.05);
+    float fogFactor = exp(eye.z * 0.09);
     //color = mix(vec3(bgColor), color, fogFactor);
     //color = pow(color, vec3(0.4545)); // gamma corr
     
