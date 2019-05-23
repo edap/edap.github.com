@@ -247,6 +247,9 @@ void main(void){
     vec3 blueHard = vec3( 0.098, 0.0, 0.749);
 
     vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+
+
+
     vec2 ruv = st;
     //ruv *= 2.0;
     ruv = fract(ruv);

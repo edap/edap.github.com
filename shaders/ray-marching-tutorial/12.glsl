@@ -85,6 +85,7 @@ float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax ) {
 }
 
 
+
 float ao( in vec3 pos, in vec3 nor ){
     // ambient occlusion
 	float occ = 0.0;
