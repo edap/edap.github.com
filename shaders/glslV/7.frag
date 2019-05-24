@@ -124,15 +124,15 @@ float opTwist(vec3 p, vec2 dim, float t)
     return sdTorus(q,dim);
 }
 
-float map(vec3 pos, float t){
+float map(vec3 pos){
     pos.x -= 0.35;
     pos.y -= 0.97;
     vec3 rpos = pos;
-    rpos.zx =  rpos.zx * rotate2d(sin(t*2.0) * 0.2);
+    rpos.zx =  rpos.zx * rotate2d(sin(u_time*2.0) * 0.2);
 
-    float s = sphere(rpos, 0.08 + abs(sin(t*0.25) * 0.35));
-    float t2 = opTwist(rpos,vec2(0.55,.05), t);
-    float t3 = opTwist(rpos,vec2(0.4,.03), t);
+    float s = sphere(rpos, 0.08 + abs(sin(u_time*0.25) * 0.35));
+    float t2 = opTwist(rpos,vec2(0.55,.05), u_time);
+    float t3 = opTwist(rpos,vec2(0.4,.03), u_time);
 
     //return smins(t2,t3);
     //return t2;
@@ -140,12 +140,10 @@ float map(vec3 pos, float t){
 }
     
 
-float raymarching(vec3 eye, vec3 marchingDirection, float t){
+float raymarching(vec3 eye, vec3 marchingDirection){
     float depth = NEAR_CLIP;
-    float a = t;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
-        //a *= 1.1;
-        float dist = map(eye + depth * marchingDirection, a);
+        float dist = map(eye + depth * marchingDirection);
         if (dist < EPSILON){
             return depth;
         }
@@ -160,11 +158,11 @@ float raymarching(vec3 eye, vec3 marchingDirection, float t){
     return FAR_CLIP;
 }
 
-float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax, float time) {
+float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax) {
     float res = 1.0;
     float t = mint;
     for( int i=0; i<16; i++ ) {
-        float h = map( ro + rd*t , time);
+        float h = map( ro + rd);
         res = min( res, 8.0*h/t );
         t += clamp( h, 0.02, 0.10 );
         if( h<0.001 || t>tmax ) break;
@@ -179,7 +177,7 @@ float ao( in vec3 pos, in vec3 nor ){
     {
         float hr = 0.01 + 0.06*float(i)/4.0;
         vec3 aopos =  nor * hr + pos;
-        float dd = map( aopos, u_time);
+        float dd = map( aopos);
         occ += -(dd-hr)*sca;
         sca *= 0.95;
     }
@@ -196,9 +194,9 @@ vec3 albedo(vec3 pos){
 vec3 computeNormal(vec3 pos){
     vec2 eps = vec2(0.01, 0.);
     return normalize(vec3(
-        map(pos + eps.xyy, u_time) - map(pos - eps.xyy, u_time),
-        map(pos + eps.yxy, u_time) - map(pos - eps.yxy, u_time),
-        map(pos + eps.yyx, u_time) - map(pos - eps.yyx, u_time)
+        map(pos + eps.xyy) - map(pos - eps.xyy),
+        map(pos + eps.yxy) - map(pos - eps.yxy),
+        map(pos + eps.yyx) - map(pos - eps.yyx)
     ));
 }
 //glslViewer ../../pattern1.frag ../../textures/tangara-velia.jpg ../../textures/pink-necked-green-pigeon-resized.jpg ../../textures/sol.jpg -w 2048 -h 2048 --headless -s 5 -o fourth.png
@@ -264,57 +262,43 @@ void main(void){
     mat3 camera = setCamera( eye, ta, 0.0 );
     float fov = 18.4;
 
-
-
-
     vec3 dir = camera * normalize(vec3(ruv, fov));
   
-    const int iter = 16;
-
     vec3 color;
-    for(int i = 0; i < iter; i++) {
-        float fi = float(i)/float(iter)*2.*355.0/113.0;
-        vec2 nn = vec2(cos(float(fi)), sin(float(fi)));
-        vec3 offs = vec3(nn.x,nn.y, .0)*.03;
 
-        float shortestDistanceToScene = raymarching(eye, dir, u_time);
+    float shortestDistanceToScene = raymarching(eye, dir);
 
-        if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
-            vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
+    if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
+        vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
 
-            float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 , u_time);
-            float lightDistance = sphere(collision, 1.0);
-            vec3 normal = computeNormal(collision);
-            float diffLight = diffuse(normal);
-            float specLight = specular(normal, dir);
-            float fresnelLight = fresnel(normal, dir);
-            float ambientOcc = ao(collision, normal);
-            //vec3 texCol = vec3(1.00, 0.352, 0.207);
-            vec3 texCol =  getTextureCol(normal, dir);
-            //color += (diffLight + specLight + fresnelLight) * texCol;
-            color += texCol;
-            //shadow = mix(shadow, 1.0, 0.6);
-            //color = color *  shadow;
-            //color = color * ambientOcc * shadow;
-            
-        }
-        //else {
-        //     uv = vectorField(st* 2.0);
+        float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 );
+        float lightDistance = sphere(collision, 1.0);
+        vec3 normal = computeNormal(collision);
+        float diffLight = diffuse(normal);
+        float specLight = specular(normal, dir);
+        float fresnelLight = fresnel(normal, dir);
+        float ambientOcc = ao(collision, normal);
+        //vec3 texCol = vec3(1.00, 0.352, 0.207);
+        vec3 texCol =  getTextureCol(normal, dir);
+        color = (diffLight + specLight + fresnelLight) * texCol;
+        
+        shadow = mix(shadow, 1.0, 0.7);
+        color = color * ambientOcc * shadow;
+    }
+    else {
+        uv = vectorField(st* 2.0);
 
-        //     float cell = 0.6;
-        //     vec2 modSt = mod(uv, vec2(cell));
+        float cell = 0.6;
+        vec2 modSt = mod(uv, vec2(cell));
 
-        //     float x = plot(modSt.x, cell, t);
-        //     float y = plot(modSt.y, cell, t);
+        float x = plot(modSt.x, cell, t);
+        float y = plot(modSt.y, cell, t);
 
-        //     vec3 texc = texture2D(u_tex3, uv).xyz;
-        //     // color = blu * x;
-        //     // color     += red * y;
-        //     // color     += texc*vec3(smoothstep(1.3, .01,x+y));
-        //     //color += vec3(1,0,0);
-        // }
+        vec3 texc = texture2D(u_tex3, uv).xyz;
+        color = blu * x;
+        color     += red * y;
+        color     += texc*vec3(smoothstep(1.3, .01,x+y));
     }
 
-  //color = vec4(color / float(iter), 1.0);
-  gl_FragColor = vec4(color / float(iter), 1.0);
+  gl_FragColor = vec4(color, 1.0);
 }
