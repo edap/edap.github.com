@@ -193,7 +193,8 @@ void main() {
 	float dist;
 	float seed = time+(p.x+u_resolution.x*p.y)*1.51269341231;
 	
-	for( int j=0; j<SAMPLES + 0; j++ ) {
+	// for( int j=0; j<SAMPLES + min(0,iFrame); j++ ) {
+	for( int j=0; j<SAMPLES; j++ ) {
 		float fj = float(j);
 		
 #ifdef MOTIONBLUR

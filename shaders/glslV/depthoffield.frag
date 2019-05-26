@@ -46,10 +46,10 @@ void main(){
     float focalDis = 11.0; //THIS <
     //THIS ^
     //fragcoord is the center of the pixel
-
-	vec2 sensorLoc = gl_FragCoord.xy / u_resolution.xy; //sets x limits from 0-1 y at same scale, center at (0.5,0.?)
-    sensorLoc = vec2(0.5, 0.5*(u_resolution.y/u_resolution.x)) - sensorLoc; //reverse sensor and center on (0,0)
     
+    vec2 sensorLoc = 2.0 * gl_FragCoord.xy / u_resolution.xy - 1.0;
+    sensorLoc.x *= u_resolution.x / u_resolution.y;
+
     vec3 Z = vec3(0.0,0.0,1.0); //useful later could be hardcoded later instead
     float t = 0.5*u_time - 5.0*u_mouse.x/u_resolution.x; //tau used to determine camera position
     
@@ -75,11 +75,11 @@ void main(){
     float lstep = 1.0/lensResF;
     float lstart = lstep/2.0-0.5;
     
-    for (float sx = sstart; sx < 0.5; sx += sstep){ //SSAA x direction
-    	for (float sy = sstart; sy < 0.5; sy += sstep){ //SSAA y direction
-          //float sy = sstart;
-          //float sx = sstart;
-        	vec2 ss = vec2(sx,sy)*sscale; //sub pixel offset for SSAA
+    //for (float sx = sstart; sx < 0.5; sx += sstep){ //SSAA x direction
+    	//for (float sy = sstart; sy < 0.5; sy += sstep){ //SSAA y direction
+            float sy = sstart;
+            float sx = sstart;
+            vec2 ss = vec2(sx,sy)*sscale; //sub pixel offset for SSAA
             vec3 sensorRel = cameraX*(sensorLoc.x+ss.x) + cameraY*(sensorLoc.y+ss.y); //position on sensor relative to center of sensor. Used once
             vec3 sensorPos = cameraPos - lensDis*cameraDir + sensorRel; //3d position of ray1 origin on sensor
             	
@@ -89,7 +89,7 @@ void main(){
             		vec2 lensCoord = vec2(lx,ly); //fragCoord analog for lens array. lens is square
         			vec2 lensLoc = (lensCoord)*lensSiz; //location on 2d lens plane
             		
-                    if (length(lensLoc)<(lensSiz/2.0)){ //trim lens to circle
+                    //if (length(lensLoc)<(lensSiz/2.0)){ //trim lens to circle
                         
                 		vec3 lensRel = cameraX*(lensLoc.x) + cameraY*(lensLoc.y); //position on lens relative to lens center. Used twice
             			vec3 lensPos = cameraPos + lensRel; // 3d position of ray1 end and ray2 origin on lens
@@ -99,11 +99,12 @@ void main(){
             			vec3 color = ascene(lensPos,rayDir2); //scene returns a color
             			colorTotal = colorTotal+color; //sum colors over all  points from lens
                         colorCount += 1.0; //total number of colors added.
-                    }
+                    //}
                 }
             }
-        }
-    }
+        //}
+    //}
     
-    gl_FragColor = vec4(colorTotal/colorCount - length(sensorLoc)*0.25,1.0); //slight post-processing
+    gl_FragColor = vec4(vec3(   colorCount/90.0), 1.0);
+    //gl_FragColor = vec4(colorTotal/colorCount - length(sensorLoc)*0.25,1.0); //slight post-processing
 }
