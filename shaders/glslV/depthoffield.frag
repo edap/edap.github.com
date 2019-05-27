@@ -105,6 +105,6 @@ void main(){
         //}
     //}
     
-    gl_FragColor = vec4(vec3(   colorCount/90.0), 1.0);
-    //gl_FragColor = vec4(colorTotal/colorCount - length(sensorLoc)*0.25,1.0); //slight post-processing
+    //gl_FragColor = vec4(vec3(   colorCount/90.0), 1.0);
+    gl_FragColor = vec4(colorTotal/colorCount - length(sensorLoc)*0.25,1.0); //slight post-processing
 }
