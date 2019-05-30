@@ -17,9 +17,7 @@ uniform sampler2D u_tex3;
 
 
 vec2 squareFrame(vec2 res, vec2 coord){
-    vec2 uv = 2.0 * coord.xy / res.xy - 1.0;
-    uv.x *= res.x / res.y;
-    return uv;
+    return ( 2. * coord.xy - res.xy ) / res.y;
 }
 
 
@@ -149,7 +147,6 @@ float raymarching(vec3 eye, vec3 marchingDirection){
         }
 
         depth += dist;
-
 
         if (depth >= FAR_CLIP) {
             return FAR_CLIP;
