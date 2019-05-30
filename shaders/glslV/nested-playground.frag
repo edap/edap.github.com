@@ -3,15 +3,12 @@ const int MAX_MARCHING_STEPS = 164;
 const float EPSILON = 0.0015;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 80.00;
-const float SPEED = 2.0;
+const float speed = 1.0;
 
 uniform float u_time;
 uniform vec2 u_resolution;
-uniform sampler2D u_tex0;
-uniform sampler2D u_tex1;
 
 
-float opSubtraction( float d1, float d2 ) { return max(-d1,d2); }
 
 float length2( vec3 p ) { p=p*p; return sqrt( p.x+p.y+p.z); }
 float length2( vec2 p ) { p=p*p; return sqrt( p.x+p.y); }
@@ -42,25 +39,13 @@ float smin( float a, float b, float k ){
     return mix( b, a, h ) - k*h*(1.0-h);
 }
 
-float sdBox( vec3 p, vec3 b ){
-    vec3 d = abs(p) - b;
-    return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
-}
-
-
 float sdTorus( vec3 p, vec2 t ){
   vec2 q = vec2(length(p.xz)-t.x,p.y);
-  return length2(q)-t.y;
-}
-
-float elongatedTorus(in vec3 p, vec2 t, in vec3 h )
-{
-    vec3 q = abs(p)-h;
-    return sdTorus( max(q,0.0), t ) + min(max(q.x,max(q.y,q.z)),0.0);
+  return length8(q)-t.y;
 }
 
 float bendTorus( vec3 p, vec2 dim ){
-    float wave = sin(u_time * SPEED / 4.) * 0.00;
+    float wave = sin(u_time * 4.0) * 0.06;
     //float wave = 7.2;
     float c = cos(wave*p.x);
     float s = sin(wave*p.x);
@@ -68,51 +53,52 @@ float bendTorus( vec3 p, vec2 dim ){
     //vec3  q = vec3(m*p.xy,p.z);
     //vec3  q = vec3( p.x, m*p.yz);
     vec3  q = vec3( p.xy*m, p.z);
-    //return sdTorus(q, dim);
-    return elongatedTorus(q, dim, 1.2);
+    return sdTorus(q, dim);
 }
 
 float nestedRings(vec3 _pos, float speed){
-    float thick = 0.15;
+
+    float thick = 0.29;
     float diametro = 5.3;
     float off = 0.2;
-    float d1 =onion(bendTorus( _pos.xzy, vec2(diametro,0.6)), thick-0.01);
-    d1 = max( d1, _pos.x+sin(u_time*speed-off)*8.0);
-    return d1;
-}
-
-float nestedRings2(vec3 _pos, float speed){
-    float thick = 0.25;
-    float diametro = 5.3;
+    float off1 = 0.6;
+    float off2 = 1.0;
     float off3 = 1.2;
 
-    float d4 = onion(bendTorus( _pos.xzy, vec2(diametro,1.8)), thick-0.04);
-    d4 = max( d4, _pos.x+sin(u_time*speed-off3)*8.0);
+    float d = onion(bendTorus( _pos.xzy, vec2(diametro,0.2) ), thick);
+    d = max( d, _pos.x+sin(u_time*speed)*diametro);
 
-    return d4;
+    float d1 =onion(bendTorus( _pos.xzy, vec2(diametro,0.6)), thick-0.01);
+    d1 = max( d1, _pos.x+sin(u_time*speed-off)*diametro);
+
+    float d2 = onion(bendTorus( _pos.xzy, vec2(diametro,1.0)), thick-0.02);
+    d2 = max( d2, _pos.x+sin(u_time*speed-off1)*diametro);
+
+    float d3 = onion(bendTorus( _pos.xzy, vec2(diametro,1.4)), thick-0.03);
+    d3 = max( d3, _pos.x+sin(u_time*speed-off2)*diametro);
+
+    float d4 = onion(bendTorus( _pos.xzy, vec2(diametro,1.8)), thick-0.04);
+    d4 = max( d4, _pos.x+sin(u_time*speed-off3)*diametro);
+
+    return min(d4, d);
+    return min(d4, min(d3, min(d2, min(d, d1))));
 }
 
-
 float map(vec3 pos){
-    pos.xz =  pos.xz * rotate2d(u_time-0.5 * SPEED * 0.25);
     vec3 vertPos = pos;
-    float diametro = 0.0;
-    float displacement = sin(2.4 * pos.x) *
-                         sin(2.4 * pos.y) *
-                         sin(2.4 * pos.z) * 0.15;
- 
-    //vertPos.yz = vertPos.yz * rotate2d(u_time * SPEED * 0.25);
-    //vertPos.yz = vertPos.yz * rotate2d(PI/2.0);
+    float diametro = 3.3;
+    float displacement = sin(2.2 * pos.x) *
+                         sin(2.0 * pos.y) *
+                         sin(2.2 * pos.z) * 0.25;
+
+    vertPos.yz = vertPos.yz * rotate2d(PI/2.0);
     vertPos.xz = vertPos.xz * rotate2d(-PI);
     vertPos.x -= diametro;
     
-    float v = nestedRings2(vertPos, SPEED/ 4.) + displacement;
-    float o = nestedRings(pos, SPEED/ 4.) + displacement;
-    float vo = smin(o,v, 0.6);
-    // /return vo;
-    vec3 boxDim = vec3(10.0, 10.1, sin(u_time * SPEED/ 4.0)*0.6);
-    vec3 box =  sdBox(pos, boxDim);
-    return opSubtraction(box+displacement, vo);
+    float v = nestedRings(vertPos, speed);
+    float o = nestedRings(pos, speed) + displacement;
+    float vo = smin(o,v, 0.2);
+    return vo;
 }
     
 float raymarching(vec3 eye, vec3 marchingDirection){
@@ -141,31 +127,15 @@ vec3 computeNormal(vec3 pos){
     ));
 }
 
-float clampeddot(vec3 a, vec3 b){
-    return max(0.,dot(a, b));
-}
-
 float diffuse(vec3 normal){
-    float ambient = 0.2;
-    return clamp( clampeddot(normal, lightDirection) * ambient + ambient, 0.0, 1.0 );
+    float ambient = 0.4;
+    return clamp( dot(normal, lightDirection) * ambient + ambient, 0.0, 1.0 );
 }
 
 float specular(vec3 normal, vec3 dir){
     vec3 h = normalize(normal - dir);
     float specularityCoef = 40.;
-    return clamp( pow(clampeddot(h, normal), specularityCoef), 0.0, 1.0);
-}
-
-float softshadow( in vec3 ro, in vec3 rd, in float mint, in float tmax ) {
-    float res = 1.0;
-    float t = mint;
-    for( int i=0; i<16; i++ ) {
-        float h = map( ro + rd*t );
-        res = min( res, 8.0*h/t );
-        t += clamp( h, 0.02, 0.10 );
-        if( h<0.001 || t>tmax ) break;
-    }
-    return clamp( res, 0.0, 1.0 );
+    return clamp( pow(max(dot(h, normal), 0.), specularityCoef), 0.0, 1.0);
 }
 
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
@@ -176,20 +146,10 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
     return mat3( cu, cv, cw );
 }
 
-vec3 getTextureCol(sampler2D tex, vec3 normal, vec3 dir) {
-    vec3 eye = -dir;
-    vec3 r = reflect( eye, normal );
-    vec4 c = texture2D(tex, (0.5 * (r.xy) + .5));
-    return c.xyz;
-}
-
 void main(void){
     vec3 red = vec3(0.8784, 0.2, 0.0784);
     vec3 blu = vec3(0.0, 0.2471, 0.7843);
     vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
-
-    vec2 ruv = st * 1.0;
-    ruv = fract(ruv);
 
     // this is the accumulated color
     vec3 color = vec3(0.0,0.0,0.0);
@@ -203,37 +163,30 @@ void main(void){
     float start = inc/2.0-0.5;
 
     // camera setup
-    float camSpeed = SPEED / 16.0;
-    //  vec3 eye = 10.0*vec3(
-    //      sin(4.0* u_time * camSpeed),
-         
-    //      0.5,
-    //      //cos(4.0* u_time * camSpeed),
-    //      //1.
-    //      cos(4.0* u_time * camSpeed)
-    //      ); 
-    vec3 eye = 5.*vec3(4., 3., 4.);
-    vec3 tangent = vec3(-22.3, -36.0, -1.0);  
+    float camSpeed = 0.5;
+     vec3 eye = 18.0*vec3(
+         sin(4.0* u_time * camSpeed),
+         cos(4.0* u_time * camSpeed),
+         cos(4.0* u_time * camSpeed)); 
+    // /vec3 eye = 5.*vec3(4., 3., 4.);
+    vec3 tangent = vec3(0.3, 1.0, -1.0);  
     mat3 camera = setCamera( eye, tangent, 0.0 );
-    float fov =1.4;
-    vec3 dir = camera * normalize(vec3(ruv, fov));
+    float fov = 0.5;
+    vec3 dir = camera * normalize(vec3(st, fov));
 
 
     float shortestDistanceToScene = raymarching(eye, dir);
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
-        vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
-        float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 );
-        float lightDistance = sphere(collision, 1.0);
-        vec3 normal = computeNormal(collision);
-        float diffLight = diffuse(normal);
-        float specLight = specular(normal, dir);
-        vec3 texCol = getTextureCol(u_tex0, normal, dir);
-        color = (diffLight + specLight ) * texCol;
+      vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
 
-        shadow = mix(shadow, 1.0, 0.5);
-        color *= shadow;
+      float lightDistance = sphere(collision, 1.0);
+      vec3 normal = computeNormal(collision);
+      float diffLight = diffuse(normal);
+      float specLight = specular(normal, dir);
+
+      color += (diffLight + specLight ) * red;
     } else {
-        color += blu;
+      color += blu;
     }
 
     vec3 c = sqrt(clamp(color, 0., 1.));
