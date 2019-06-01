@@ -8,14 +8,15 @@ const float speed = 1.0;
 uniform float u_time;
 uniform vec2 u_resolution;
 
+/**
+ * Generic random
+ */
+float random(vec3 scale, float seed) {
+  return fract(sin(dot(gl_FragCoord.xyz + seed, scale)) * 43758.5453 + seed);
+}
 
-
-float length2( vec3 p ) { p=p*p; return sqrt( p.x+p.y+p.z); }
-float length2( vec2 p ) { p=p*p; return sqrt( p.x+p.y); }
-float length6( vec3 p ) { p=p*p*p; p=p*p; return pow(p.x+p.y+p.z,1.0/6.0); }
-float length6( vec2 p ) { p=p*p*p; p=p*p; return pow(p.x+p.y,1.0/6.0); }
-float length8( vec3 p ) { p=p*p; p=p*p; p=p*p; return pow(p.x+p.y+p.z,1.0/8.0); }
 float length8( vec2 p ) { p=p*p; p=p*p; p=p*p; return pow(p.x+p.y,1.0/8.0); }
+
 vec2 squareFrame(vec2 res, vec2 coord){
     return ( 2. * coord.xy - res.xy ) / res.y;
 }
@@ -138,6 +139,28 @@ float specular(vec3 normal, vec3 dir){
     return clamp( pow(max(dot(h, normal), 0.), specularityCoef), 0.0, 1.0);
 }
 
+
+/**
+ * RIM
+ * http://roxlu.com/2014/037/opengl-rim-shader
+ */
+float rim(vec3 surfaceNormal, vec3 towardsEyeDir) {
+    return 1. - max(dot(towardsEyeDir, surfaceNormal), 0.0);
+}
+
+
+
+/**
+ * Generic fresnel
+ */
+// float fresnel(float costheta, float fresnelCoef) {
+//   return fresnelCoef + (1. - fresnelCoef) * pow(1. - costheta, 5.);
+// }
+
+float fresnel(vec3 normal, vec3 dir){
+    return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
+}
+
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr ){
     vec3 cw = normalize(ta-ro);
     vec3 cp = vec3(sin(cr), cos(cr),0.0);
@@ -168,21 +191,35 @@ void main(void){
          sin(4.0* u_time * camSpeed),
          cos(4.0* u_time * camSpeed),
          cos(4.0* u_time * camSpeed)); 
-    // /vec3 eye = 5.*vec3(4., 3., 4.);
+    //vec3 eye = 5.*vec3(4., 3., 4.);
     vec3 tangent = vec3(0.3, 1.0, -1.0);  
     mat3 camera = setCamera( eye, tangent, 0.0 );
-    float fov = 1.5;
+    float fov = 2.5;
     vec3 dir = camera * normalize(vec3(st, fov));
 
 
     float shortestDistanceToScene = raymarching(eye, dir);
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
-      vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
+        vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
 
-      float lightDistance = sphere(collision, 1.0);
-      vec3 normal = computeNormal(collision);
-      float diffLight = diffuse(normal);
-      float specLight = specular(normal, dir);
+        float lightDistance = sphere(collision, 1.0);
+        vec3 normal = computeNormal(collision);
+        float diffLight = diffuse(normal);
+        float specLight = specular(normal, dir);
+        color = red;
+        //color += fresnel(normal, dir);
+
+        vec3 rimColor = vec3(0.0902, 0.0, 0.4902);
+        float rimStart = 2.;
+        float rimEnd = 2.6;
+        float rimContribution = rim(normal, -dir);
+        //color += rimContribution * rimColor;
+
+        // you can amplify the contrib
+        //color += rimContribution * 2.2 * rimColor;
+
+        // or amplify and smooth it
+        //color += smoothstep(rimContribution * 2.2, 1.0, 2.2)* rimColor;
 
       color += (diffLight + specLight ) * red;
     } else {

@@ -1,4 +1,7 @@
 #define PI 3.14159265359
+
+//glslViewer ../../8video.frag  ../../textures/ocellate-turkey-tex2.jpg  ../../textures/sol.jpg
+
 const int MAX_MARCHING_STEPS = 164;
 const float EPSILON = 0.0015;
 const float NEAR_CLIP = 0.0;
@@ -10,8 +13,56 @@ uniform vec2 u_resolution;
 uniform sampler2D u_tex0;
 uniform sampler2D u_tex1;
 
+//BG
+vec2 tile(vec2 st, float zoom){
+    st *= zoom;
+    return fract(st);
+}
 
-float opSubtraction( float d1, float d2 ) { return max(-d1,d2); }
+float sdCircle( vec2 p, float r ){
+  return 1.- smoothstep(0.05, 0.05,length(p) - r);
+}
+
+// 2D Random
+float random (in vec2 st) {
+    return fract(sin(dot(st.xy,
+                         vec2(12.9898,78.233)))
+                 * 43758.5453123);
+}
+
+// 2D Noise based on Morgan McGuire @morgan3d
+// https://www.shadertoy.com/view/4dS3Wd
+float noise (in vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+
+    // Four corners in 2D of a tile
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+
+    // Smooth Interpolation
+    // Cubic Hermine Curve.  Same as SmoothStep()
+    vec2 u = f*f*(3.0-2.0*f);
+    // u = smoothstep(0.,1.,f);
+
+    // Mix 4 coorners percentages
+    return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
+            (d - b) * u.x * u.y;
+}
+
+vec2 vectorField(vec2 uv){
+  vec2 res = uv;
+  float n = noise(res*vec2(0.1));
+  res.y -= u_time*0.05;
+  res += sin(res.yx*40.) * 0.005;
+  res += vec2(n);
+  return res;
+}
+
+// RM
 
 float length2( vec3 p ) { p=p*p; return sqrt( p.x+p.y+p.z); }
 float length2( vec2 p ) { p=p*p; return sqrt( p.x+p.y); }
@@ -19,6 +70,7 @@ float length6( vec3 p ) { p=p*p*p; p=p*p; return pow(p.x+p.y+p.z,1.0/6.0); }
 float length6( vec2 p ) { p=p*p*p; p=p*p; return pow(p.x+p.y,1.0/6.0); }
 float length8( vec3 p ) { p=p*p; p=p*p; p=p*p; return pow(p.x+p.y+p.z,1.0/8.0); }
 float length8( vec2 p ) { p=p*p; p=p*p; p=p*p; return pow(p.x+p.y,1.0/8.0); }
+
 vec2 squareFrame(vec2 res, vec2 coord){
     return ( 2. * coord.xy - res.xy ) / res.y;
 }
@@ -28,8 +80,7 @@ vec3 lightDirection = vec3(0.702, 1.9686, 0.6745);
 float sphere(vec3 pos, float radius){
     return length(pos) - radius;
 }
-float onion( in float d, in float h )
-{
+float onion( in float d, in float h ){
     return abs(d)-h;
 }
 mat2 rotate2d(float _angle){
@@ -42,41 +93,21 @@ float smin( float a, float b, float k ){
     return mix( b, a, h ) - k*h*(1.0-h);
 }
 
-float sdBox( vec3 p, vec3 b ){
-    vec3 d = abs(p) - b;
-    return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
-}
-
-
 float sdTorus( vec3 p, vec2 t ){
   vec2 q = vec2(length(p.xz)-t.x,p.y);
-  return length2(q)-t.y;
+  return length6(q)-t.y;
 }
 
-float elongatedTorus(in vec3 p, vec2 t, in vec3 h )
-{
+float elongatedTorus(in vec3 p, vec2 t, in vec3 h ){
     vec3 q = abs(p)-h;
     return sdTorus( max(q,0.0), t ) + min(max(q.x,max(q.y,q.z)),0.0);
-}
-
-float bendTorus( vec3 p, vec2 dim ){
-    float wave = sin(u_time * SPEED / 4.) * 0.00;
-    //float wave = 7.2;
-    float c = cos(wave*p.x);
-    float s = sin(wave*p.x);
-    mat2  m = mat2(c,-s,s,c);
-    //vec3  q = vec3(m*p.xy,p.z);
-    //vec3  q = vec3( p.x, m*p.yz);
-    vec3  q = vec3( p.xy*m, p.z);
-    //return sdTorus(q, dim);
-    return elongatedTorus(q, dim, 1.2);
 }
 
 float nestedRings(vec3 _pos, float speed){
     float thick = 0.15;
     float diametro = 5.3;
     float off = 0.2;
-    float d1 =onion(bendTorus( _pos.xzy, vec2(diametro,0.6)), thick-0.01);
+    float d1 = onion(elongatedTorus( _pos.xzy, vec2(diametro,0.6),vec3(1.2)), thick-0.01);
     d1 = max( d1, _pos.x+sin(u_time*speed-off)*8.0);
     return d1;
 }
@@ -86,15 +117,16 @@ float nestedRings2(vec3 _pos, float speed){
     float diametro = 5.3;
     float off3 = 1.2;
 
-    float d4 = onion(bendTorus( _pos.xzy, vec2(diametro,1.8)), thick-0.04);
-    d4 = max( d4, _pos.x+sin(u_time*speed-off3)*8.0);
+    float d4 = onion(elongatedTorus( _pos.xzy, vec2(diametro,1.8),vec3(1.2)), thick-0.04);
+    d4 = max( d4, _pos.x+sin(u_time*speed-off3)*8.5);
 
     return d4;
 }
 
-
 float map(vec3 pos){
-    pos.xz =  pos.xz * rotate2d(u_time-0.5 * SPEED * 0.25);
+    vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+    float offset = mod(st.x , 2.0);
+    pos.xz =  pos.xz * rotate2d(u_time-offset * SPEED);
     vec3 vertPos = pos;
     float diametro = 0.0;
     float displacement = sin(2.4 * pos.x) *
@@ -109,10 +141,7 @@ float map(vec3 pos){
     float v = nestedRings2(vertPos, SPEED/ 4.) + displacement;
     float o = nestedRings(pos, SPEED/ 4.) + displacement;
     float vo = smin(o,v, 0.6);
-    // /return vo;
-    vec3 boxDim = vec3(10.0, 10.1, sin(u_time * SPEED/ 4.0)*0.6);
-    vec3 box =  sdBox(pos, boxDim);
-    return opSubtraction(box+displacement, vo);
+    return vo;
 }
     
 float raymarching(vec3 eye, vec3 marchingDirection){
@@ -184,40 +213,24 @@ vec3 getTextureCol(sampler2D tex, vec3 normal, vec3 dir) {
 }
 
 void main(void){
+    vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+
     vec3 red = vec3(0.8784, 0.2, 0.0784);
     vec3 blu = vec3(0.0, 0.2471, 0.7843);
-    vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+    vec3 bg  = texture2D(u_tex1, st*0.5+ 0.5).xyz;
 
     vec2 ruv = st * 1.0;
     ruv = fract(ruv);
 
-    // this is the accumulated color
     vec3 color = vec3(0.0,0.0,0.0);
-
-    // Depth of field variables
-    float lensResolution = 3.0;
-    float focalLenght = 20.0;
-    float lensAperture = 0.3;
-    float shiftIteration = 0.0;
-    float inc = 1.0/lensResolution;
-    float start = inc/2.0-0.5;
 
     // camera setup
     float camSpeed = SPEED / 16.0;
-    //  vec3 eye = 10.0*vec3(
-    //      sin(4.0* u_time * camSpeed),
-         
-    //      0.5,
-    //      //cos(4.0* u_time * camSpeed),
-    //      //1.
-    //      cos(4.0* u_time * camSpeed)
-    //      ); 
     vec3 eye = 5.*vec3(4., 3., 4.);
     vec3 tangent = vec3(-22.3, -36.0, -1.0);  
     mat3 camera = setCamera( eye, tangent, 0.0 );
     float fov =1.4;
     vec3 dir = camera * normalize(vec3(ruv, fov));
-
 
     float shortestDistanceToScene = raymarching(eye, dir);
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
@@ -230,13 +243,25 @@ void main(void){
         vec3 texCol = getTextureCol(u_tex0, normal, dir);
         color = (diffLight + specLight ) * texCol;
 
-        shadow = mix(shadow, 1.0, 0.5);
         color *= shadow;
     } else {
-        color += blu;
+        st = vectorField(st* 2.0);
+        float s = SPEED * 0.5;
+
+        vec2 grid1 = tile(st + vec2(cos(u_time *s ),sin(u_time * s))*0.03,4.);
+        color = mix(bg, red,
+            sdCircle(grid1 + vec2(-0.5), 0.33) -
+            sdCircle(grid1 + vec2(-0.5), 0.1)
+
+        );
+
+        vec2 grid2 = tile(st + vec2(cos(u_time * s),sin(u_time * s))*0.09 ,1.5);
+        color = mix(color,blu,
+            sdCircle(grid2 + vec2(-0.5), 0.4) -
+            sdCircle(grid2 + vec2(-0.5), 0.2)
+        );
     }
 
     vec3 c = sqrt(clamp(color, 0., 1.));
-	  //vec3 c = sqrt(clamp(color/shiftIteration, 0., 1.));
     gl_FragColor = vec4(c,1.0);
 }
