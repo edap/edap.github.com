@@ -1,3 +1,5 @@
+//glslViewer rim-light.frag
+
 #define PI 3.14159265359
 const int MAX_MARCHING_STEPS = 164;
 const float EPSILON = 0.0015;
@@ -147,15 +149,6 @@ float specular(vec3 normal, vec3 dir){
 float rim(vec3 surfaceNormal, vec3 towardsEyeDir) {
     return 1. - max(dot(towardsEyeDir, surfaceNormal), 0.0);
 }
-
-
-
-/**
- * Generic fresnel
- */
-// float fresnel(float costheta, float fresnelCoef) {
-//   return fresnelCoef + (1. - fresnelCoef) * pow(1. - costheta, 5.);
-// }
 
 float fresnel(vec3 normal, vec3 dir){
     return pow( clamp(1.0+dot(normal,dir),0.0,1.0), 2.0 );
