@@ -6,7 +6,7 @@ const int MAX_MARCHING_STEPS = 164;
 const float EPSILON = 0.0015;
 const float NEAR_CLIP = 0.0;
 const float FAR_CLIP = 80.00;
-const float SPEED = 1.;
+const float SPEED = 1.0;
 
 uniform float u_time;
 uniform vec2 u_resolution;
@@ -108,10 +108,10 @@ float elongatedTorus(in vec3 p, in vec2 dim, in vec3 h )
 
 float waveOfRings(vec3 pos, float dir, float time, float diametro){
     float anim = dir * sin(time * SPEED);
-    float expansion = 0.3 * abs(anim); // elongate on y axis
+    float expansion = 1.6 * abs(anim); // elongate on y axis
     float sizeT = 0.5; // size of the torus
     float decreasePadding = 1.; // space between the tori
-    float k = 0.9; // smin k value
+    float k = 1.1; // smin k value
     float yOff = 0.0 + (2.0 * anim); // offsetting on y
     float oscAmp = 0.8;
 
@@ -125,7 +125,7 @@ float waveOfRings(vec3 pos, float dir, float time, float diametro){
     vec3 pos3 = pos+vec3(0.,yOff*3., 0.);
     pos3.yz = pos3.yz * rotate2d(dir * sin(time*SPEED + 0.6*SPEED)* oscAmp);
 
-    vec3 pos4 = pos+vec3(0.,yOff*2, 0.);
+    vec3 pos4 = pos+vec3(0.,yOff*2., 0.);
     pos4.yz = pos4.yz * rotate2d(dir * sin(time*SPEED + 0.9*SPEED)* oscAmp);
 
     vec3 pos5 = pos+vec3(0.,yOff, 0.);
@@ -158,7 +158,7 @@ float map(vec3 pos){
 
     vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
     float offset = mod(st.x , 2.0);
-    pos.yz =  pos.yz * rotate2d(-PI/2);
+    pos.yz =  pos.yz * rotate2d(-PI/2.);
     //pos.yz =  pos.yz * rotate2d(u_time * SPEED);
     pos.xy =  pos.xy * rotate2d(u_time * SPEED/4.);
 
