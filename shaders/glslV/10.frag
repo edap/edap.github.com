@@ -112,7 +112,7 @@ float waveOfRings(vec3 pos, float dir, float time, float diametro){
     float sizeT = 0.5; // size of the torus
     float decreasePadding = 1.; // space between the tori
     float k = 1.1; // smin k value
-    float yOff = 0.0 + (2.0 * anim); // offsetting on y
+    float yOff = 0.0 + (1.2 * anim); // offsetting on y
     float oscAmp = 0.8;
 
 
@@ -262,20 +262,20 @@ void main(void){
     vec3 bg  = texture2D(u_tex1, st*0.5+ 0.5).xyz;
 
     vec2 ruv = st * 1.0;
-    //ruv = fract(ruv);
+    ruv = fract(ruv);
 
     vec3 color = vec3(0.0,0.0,0.0);
 
     // camera setup
     float camSpeed = SPEED / 16.0;
-    // vec3 eye = 5.*vec3(4., 3., 4.);
-    // vec3 tangent = vec3(-22.3, -36.0, -1.0);
+    vec3 eye = vec3(10., 5., 10.);
+    vec3 tangent = vec3(-18.3, -5.0, -1.0);
 
-    vec3 eye = 5.*vec3(0., 1., 4.);
-    vec3 tangent = vec3(-.3, -1.0, -1.0);  
+    // vec3 eye = 5.*vec3(0., 1., 4.);
+    // vec3 tangent = vec3(-.3, -1.0, -1.0);  
 
     mat3 camera = setCamera( eye, tangent, 0.0 );
-    float fov =2.4;
+    float fov = 0.3;
     vec3 dir = camera * normalize(vec3(ruv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
