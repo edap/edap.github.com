@@ -55,11 +55,17 @@ float noise (in vec2 st) {
 
 vec2 vectorField(vec2 uv){
   vec2 res = uv;
-  float n = noise(res*vec2(0.1));
+  float n = noise(res*vec2(2.4));
   res.y -= u_time*0.05;
-  res += sin(res.yx*40.) * 0.005;
+  res += sin(res.yx*40.) * 0.02;
   res += vec2(n);
   return res;
+}
+
+float plot(float val, float c, float t){
+  float l = smoothstep(c,c-t,val);
+  float r = smoothstep(c,c-t/5.,val);
+  return r-l;
 }
 
 // RM
@@ -107,14 +113,22 @@ float elongatedTorus(in vec3 p, in vec2 dim, in vec3 h )
 }
 
 float waveOfRings(vec3 pos, float dir, float time, float diametro){
-    float anim = dir * sin(time * SPEED);
-    float expansion = 1.6 * abs(anim); // elongate on y axis
+    vec2 screen = gl_FragCoord.xy/ u_resolution.xy;
+
+    float offsetx = step(screen.x, 0.5) * 7.5;
+    float offsety = step(screen.y, 0.5) * 4.0;
+    time += offsetx;
+    time += offsety;
+
+    float anim = dir * sin((time) * SPEED);
+    float expansion = 0.5 * abs(anim); // elongate on y axis
     float sizeT = 0.5; // size of the torus
     float decreasePadding = 1.; // space between the tori
-    float k = 1.1; // smin k value
-    float yOff = 0.0 + (1.2 * anim); // offsetting on y
+    float k = 0.3; // smin k value
+    float yOff = 0.0 + (0.7 * anim); // offsetting on y
     float oscAmp = 0.8;
-
+    pos.xy = pos.xy * rotate2d(dir * sin(time*SPEED) * oscAmp);
+    //pos.yz = pos.yz * rotate2d(dir * sin(time*SPEED) * oscAmp);
 
     vec3 pos1 = pos+vec3(0.,yOff*5., 0.);
     pos1.yz = pos1.yz * rotate2d(dir * sin(time*SPEED) * oscAmp);
@@ -169,7 +183,7 @@ float map(vec3 pos){
     float diametro = 0.0;
     float displacement = sin(2.4 * pos.x) *
                          sin(2.4 * pos.y) *
-                         sin(2.4 * pos.z) * 0.15;
+                         sin(2.4 * pos.z) * 0.05;
  
     //vertPos.yz = vertPos.yz * rotate2d(u_time * SPEED * 0.25);
     //vertPos.yz = vertPos.yz * rotate2d(PI);
@@ -261,21 +275,22 @@ void main(void){
     vec3 blu = vec3(0.0, 0.2471, 0.7843);
     vec3 bg  = texture2D(u_tex1, st*0.5+ 0.5).xyz;
 
-    vec2 ruv = st * 1.0;
+    vec2 ruv = st * 1.;
     ruv = fract(ruv);
 
     vec3 color = vec3(0.0,0.0,0.0);
 
     // camera setup
     float camSpeed = SPEED / 16.0;
-    vec3 eye = vec3(10., 5., 10.);
-    vec3 tangent = vec3(-18.3, -5.0, -1.0);
+    vec3 eye = 5.*vec3(4., 3., 4.);
+    vec3 tangent = vec3(-22.3, -36.0, -1.0);  
 
+    // fixed camera and no space domain repetition
     // vec3 eye = 5.*vec3(0., 1., 4.);
     // vec3 tangent = vec3(-.3, -1.0, -1.0);  
 
     mat3 camera = setCamera( eye, tangent, 0.0 );
-    float fov = 0.3;
+    float fov = 1.4;
     vec3 dir = camera * normalize(vec3(ruv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
@@ -295,15 +310,15 @@ void main(void){
 
         color *= shadow;
     } else {
-        st = vectorField(st* 2.0);
-        float s = SPEED * 0.5;
+        // st = vectorField(st* 2.0);
+        // float s = SPEED * 0.5;
 
-        vec2 grid1 = tile(st + vec2(cos(u_time *s ),sin(u_time * s))*0.03,4.);
-        color = mix(bg, red,
-            sdCircle(grid1 + vec2(-0.5), 0.43) -
-            sdCircle(grid1 + vec2(-0.5), 0.1)
+        // vec2 grid1 = tile(st + vec2(cos(u_time *s ),sin(u_time * s))*0.03,4.);
+        // color = mix(bg, red,
+        //     sdCircle(grid1 + vec2(-0.5), 0.43) -
+        //     sdCircle(grid1 + vec2(-0.5), 0.1)
 
-        );
+        // );
 
         // vec2 grid2 = tile(st + vec2(cos(u_time * s),sin(u_time * s))*0.09 ,1.5);
         // color = mix(color,blu,
@@ -311,8 +326,24 @@ void main(void){
         //     sdCircle(grid2 + vec2(-0.5), 0.2)
         // );
 
-        color = bg;
-        //color = blu;
+
+
+        // color = bg;
+
+      float t = 0.5;
+      vec2 uv = vectorField(st* 2.0);
+
+      float cell = 0.4;
+      vec2 modSt = mod(uv, vec2(cell));
+
+      float x = plot(modSt.x, cell, t);
+      float y = plot(modSt.y, cell, t);
+
+      vec3 texc = texture2D(u_tex0, uv).xyz;
+      color = red * x;
+      color     += texc * y;
+      color     += blu*vec3(smoothstep(0.3, .01,x+y));
+      color *= 0.4;
     }
 
     vec3 c = sqrt(clamp(color, 0., 1.));
