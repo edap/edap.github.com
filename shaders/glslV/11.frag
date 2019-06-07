@@ -98,6 +98,8 @@ float smin( float a, float b, float k ){
     return mix( b, a, h ) - k*h*(1.0-h);
 }
 
+
+
 float sdTorus( vec3 p, vec2 t ){
 //   vec2 q = vec2(length8(p.xz)-t.x,p.y);
 //   return length8(q)-t.y;
@@ -106,11 +108,17 @@ float sdTorus( vec3 p, vec2 t ){
   return length(q)-t.y;
 }
 
-float elongatedTorus(in vec3 p, in vec2 dim, in vec3 h )
-{
-    vec3 q = p - clamp( p, -h, h );
-    return sdTorus( q, dim );
+float bendTorus( vec3 p, vec2 dim, float wave ){
+    wave *= 0.05;
+    float c = cos(wave*p.z);
+    float s = sin(wave*p.z);
+    mat2  m = mat2(c,-s,s,c);
+    //vec3  q = vec3(m*p.xy,p.z);
+    vec3  q = vec3( p.x, m*p.yz);
+    //vec3  q = vec3( m*p.xy, p.z);
+    return sdTorus(q, dim);
 }
+
 
 float waveOfRings(vec3 pos, float dir, float time, float diametro){
     vec2 screen = gl_FragCoord.xy/ u_resolution.xy;
@@ -121,12 +129,11 @@ float waveOfRings(vec3 pos, float dir, float time, float diametro){
     time += offsety;
 
     float anim = dir * sin((time) * SPEED);
-    float expansion = 0.5 * abs(anim); // elongate on y axis
-    float sizeT = 0.5; // size of the torus
-    float decreasePadding = 1.; // space between the tori
+    float sizeT = 1.5; // size of the torus
+    float decreasePadding = 1.4; // space between the tori
     float k = 0.3; // smin k value
     float yOff = 0.0 + (0.7 * anim); // offsetting on y
-    float oscAmp = 0.8;
+    float oscAmp = 0.5;
     pos.xy = pos.xy * rotate2d(dir * sin(time*SPEED) * oscAmp);
     //pos.yz = pos.yz * rotate2d(dir * sin(time*SPEED) * oscAmp);
 
@@ -145,25 +152,27 @@ float waveOfRings(vec3 pos, float dir, float time, float diametro){
     vec3 pos5 = pos+vec3(0.,yOff, 0.);
     pos5.yz = pos5.yz * rotate2d(dir * sin(time*SPEED + 1.2*SPEED)* oscAmp);
 
-    float tor1 = elongatedTorus(pos1,
+
+    float tor1 = bendTorus(pos1,
                                 vec2(diametro, sizeT),
-                                vec3(0.1,expansion,0.1));
-    float tor2 = elongatedTorus(pos2,
+                                anim);
+    float tor2 = bendTorus(pos2,
                                 vec2(diametro-decreasePadding*1., sizeT),
-                                vec3(0.1,expansion,0.1));
-    float tor3 = elongatedTorus(pos3,
+                                anim);
+    float tor3 = bendTorus(pos3,
                                 vec2(diametro-decreasePadding*2., sizeT),
-                                vec3(0.1,expansion,0.1));
-    float tor4 = elongatedTorus(pos4,
+
+                                anim);
+    float tor4 = bendTorus(pos4,
                                 vec2(diametro-decreasePadding*3., sizeT),
-                                vec3(0.1,expansion,0.1));
-    float tor5 = elongatedTorus(pos5,
+                                anim);
+    float tor5 = bendTorus(pos5,
                                 vec2(diametro-decreasePadding*4., sizeT),
-                                vec3(0.1,expansion,0.1));
+                                anim);
 
-    float w = smin(tor1, smin(tor2, smin(tor3, smin(tor4,tor5,k), k), k), k);
-
-    //float w = smin(tor1, smin(tor2, smin(tor3, tor4, k), k), k);
+    //float w = smin(tor1, smin(tor2, smin(tor3, smin(tor4,tor5,k), k), k), k);
+    //return tor1;
+    float w = smin(tor1, smin(tor2, smin(tor3, tor4, k), k), k);
     return w;
 }
 
@@ -180,7 +189,6 @@ float map(vec3 pos){
 
 
     vec3 vertPos = pos;
-    float diametro = 0.0;
     float displacement = sin(2.4 * pos.x) *
                          sin(2.4 * pos.y) *
                          sin(2.4 * pos.z) * 0.05;
@@ -190,8 +198,8 @@ float map(vec3 pos){
     //vertPos.xz = vertPos.xz * rotate2d(-PI);
     //vertPos.x -= diametro;
 
-    float v = waveOfRings(vertPos, 1., u_time * SPEED,6.0);
-    float o = waveOfRings(pos,-1., u_time+0.5 * SPEED, 5.5);
+    float v = waveOfRings(vertPos, 1., u_time * SPEED,7.0);
+    float o = waveOfRings(pos,-1., u_time+0.5 * SPEED, 6.5);
     float vo = smin(o,v, 0.6);
     return vo;
 }
@@ -282,21 +290,21 @@ void main(void){
 
     // camera setup
     float camSpeed = SPEED / 16.0;
-    vec3 eye = 5.*vec3(4., 3., 4.);
-    vec3 tangent = vec3(-22.3, -36.0, -1.0);  
+    vec3 eye = 5.*vec3(3., 3., 4.);
+    vec3 tangent = vec3(-28.3, -56.0, -1.0);  
 
     // fixed camera and no space domain repetition
     // vec3 eye = 5.*vec3(0., 1., 4.);
     // vec3 tangent = vec3(-.3, -1.0, -1.0);  
 
     mat3 camera = setCamera( eye, tangent, 0.0 );
-    float fov = 1.4;
+    float fov = 0.8;
     vec3 dir = camera * normalize(vec3(ruv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
     if (shortestDistanceToScene < FAR_CLIP - EPSILON) {
         vec3 collision = (eye += (shortestDistanceToScene*0.995) * dir );
-        float shadow  = softshadow(collision, lightDirection, 0.02, 2.5 );
+        float shadow  = softshadow(collision, lightDirection, 0.8, 0.05 );
         float lightDistance = sphere(collision, 1.0);
         vec3 normal = computeNormal(collision);
         float diffLight = diffuse(normal);

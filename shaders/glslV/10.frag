@@ -98,6 +98,7 @@ float smin( float a, float b, float k ){
     return mix( b, a, h ) - k*h*(1.0-h);
 }
 
+
 float sdTorus( vec3 p, vec2 t ){
 //   vec2 q = vec2(length8(p.xz)-t.x,p.y);
 //   return length8(q)-t.y;
