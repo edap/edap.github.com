@@ -224,13 +224,14 @@ function createTrees(ofMesh, fog, bumpTexture){
     // that's why i need to create a new THREE.Geometry for each new tree in the
     // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
     // this container to a BufferGeometry
-    var treesGeometry = createTreesGeometry(ofMesh, bumpTexture);
-    var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
-    return new THREE.Mesh( treesBufferGeometry, treeMaterial);
+    var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
+    //var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
+    return new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
 }
 
 // TODO, implement instance geometry
 // https://threejs.org/examples/webgl_buffergeometry_instancing2.html
+// view-source:https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 function createTreesGeometry(ofMesh, bumpTexture){
     var density = 1; // n trees pro point in curve
     var context = createCanvasContext(bumpTexture);
@@ -240,30 +241,48 @@ function createTreesGeometry(ofMesh, bumpTexture){
     ofMesh.computeFaceNormals();
     ofMesh.computeVertexNormals();
 
-    var geometriesContainer = new THREE.Geometry();
+    var instancePositions = [];
+    var instanceQuaternions = [];
+    var instanceScales = [];
+
+    var tree = new THREE.Geometry();
+    tree.merge(ofMesh);
+    var geometry = new THREE.BufferGeometry().fromGeometry(tree);
+
     for (var i = 0; i< spline.points.length; i++) {
         //if(i%3 === 0){
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
             var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
+
             var x = Math.floor((randX + side/2) / ratio);
             var y = Math.floor((randY + side/2) / ratio);
             // put thress only where there are no mountains (eg, the pixel is black)
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
                 var randomScalar = getRandomArbitrary(0.03, 0.07);
-                var tree = new THREE.Geometry();
-                tree.merge(ofMesh);
-                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
-                tree.applyMatrix(
-                    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
-                tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
-                geometriesContainer.merge(tree);
+
+                //tree.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
+                //tree.applyMatrix(
+                //    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
+                //tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
+
+                instancePositions.push( randX, (pos.y - cameraHeight), randY );
+				instanceQuaternions.push( 0, 0, 0, 0 );
+				instanceScales.push( randomScalar, randomScalar, randomScalar );
             }
         //}
         }
     }
-    return geometriesContainer;
+
+    var instancedGeometry = new THREE.InstancedBufferGeometry();
+    instancedGeometry.attributes.position = geometry.attributes.position;
+        instancedGeometry.attributes.color = geometry.attributes.color;
+
+    instancedGeometry.addAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
+    instancedGeometry.addAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );
+    instancedGeometry.addAttribute( 'instanceScale', new THREE.InstancedBufferAttribute( new Float32Array( instanceScales ), 3 ) );    
+    return instancedGeometry;
 }
 
 function createTreeMaterial(fog){
@@ -282,7 +301,8 @@ function createTreeMaterial(fog){
         uniforms: uniforms,
         fog: true,
         lights: true,
-        vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
+        // vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
+        vertexShader: document.getElementById( 'vertexShaderInstanceTree' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShaderTree' ).textContent
     });
     customMaterial.side = THREE.BackSide;
@@ -471,7 +491,7 @@ function readVerticesInSvg(svgPath) {
 }
 
 function createCurveFromVertices(vertices){
-    // THREE.Curve has not matrix transformation, I've to apply transformation to vertices
+    // THREE.Curve has no matrix transformation, I've to apply transformation to vertices
     for (i = 0; i< vertices.length; i++) {
         // center the path on the terrain
         vertices[i].applyMatrix4( new THREE.Matrix4().makeTranslation( -side/2, -side/2, -cameraHeight ) );
