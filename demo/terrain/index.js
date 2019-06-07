@@ -5,7 +5,7 @@ var Config = function(){
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
-var debug = false;
+var debug = true;
 
 // Terrain
 var bumpScale = 200; // how much tha bumb affects the heights
@@ -201,6 +201,7 @@ function init(
     //container DOM
     container = document.getElementById( 'container' );
     container.appendChild(renderer.domElement);
+
     window.addEventListener('resize', onWindowResize, false);
 
     addGui(customMaterial);
