@@ -76,7 +76,7 @@ void main(void){
 
   vec3 color = blu * x;
   color     += red * y;
-  color     += lime*vec3(smoothstep(1.3, .01,x+y));
+  color     += lime*vec3(smoothstep(1.2, .01,x+y));
 
 
   gl_FragColor = vec4(clamp(color,0.0,1.0) , 1.0);
