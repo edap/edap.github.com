@@ -98,6 +98,7 @@ float smin( float a, float b, float k ){
     return mix( b, a, h ) - k*h*(1.0-h);
 }
 
+
 float sdTorus( vec3 p, vec2 t ){
 //   vec2 q = vec2(length8(p.xz)-t.x,p.y);
 //   return length8(q)-t.y;
@@ -310,25 +311,6 @@ void main(void){
 
         color *= shadow;
     } else {
-        // st = vectorField(st* 2.0);
-        // float s = SPEED * 0.5;
-
-        // vec2 grid1 = tile(st + vec2(cos(u_time *s ),sin(u_time * s))*0.03,4.);
-        // color = mix(bg, red,
-        //     sdCircle(grid1 + vec2(-0.5), 0.43) -
-        //     sdCircle(grid1 + vec2(-0.5), 0.1)
-
-        // );
-
-        // vec2 grid2 = tile(st + vec2(cos(u_time * s),sin(u_time * s))*0.09 ,1.5);
-        // color = mix(color,blu,
-        //     sdCircle(grid2 + vec2(-0.5), 0.4) -
-        //     sdCircle(grid2 + vec2(-0.5), 0.2)
-        // );
-
-
-
-        // color = bg;
 
       float t = 0.5;
       vec2 uv = vectorField(st* 2.0);

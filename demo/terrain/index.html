@@ -104,6 +104,39 @@
       }
     </script>
 
+    <script id="vertexShaderInstanceTree" type="x-shader/x-vertex">
+      precision highp float;
+  
+      attribute vec3 instancePosition;
+      attribute vec4 instanceQuaternion;
+      attribute vec3 instanceScale;
+
+      varying vec3 vNormal;
+      varying vec3 vPos;
+  
+  
+      vec3 applyTRS( vec3 position, vec3 translation, vec4 quaternion, vec3 scale ) {
+  
+        position *= scale;
+        position += 2.0 * cross( quaternion.xyz, cross( quaternion.xyz, position ) + quaternion.w * position );
+        return position + translation;
+  
+      }
+  
+      void main(){
+        vNormal = normalMatrix * normal;
+  
+        vec3 transformed = applyTRS( position.xyz, instancePosition, instanceQuaternion, instanceScale );
+        // as the light later will be given in world coordinate space,
+        // vPos has to be in world coordinate space too
+        vPos = (modelMatrix * vec4(transformed, 1.0 )).xyz;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
+  
+      }
+  
+    </script>
+
     <script id="fragmentShaderTree" type="x-shader/x-vertex">
       // fog's constant and functions
       #define LOG2 1.442695
