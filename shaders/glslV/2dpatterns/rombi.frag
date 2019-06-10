@@ -5,12 +5,6 @@
 uniform float u_time;
 uniform vec2 u_resolution;
 uniform sampler2D u_tex0;
-uniform vec2 u_mouse;
-
-float sinc( float x, float k ){
-    float a = PI*(k*x-1.0);
-    return sin(a)/a;
-}
 
 float ndot(vec2 a, vec2 b ) { return a.x*b.x - a.y*b.y; }
 
@@ -33,25 +27,14 @@ float plot(float val, float c, float t){
 }
 
 vec2 rotate2d(float _angle, vec2 _st){
-    //muovi
     _st -= 0.5;
-    // applica la rotazione nel centro del coordinate system
     mat2 rot =  mat2(cos(_angle),-sin(_angle),
-                      sin(_angle),cos(_angle));
+                     sin(_angle),cos(_angle));
     _st = rot * _st;
-    // rimuovi nella posizione originale, prima della rotazione
     _st += 0.5;
     return _st;
 }
 
-
-vec2 squareFrame(vec2 res, vec2 coord){
-    vec2 uv = 2.0 * coord.xy / res.xy - 1.0;
-    uv.x *= res.x / res.y;
-    return uv;
-}
-
-// 2D Random
 float random (in vec2 st) {
     return fract(sin(dot(st.xy,
                          vec2(12.9898,78.233)))
@@ -91,8 +74,6 @@ vec2 vectorField(vec2 uv, float noiseScale, float disFreq, float distAmp, float 
 }
 
 float romboRotate(in vec2 st){
-  // float rot = (PI/3. * sign( (st-vec2(0.5)).x)) * step(0.0,(st-vec2(0.5)).y);
-  // rot += (-PI/3. * sign( st-vec2(0.5)).x) * step((st-vec2(0.5)).y, 0.0);
   float rot = 0.;
 
   if(step(0.0,(st-vec2(0.5)).y) > 0. && step(0.0,(st-vec2(0.5)).x) > 0.){
@@ -110,11 +91,11 @@ float romboRotate(in vec2 st){
   if(step((st-vec2(0.5)).y, 0.0) > 0. && step((st-vec2(0.5)).x, 0.0) > 0.){
     rot = PI * 0.25;
   }
-  return rot;
+   return rot;
 }
 
 void main(void){
-  vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+  vec2 st = (2.0 * gl_FragCoord.xy - u_resolution.xy)/ u_resolution.y;
   float time = u_time * SPEED;
   vec2 grid1 = st;
   vec2 grid2 = st;
@@ -129,13 +110,12 @@ void main(void){
   vec3 blueHard = vec3( 0.098, 0.0, 0.749);
   vec3 bgColor = tex;
 
-  // dimensions
-  vec2 d1 =  vec2(0.5,0.5);
+  // rombi dimensions
+  vec2 d1 = vec2(0.5,0.5);
   vec2 d2 = vec2(0.3,0.3);
   vec2 d3 = vec2(0.1,0.1);
   vec2 d4 = vec2(0.05,0.05);
   float zoom = 1.0; // zoom solo con numeri dispari
-  
 
   // dots
   vec2 dottedField = vectorField(st, 2.0, 90., 0.01, 0.0)* 20. * zoom;
@@ -148,7 +128,6 @@ void main(void){
   float holes = sdCircle(holesField, 0.2);
 
   // GRID 1
-
   grid1 = vec2(fract(grid1.x * zoom), fract(grid1.y * zoom*2.));
 
   float r1 = 1.0-sdRhombus(grid1-vec2(0.5), d1);
@@ -159,17 +138,16 @@ void main(void){
   color = r1 * blu * tex.b;
   vec3 dottedCol = mix(blu* tex.b, tex, smoothstep(0.01, 0.2, dots));
   color = mix(color, dottedCol, r2);
-  //color = mix(color, lime * tex.r, r2);
   color = mix(color, red * tex.r, r3);
   color = mix(color, blueHard * tex.r, r4);
-  
+
   // GRID 2. With the stripes.
   // grid tiling and rotation
   grid2 += vec2(0.5, 0.25);
   grid2 = vec2(fract(grid2.x * zoom), fract(grid2.y * zoom*2.));
   float rot = romboRotate(grid2);
   vec2 rotatedGrid2 = rotate2d(rot,grid2);
-  
+
   // rombi
   float r11 = 1.0-sdRhombus(grid2-vec2(0.5), d1);
   float r12 = 1.0-sdRhombus(grid2-vec2(0.5), d2);
@@ -186,7 +164,6 @@ void main(void){
   color = mix(color, blu * tex.r, r13);
   color = mix(color, lime * tex.r, r14);
 
-
   // add colors to the border of the "holes"
   float cell = 1.9;
   vec2 modSt = mod(holesField, vec2(cell));
@@ -199,12 +176,11 @@ void main(void){
   //final color
   color = mix(bcolor, color, smoothstep(0.01,0.2,holes));
 
-  //debug dots 
+  //debug dots
   //color = mix(red, blu,smoothstep(0.01,0.2,dots));
 
-  //debug holes 
+  //debug holes
   //color = mix(red, blu,smoothstep(0.01,0.3,holes));
-
 
   gl_FragColor = vec4(clamp(color*1.4,0.0,1.0) , 1.0);
 }
