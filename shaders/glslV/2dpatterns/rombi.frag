@@ -5,6 +5,8 @@
 uniform float u_time;
 uniform vec2 u_resolution;
 uniform sampler2D u_tex0;
+uniform sampler2D u_tex1;
+uniform sampler2D u_tex2;
 uniform vec2 u_mouse;
 
 float sinc( float x, float k ){
@@ -33,17 +35,13 @@ float plot(float val, float c, float t){
 }
 
 vec2 rotate2d(float _angle, vec2 _st){
-    //muovi
     _st -= 0.5;
-    // applica la rotazione nel centro del coordinate system
     mat2 rot =  mat2(cos(_angle),-sin(_angle),
                       sin(_angle),cos(_angle));
     _st = rot * _st;
-    // rimuovi nella posizione originale, prima della rotazione
     _st += 0.5;
     return _st;
 }
-
 
 vec2 squareFrame(vec2 res, vec2 coord){
     vec2 uv = 2.0 * coord.xy / res.xy - 1.0;
@@ -115,6 +113,7 @@ float romboRotate(in vec2 st){
 
 void main(void){
   vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+  st += vec2(0.0, 0.001); // fix a line that appear in the middle
   float time = u_time * SPEED;
   vec2 grid1 = st;
   vec2 grid2 = st;
