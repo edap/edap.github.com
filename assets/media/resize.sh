@@ -4,7 +4,7 @@ PROJECT=$1
 # Usage:
 # Example, in assets/media you have a folder called uaua containing two high res images, they have to be .png files. They are called 1.png and 2.png
 # Running from assets/media the script `/bin/bash resize.sh uaua` will resize and create the following images in uaua:
-# 1.jpg (2600 x)
+# 1.jpg (2600 x) // 1462
 # 1-large.jpg (1940 x)
 # 1-medium.jpg (1280 x)
 # 1-small.jpg (640 x)

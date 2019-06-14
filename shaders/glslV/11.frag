@@ -121,20 +121,22 @@ float bendTorus( vec3 p, vec2 dim, float wave ){
 
 
 float waveOfRings(vec3 pos, float dir, float time, float diametro){
-    vec2 screen = gl_FragCoord.xy/ u_resolution.xy;
+    vec2 screen = 2.0 * (gl_FragCoord.xy - u_resolution.xy) / u_resolution.y;  
 
-    float offsetx = step(screen.x, 0.5) * 7.5;
-    float offsety = step(screen.y, 0.5) * 4.0;
+    float offsetx = mod(screen.x, 0.05) * 4.0;
+    float offsety = mod(screen.y, 0.05) * 4.0;
+    // float offsetx = mod(screen.x, 0.02) * 4.0;
+    // float offsety = mod(screen.y, 0.) * 4.0;
     time += offsetx;
     time += offsety;
 
-    float anim = dir * sin((time) * SPEED);
-    float sizeT = 1.5; // size of the torus
+    float anim = dir * sin(time * SPEED);
+    float sizeT = 0.6; // size of the torus
     float decreasePadding = 1.4; // space between the tori
-    float k = 0.3; // smin k value
+    float k = 0.9; // smin k value
     float yOff = 0.0 + (0.7 * anim); // offsetting on y
-    float oscAmp = 0.5;
-    pos.xy = pos.xy * rotate2d(dir * sin(time*SPEED) * oscAmp);
+    float oscAmp = 0.2;
+    //pos.xy = pos.xy * rotate2d(dir * sin(time*SPEED));
     //pos.yz = pos.yz * rotate2d(dir * sin(time*SPEED) * oscAmp);
 
     vec3 pos1 = pos+vec3(0.,yOff*5., 0.);
@@ -179,11 +181,11 @@ float waveOfRings(vec3 pos, float dir, float time, float diametro){
 float map(vec3 pos){
     float d4 = sdTorus( pos.xzy, vec2(5.3,1.2));
 
-    vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
-    float offset = mod(st.x , 2.0);
+    //vec2 st = squareFrame(u_resolution.xy, gl_FragCoord.xy);
+
     pos.yz =  pos.yz * rotate2d(-PI/2.);
-    //pos.yz =  pos.yz * rotate2d(u_time * SPEED);
-    pos.xy =  pos.xy * rotate2d(u_time * SPEED/4.);
+    // rotate un up axis
+    //pos.xy =  pos.xy * rotate2d((u_time* 0.2) * SPEED/4.);
 
     //return waveOfRings(pos, u_time);
 
@@ -199,7 +201,7 @@ float map(vec3 pos){
     //vertPos.x -= diametro;
 
     float v = waveOfRings(vertPos, 1., u_time * SPEED,7.0);
-    float o = waveOfRings(pos,-1., u_time+0.5 * SPEED, 6.5);
+    float o = waveOfRings(pos,-1., u_time * SPEED, 6.5);
     float vo = smin(o,v, 0.6);
     return vo;
 }
@@ -289,16 +291,16 @@ void main(void){
     vec3 color = vec3(0.0,0.0,0.0);
 
     // camera setup
-    float camSpeed = SPEED / 16.0;
+    //float camSpeed = SPEED / 16.0;
     vec3 eye = 5.*vec3(3., 3., 4.);
-    vec3 tangent = vec3(-28.3, -56.0, -1.0);  
+    vec3 tangent = vec3(-16.9, -36.0, -1.0);  
 
     // fixed camera and no space domain repetition
     // vec3 eye = 5.*vec3(0., 1., 4.);
     // vec3 tangent = vec3(-.3, -1.0, -1.0);  
 
     mat3 camera = setCamera( eye, tangent, 0.0 );
-    float fov = 0.8;
+    float fov = 1.245;
     vec3 dir = camera * normalize(vec3(ruv, fov));
 
     float shortestDistanceToScene = raymarching(eye, dir);
@@ -311,7 +313,7 @@ void main(void){
         float specLight = specular(normal, dir);
         vec3 texCol = getTextureCol(u_tex0, normal, dir);
 
-        vec3 rimColor = vec3(0.0902, 0.0, 0.4902);
+        vec3 rimColor = vec3(0.1216, 0.2235, 0.5608);
         float rimContribution = rim(normal, -dir);
         color = (diffLight + specLight ) * texCol;
         color += smoothstep(rimContribution * 19.2, 0.8, 19.2)* rimColor;
@@ -341,7 +343,7 @@ void main(void){
       float t = 0.5;
       vec2 uv = vectorField(st* 2.0);
 
-      float cell = 0.4;
+      float cell = 0.3 + sin(u_time * SPEED) * 0.02;
       vec2 modSt = mod(uv, vec2(cell));
 
       float x = plot(modSt.x, cell, t);
