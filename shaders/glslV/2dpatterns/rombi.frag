@@ -96,6 +96,8 @@ float romboRotate(in vec2 st){
 
 void main(void){
   vec2 st = (2.0 * gl_FragCoord.xy - u_resolution.xy)/ u_resolution.y;
+  st += vec2(0.0, 0.001); // fix a line that appear in the middle
+
   float time = u_time * SPEED;
   vec2 grid1 = st;
   vec2 grid2 = st;
