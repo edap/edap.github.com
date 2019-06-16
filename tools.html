@@ -7,9 +7,7 @@ layout: default
 
   <div class="grid l3 ghcard-intro">
         <h2>Algorithmic Botany tools </h2>
-        <p>Since 2015 I am developing open source software to generate programmatically shapes of flowers, leaves and trees.</p>
   </div>
-
 
   {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis,ofxSpaceColonization,ofxBranchesPrimitive" | split: "," %}
   {% assign sorted = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
