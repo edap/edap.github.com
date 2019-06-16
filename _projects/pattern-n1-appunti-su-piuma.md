@@ -14,8 +14,8 @@ tags: []
   {% include img-jpg.html pngName="rombi1" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l2" %}
 </a>
 
-<a href = "/artworks/pattern1-appunti-su-piuma/4.html">
-  {% include img-jpg.html pngName="rombi4" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid grid-sizer" %}
+<a href = "/artworks/pattern1-appunti-su-piuma/6.html">
+  {% include img-jpg.html pngName="rombi6" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid" %}
 </a>
 
 <a href = "/artworks/pattern1-appunti-su-piuma/5.html">
@@ -29,6 +29,11 @@ tags: []
 <a href = "/artworks/pattern1-appunti-su-piuma/3.html">
   {% include img-jpg.html pngName="rombi3" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid" %}
 </a>
+
+<a href = "/artworks/pattern1-appunti-su-piuma/4.html">
+  {% include img-jpg.html pngName="rombi4" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid grid-sizer" %}
+</a>
+
 
 <div class = "grid l3">
 WebGL animation, 2019.
