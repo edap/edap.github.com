@@ -17,6 +17,7 @@ node_modules/
 
 demo/3dprinteflowers-webgl/target/*
 demo/3dprinteflowers-webgl/bin/*
+demo/canvas-sketches/node_modules/*
 shaders/glslV/videos/*
 shaders/glslV/2dpatterns/videos/*
 shaders/glslV/textures/*
