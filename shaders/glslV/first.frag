@@ -58,7 +58,8 @@ float smins( float a, float b ){
 }
 
 float bendTorus( vec3 p, vec2 dim ){
-    float wave = sin(u_time * 4.0) * 0.02;
+    float wave = sin(u_time * 2.0) * 1.0;
+    //float wave = sin(u_time * 4.0) * 0.02;
     //float wave = 7.2;
     float c = cos(wave*p.x);
     float s = sin(wave*p.x);
