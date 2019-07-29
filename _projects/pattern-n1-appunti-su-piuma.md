@@ -11,27 +11,27 @@ tags: []
 
 
 <a href = "/artworks/pattern1-appunti-su-piuma/1.html">
-  {% include img-jpg.html pngName="rombi1" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l2" %}
+  {% include img-jpg.html pngName="rombi1" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l3" %}
 </a>
 
 <a href = "/artworks/pattern1-appunti-su-piuma/6.html">
-  {% include img-jpg.html pngName="rombi6" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid" %}
+  {% include img-jpg.html pngName="rombi6" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l3" %}
 </a>
 
 <a href = "/artworks/pattern1-appunti-su-piuma/5.html">
-  {% include img-jpg.html pngName="rombi5" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid" %}
+  {% include img-jpg.html pngName="rombi5" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l3" %}
 </a>
 
 <a href = "/artworks/pattern1-appunti-su-piuma/2.html">
-  {% include img-jpg.html pngName="rombi2" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l2" %}
+  {% include img-jpg.html pngName="rombi2" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l3" %}
 </a>
 
 <a href = "/artworks/pattern1-appunti-su-piuma/3.html">
-  {% include img-jpg.html pngName="rombi3" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid" %}
+  {% include img-jpg.html pngName="rombi3" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l3" %}
 </a>
 
 <a href = "/artworks/pattern1-appunti-su-piuma/4.html">
-  {% include img-jpg.html pngName="rombi4" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid grid-sizer" %}
+  {% include img-jpg.html pngName="rombi4" assetPath="/assets/media/pattern1-appunti-su-piuma/" gridClass = "grid l3 grid-sizer" %}
 </a>
 
 
