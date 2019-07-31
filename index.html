@@ -46,10 +46,7 @@ layout: home
   <!-- to work correctly on firefox, one of the smaller div with the class "grid" needs
   to also have the class grid-sizer. And it cannot be empty -->
   <a href="/projects/less-than-a-flower-more-than-a-bird">
-    <img class="grid grid-sizer" srcset="assets/media/less-than-a-flower-more-than-a-bird/budgeridgar-1-small.png 640w,
-    assets/media/less-than-a-flower-more-than-a-bird/budgeridgar-1-medium.png 1280w,
-    assets/media/less-than-a-flower-more-than-a-bird/budgeridgar-1-large.png 1940w,
-    assets/media/less-than-a-flower-more-than-a-bird/budgeridgar-1.png 2600w" sizes="(max-width: 600px) 96vw, 32.666vw">
+    {% include img-jpg.html pngName="budgerigar" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid grid-sizer" %}
   </a>
 
   <a href="/projects/flowers">

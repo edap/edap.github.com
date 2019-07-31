@@ -15,52 +15,28 @@ tags: []
 
 </div>
 
-{% include img-small.html pngName="budgeridgar-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid grid-sizer" %}
-{% include img-small.html pngName="budgeridgar-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="budgeridgar" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-<div class = "grid l3">
-Budgerigar<br/>
-<a href='/artworks/less-than-a-flower-more-than-a-bird/budgerigar/'>(open webGL animation)</a>
-<hr />
-</div>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/ring-necked-parakeet/'>
+{% include img-jpg.html pngName="ring-necked-parakeet" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid l2" %}
+</a>
 
-{% include img-small.html pngName="fischers-lovebird-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="fischers-lovebird-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="fischers-lovebird" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-<div class = "grid l3">
-Fischer's Lovebird <br/>
-<a href='/artworks/less-than-a-flower-more-than-a-bird/fischers-lovebird/'>(open webGL animation)</a>
-<hr />
+<a href='/artworks/less-than-a-flower-more-than-a-bird/budgerigar/'>
+{% include img-jpg.html pngName="budgerigar" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid " %}
+</a>
 
-</div>
-{% include img-small.html pngName="eastern-rosella-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="eastern-rosella-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="eastern-rosella" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-<div class = "grid l3">
-Eastern Rosella <br/>
-<a href='/artworks/less-than-a-flower-more-than-a-bird/eastern-rosella/'>(open webGL animation)</a>
-<hr />
-</div>
+<a href='/artworks/less-than-a-flower-more-than-a-bird/eastern-rosella/'>
+{% include img-jpg.html pngName="eastern-rosella" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid l2" %}
+</a>
+
+<a href='/artworks/less-than-a-flower-more-than-a-bird/fischers-lovebird/'>
+{% include img-jpg.html pngName="fischers-lovebird" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
+</a>
+
+<a href='/artworks/less-than-a-flower-more-than-a-bird/blue-fronted-parrot/'>
+{% include img-jpg.html pngName="blue-fronted-parrot" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid grid-sizer" %}
+</a>
 
 
 
-{% include img-small.html pngName="ring-necked-parakeet-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="ring-necked-parakeet-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="ring-necked-parakeet" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-<div class = "grid l3">
-Ring-Necked Parakeet <br/>
-<a href='/artworks/less-than-a-flower-more-than-a-bird/ring-necked-parakeet/'>(open webGL animation)</a>
-<hr />
-</div>
-
-{% include img-small.html pngName="blue-fronted-parrot-2" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="blue-fronted-parrot-1" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-{% include img-small.html pngName="blue-fronted-parrot" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid" %}
-<div class = "grid l3">
-Blue Fronted Parrot <br/>
-<a href='/artworks/less-than-a-flower-more-than-a-bird/blue-fronted-parrot/'>(open webGL animation)</a>
-<hr />
-</div>
 
 </div>
 </div>
