@@ -4,14 +4,14 @@ precision mediump float;
 
 uniform vec2 u_resolution;
 uniform vec2 u_mouse;
-uniform sampler2D u_tex0;
+uniform sampler2D u_tex1;
 uniform float u_time;
 
 const float SPEED = 1.4;
 const float OFFSET = 0.9;
 const float ROTATION = 0.0;
 const vec2 SCALING = vec2(1.);
-const float PATTERN_DIM = 162.0;
+const float PATTERN_DIM = 342.0;
 const int PALETTE = 6;
 
 float randomMg (in vec2 st) {
@@ -167,12 +167,12 @@ void main(void) {
   }
 
   // textures
-  vec4 texEye = vec4(texture2D(u_tex0, (origSt + vec2(0.5)) * (0.5 + length(mouse) * 0.3)));
-  vec4 texZoom = vec4(texture2D(u_tex0, (origSt + vec2(0.5))));
-  vec4 texGroup = vec4(texture2D(u_tex0, pos * 0.41));
+  vec4 texEye = vec4(texture2D(u_tex1, (origSt + vec2(0.5)) * (0.5 + length(mouse) * 0.3)));
+  vec4 texZoom = vec4(texture2D(u_tex1, origSt + vec2(0.5)));
+  vec4 texGroup = vec4(texture2D(u_tex1, pos * 0.41));
   
   // BG Holes
-  background = mix(background, vec4(0), smoothstep(0.7, 0.8, texGroup.r));
+  background = mix(background, vec4(0), step(0.7, texGroup.r));
   color = vec4(mix(color.rgb, background.rgb, 1.), 1);
   vec2 grid1 = fract((origSt + vec2(0.5)) * 1.0);
 
@@ -185,11 +185,10 @@ void main(void) {
   vec2 modSt = mod(holesField, vec2(cell));
   float x = plot(modSt.x, cell, 1.2);
   float y = plot(modSt.y, cell, 1.2);
-
-  //blu = blu - (length(texGroup) * 0.1);
-  //blu = blu * step(length(texGroup), 1.2);
-  //blu-= (colTex * x) * 0.001;
-  //color = mix(color, blu, holes);
+  blu = blu - (length(texGroup) * 0.1);
+  blu = blu * step(length(texGroup), 1.2);
+  blu-= colTex* x;
+  color = mix(color, blu, holes);
 
   // bulbo oculare. Uncomment for occhi a goccia
   //vec2 dir = normalize(mouse - origSt);
@@ -197,16 +196,13 @@ void main(void) {
   vec4 bigCircleCol = mix(blu, texZoom, step(0.4,texZoom.b)) ;
   // pupilla
   vec2 outlinePos = vec2(-0.50 - dir.x * 0.01, -0.50 - dir.y * 0.01);
-  // ADD color = mix(color, red*texZoom.b, sdCircle(grid1+ outlinePos, 0.47));
+  color = mix(color, red*texZoom.b, sdCircle(grid1+ outlinePos, 0.47));
 
   float circ1 = sdCircle(grid1 + vec2(-0.5 - dir*0.03), 0.48 -(length(dir)* 0.04));
   float circ2 = sdCircle(grid1 + vec2(-0.5 - dir*0.09), 0.24 -(length(dir)* 0.09));
 
-  // ADD color = mix(color, bigCircleCol, circ1-circ2);
-  // ADD  color = mix(color, red*texEye.b, circ2);
-
-  vec4 debMouse = vec4(mouse.x, mouse.y,0.,1.0);
-  vec4 debUres = vec4(u_resolution.x, u_resolution.y,0.,1.0);
+  color = mix(color, bigCircleCol, circ1-circ2);
+  color = mix(color, red*texEye.b, circ2);
 
   gl_FragColor = pow(color, vec4(vec3(1./2.2), 1.0));
 }

@@ -1306,8 +1306,10 @@ var Texture = function () {
             // linear: linear blend from original image (no mips)
             // nearest: nearest pixel from original image (no mips, 'blocky' look)
             if (this.powerOf2) {
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, options.TEXTURE_WRAP_S || options.repeat && gl.REPEAT || gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, options.TEXTURE_WRAP_T || options.repeat && gl.REPEAT || gl.CLAMP_TO_EDGE);
+                // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, options.TEXTURE_WRAP_S || options.repeat && gl.REPEAT || gl.CLAMP_TO_EDGE);
+                // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, options.TEXTURE_WRAP_T || options.repeat && gl.REPEAT || gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
                 if (this.filtering === 'mipmap') {
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); // TODO: use trilinear filtering by defualt instead?
@@ -1737,9 +1739,8 @@ var GlslCanvas = function () {
             var rect = this.canvas.getBoundingClientRect();
             if (mouse && mouse.x && mouse.x >= rect.left && mouse.x <= rect.right && mouse.y && mouse.y >= rect.top && mouse.y <= rect.bottom) {
 
-                var mouse_x = (mouse.x - rect.left) * this.realToCSSPixels;
-                var mouse_y = this.canvas.height - (mouse.y - rect.top) * this.realToCSSPixels;
-
+                var mouse_x = (mouse.x - rect.left);
+                var mouse_y = (this.height - (mouse.y - rect.top));
                 this.uniform('2f', 'vec2', 'u_mouse', mouse_x, mouse_y);
             }
         }
@@ -1852,7 +1853,7 @@ var GlslCanvas = function () {
                 }
 
                 // set the resolution uniform
-                this.uniform('2f', 'vec2', 'u_resolution', this.canvas.width, this.canvas.height);
+                this.uniform('2f', 'vec2', 'u_resolution', this.width, this.height);
 
                 for (var key in this.buffers) {
                     var buffer = this.buffers[key];
