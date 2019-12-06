@@ -37,7 +37,7 @@
     const float ROTATION = 0.0;
     const vec2 SCALING = vec2(1.);
     const float PATTERN_DIM = 342.0;
-    const int PALETTE = 2;
+    const int PALETTE = 6;
 
     float randomMg (in vec2 st) {
       return fract(sin(dot(st.xy,
@@ -233,80 +233,80 @@
     }
     </script>
     <script>
-    var clock = new THREE.Clock();
-    var textureLoader = new THREE.TextureLoader();
-    var container, camera, scene, renderer, uniforms, material, mesh;
-    var i = 1.0;
-    var renderRequested = false;
-    //load assets and start
-    textureLoader.load('argusianus-argus2-big.jpg', texture => {
-      init(texture);
-      animate();
-    });
-
-    function init(texture) {
-      // set texture repeat
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set( 2, 2 );
-
-      container = document.getElementById('container');
-      camera = new THREE.Camera();
-      camera.position.z = 1;
-      scene = new THREE.Scene();
-      uniforms = {
-        u_time: { type: "f", value: 0.1 },
-        u_resolution: { type: "v2", value: new THREE.Vector2() },
-        u_tex0: {type: "t", value: texture},
-        u_mouse: {
-          type: 'v2',
-          value: new THREE.Vector2()
-        }
-      };
-      material = new THREE.ShaderMaterial({
-        uniforms: uniforms,
-        vertexShader: document.getElementById('vertexShader').textContent,
-        fragmentShader: document.getElementById('fragmentShader').textContent
+      var clock = new THREE.Clock();
+      var textureLoader = new THREE.TextureLoader();
+      var container, camera, scene, renderer, uniforms, material, mesh;
+      var i = 1.0;
+      var renderRequested = false;
+      //load assets and start
+      textureLoader.load('argusianus-argus2-big.jpg', texture => {
+        init(texture);
+        animate();
       });
-      mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
-      scene.add(mesh);
-      renderer = new THREE.WebGLRenderer();
-      renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
-      container.appendChild(renderer.domElement);
-      uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
-      uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
-      renderer.setSize(window.innerWidth, window.innerHeight);
 
-      renderer.domElement.addEventListener('mousemove', function(e) {
-        i += 0.05;
-        var canvas = renderer.domElement;
-        uniforms.u_mouse.value.x = e.clientX * window.devicePixelRatio;
-        uniforms.u_mouse.value.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
+      function init(texture) {
+        // set texture repeat
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 2, 2 );
+
+        container = document.getElementById('container');
+        camera = new THREE.Camera();
+        camera.position.z = 1;
+        scene = new THREE.Scene();
+        uniforms = {
+          u_time: { type: "f", value: 0.1 },
+          u_resolution: { type: "v2", value: new THREE.Vector2() },
+          u_tex0: {type: "t", value: texture},
+          u_mouse: {
+            type: 'v2',
+            value: new THREE.Vector2()
+          }
+        };
+        material = new THREE.ShaderMaterial({
+          uniforms: uniforms,
+          vertexShader: document.getElementById('vertexShader').textContent,
+          fragmentShader: document.getElementById('fragmentShader').textContent
+        });
+        mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+        scene.add(mesh);
+        renderer = new THREE.WebGLRenderer();
+        renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+        container.appendChild(renderer.domElement);
+        uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
+        uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        renderer.domElement.addEventListener('mousemove', function(e) {
+          i += 0.05;
+          var canvas = renderer.domElement;
+          uniforms.u_mouse.value.x = e.clientX * window.devicePixelRatio;
+          uniforms.u_mouse.value.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
+          requestRenderIfNotRequested();
+        });
+
+        window.addEventListener('resize', windowResized);
+      }
+
+      function animate() {
+        renderRequested = false;
+        //uniforms.u_time.value += clock.getDelta();
+        uniforms.u_time.value = i;
+        renderer.render(scene, camera);
+      }
+
+      function requestRenderIfNotRequested() {
+          if (!renderRequested) {
+            renderRequested = true;
+            requestAnimationFrame(animate);
+          }
+      }
+
+      function windowResized() {
+        uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
+        uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
+        renderer.setSize(window.innerWidth, window.innerHeight);
         requestRenderIfNotRequested();
-      });
-
-      window.addEventListener('resize', windowResized);
-    }
-
-    function animate() {
-      renderRequested = false;
-      //uniforms.u_time.value += clock.getDelta();
-      uniforms.u_time.value = i;
-      renderer.render(scene, camera);
-    }
-
-    function requestRenderIfNotRequested() {
-        if (!renderRequested) {
-          renderRequested = true;
-          requestAnimationFrame(animate);
-        }
-    }
-
-    function windowResized() {
-      uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
-      uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      requestRenderIfNotRequested();
-    }
+      }
   </script>
 </body>
 </html>

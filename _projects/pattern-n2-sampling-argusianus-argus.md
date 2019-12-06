@@ -1,6 +1,6 @@
 ---
 layout: project
-title: "Pattern n2: Sampling Argusianus Argus"
+title: "Pattern #2: Sampling Argusianus Argus"
 category: 
 tags: []
 ---
