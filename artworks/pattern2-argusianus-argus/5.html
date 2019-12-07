@@ -209,8 +209,9 @@
       vec2 modSt = mod(holesField, vec2(cell));
       float x = plot(modSt.x, cell, 1.2);
       blu = blu - (length(texGroup) * 0.1);
-      blu = blu * step(length(texGroup), 1.2);
-      vec4 colorHoles = mix(blu, colTex, x);
+      float f = step(length(texGroup), 1.2);
+      blu = blu * f;
+      vec4 colorHoles = mix(blu, colTex * f, x);
       color = mix(color,colorHoles, holes);
 
       // bulbo oculare. Uncomment for occhi a goccia
