@@ -198,7 +198,7 @@
       vec4 texGroup = texture2D(u_tex0, pos * 0.41);
 
       // Sfondo buchi
-      float feathers = smoothstep(0.7, 0.75, texGroup.r);
+      float feathers = smoothstep(0.3, 0.7, texGroup.r);
       color = mix(background, vec4(0.), feathers);
       vec2 grid1 = fract((origSt + vec2(0.5)) * 1.0);
 
