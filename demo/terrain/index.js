@@ -189,12 +189,11 @@ function init(
     scene.add(terrain);
 
     //path
-    var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
 
     //tree
-    var trees = createTrees(treePly,scene.fog, bumpTexture);
+    var trees = createTrees(treePly, scene.fog, bumpTexture);
     scene.add(trees);
 
     container = document.getElementById( 'spinner' ).remove();
@@ -225,10 +224,55 @@ function createTrees(ofMesh, fog, bumpTexture){
     // that's why i need to create a new THREE.Geometry for each new tree in the
     // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
     // this container to a BufferGeometry
-    var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
+    //var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
     //var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
-    return new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
+    var instancedMesh = createInstancedTreeMesh(ofMesh, bumpTexture, treeMaterial);
+    return instancedMesh;
+    //return new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
 }
+
+function createInstancedTreeMesh(ofMesh, bumpTexture, material) {
+    var dummy = new THREE.Object3D();
+    var count = spline.points.length;
+    var tree = new THREE.Geometry();
+    tree.merge(ofMesh);
+    var geometry = new THREE.BufferGeometry().fromGeometry(tree);
+    var mat = new THREE.MeshNormalMaterial();
+    var mesh = new THREE.InstancedMesh(geometry, mat, count);
+    console.log(mesh);
+
+    for (var i = 0; i< spline.points.length; i++) {
+        //if(i%3 === 0){
+        var pos = spline.points[i];
+
+        var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
+        var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
+
+        //var x = Math.floor((randX + side/2) / ratio);
+        //var y = Math.floor((randY + side/2) / ratio);
+        // put thress only where there are no mountains (eg, the pixel is black)
+        //if (context.getImageData(x, y, 1, 1).data[0] === 0) {
+            var randomScalar = getRandomArbitrary(0.03, 0.07);
+
+            dummy.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
+            //dummy.applyMatrix(
+            //    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
+            dummy.position.set(randX, (pos.y - cameraHeight), randY );
+            //dummy.rotateY = Math.PI / getRandomArbitrary(-3, 3);
+            dummy.rotation.y =  Math.PI / getRandomArbitrary(-3, 3);
+
+            // instancePositions.push( randX, (pos.y - cameraHeight), randY );
+            // instanceQuaternions.push( 0, 0, 0, 0 );
+            // instanceScales.push( randomScalar, randomScalar, randomScalar );
+            console.log(dummy.position.y);
+
+            dummy.updateMatrix();
+            mesh.setMatrixAt(i, dummy.matrix );
+        //}
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    return mesh;
+};
 
 // TODO, implement instance geometry
 // https://threejs.org/examples/webgl_buffergeometry_instancing2.html
