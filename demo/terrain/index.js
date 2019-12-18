@@ -221,16 +221,11 @@ function createCanvasContext(bumpTexture){
 
 function createTrees(ofMesh, fog, bumpTexture){
     treeMaterial = createTreeMaterial(fog);
-    // it is not possible to merge BufferGeometries, only Geometry instances can be merged
-    // that's why i need to create a new THREE.Geometry for each new tree in the
-    // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
-    // this container to a BufferGeometry
     var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
     //var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
     return new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
 }
 
-// TODO, implement instance geometry
 // https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 // view-source:https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 function createTreesGeometry(ofMesh, bumpTexture){
@@ -251,7 +246,6 @@ function createTreesGeometry(ofMesh, bumpTexture){
     var geometry = new THREE.BufferGeometry().fromGeometry(tree);
 
     for (var i = 0; i< spline.points.length; i++) {
-        //if(i%3 === 0){
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
@@ -272,7 +266,6 @@ function createTreesGeometry(ofMesh, bumpTexture){
 				instanceQuaternions.push( 0, 0, 0, 0 );
 				instanceScales.push( randomScalar, randomScalar, randomScalar );
             }
-        //}
         }
     }
 
