@@ -183,7 +183,7 @@ function init(
 
     //terrain
     var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture, scene.fog);
-    var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 50, 50);
+    var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 150, 150);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
     scene.add(terrain);
@@ -337,6 +337,7 @@ function createSkyDome(backgroundTexture){
       vertexShader:   document.getElementById('sky-vertex').textContent,
       fragmentShader: document.getElementById('sky-fragment').textContent
     });
+    material.side = THREE.DoubleSide;
 
     skyDome = new THREE.Mesh(geometry, material);
     skyDome.scale.set(-1, 1, 1);
@@ -474,7 +475,6 @@ function readVerticesInSvg(svgPath) {
     var vertices = [];
     //this is ugly
     var points = svgPath.getElementById('Unnamed').getAttribute('d').split("            ");
-    var position = points[0];
     var curvePoints = points.slice(1);
     for (var i = 0; i< curvePoints.length; i++) {
         var arc = curvePoints[i].trim();
