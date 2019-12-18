@@ -5,10 +5,10 @@ var Config = function(){
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
-var debug = true;
+var debug = false;
 
 // Terrain
-var bumpScale = 200; // how much tha bumb affects the heights
+var bumpScale = 148; // how much tha bumb affects the heights
 var side = 2048; // side of the plane
 var terrain; // Plane geometry
 var planeRotation = Math.PI/2;
@@ -158,7 +158,7 @@ function init(
         backgroundTexture,
         audioBuffer,
         treePly) {
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 40000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
@@ -189,15 +189,15 @@ function init(
     scene.add(terrain);
 
     //path
-    var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
 
     //tree
-    var trees = createTrees(treePly,scene.fog, bumpTexture);
+    var trees = createTrees(treePly, scene.fog, bumpTexture);
     scene.add(trees);
 
     container = document.getElementById( 'spinner' ).remove();
+    container = document.getElementById( 'info' ).remove();
     //container DOM
     container = document.getElementById( 'container' );
     container.appendChild(renderer.domElement);
@@ -222,8 +222,9 @@ function createCanvasContext(bumpTexture){
 function createTrees(ofMesh, fog, bumpTexture){
     treeMaterial = createTreeMaterial(fog);
     var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
-    //var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
-    return new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
+    var mesh = new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
+    mesh.frustumCulled = false; // necessary, otherwise three get culled out when the camera
+    return  mesh;
 }
 
 // https://threejs.org/examples/webgl_buffergeometry_instancing2.html
@@ -244,7 +245,8 @@ function createTreesGeometry(ofMesh, bumpTexture){
     var tree = new THREE.Geometry();
     tree.merge(ofMesh);
     var geometry = new THREE.BufferGeometry().fromGeometry(tree);
-
+	var quat = new THREE.Quaternion();
+	var upVector = new THREE.Vector3(0,1,0);
     for (var i = 0; i< spline.points.length; i++) {
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
@@ -256,14 +258,10 @@ function createTreesGeometry(ofMesh, bumpTexture){
             // put thress only where there are no mountains (eg, the pixel is black)
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
                 var randomScalar = getRandomArbitrary(0.03, 0.07);
-
-                //tree.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
-                //tree.applyMatrix(
-                //    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
-                //tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
+                quat.setFromAxisAngle( upVector, Math.PI / getRandomArbitrary(-3, 3) );
 
                 instancePositions.push( randX, (pos.y - cameraHeight), randY );
-				instanceQuaternions.push( 0, 0, 0, 0 );
+                instanceQuaternions.push( quat.x, quat.y, quat.z, quat.w );
 				instanceScales.push( randomScalar, randomScalar, randomScalar );
             }
         }
@@ -271,11 +269,11 @@ function createTreesGeometry(ofMesh, bumpTexture){
 
     var instancedGeometry = new THREE.InstancedBufferGeometry();
     instancedGeometry.attributes.position = geometry.attributes.position;
-        instancedGeometry.attributes.color = geometry.attributes.color;
+    instancedGeometry.attributes.color = geometry.attributes.color;
 
-    instancedGeometry.addAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
-    instancedGeometry.addAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );
-    instancedGeometry.addAttribute( 'instanceScale', new THREE.InstancedBufferAttribute( new Float32Array( instanceScales ), 3 ) );    
+    instancedGeometry.setAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
+    instancedGeometry.setAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );
+    instancedGeometry.setAttribute( 'instanceScale', new THREE.InstancedBufferAttribute( new Float32Array( instanceScales ), 3 ) );    
     return instancedGeometry;
 }
 
@@ -295,7 +293,6 @@ function createTreeMaterial(fog){
         uniforms: uniforms,
         fog: true,
         lights: true,
-        // vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
         vertexShader: document.getElementById( 'vertexShaderInstanceTree' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShaderTree' ).textContent
     });

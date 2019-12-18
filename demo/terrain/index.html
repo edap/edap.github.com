@@ -2,12 +2,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Press the bar to unleash the dogs</title>
+    <title>Press space to unleash the dogs</title>
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <div id="spinner"></div>
-    <div id="container"></div>
+    <div id="info">Press space to unleash the dog</div>
+    <div id="spinner">
+    </div>
+    <div id="container">
+    </div>
     <script id="vertexShader" type="x-shader/x-vertex">
     uniform sampler2D bumpTexture;
     uniform float bumpScale;
@@ -88,20 +91,6 @@
       vec4 sample = texture2D(texture, vUV);
       gl_FragColor = vec4(sample.xyz, sample.w);
     }
-    </script>
-
-    <script id="vertexShaderTree" type="x-shader/x-vertex">
-      varying vec3 vNormal;
-      varying vec3 vPos;
-
-      void main() {
-        vNormal = normalMatrix * normal;
-        // as the light later will be given in world coordinate space,
-        // vPos has to be in world coordinate space too
-        vPos = (modelMatrix * vec4(position, 1.0 )).xyz;
-
-        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position,1.);
-      }
     </script>
 
     <script id="vertexShaderInstanceTree" type="x-shader/x-vertex">
