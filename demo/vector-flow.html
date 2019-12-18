@@ -1,0 +1,159 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
+
+  <script id="vertexShader" type="x-shader/x-vertex">
+        void main()	{
+            gl_Position = vec4( position, 1.0 );
+        }
+    </script>
+
+  <script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+    uniform float u_time;
+    // 2D Random
+    float random (in vec2 st) {
+        return fract(sin(dot(st.xy,
+                             vec2(12.9898,78.233)))
+                     * 43758.5453123);
+    }
+    
+    // 2D Noise based on Morgan McGuire @morgan3d
+    // https://www.shadertoy.com/view/4dS3Wd
+    float noise (in vec2 st) {
+        vec2 i = floor(st);
+        vec2 f = fract(st);
+    
+        // Four corners in 2D of a tile
+        float a = random(i);
+        float b = random(i + vec2(1.0, 0.0));
+        float c = random(i + vec2(0.0, 1.0));
+        float d = random(i + vec2(1.0, 1.0));
+    
+        // Smooth Interpolation
+        // Cubic Hermine Curve.  Same as SmoothStep()
+        vec2 u = f*f*(3.0-2.0*f);
+        // u = smoothstep(0.,1.,f);
+    
+        // Mix 4 coorners percentages
+        return mix(a, b, u.x) +
+                (c - a)* u.y * (1.0 - u.x) +
+                (d - b) * u.x * u.y;
+    }
+    
+    vec2 vectorField(vec2 uv){
+      vec2 res = uv;
+      float n = noise(res*vec2(3.0));
+      res.y -= u_time*0.05;
+      res += sin(res.yx*40.) * 0.02;
+      res += vec2(n);
+      return res;
+    }
+    
+    float plot(float val, float c, float t){
+      float l = smoothstep(c,c-t,val);
+      float r = smoothstep(c,c-t/5.,val);
+      return r-l;
+    }
+
+    void main()	{
+    float t = 0.2; // try 0.2 or 0.3
+    vec2 m = u_mouse.xy / u_resolution.xy;
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    st.y *= u_resolution.y / u_resolution.x;
+    st = vec2(st.y, st.y * (st.x * 0.4));
+    st = vectorField(st);
+  
+    float cell = 0.2 + m.y*0.3;
+    vec2 modSt = mod(st, vec2(cell));
+  
+    float x = plot(modSt.x, cell, t);
+    float y = plot(modSt.y, cell, t);
+      
+    vec3 green = vec3(0.733,1.,0.309 );
+    vec3 red = vec3(1.,0.352,0.207);
+    vec3 blue = vec3(0.086,0.290, 0.8 );
+  
+      
+    vec3 col = blue * x;
+    col     += green * y;
+    col     += red*vec3(smoothstep(1.3, .01,x+y));
+    
+    gl_FragColor = pow(vec4(col, 1.0), vec4(vec3(1. / 2.2), 1.0));
+
+    }
+    </script>
+  <script>
+  var clock = new THREE.Clock();
+  var container;
+  var camera, scene, renderer, uniforms, material, mesh;
+
+  init();
+  animate();
+
+  function init() {
+    container = document.getElementById('container');
+    camera = new THREE.Camera();
+    camera.position.z = 1;
+    scene = new THREE.Scene();
+    uniforms = {
+      u_time: { type: "f", value: 0.1 },
+      u_resolution: { type: "v2", value: new THREE.Vector2() },
+      u_mouse: {
+        type: 'v2',
+        value: new THREE.Vector2()
+      }
+    };
+    material = new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: document.getElementById('vertexShader').textContent,
+      fragmentShader: document.getElementById('fragmentShader').textContent
+    });
+    mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    scene.add(mesh);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+    container.appendChild(renderer.domElement);
+    uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
+    uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    renderer.domElement.addEventListener('mousemove', function(e) {
+      var canvas = renderer.domElement;
+      uniforms.u_mouse.value.x = e.clientX * window.devicePixelRatio;
+      uniforms.u_mouse.value.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
+    });
+    window.addEventListener('resize', windowResized);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    uniforms.u_time.value += clock.getDelta();
+    renderer.render(scene, camera);
+  }
+  
+  function windowResized() {
+    uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
+    uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    animate();
+  }
+  </script>
+</body>
+</html>
