@@ -158,7 +158,7 @@ function init(
         backgroundTexture,
         audioBuffer,
         treePly) {
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 40000);
     camera.position.z = cameraZposition;
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener('change', render);
@@ -232,13 +232,18 @@ function createTrees(ofMesh, fog, bumpTexture){
 }
 
 function createInstancedTreeMesh(ofMesh, bumpTexture, material) {
+    var context = createCanvasContext(bumpTexture);
+    var ratio = side / bumpTexture.image.width;
     var dummy = new THREE.Object3D();
     var count = spline.points.length;
     var tree = new THREE.Geometry();
     tree.merge(ofMesh);
     var geometry = new THREE.BufferGeometry().fromGeometry(tree);
+    geometry.computeVertexNormals();
     var mat = new THREE.MeshNormalMaterial();
-    var mesh = new THREE.InstancedMesh(geometry, mat, count);
+    var mesh = new THREE.InstancedMesh(geometry, mat, count, false);
+    // see thread https://discourse.threejs.org/t/solved-camera-rendering-instanced-objects-behind-camera/6392/11
+
     console.log(mesh);
 
     for (var i = 0; i< spline.points.length; i++) {
@@ -248,17 +253,20 @@ function createInstancedTreeMesh(ofMesh, bumpTexture, material) {
         var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
         var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
 
-        //var x = Math.floor((randX + side/2) / ratio);
-        //var y = Math.floor((randY + side/2) / ratio);
+        var x = Math.floor((randX + side/2) / ratio);
+        var y = Math.floor((randY + side/2) / ratio);
         // put thress only where there are no mountains (eg, the pixel is black)
         //if (context.getImageData(x, y, 1, 1).data[0] === 0) {
             var randomScalar = getRandomArbitrary(0.03, 0.07);
 
-            dummy.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
-            //dummy.applyMatrix(
-            //    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
-            dummy.position.set(randX, (pos.y - cameraHeight), randY );
-            //dummy.rotateY = Math.PI / getRandomArbitrary(-3, 3);
+            dummy.applyMatrix(new THREE.Matrix4().multiplyScalar( 0.4 ));
+            // dummy.applyMatrix(
+            //     new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
+            if (context.getImageData(x, y, 1, 1).data[0] === 0) {
+                dummy.position.set(randX, (pos.y - cameraHeight), randY );
+            }else{
+                dummy.position.set(pos.x, (pos.y - cameraHeight), pos.z );
+            }
             dummy.rotation.y =  Math.PI / getRandomArbitrary(-3, 3);
 
             // instancePositions.push( randX, (pos.y - cameraHeight), randY );
@@ -270,6 +278,8 @@ function createInstancedTreeMesh(ofMesh, bumpTexture, material) {
             mesh.setMatrixAt(i, dummy.matrix );
         //}
     }
+    mesh.frustumCulled = true;
+    mesh.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, -1.3, 0), side);
     mesh.instanceMatrix.needsUpdate = true;
     return mesh;
 };
