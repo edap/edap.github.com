@@ -5,10 +5,10 @@ var Config = function(){
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
-var debug = true;
+var debug = false;
 
 // Terrain
-var bumpScale = 200; // how much tha bumb affects the heights
+var bumpScale = 148; // how much tha bumb affects the heights
 var side = 2048; // side of the plane
 var terrain; // Plane geometry
 var planeRotation = Math.PI/2;
@@ -197,6 +197,7 @@ function init(
     scene.add(trees);
 
     container = document.getElementById( 'spinner' ).remove();
+    container = document.getElementById( 'info' ).remove();
     //container DOM
     container = document.getElementById( 'container' );
     container.appendChild(renderer.domElement);
@@ -220,71 +221,12 @@ function createCanvasContext(bumpTexture){
 
 function createTrees(ofMesh, fog, bumpTexture){
     treeMaterial = createTreeMaterial(fog);
-    // it is not possible to merge BufferGeometries, only Geometry instances can be merged
-    // that's why i need to create a new THREE.Geometry for each new tree in the
-    // createTreesGeometryMethod, merge them in a THREE.Geometry container and finally convert
-    // this container to a BufferGeometry
-    //var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
-    //var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
-    var instancedMesh = createInstancedTreeMesh(ofMesh, bumpTexture, treeMaterial);
-    return instancedMesh;
-    //return new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
+    var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
+    var mesh = new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
+    mesh.frustumCulled = false; // necessary, otherwise three get culled out when the camera
+    return  mesh;
 }
 
-function createInstancedTreeMesh(ofMesh, bumpTexture, material) {
-    var context = createCanvasContext(bumpTexture);
-    var ratio = side / bumpTexture.image.width;
-    var dummy = new THREE.Object3D();
-    var count = spline.points.length;
-    var tree = new THREE.Geometry();
-    tree.merge(ofMesh);
-    var geometry = new THREE.BufferGeometry().fromGeometry(tree);
-    geometry.computeVertexNormals();
-    var mat = new THREE.MeshNormalMaterial();
-    var mesh = new THREE.InstancedMesh(geometry, mat, count, false);
-    // see thread https://discourse.threejs.org/t/solved-camera-rendering-instanced-objects-behind-camera/6392/11
-
-    console.log(mesh);
-
-    for (var i = 0; i< spline.points.length; i++) {
-        //if(i%3 === 0){
-        var pos = spline.points[i];
-
-        var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
-        var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
-
-        var x = Math.floor((randX + side/2) / ratio);
-        var y = Math.floor((randY + side/2) / ratio);
-        // put thress only where there are no mountains (eg, the pixel is black)
-        //if (context.getImageData(x, y, 1, 1).data[0] === 0) {
-            var randomScalar = getRandomArbitrary(0.03, 0.07);
-
-            dummy.applyMatrix(new THREE.Matrix4().multiplyScalar( 0.4 ));
-            // dummy.applyMatrix(
-            //     new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
-            if (context.getImageData(x, y, 1, 1).data[0] === 0) {
-                dummy.position.set(randX, (pos.y - cameraHeight), randY );
-            }else{
-                dummy.position.set(pos.x, (pos.y - cameraHeight), pos.z );
-            }
-            dummy.rotation.y =  Math.PI / getRandomArbitrary(-3, 3);
-
-            // instancePositions.push( randX, (pos.y - cameraHeight), randY );
-            // instanceQuaternions.push( 0, 0, 0, 0 );
-            // instanceScales.push( randomScalar, randomScalar, randomScalar );
-            console.log(dummy.position.y);
-
-            dummy.updateMatrix();
-            mesh.setMatrixAt(i, dummy.matrix );
-        //}
-    }
-    mesh.frustumCulled = true;
-    mesh.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, -1.3, 0), side);
-    mesh.instanceMatrix.needsUpdate = true;
-    return mesh;
-};
-
-// TODO, implement instance geometry
 // https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 // view-source:https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 function createTreesGeometry(ofMesh, bumpTexture){
@@ -303,9 +245,9 @@ function createTreesGeometry(ofMesh, bumpTexture){
     var tree = new THREE.Geometry();
     tree.merge(ofMesh);
     var geometry = new THREE.BufferGeometry().fromGeometry(tree);
-
+	var quat = new THREE.Quaternion();
+	var upVector = new THREE.Vector3(0,1,0);
     for (var i = 0; i< spline.points.length; i++) {
-        //if(i%3 === 0){
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
@@ -316,27 +258,22 @@ function createTreesGeometry(ofMesh, bumpTexture){
             // put thress only where there are no mountains (eg, the pixel is black)
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
                 var randomScalar = getRandomArbitrary(0.03, 0.07);
-
-                //tree.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
-                //tree.applyMatrix(
-                //    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
-                //tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
+                quat.setFromAxisAngle( upVector, Math.PI / getRandomArbitrary(-3, 3) );
 
                 instancePositions.push( randX, (pos.y - cameraHeight), randY );
-				instanceQuaternions.push( 0, 0, 0, 0 );
+                instanceQuaternions.push( quat.x, quat.y, quat.z, quat.w );
 				instanceScales.push( randomScalar, randomScalar, randomScalar );
             }
-        //}
         }
     }
 
     var instancedGeometry = new THREE.InstancedBufferGeometry();
     instancedGeometry.attributes.position = geometry.attributes.position;
-        instancedGeometry.attributes.color = geometry.attributes.color;
+    instancedGeometry.attributes.color = geometry.attributes.color;
 
-    instancedGeometry.addAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
-    instancedGeometry.addAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );
-    instancedGeometry.addAttribute( 'instanceScale', new THREE.InstancedBufferAttribute( new Float32Array( instanceScales ), 3 ) );    
+    instancedGeometry.setAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
+    instancedGeometry.setAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );
+    instancedGeometry.setAttribute( 'instanceScale', new THREE.InstancedBufferAttribute( new Float32Array( instanceScales ), 3 ) );    
     return instancedGeometry;
 }
 
@@ -356,7 +293,6 @@ function createTreeMaterial(fog){
         uniforms: uniforms,
         fog: true,
         lights: true,
-        // vertexShader: document.getElementById( 'vertexShaderTree' ).textContent,
         vertexShader: document.getElementById( 'vertexShaderInstanceTree' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShaderTree' ).textContent
     });
