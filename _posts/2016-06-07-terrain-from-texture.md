@@ -231,12 +231,21 @@ I've collected the textures during a trip in Sächsische Schweiz. Mostly rock's 
 
 ## Add the trees
 
-I' ve generated the mesh for the trees using openFrameworks and my addon [ofxLSystem](https://github.com/edap/ofxLSystem).All the trees are generated from the same mesh. I've scaled and rotated it to make the trees look differents from each other. As i wanted to have trees only near the track, I've to check the coordinates where the tree is supposed to be placed in the image texture. If the pixel is black it means there are no mountains at that coordinates, and the tree can be put there. Otherwise i will just iterate over the next tree.
+All the trees are created using the geometry. The geometry is created using openFrameworks and my addon [ofxLSystem](https://github.com/edap/ofxLSystem). As the only thing that differentiates a tree from another is its location, rotation and scale, this is a good case to create an instanced mesh. As the trees are just along the track, they are added only if a random position close to the track is overlapping with a portion of the noise texture that is not white. If the pixel is black it means there are no mountains at that coordinates, and the tree can be put there.
 The coordinates of the points on the path are in a different scale and position than the coordinate of the texture (my path was on a surface of 2048x2048, translated on the y and x axis and rotated, the texture has not translation nor rotation and it is 512x512), that's why there are coordinate conversions in this method:
 
 ```javascript
+function createTrees(ofMesh, fog, bumpTexture){
+    treeMaterial = createTreeMaterial(fog);
+    var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
+    var mesh = new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
+    mesh.frustumCulled = false; // necessary, otherwise three get culled out when the camera turns
+    return  mesh;
+}
+
+// https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 function createTreesGeometry(ofMesh, bumpTexture){
-    var density = 1; // n trees pro point in curve, more trees is also less fps :(
+    var density = 1; // n trees pro point in curve
     var context = createCanvasContext(bumpTexture);
     // ratio between the geometry plane and the texture
     var ratio = side / bumpTexture.image.width;
@@ -244,41 +253,80 @@ function createTreesGeometry(ofMesh, bumpTexture){
     ofMesh.computeFaceNormals();
     ofMesh.computeVertexNormals();
 
-    var geometriesContainer = new THREE.Geometry();
+    var instancePositions = [];
+    var instanceQuaternions = [];
+    var instanceScales = [];
+
+    var tree = new THREE.Geometry();
+    tree.merge(ofMesh);
+    var geometry = new THREE.BufferGeometry().fromGeometry(tree);
+	var quat = new THREE.Quaternion();
+	var upVector = new THREE.Vector3(0,1,0);
     for (var i = 0; i< spline.points.length; i++) {
         var pos = spline.points[i];
         for (var d = 0; d <= density; d++) {
-            // coordinates conversion + random positioning
             var randX = Math.floor(pos.x + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
             var randY = Math.floor(pos.z + getRandomArbitrary(-maxDistanceFromPath, +maxDistanceFromPath));
+
             var x = Math.floor((randX + side/2) / ratio);
             var y = Math.floor((randY + side/2) / ratio);
             // put thress only where there are no mountains (eg, the pixel is black)
             if (context.getImageData(x, y, 1, 1).data[0] === 0) {
-                // some big tree, some small tree
                 var randomScalar = getRandomArbitrary(0.03, 0.07);
-                var tree = new THREE.Geometry();
-                tree.merge(ofMesh);
-                tree.applyMatrix(new THREE.Matrix4().multiplyScalar( randomScalar ));
-                tree.applyMatrix(
-                    new THREE.Matrix4().makeTranslation( randX, (pos.y - cameraHeight), randY ) );
-                tree.rotateY = Math.PI / getRandomArbitrary(-3, 3);
-                geometriesContainer.merge(tree);
+                quat.setFromAxisAngle( upVector, Math.PI / getRandomArbitrary(-3, 3) );
+
+                instancePositions.push( randX, (pos.y - cameraHeight), randY );
+                instanceQuaternions.push( quat.x, quat.y, quat.z, quat.w );
+                instanceScales.push( randomScalar, randomScalar, randomScalar );
             }
         }
     }
-    return geometriesContainer;
+
+    var instancedGeometry = new THREE.InstancedBufferGeometry();
+    instancedGeometry.attributes.position = geometry.attributes.position;
+    instancedGeometry.attributes.color = geometry.attributes.color;
+
+    instancedGeometry.setAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
+    instancedGeometry.setAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );
+    instancedGeometry.setAttribute( 'instanceScale', new THREE.InstancedBufferAttribute( new Float32Array( instanceScales ), 3 ) );    
+    return instancedGeometry;
 }
 
-function createTrees(ofMesh, fog, bumpTexture){
-    treeMaterial = createTreeMaterial(fog);
-    var treesGeometry = createTreesGeometry(ofMesh, bumpTexture);
-    var treesBufferGeometry = new THREE.BufferGeometry().fromGeometry(treesGeometry);
-    return new THREE.Mesh( treesBufferGeometry, treeMaterial);
-}
 
 ```
 
-As you see first a `geometriesContainer` is created, then each tree is transformed in a `THREE.Geometry` instance and merged into the container. After that, in the method `createTrees` the `THREE.Geometry` is converted to a `THREE.BufferGeometry`. I did not create directly a `THREE.BufferGeometry` for each tree because it is not possible to merge BufferGeometries, only Geometry instances can be merged. I've merged all the trees in a single mesh to gain performances, and it works pretty well. This is a screenshot of the final result.
+The matrix transformations are now passed as attribute to the vertex shader, that can scale, rotate and translate the instances. The vertex shader code needs consequentially to be adapted.
+
+```
+precision highp float;
+
+attribute vec3 instancePosition;
+attribute vec4 instanceQuaternion;
+attribute vec3 instanceScale;
+
+varying vec3 vNormal;
+varying vec3 vPos;
+
+vec3 applyTRS( vec3 position, vec3 translation, vec4 quaternion, vec3 scale ) {
+  position *= scale;
+  position += 2.0 * cross( quaternion.xyz, cross( quaternion.xyz, position ) + quaternion.w * position );
+  return position + translation;
+}
+
+void main(){
+  vNormal = normalMatrix * normal;
+
+  vec3 transformed = applyTRS( position.xyz, instancePosition, instanceQuaternion, instanceScale );
+  // as the light later will be given in world coordinate space,
+  // vPos has to be in world coordinate space too
+  vPos = (modelMatrix * vec4(transformed, 1.0 )).xyz;
+
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
+}
+```
+
+Here a screenshot of the final result and the link to the a live demo.
 
 ![final](/assets/media/posts/desert.png)
+
+[live demo](/demo/terrain)

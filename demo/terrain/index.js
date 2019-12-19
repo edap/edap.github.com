@@ -223,12 +223,11 @@ function createTrees(ofMesh, fog, bumpTexture){
     treeMaterial = createTreeMaterial(fog);
     var treesInstanceBufferGeometry = createTreesGeometry(ofMesh, bumpTexture);
     var mesh = new THREE.Mesh( treesInstanceBufferGeometry, treeMaterial);
-    mesh.frustumCulled = false; // necessary, otherwise three get culled out when the camera
+    mesh.frustumCulled = false; // necessary, otherwise three get culled out when the camera turns
     return  mesh;
 }
 
 // https://threejs.org/examples/webgl_buffergeometry_instancing2.html
-// view-source:https://threejs.org/examples/webgl_buffergeometry_instancing2.html
 function createTreesGeometry(ofMesh, bumpTexture){
     var density = 1; // n trees pro point in curve
     var context = createCanvasContext(bumpTexture);
