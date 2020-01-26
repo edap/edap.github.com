@@ -5,7 +5,7 @@ var Config = function(){
 // Gereral
 var container, camera, controls, scene, renderer, stats, gui, light;
 var config = new Config();
-var debug = false;
+var debug = true;
 
 // Terrain
 var bumpScale = 148; // how much tha bumb affects the heights
@@ -127,12 +127,12 @@ var loadTexture = function (filename){
 $.when( loadSvg('path.svg'),
         loadTexture('terrain512.png'),
         // street with grass
-        //loadTexture('grass512.jpg'),
+        loadTexture('grass-512.jpg'),
         //violet street
         //loadTexture('grass-violet512.jpg'),
         //street with stone
         //loadTexture('desertrock-dark512.jpg'),
-        loadTexture('desertrock-bottom512.jpg'),
+        //loadTexture('desertrock-bottom512.jpg'),
         loadTexture('rock-top512.jpg'),
         loadTexture('desertrock-light512.jpg'),
         loadTexture('bg.jpg'),
@@ -183,7 +183,7 @@ function init(
 
     //terrain
     var customMaterial = createTerrainMaterial(bumpTexture, grassTexture, rockBottomTexture, rockTopTexture, scene.fog);
-    var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 150, 150);
+    var geometryPlane = new THREE.PlaneBufferGeometry(side, side, 512, 512);
     geometryPlane.rotateX( - planeRotation);
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
     scene.add(terrain);
@@ -241,9 +241,8 @@ function createTreesGeometry(ofMesh, bumpTexture){
     var instanceQuaternions = [];
     var instanceScales = [];
 
-    var tree = new THREE.Geometry();
-    tree.merge(ofMesh);
-    var geometry = new THREE.BufferGeometry().fromGeometry(tree);
+    var geometry = new THREE.BufferGeometry().fromGeometry(ofMesh);
+
 	var quat = new THREE.Quaternion();
 	var upVector = new THREE.Vector3(0,1,0);
     for (var i = 0; i< spline.points.length; i++) {
@@ -269,6 +268,7 @@ function createTreesGeometry(ofMesh, bumpTexture){
     var instancedGeometry = new THREE.InstancedBufferGeometry();
     instancedGeometry.attributes.position = geometry.attributes.position;
     instancedGeometry.attributes.color = geometry.attributes.color;
+    instancedGeometry.attributes.normal = geometry.attributes.normal;
 
     instancedGeometry.setAttribute( 'instancePosition', new THREE.InstancedBufferAttribute( new Float32Array( instancePositions ), 3 ) );
     instancedGeometry.setAttribute( 'instanceQuaternion', new THREE.InstancedBufferAttribute( new Float32Array( instanceQuaternions ), 4 ) );

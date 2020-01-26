@@ -292,12 +292,11 @@ function createTreesGeometry(ofMesh, bumpTexture){
     return instancedGeometry;
 }
 
-
 ```
 
 The matrix transformations are now passed as attribute to the vertex shader, that can scale, rotate and translate the instances. The vertex shader code needs consequentially to be adapted.
 
-```
+```c
 precision highp float;
 
 attribute vec3 instancePosition;

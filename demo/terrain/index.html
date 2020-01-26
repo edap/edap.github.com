@@ -103,7 +103,6 @@
       varying vec3 vNormal;
       varying vec3 vPos;
   
-  
       vec3 applyTRS( vec3 position, vec3 translation, vec4 quaternion, vec3 scale ) {
   
         position *= scale;
@@ -123,7 +122,6 @@
         gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
   
       }
-  
     </script>
 
     <script id="fragmentShaderTree" type="x-shader/x-vertex">
