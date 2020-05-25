@@ -7,9 +7,9 @@ tags: []
 
 <div class="content-container">
 <div class="index-content">
-<div class="grid-gutter"></div><div class="grid-sizer"></div>
+<div class="grid-gutter"></div>
 
-  <div class = "grid l3">
+  <div class = "grid l3 grid-sizer">
   WebGL animations produced sampling the feathers of the<a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>, a species of turkey residing primarily in the Yucatán Peninsula.
   </div>
   <div class="grid">
