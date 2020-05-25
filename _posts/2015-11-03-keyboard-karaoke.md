@@ -3,10 +3,8 @@ layout: post
 title: "Keyboard Karaoke"
 category:
 published: false
-tags: [openFrameworks, karaoke, keyboard]
-description: "<div class='sixteen-nine'>
-<iframe src='https://player.vimeo.com/video/144209588' width='745' height='466' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-</div>"
+tags: [openFrameworks, karaoke, keyboard, interactive installation]
+description: "openFrameworks keyboard karaoke"
 ---
 The Keyboard Karaoke is an application to sing and type your favourite songs. The code is available at [https://github.com/edap/KeyboardKaraoke](https://github.com/edap/KeyboardKaraoke)
 <div class="sixteen-nine">

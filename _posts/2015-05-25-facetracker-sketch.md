@@ -2,13 +2,8 @@
 layout: post
 title: "FaceTracker sketch"
 category:
-published: false
-tags: [openFrameworks, FaceTracker, Box2D, OpenCV]
-description: "OpenFrameworks sketch mixing ofxFaceTracker, ofxBox2D and the audio input.
-<div class='sixteen-nine'>
-<iframe src='https://player.vimeo.com/video/128782688' width='700' height='438' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-</div>
-"
+tags: [openFrameworks, FaceTracker, Box2D, OpenCV, interactive installation]
+description: "OpenFrameworks sketch mixing ofxFaceTracker, ofxBox2D and the audio input."
 ---
 
 I've played a bit with the [ofxFaceTracker](https://github.com/kylemcdonald/ofxFaceTracker) addon recently and I've done this small application that use this addons, the microphone and ofxBox2D to literally blow bubbles out of your eyes. 
@@ -20,7 +15,7 @@ I've played a bit with the [ofxFaceTracker](https://github.com/kylemcdonald/ofxF
 I write here the steps followed to reach the final results, the code is available on [Github](https://github.com/edap/bubbles)
 
 ### Put the mouth over the eyes
-For each frame composing the video, I've identified the profile of the mouth with `tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH)`, then I've created a transparent image and I've copied to it only with the pixels inside the profile of the mouth.
+For each frame composing the video, I have identified the profile of the mouth with `tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH)`, then I have created a transparent image and I have copied to it only with the pixels inside the profile of the mouth.
 
 ```cpp
 ofImage ofApp::grabMouth(){
@@ -34,14 +29,15 @@ ofImage ofApp::grabMouth(){
     ofPixels alphaPixels;
     alphaPixels.allocate(pixels.getWidth(), pixels.getHeight(), OF_IMAGE_COLOR_ALPHA);
     int totalPixels = pixels.getWidth()*pixels.getHeight();
+    // allocate two colors
+    ofColor c = pixels.getColor(x,y);
+    ofColor transparent = ofColor(0,0,0,0);
     for (int x = 0; x < pixels.getWidth(); x++) {
         for (int y = 0; y < pixels.getHeight(); y++) {
             ofPoint checkpoint = ofPoint(x+mouthBox.x,y+mouthBox.y);
             if (mouthProfile.inside(checkpoint)) {
-                ofColor c = pixels.getColor(x,y);
                 alphaPixels.setColor(x,y,c);
             } else {
-                ofColor transparent = ofColor(0,0,0,0);
                 alphaPixels.setColor(x,y,transparent);
             }
         }
@@ -52,7 +48,7 @@ ofImage ofApp::grabMouth(){
 }
 ```
 
-Then, for every new frame, I've copied this image over the eyes
+Then, for every new frame, I have copied this image over the eyes.
 
 ```cpp
 void ofApp::update() {
@@ -78,7 +74,7 @@ void ofApp::drawMouth(ofVec2f eye, ofImage mouth){
 
 ### Create the bubbles
 
-I've used ofxBox2D to create the bubbles that fullfill the screen while blowing. The `BallsGenerator` class contains an emissive particle system that has 2 origins over the eyes. The origins get constantly update because the face is supposed to turn or move.
+I've used ofxBox2D to create the bubbles that fill the screen while blowing. The `BallsGenerator` class contains an emissive particle system that has 2 origins over the eyes. The origins need to be constantly updated because the face is supposed to turn or move.
 
 ```cpp
 void ofApp::update() {
@@ -91,7 +87,7 @@ void ofApp::update() {
 
 ### Map the audio input to the bubbles
 
-The `microphone.update()` call updates the current input volume, and save it in the `scaledVol` variable. This variable is used shortly after by the bubbles generator.
+The `microphone.update()` call updates the current input volume, and save it in the `scaledVol` variable. This variable is used shortly after by the bubbles generator and affects the particle emitters.
 
 ```cpp
 void BallsGenerator::blow(float blowPower){
