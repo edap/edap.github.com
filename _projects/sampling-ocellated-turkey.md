@@ -49,7 +49,7 @@ tags: []
   </div>
 
   <div class = "grid l3">
-Further development over this idea are available on <a href="https://frm.fm/a/davide_prati">Framed</a>
+Further development these animations are available on <a href="https://frm.fm/a/davide_prati">Framed</a>
   </div>
 
   <!--Subsistence Plumage #1 -->
