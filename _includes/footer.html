@@ -5,23 +5,34 @@
   
   <script>
 
-var $grid = $('.index-content').imagesLoaded( function() {
+const container = document.querySelector('.index-content');
+let msnry;
+
+if(container){
+  $(container).imagesLoaded( function() {
   // init Masonry after all images have loaded
-  $grid.masonry({
+  msnry = new Masonry( container, {
     columnWidth: '.grid-sizer',
-        gutter: '.grid-gutter',
-        itemSelector: '.grid',
-        transitionDuration: '0.1s'
+    gutter: '.grid-gutter',
+    itemSelector: '.grid',
+    transitionDuration: '0.1s'
   });
+
+  imgLoadHandler = () => { msnry.layout(); };
+  $('img').bind('load', imgLoadHandler);
 
   // html5 video. As they load, call masonry
   document.querySelectorAll('video').forEach(vid => 
     vid.addEventListener('loadeddata', (event) => {
-      $grid.masonry('layout');
+      msnry.layout();
     })
   )
 
 });
+
+}
+
+
 
 
 </script>
