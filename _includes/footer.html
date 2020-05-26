@@ -2,48 +2,24 @@
   <script src="/js/jquery-2.2.3.min.js"></script>
   <script src="/js/masonry.pkgd.min.js"></script>
   <script src="/js/imagesloaded.pkgd.min.js"></script>
+  
   <script>
-  var container = document.querySelector('.index-content');
-  var msnry;
-  if(container){
-    $(container).imagesLoaded( function() {
-
-      msnry = new Masonry( container, {
+// init Masonry
+const $grid = $('.index-content').masonry({
         columnWidth: '.grid-sizer',
         gutter: '.grid-gutter',
         itemSelector: '.grid',
         transitionDuration: '0.1s'
-      });
+});
+// Images. As they load, call masonry
+$grid.imagesLoaded().progress( function() {
+  $grid.masonry('layout');
+});
 
-      imgLoadHandler = function() {
-          msnry.layout();
-      }
-
-      $('img').bind('load', imgLoadHandler);
-
-    });
-  }
-
-  var additionalContainer = document.querySelector('.index-content-second');
-  var msnry;
-  if(additionalContainer){
-    $(additionalContainer).imagesLoaded( function() {
-
-      msnry = new Masonry( additionalContainer, {
-        columnWidth: '.grid-sizer',
-        gutter: '.grid-gutter',
-        itemSelector: '.grid',
-        transitionDuration: '0.1s'
-      });
-
-      imgLoadHandler = function() {
-          msnry.layout();
-      }
-
-      $('img').bind('load', imgLoadHandler);
-
-    });
-  }
-
-
+// html5 video. As they load, call masonry
+document.querySelectorAll('video').forEach(vid => 
+  vid.addEventListener('loadeddata', (event) => {
+    $grid.masonry('layout');
+  })
+)
 </script>

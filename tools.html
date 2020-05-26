@@ -6,31 +6,14 @@ layout: default
   <div class="grid-gutter"></div>
 
   <div class="grid l3 ghcard-intro">
-        <h2>Algorithmic Botany tools </h2>
+        <h2>Algorithmic Botany and general 3D tools </h2>
   </div>
 
-  {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis,ofxSpaceColonization,ofxBranchesPrimitive" | split: "," %}
+  {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis,ofxSpaceColonization,ofxBranchesPrimitive,ofxRaycaster,ofxLatheMesh" | split: "," %}
   {% assign sorted = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
   {% for repository in sorted  %}
     {% if selected contains repository.name %}
         {% include card.html repoName=repository.name repoDescription=repository.description repoUrl=repository.html_url ownerUrl=site.github.owner_url ownerAvatar=site.github.owner_gravatar_url stars=repository.stargazers_count forks=repository.forks_count language=repository.language gridClass = "grid" %}
     {% endif %}
   {% endfor %}
-</div>
-
-<div class="separation-line"></div>
-
-<div class="index-content-second">
-    <div class="grid-gutter"></div>
-    <div class="grid l3 ghcard-intro">
-        <h2>General tools 3D tools</h2>
-    </div>
-
-    {% assign selected = "ofxRaycaster,ofxLatheMesh" | split: "," %}
-    {% assign sorted = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
-    {% for repository in sorted  %}
-        {% if selected contains repository.name %}
-            {% include card.html repoName=repository.name repoDescription=repository.description repoUrl=repository.html_url ownerUrl=site.github.owner_url ownerAvatar=site.github.owner_gravatar_url stars=repository.stargazers_count forks=repository.forks_count language=repository.language gridClass = "grid" %}
-        {% endif %}
-    {% endfor %}
 </div>
