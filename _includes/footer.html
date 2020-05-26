@@ -8,27 +8,33 @@
 const container = document.querySelector('.index-content');
 let msnry;
 
-if(container){
-  $(container).imagesLoaded( function() {
-  // init Masonry after all images have loaded
-  msnry = new Masonry( container, {
-    columnWidth: '.grid-sizer',
-    gutter: '.grid-gutter',
-    itemSelector: '.grid',
-    transitionDuration: '0.1s'
+if (container) {
+  imagesLoaded(container, function() {  
+    // init Masonry after all images have loaded
+    msnry = new Masonry( container, {
+      columnWidth: '.grid-sizer',
+      gutter: '.grid-gutter',
+      itemSelector: '.grid',
+      transitionDuration: '0.1s'
+    });
+
+    // Images. As they load, call masonry. This is redundand with imagesLoaded
+    // but sometime it needs to be called twice
+    document.querySelectorAll("img").forEach(img => 
+      img.addEventListener('load', (event) => {
+        console.log(img);
+        msnry.layout();
+      })
+    )
+
+    // html5 videos. As they load, call masonry.
+    document.querySelectorAll("video").forEach(vid => 
+      vid.addEventListener('loadeddata', (event) => {
+        console.log(vid);
+        msnry.layout();
+      })
+    )
   });
-
-  imgLoadHandler = () => { msnry.layout(); };
-  $('img').bind('load', imgLoadHandler);
-
-  // html5 video. As they load, call masonry
-  document.querySelectorAll('video').forEach(vid => 
-    vid.addEventListener('loadeddata', (event) => {
-      msnry.layout();
-    })
-  )
-
-});
 
 }
 

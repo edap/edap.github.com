@@ -34,6 +34,7 @@
     line-height: 1;
     text-align: center;
     text-transform: capitalize;
+    padding-bottom: 25px;
 
     @include media-query($on-laptop) {
         font-size: 36px;
@@ -41,26 +42,6 @@
     @include media-query($on-phone) {
         font-size: 28px;
     }
-}
-
-// this two rules sound dull. But the height of a container it is relative to its parent.
-// Vhen the video is still not loaded, the dive has to be already with the correct height
-// that's why these two nested div.
-// for major details https://stackoverflow.com/questions/5657964/css-why-doesn-t-percentage-height-work
-// and https://jsfiddle.net/davidxmartins/jt49a064/2/
-.video-container {
-  position: relative;
-  width: 100%;
-}
-
-.video-container video{
-  height: 100%!important;
-  width: 100%!important;
-  z-index: 10;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  background-color: rgb(221, 255, 0);
 }
 
 /**
