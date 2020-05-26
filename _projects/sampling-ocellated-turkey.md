@@ -7,14 +7,15 @@ tags: []
 
 <div class="content-container">
 <div class="index-content">
-<div class="grid-gutter"></div><div class="grid-sizer"></div>
+<div class="grid-gutter"></div>
 
   <div class = "grid l3">
   WebGL animations produced sampling the feathers of the<a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>. Mouse over to play the videos.
   </div>
-  <div class="grid">
+  <div class="grid grid-sizer">
     <div class="video-container">
-    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()" style="transition-duration: initial;">
+    <img src = "/assets/media/video600xplaceholder.gif">
+    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
     <source src="/assets/media/sampling-ocellated-turkey/first-compressed.mp4" type="video/mp4" height="600" />
     </video>
   </div>
@@ -22,7 +23,8 @@ tags: []
 
   <div class="grid">
     <div class="video-container">
-    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()" style="transition-duration: initial;">
+    <img src = "/assets/media/video600xplaceholder.gif">
+    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
     <source src="/assets/media/sampling-ocellated-turkey/video12-compressed.mp4" type="video/mp4" />
     </video>
     </div>
@@ -30,7 +32,8 @@ tags: []
 
   <div class="grid">
     <div class="video-container">
-    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()" style="transition-duration: initial;">
+    <img src = "/assets/media/video600xplaceholder.gif">
+    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
     <source src="/assets/media/sampling-ocellated-turkey/firstDistorted-compressed.mp4" type="video/mp4" />
     </video>
     </div>
@@ -38,7 +41,8 @@ tags: []
 
   <div class="grid">
     <div class="video-container">
-    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()" style="transition-duration: initial;">
+    <img src = "/assets/media/video600xplaceholder.gif">
+    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
     <source src="/assets/media/sampling-ocellated-turkey/third-compressed.mp4" type="video/mp4" />
     </video>
     </div>
@@ -46,7 +50,8 @@ tags: []
 
   <div class="grid">
     <div class="video-container">
-    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()" style="transition-duration: initial;">
+    <img src = "/assets/media/video600xplaceholder.gif">
+    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
     <source src="/assets/media/sampling-ocellated-turkey/cutted-compressed.mp4" type="video/mp4" />
     </video>
     </div>
@@ -54,7 +59,8 @@ tags: []
 
   <div class="grid">
     <div class="video-container">
-    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()" style="transition-duration: initial;">
+    <img src = "/assets/media/video600xplaceholder.gif">
+    <video class="scroll-transition-fade" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
     <source src="/assets/media/sampling-ocellated-turkey/10single-compressed.mp4" type="video/mp4" />
     </video>
     </div>

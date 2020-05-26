@@ -49,13 +49,18 @@
 // for major details https://stackoverflow.com/questions/5657964/css-why-doesn-t-percentage-height-work
 // and https://jsfiddle.net/davidxmartins/jt49a064/2/
 .video-container {
+  position: relative;
   width: 100%;
-  height: 100%;
 }
 
 .video-container video{
-  width: 100%;
-  height: 100%;
+  height: 100%!important;
+  width: 100%!important;
+  z-index: 10;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: rgb(221, 255, 0);
 }
 
 /**
