@@ -4,22 +4,24 @@
   <script src="/js/imagesloaded.pkgd.min.js"></script>
   
   <script>
-// init Masonry
-const $grid = $('.index-content').masonry({
-        columnWidth: '.grid-sizer',
+
+var $grid = $('.index-content').imagesLoaded( function() {
+  // init Masonry after all images have loaded
+  $grid.masonry({
+    columnWidth: '.grid-sizer',
         gutter: '.grid-gutter',
         itemSelector: '.grid',
         transitionDuration: '0.1s'
-});
-// Images. As they load, call masonry
-$grid.imagesLoaded().progress( function() {
-  $grid.masonry('layout');
+  });
+
+  // html5 video. As they load, call masonry
+  document.querySelectorAll('video').forEach(vid => 
+    vid.addEventListener('loadeddata', (event) => {
+      $grid.masonry('layout');
+    })
+  )
+
 });
 
-// html5 video. As they load, call masonry
-document.querySelectorAll('video').forEach(vid => 
-  vid.addEventListener('loadeddata', (event) => {
-    $grid.masonry('layout');
-  })
-)
+
 </script>
