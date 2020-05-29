@@ -8,6 +8,19 @@
 const container = document.querySelector('.index-content');
 let msnry;
 
+let toggleVideoControls = () => {
+  const width  = window.innerWidth || document.documentElement.clientWidth ||  document.body.clientWidth;
+  document.querySelectorAll("video").forEach(vid => {
+    if(width<700){
+      vid.setAttribute("controls","controls")
+    }else{
+      if(vid.hasAttribute("controls")){
+        vid.removeAttribute("controls") 
+      }
+    }
+  });
+};
+
 if (container) {
   imagesLoaded(container, function() {  
     // init Masonry after all images have loaded
@@ -22,18 +35,21 @@ if (container) {
     // but sometime it needs to be called twice
     document.querySelectorAll("img").forEach(img => 
       img.addEventListener('load', (event) => {
-        console.log(img);
         msnry.layout();
       })
     )
 
     // html5 videos. As they load, call masonry.
-    document.querySelectorAll("video").forEach(vid => 
+    let videos = document.querySelectorAll("video");
+    videos.forEach(vid => 
       vid.addEventListener('loadeddata', (event) => {
-        console.log(vid);
         msnry.layout();
       })
     )
+
+    // add video controls for small screens
+    toggleVideoControls();
+    window.addEventListener('resize', toggleVideoControls);
   });
 
 }
