@@ -6,15 +6,14 @@
   <script>
 
 const container = document.querySelector('.index-content');
-let msnry;
 
 let toggleVideoControls = () => {
   const width  = window.innerWidth || document.documentElement.clientWidth ||  document.body.clientWidth;
   document.querySelectorAll("video").forEach(vid => {
-    if(width<700){
+    if (width < 700) {
       vid.setAttribute("controls","controls")
-    }else{
-      if(vid.hasAttribute("controls")){
+    } else {
+      if (vid.hasAttribute("controls")) {
         vid.removeAttribute("controls") 
       }
     }
@@ -22,6 +21,7 @@ let toggleVideoControls = () => {
 };
 
 if (container) {
+  let msnry;
   imagesLoaded(container, function() {  
     // init Masonry after all images have loaded
     msnry = new Masonry( container, {
@@ -51,7 +51,6 @@ if (container) {
     toggleVideoControls();
     window.addEventListener('resize', toggleVideoControls);
   });
-
 }
 
 
