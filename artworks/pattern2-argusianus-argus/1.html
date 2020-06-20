@@ -245,10 +245,10 @@
       animate();
     });
 
-    function updateMouseUniforms(evt) {
+    function updateMouseUniforms(clientX, clientY) {
       i += 0.05;
-      uniforms.u_mouse.value.x = evt.clientX * window.devicePixelRatio;
-      uniforms.u_mouse.value.y = (window.innerHeight - evt.clientY) * window.devicePixelRatio;
+      uniforms.u_mouse.value.x = clientX * window.devicePixelRatio;
+      uniforms.u_mouse.value.y = (window.innerHeight - clientY) * window.devicePixelRatio;
       requestRenderIfNotRequested();
     }
 
@@ -285,12 +285,11 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
 
       renderer.domElement.addEventListener('mousemove', function(e) {
-        updateMouseUniforms(e);
+        updateMouseUniforms(e.clientX, e.clientY);
       });
-
       renderer.domElement.addEventListener('ontouchmove', function(e) {
         e.preventDefault();
-        updateMouseUniforms(e);
+        updateMouseUniforms(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
       });
 
       window.addEventListener('resize', windowResized);
