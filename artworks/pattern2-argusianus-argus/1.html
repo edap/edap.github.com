@@ -303,7 +303,6 @@
     }
 
     function updateMouseUniforms(clientX, clientY) {
-      console.log(clientX);
       i += 0.05;
       uniforms.u_mouse.value.x = clientX * window.devicePixelRatio;
       uniforms.u_mouse.value.y = (window.innerHeight - clientY) * window.devicePixelRatio;
