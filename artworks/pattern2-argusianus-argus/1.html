@@ -245,6 +245,13 @@
       animate();
     });
 
+    function updateMouseUniforms(evt) {
+      i += 0.05;
+      uniforms.u_mouse.value.x = evt.clientX * window.devicePixelRatio;
+      uniforms.u_mouse.value.y = (window.innerHeight - evt.clientY) * window.devicePixelRatio;
+      requestRenderIfNotRequested();
+    }
+
     function init(texture) {
       // set texture repeat
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -278,11 +285,12 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
 
       renderer.domElement.addEventListener('mousemove', function(e) {
-        i += 0.05;
-        var canvas = renderer.domElement;
-        uniforms.u_mouse.value.x = e.clientX * window.devicePixelRatio;
-        uniforms.u_mouse.value.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
-        requestRenderIfNotRequested();
+        updateMouseUniforms(e);
+      });
+
+      renderer.domElement.addEventListener('ontouchmove', function(e) {
+        e.preventDefault();
+        updateMouseUniforms(e);
       });
 
       window.addEventListener('resize', windowResized);
