@@ -245,13 +245,6 @@
       animate();
     });
 
-    function updateMouseUniforms(clientX, clientY) {
-      i += 0.05;
-      uniforms.u_mouse.value.x = clientX * window.devicePixelRatio;
-      uniforms.u_mouse.value.y = (window.innerHeight - clientY) * window.devicePixelRatio;
-      requestRenderIfNotRequested();
-    }
-
     function init(texture) {
       // set texture repeat
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -288,7 +281,7 @@
         updateMouseUniforms(e.clientX, e.clientY);
       });
       renderer.domElement.addEventListener('ontouchmove', function(e) {
-        e.preventDefault();
+        //e.preventDefault();
         updateMouseUniforms(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
       });
 
@@ -307,6 +300,14 @@
           renderRequested = true;
           requestAnimationFrame(animate);
         }
+    }
+
+    function updateMouseUniforms(clientX, clientY) {
+      console.log(clientX);
+      i += 0.05;
+      uniforms.u_mouse.value.x = clientX * window.devicePixelRatio;
+      uniforms.u_mouse.value.y = (window.innerHeight - clientY) * window.devicePixelRatio;
+      requestRenderIfNotRequested();
     }
 
     function windowResized() {
