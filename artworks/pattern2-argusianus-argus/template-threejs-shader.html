@@ -286,9 +286,11 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     renderer.domElement.addEventListener('mousemove', function(e) {
-      var canvas = renderer.domElement;
-      uniforms.u_mouse.value.x = e.clientX * window.devicePixelRatio;
-      uniforms.u_mouse.value.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
+      updateMouseUniforms(e.clientX, e.clientY);
+    });
+    renderer.domElement.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      updateMouseUniforms(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
     });
     window.addEventListener('resize', windowResized);
   }
@@ -297,6 +299,13 @@
     requestAnimationFrame(animate);
     uniforms.u_time.value += clock.getDelta();
     renderer.render(scene, camera);
+  }
+
+  function updateMouseUniforms(clientX, clientY) {
+    i += 0.05;
+    uniforms.u_mouse.value.x = clientX * window.devicePixelRatio;
+    uniforms.u_mouse.value.y = (window.innerHeight - clientY) * window.devicePixelRatio;
+    requestRenderIfNotRequested();
   }
   
   function windowResized() {
