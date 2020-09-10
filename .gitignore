@@ -1,6 +1,6 @@
+.jekyll-metadata
 _site/*
 _theme_packages/*
-.jekyll-metadata
 
 Thumbs.db
 .DS_Store
