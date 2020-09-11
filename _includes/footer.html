@@ -1,58 +1,103 @@
-  <footer></footer>
-  <script src="/js/jquery-2.2.3.min.js"></script>
-  <script src="/js/masonry.pkgd.min.js"></script>
-  <script src="/js/imagesloaded.pkgd.min.js"></script>
-  
-  <script>
+<footer></footer>
+<script src="/js/jquery-2.2.3.min.js"></script>
+<script src="/js/masonry.pkgd.min.js"></script>
+<script src="/js/imagesloaded.pkgd.min.js"></script>
+<script src="/js/isotope.pkgd.min.js"></script>
 
-const container = document.querySelector('.index-content');
+<script>
 
-let toggleVideoControls = () => {
-  const width  = window.innerWidth || document.documentElement.clientWidth ||  document.body.clientWidth;
-  document.querySelectorAll("video").forEach(vid => {
-    if (width < 700) {
-      vid.setAttribute("controls","controls")
-    } else {
-      if (vid.hasAttribute("controls")) {
-        vid.removeAttribute("controls") 
+  const container = document.querySelector('.index-content');
+
+  let toggleVideoControls = () => {
+    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    document.querySelectorAll("video").forEach(vid => {
+      if (width < 700) {
+        vid.setAttribute("controls", "controls")
+      } else {
+        if (vid.hasAttribute("controls")) {
+          vid.removeAttribute("controls")
+        }
       }
-    }
-  });
-};
+    });
+  };
 
-if (container) {
-  let msnry;
-  imagesLoaded(container, function() {  
-    // init Masonry after all images have loaded
-    msnry = new Masonry( container, {
+  // if (container) {
+  //   let msnry;
+  //   imagesLoaded(container, function () {
+  //     // init Masonry after all images have loaded
+  //     msnry = new Masonry(container, {
+  //       columnWidth: '.grid-sizer',
+  //       gutter: '.grid-gutter',
+  //       itemSelector: '.grid',
+  //       transitionDuration: '0.1s'
+  //     });
+
+  //     // Images. As they load, call masonry. This is redundand with imagesLoaded
+  //     // but sometime it needs to be called twice
+  //     document.querySelectorAll("img").forEach(img =>
+  //       img.addEventListener('load', (event) => {
+  //         msnry.layout();
+  //       })
+  //     )
+
+  //     // html5 videos. As they load, call masonry.
+  //     let videos = document.querySelectorAll("video");
+  //     videos.forEach(vid =>
+  //       vid.addEventListener('loadeddata', (event) => {
+  //         msnry.layout();
+  //       })
+  //     )
+
+  //     // add video controls for small screens
+  //     toggleVideoControls();
+  //     window.addEventListener('resize', toggleVideoControls);
+  //   });
+  // }
+
+
+
+  var $grid = $('.index-content').isotope({
+    itemSelector: '.grid',
+    percentPosition: true,
+    masonry: {
       columnWidth: '.grid-sizer',
       gutter: '.grid-gutter',
-      itemSelector: '.grid',
       transitionDuration: '0.1s'
-    });
-
-    // Images. As they load, call masonry. This is redundand with imagesLoaded
-    // but sometime it needs to be called twice
-    document.querySelectorAll("img").forEach(img => 
-      img.addEventListener('load', (event) => {
-        msnry.layout();
-      })
-    )
-
-    // html5 videos. As they load, call masonry.
-    let videos = document.querySelectorAll("video");
-    videos.forEach(vid => 
-      vid.addEventListener('loadeddata', (event) => {
-        msnry.layout();
-      })
-    )
-
-    // add video controls for small screens
-    toggleVideoControls();
-    window.addEventListener('resize', toggleVideoControls);
+    }
   });
-}
+  // layout Isotope after each image loads
+  $grid.imagesLoaded().progress(function () {
+    $grid.isotope('layout');
+  });
 
+  // filter functions
+  var filterFns = {
+    // show if number is greater than 50
+    numberGreaterThan50: function () {
+      var number = $(this).find('.number').text();
+      return parseInt(number, 10) > 50;
+    },
+    // show if name ends with -ium
+    ium: function () {
+      var name = $(this).find('.name').text();
+      return name.match(/ium$/);
+    }
+  };
+  // bind filter button click
+  $('.filters-button-group').on('click', 'button', function () {
+    var filterValue = $(this).attr('data-filter');
+    // use filterFn if matches value
+    filterValue = filterFns[filterValue] || filterValue;
+    $grid.isotope({ filter: filterValue });
+  });
+  // change is-checked class on buttons
+  $('.button-group').each(function (i, buttonGroup) {
+    var $buttonGroup = $(buttonGroup);
+    $buttonGroup.on('click', 'button', function () {
+      $buttonGroup.find('.is-checked').removeClass('is-checked');
+      $(this).addClass('is-checked');
+    });
+  });
 
 
 
