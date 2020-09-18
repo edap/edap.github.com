@@ -13,27 +13,27 @@ tags: []
   WebGL animations produced sampling the feathers of the <a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>. Mouse over to play the videos.
   </div>
 
-  <video controls height="500" class="grid grid-sizer" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
+  <video class="grid grid-sizer" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
   <source src="/assets/media/sampling-ocellated-turkey/first-compressed.mp4" type="video/mp4" />
   </video>
 
-  <video controls height="500"  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
+  <video  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
   <source src="/assets/media/sampling-ocellated-turkey/video12-compressed.mp4" type="video/mp4" />
   </video>
 
-  <video controls height="500"  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
+  <video  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
   <source src="/assets/media/sampling-ocellated-turkey/firstDistorted-compressed.mp4" type="video/mp4" />
   </video>
 
-  <video controls height="500"  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
+  <video  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
   <source src="/assets/media/sampling-ocellated-turkey/third-compressed.mp4" type="video/mp4" />
   </video>
 
-  <video controls height="500"  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
+  <video  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
   <source src="/assets/media/sampling-ocellated-turkey/cutted-compressed.mp4" type="video/mp4" />
   </video>
 
-  <video controls height="500"  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
+  <video  class="grid" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">
   <source src="/assets/media/sampling-ocellated-turkey/10single-compressed.mp4" type="video/mp4" />
   </video>
 
