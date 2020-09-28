@@ -7,7 +7,7 @@
     background: $background-color;
     border: none;
     border-radius: 7px;
-    background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
+    // background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
     color: $text-color;
     font-family: sans-serif;
     font-size: 16px;
@@ -52,5 +52,5 @@
     justify-content: center;
   }
   
-  .button-group .button:first-child { border-radius: 0.5em 0 0 0.5em; }
-  .button-group .button:last-child { border-radius: 0 0.5em 0.5em 0; }
+  // .button-group .button:first-child { border-radius: 0.5em 0 0 0.5em; }
+  // .button-group .button:last-child { border-radius: 0 0.5em 0.5em 0; }
