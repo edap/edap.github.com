@@ -23,28 +23,71 @@
 </script>
 
 <script id="fragmentShader" type="x-shader/x-fragment">
-
-// glslViewer denti/third.frag ../textures/sunbittern-bw.jpg ../textures/sunbittern4.jpg
-
-#include "../libs/wallpaperGroups.glsl"
-
+#ifdef GL_ES
+precision mediump float;
+#endif
 uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform sampler2D u_tex0;
 uniform sampler2D u_tex1;
 uniform float u_time;
 
-#define palette 3
-#define PI 3.14159265359
-#define PATTERN_DIM 1040.0
+const int palette = 4;
+const float PI = 3.14159265359;
+const float PATTERN_DIM = 1040.0;
 // 5
-#define group 5
-#define offset 0.0
+const int  group = 5;
+const float offset = 0.0;
 const float rotation = 0.0;
 const vec2 scalingGroup = vec2(1.,1.);
 
-#include "../libs/rectSDF.glsl"
-#include "../libs/noise.glsl"
+float rectSDF(vec2 st, vec2 s) {
+  st = st*2.-1.;
+  return max( abs(st.x/s.x),
+              abs(st.y/s.y) );
+}
+
+vec3 CCbrightnessContrast(vec3 value, float brightness, float contrast){
+    return (value - 0.5) * contrast + 0.5 + brightness;
+}
+
+float randomMg (in vec2 st) {
+  return fract(sin(dot(st.xy,
+                       vec2(12.9898,78.233)))
+               * 43758.5453123);
+}
+
+// 2D Noise based on Morgan McGuire @morgan3d
+// https://www.shadertoy.com/view/4dS3Wd
+float noiseMg (in vec2 st) {
+  vec2 i = floor(st);
+  vec2 f = fract(st);
+
+  // Four corners in 2D of a tile
+  float a = randomMg(i);
+  float b = randomMg(i + vec2(1.0, 0.0));
+  float c = randomMg(i + vec2(0.0, 1.0));
+  float d = randomMg(i + vec2(1.0, 1.0));
+
+  // Smooth Interpolation
+  // Cubic Hermine Curve.  Same as SmoothStep()
+  vec2 u = f*f*(3.0-2.0*f);
+  // u = smoothstep(0.,1.,f);
+
+  // Mix 4 coorners percentages
+  return mix(a, b, u.x) +
+          (c - a)* u.y * (1.0 - u.x) +
+          (d - b) * u.x * u.y;
+}
+
+vec2 vectorFieldMg(vec2 uv, float noiseScale, float disFreq, float distAmp, float speed, float time){
+  vec2 res = uv;
+  float n = noiseMg(res*vec2(noiseScale));
+  res.y -= time*speed;
+  res += sin(res.yx*disFreq) * distAmp;
+  res += vec2(n);
+  return res;
+}
 
 vec2 rotate(vec2 st, float a) {
   st = mat2(cos(a),-sin(a),
@@ -52,16 +95,13 @@ vec2 rotate(vec2 st, float a) {
   return st+.5;
 }
 
-#ifdef GL_OES_standard_derivatives
-#extension GL_OES_standard_derivatives : enable
-#endif
 float aastep(float threshold, float value) {
-    #ifdef GL_OES_standard_derivatives
-    float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
-    return smoothstep(threshold-afwidth, threshold+afwidth, value);
-    #else
+
+    //float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+    //return smoothstep(threshold-afwidth, threshold+afwidth, value);
+
     return step(threshold, value);
-    #endif
+
 }
 
 float fill(float x, float size) {
@@ -96,93 +136,79 @@ float denti(vec2 pos, float yOff){
 void main(){
   // general variables
   vec2 uv = (2.0 * gl_FragCoord.xy - u_resolution.xy)/ u_resolution.y;
-  float scale = 1.5;
-  float scaleBg = 1.0;
-  float zoomGroup = 800.;
+  float scale = 1.0;
+  float fillCenterTextureZoom = 7.0;
+  float zoomGroup = 700.;
 
   vec3 coloreUno;
   vec3 coloreDue;
   vec3 coloreTre;
   vec3 coloreQuattro;
   vec3 coloreCinque;
-  if(palette == 1){
-    coloreUno = vec3(0.733, 1.0, 0.31);
-    coloreDue = vec3(1.0, 0.353, 0.208);
-    coloreTre = vec3(0.086, 0.29, 0.8);
-    coloreQuattro = vec3(0.698, 0.188, 0.075);
-    coloreCinque = vec3( 0.098, 0.0, 0.749);
+  if(palette == 1){ // LimePalette 
+    coloreUno = vec3(0.733, 1.0, 0.31);//lime
+    coloreDue = vec3(1.0, 0.353, 0.208);//red
+    coloreTre = vec3(0.086, 0.29, 0.8);//blu
+    coloreQuattro = vec3(0.698, 0.188, 0.075); //red hard
+    coloreCinque = vec3( 0.098, 0.0, 0.749);//blu hard
   }
-  if (palette == 2){
-    coloreUno = vec3(1., 0.592, 0.706);
-    coloreDue = vec3(0.898, 0.341, 0.878);
-    coloreTre = vec3(0.902, 0.494, 0.063);
-    coloreQuattro = vec3(0., 0.498, 0.353);
-    coloreCinque = vec3(0.098, 0, 0.749);
+  if (palette == 2){ // green and rose
+    coloreUno = vec3(1., 0.592, 0.706);   //rose
+    coloreDue = vec3(0.898, 0.341, 0.878); //lilla
+    coloreTre = vec3(0.902, 0.494, 0.063); // orange
+    coloreQuattro = vec3(0., 0.498, 0.353);//green
+    coloreCinque = vec3(0.098, 0, 0.749); //blu
   }
-  if (palette == 3){
-    coloreUno = vec3(0.965, 0.914, 0.396);
-    coloreDue = vec3(0.333, 1, 0.235);
-    coloreTre = vec3(0.078, 0.643, 0.8);
-    coloreQuattro = vec3(0.706, .0, 0.514);
-    coloreCinque = vec3(.0, .0, .0);  
+  if (palette == 3){ // bigBubblePal
+    coloreUno = vec3(0.965, 0.914, 0.396);//yellow
+    coloreDue = vec3(0.333, 1, 0.235);//green
+    coloreTre = vec3(0.078, 0.643, 0.8);//azul
+    coloreQuattro = vec3(0.706, .0, 0.514);//violetwetr
+    coloreCinque = vec3(.0, .0, .0); //black
   }
   if (palette == 4){
-    coloreUno = vec3(0.055, 0.8, 0.812);
-    coloreDue = vec3(0.965, 0.914, 0.396);
-    coloreTre = vec3(0.902, 0.659, 0.141);
-    coloreQuattro = vec3(0.953, 0.447, 0.035);
-    coloreCinque = vec3(1., 0.267, 0.016);  
+    coloreUno = vec3(0.055, 0.8, 0.812); // azul
+    coloreDue = vec3(0.702, 0.839, 0.38); // verde vomito
+    coloreTre = vec3(0.945, 0.757, 0.137); //giallo
+    coloreQuattro = vec3(0.902, 0.259, 0.141); //ocra CHANGE
+    coloreCinque = vec3(0.525, 0.094, 0.949);  //viola
+
   }
   if (palette == 5){
-    coloreUno = vec3(0.055, 0.8, 0.812);
-    coloreDue = vec3(0.702, 0.839, 0.38);
-    coloreTre = vec3(0.945, 0.757, 0.137);
-    coloreQuattro = vec3(0.902, 0.659, 0.141);
-    coloreCinque = vec3(0.525, 0.094, 0.949);  
+    coloreUno = vec3(0.921568627, 0.960784314, 0.337254902);  // giallo limone
+    coloreDue = vec3(0.121568627, 0.760784314, 0.42745098);   // verde chiaro
+    coloreTre = vec3(1.0, 0.054901961, 0.152941176);          // rosso carminio
+    coloreQuattro = vec3(0.745098039, 0.8, 0.0);              // verde oliva chiaro
+    coloreCinque = vec3(0.0, 0.521568627, 0.980392157);       // azzurro
   }
-
 
   // coordinate fields
   vec2 strecthedDentiUv = vec2(uv.x*20.0*scale, uv.y*6.*scale);
   vec2 stDenti = vec2(0.5) - fract(strecthedDentiUv);
   vec2 stDiagonal = rotate((vec2(0.5) - uv), PI/4.0);
   vec2 stRombi = fract(stDiagonal * scale);
-  vec2 stBg = fract(stDiagonal * scaleBg);
-  vec3 tex1R = texture2D(u_tex1, stRombi).xyz;
-  vec3 tex0R = texture2D(u_tex0, stRombi).xyz;
-  vec3 tex0 = texture2D(u_tex0,gl_FragCoord.xy/ u_resolution.xy).xyz;
-  vec3 tex1 = texture2D(u_tex1,gl_FragCoord.xy/ u_resolution.xy).xyz;
+
+  // textures
+  vec3 tex1 = texture2D(u_tex1, stRombi).xyz;
+  vec3 tex0 = texture2D(u_tex0, ((gl_FragCoord.xy/ u_resolution.xy)) * fillCenterTextureZoom).xyz;
 
   // noise field
   float zoom = 2.0;
-  vec2 dottedField = vectorFieldMg(uv, 12.1, 2.9, 3.9, 4.5, 0.0) * 2.0;
+  vec2 dottedField = vectorFieldMg(uv, 12.1, 2.9, 3.9, 4.5, u_time * 0.02) * 2.0;
   dottedField = fract(dottedField)-vec2(0.5);
   float dots = sdCircle(dottedField, 0.4);
   float dotMask = smoothstep(0.01, 0.07, dots);
 
-  // background Holes
-  vec2 holesField = vectorFieldMg(uv, 6.4, 5., 0.8, 0.2, 0.0) * scaleBg;
-  holesField = fract(holesField)-vec2(0.5);
-  float holes = sdCircle(holesField, 0.2);
-  float holesMask = smoothstep(0.1, 0.25, holes);
-
-  float thickness = 0.045;
-
-
-  
   // ELEMENTS
-
-
-  float sideRombo =1.7;
+  float sideRombo = 1.8;
 
   // center rombo
-  float centerRombi = rectSDF(stRombi, vec2(sideRombo*0.5));
+  float centerRombi = rectSDF(stRombi, vec2(sideRombo*0.4));
   float fillCenterRombi = fill(centerRombi, .4);
 
   //rombo bordo spesso
   float rombi = rectSDF(stRombi, vec2(sideRombo));
   float fillRombi = fill(rombi, .4) - fillCenterRombi;
-
 
   // luce
   vec2 offsetLuce = vec2(+0.0, -0.0);
@@ -194,105 +220,61 @@ void main(){
   // background
   float background = max(.0, 1. - fillRombiLuce - fillRombi - fillCenterRombi);
 
-
   // COLORS
-  // denti
-  // repetition also on y
-  // float str = denti(rep, sin(u_time) * 0.5 , rep.y);
-  // float str = denti(rep, 0.4, uv.y);
-  float den = denti(stDenti, -0.5);
   vec3 color = vec3(0.0);
+  vec3 bgColor = vec3(0.0);
   vec3 colorRombo = vec3(0.0);
-
-  // wallpaper background
-  vec2 pos = gl_FragCoord.xy;
-  float xt, yt;
-  xt = pos.x * cos(rotation) * scalingGroup.x + pos.y * sin(rotation) * scalingGroup.y;
-  yt = -pos.x * sin(rotation) * scalingGroup.x + pos.y * cos(rotation) * scalingGroup.y;
-  xt -= u_resolution.x / 2.;
-  yt -= u_resolution.y / 2.;
-  vec2 groupCoord = stBg - vec2(.5);
-  pos = getGroup(group, groupCoord.x*zoomGroup, groupCoord.y * zoomGroup, PATTERN_DIM, offset);
-  vec4 groupPiume = vec4(texture2D(u_tex1, pos));
-  vec3 bgColor = mix(coloreDue, coloreTre, groupPiume.b) *holesMask;
-  bgColor += mix(coloreTre, coloreDue, groupPiume.b) * (1. - holesMask);
+  float den = denti(stDenti, -0.5);
 
   // Colora i rombi
-  vec3 coloreSfondoRombo = mix(coloreDue, coloreQuattro, den);
-  vec3 coloreMixRombi = mix(coloreCinque, coloreUno, tex1R.r);
-  vec3 coloreLuceRombo = mix(coloreSfondoRombo, coloreMixRombi, dotMask);
-  colorRombo += fillRombiLuce * coloreLuceRombo;
-  colorRombo += fillCenterRombi * coloreSfondoRombo;
-  colorRombo += fillRombi * coloreMixRombi;
+  vec3 coloreDenti = mix(coloreTre, coloreQuattro, den);
+  vec3 coloreDentiFlipped = mix(coloreTre, coloreQuattro, 1.0-den);
+  vec3 bicolorPiume =mix(coloreTre, coloreQuattro, smoothstep(0.1, 0.4, tex0.b));
+  vec3 colorePiume = CCbrightnessContrast(tex1.rgb, 0.2, 1.7);
+  vec3 dottedDentiPiume = mix(coloreDenti, colorePiume, dotMask);
+
+  colorRombo += fillRombiLuce * dottedDentiPiume;
+  colorRombo += fillCenterRombi * bicolorPiume;
+  colorRombo += fillRombi * colorePiume;
   color += colorRombo;
-  //color += fillCenterRombi * mix(coloreQuattro, coloreUno, den);
+
+  // Colora il bg
+  bgColor = mix(coloreDenti, coloreDentiFlipped, dotMask) * background;
+  color += bgColor;
+  //color += bgColor * background;
 
 
-
-  // colora la luce
-  //color += coloreUno * fillRombiLuce;
-  //float luce = max(0.0, fillRombiLuce)  * den;
-
-  // colora il bg
-  // vec3 dottedCol = mix(coloreTre* tex0.b, tex0, dotMask);
-  // vec3 coloreDen = mix(coloreDue, coloreQuattro, den);
-  // vec3 holesCol = mix(coloreDen, tex1, holesMask);
-
-  // post processing BW
-  //vec3 bgColor =groupPiume.rgb;
-
-
-  color += bgColor * background;
-
-
-  // Final color
-  // SINGOLI
-  //gl_FragColor = vec4(vec3(fillRombiLuce), 1.0);
-  //gl_FragColor = vec4(vec3(ombra), 1.0);
-  //gl_FragColor = vec4(vec3(fillRombi + luce), 1.0);
-  //gl_FragColor = vec4(vec3(fillCenterRombi), 1.0);
-  //gl_FragColor = vec4(vec3(luce), 1.0);
-  //gl_FragColor = vec4(vec3(rays), 1.0);
-  //gl_FragColor = vec4(vec3(luce), 1.0);
-  //gl_FragColor = vec4(vec3(holesMask), 1.0);
-  //gl_FragColor = vec4(color, 1.0);
-  //gl_FragColor = vec4(vec3(stDenti.x, stDenti.y, 0.0), 1.0);
-  //gl_FragColor = vec4(vec3(stDiagonal.x, stDiagonal.y, 0.0), 1.0);
-  //gl_FragColor = vec4(vec3(uv.x, uv.y, 0.0), 1.0);
-
-  // MIXING
-  //gl_FragColor = vec4(vec3(dentAndRomb), 1.0);
-  //gl_FragColor = vec4(vec3(holesCol), 1.0);
-  //gl_FragColor = vec4(color, 1.0);
-  //gl_FragColor = vec4(pow(color, vec3(1./2.2)), 1.0);
   gl_FragColor = pow(vec4(color, 1.0), vec4(vec3(1./2.2), 1.0));
-  
 
-
-  // COLORS
-  //gl_FragColor= vec4(pos.x, pos.y, 0., 1.) * fillRombi;
-  //gl_FragColor = groupPiume;
-  //gl_FragColor = vec4(tex1, 1.0);
-  //gl_FragColor= vec4(color, 1.0);
 }
 
 </script>
 <script>
-var clock = new THREE.Clock();
-var textureLoader = new THREE.TextureLoader();
-var container, camera, scene, renderer, uniforms, material, mesh;
-var i = 1.0;
-var renderRequested = false;
-//load assets and start
-textureLoader.load('argusianus-argus2-big.jpg', texture => {
-  init(texture);
-  animate();
-});
+const renderOnRequestEnabled = false;
 
-function init(texture0, texture1) {
+const clock = new THREE.Clock();
+let container, camera, scene, renderer, uniforms, material, mesh;
+let i = 1.0;
+let renderRequested = false;
+
+const loadManager = new THREE.LoadingManager();
+const loader = new THREE.TextureLoader(loadManager);
+
+const tex1 = loader.load('../../assets/media/surfaces/sunbittern4.jpg');
+const tex0 = loader.load('../../assets/media/surfaces/sunbittern5bw.jpg');
+
+loadManager.onLoad = () => {
+  init();
+  animate();
+}
+
+function init() {
   // set texture repeat
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set( 2, 2 );
+  tex1.wrapS = tex1.wrapT = THREE.RepeatWrapping;
+  tex1.repeat.set( 2, 2 );
+
+  tex0.wrapS = tex0.wrapT = THREE.RepeatWrapping;
+  tex0.repeat.set( 2, 2 );
 
   container = document.getElementById('container');
   camera = new THREE.Camera();
@@ -301,8 +283,8 @@ function init(texture0, texture1) {
   uniforms = {
     u_time: { type: "f", value: 0.1 },
     u_resolution: { type: "v2", value: new THREE.Vector2() },
-    u_tex0: {type: "t", value: texture0},
-    u_tex1: {type: "t", value: texture1},
+    u_tex0: {type: "t", value: tex0},
+    u_tex1: {type: "t", value: tex1},
     u_mouse: {
       type: 'v2',
       value: new THREE.Vector2()
@@ -335,13 +317,18 @@ function init(texture0, texture1) {
 
 function animate() {
   renderRequested = false;
-  //uniforms.u_time.value += clock.getDelta();
-  uniforms.u_time.value = i;
+
+  if (renderOnRequestEnabled) {
+    uniforms.u_time.value = i;
+  }else{
+    uniforms.u_time.value += clock.getDelta();
+    requestAnimationFrame(animate);
+  }
   renderer.render(scene, camera);
 }
 
 function requestRenderIfNotRequested() {
-    if (!renderRequested) {
+    if (!renderRequested && renderOnRequestEnabled) {
       renderRequested = true;
       requestAnimationFrame(animate);
     }
