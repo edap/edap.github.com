@@ -96,12 +96,8 @@ vec2 rotate(vec2 st, float a) {
 }
 
 float aastep(float threshold, float value) {
-
-    //float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
-    //return smoothstep(threshold-afwidth, threshold+afwidth, value);
-
-    return step(threshold, value);
-
+    float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+    return smoothstep(threshold-afwidth, threshold+afwidth, value);
 }
 
 float fill(float x, float size) {

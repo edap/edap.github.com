@@ -8,6 +8,9 @@ tags: []
 <div class="content-container">
 <div class="index-content">
 <div class="grid-gutter"></div>
+<div class = "grid l3">
+2019
+</div>
 
 
 <a href = "/artworks/pattern1-appunti-su-piuma/1.html">
@@ -35,9 +38,6 @@ tags: []
 </a>
 
 
-<div class = "grid l3">
-2019
-</div>
 
 </div>
 </div>
