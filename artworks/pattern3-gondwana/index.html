@@ -1,0 +1,352 @@
+<html lang="en">
+
+<head>
+  <title> 2D animated pattern, Davide Prati, 2020</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script src="../../js/three.min.js"></script>
+
+<script id="vertexShader" type="x-shader/x-vertex">
+  void main()	{
+      gl_Position = vec4( position, 1.0 );
+  }
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform sampler2D u_tex0;
+uniform sampler2D u_tex1;
+uniform float u_time;
+
+const int palette = 4;
+const float PI = 3.14159265359;
+const float PATTERN_DIM = 1040.0;
+// 5
+const int  group = 5;
+const float offset = 0.0;
+const float rotation = 0.0;
+const vec2 scalingGroup = vec2(1.,1.);
+
+float rectSDF(vec2 st, vec2 s) {
+  st = st*2.-1.;
+  return max( abs(st.x/s.x),
+              abs(st.y/s.y) );
+}
+
+vec3 CCbrightnessContrast(vec3 value, float brightness, float contrast){
+    return (value - 0.5) * contrast + 0.5 + brightness;
+}
+
+float randomMg (in vec2 st) {
+  return fract(sin(dot(st.xy,
+                       vec2(12.9898,78.233)))
+               * 43758.5453123);
+}
+
+// 2D Noise based on Morgan McGuire @morgan3d
+// https://www.shadertoy.com/view/4dS3Wd
+float noiseMg (in vec2 st) {
+  vec2 i = floor(st);
+  vec2 f = fract(st);
+
+  // Four corners in 2D of a tile
+  float a = randomMg(i);
+  float b = randomMg(i + vec2(1.0, 0.0));
+  float c = randomMg(i + vec2(0.0, 1.0));
+  float d = randomMg(i + vec2(1.0, 1.0));
+
+  // Smooth Interpolation
+  // Cubic Hermine Curve.  Same as SmoothStep()
+  vec2 u = f*f*(3.0-2.0*f);
+  // u = smoothstep(0.,1.,f);
+
+  // Mix 4 coorners percentages
+  return mix(a, b, u.x) +
+          (c - a)* u.y * (1.0 - u.x) +
+          (d - b) * u.x * u.y;
+}
+
+vec2 vectorFieldMg(vec2 uv, float noiseScale, float disFreq, float distAmp, float speed, float time){
+  vec2 res = uv;
+  float n = noiseMg(res*vec2(noiseScale));
+  res.y -= time*speed;
+  res += sin(res.yx*disFreq) * distAmp;
+  res += vec2(n);
+  return res;
+}
+
+vec2 rotate(vec2 st, float a) {
+  st = mat2(cos(a),-sin(a),
+            sin(a),cos(a))*(st-.5);
+  return st+.5;
+}
+
+float aastep(float threshold, float value) {
+
+    //float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+    //return smoothstep(threshold-afwidth, threshold+afwidth, value);
+
+    return step(threshold, value);
+
+}
+
+float fill(float x, float size) {
+  return 1.-aastep(size, x);
+}
+
+float substract(float d1, float d2){
+	return max(-d1, d2);
+}
+
+float sdCircle(vec2 p, float r ){
+  return length(p) - r;
+}
+
+// if longY is bigger than 0.1 then the stripes
+// goes from top to 
+float denti(vec2 pos, float yOff){
+  float result;
+  float doOff = step(0., pos.x);
+
+  float gradUp = fract(pos.y+yOff);
+  float gradDown = fract(pos.y-yOff);
+  result = -gradUp * (doOff);
+  result += gradDown * (1.0-doOff);
+
+  //return abs(yy);
+  //return mod(yy, 0.7);
+  //return doOffY;
+  return fract(result);
+}
+
+void main(){
+  // general variables
+  vec2 uv = (2.0 * gl_FragCoord.xy - u_resolution.xy)/ u_resolution.y;
+  float scale = 1.0;
+  float fillCenterTextureZoom = 7.0;
+  float zoomGroup = 700.;
+
+  vec3 coloreUno;
+  vec3 coloreDue;
+  vec3 coloreTre;
+  vec3 coloreQuattro;
+  vec3 coloreCinque;
+  if(palette == 1){ // LimePalette 
+    coloreUno = vec3(0.733, 1.0, 0.31);//lime
+    coloreDue = vec3(1.0, 0.353, 0.208);//red
+    coloreTre = vec3(0.086, 0.29, 0.8);//blu
+    coloreQuattro = vec3(0.698, 0.188, 0.075); //red hard
+    coloreCinque = vec3( 0.098, 0.0, 0.749);//blu hard
+  }
+  if (palette == 2){ // green and rose
+    coloreUno = vec3(1., 0.592, 0.706);   //rose
+    coloreDue = vec3(0.898, 0.341, 0.878); //lilla
+    coloreTre = vec3(0.902, 0.494, 0.063); // orange
+    coloreQuattro = vec3(0., 0.498, 0.353);//green
+    coloreCinque = vec3(0.098, 0, 0.749); //blu
+  }
+  if (palette == 3){ // bigBubblePal
+    coloreUno = vec3(0.965, 0.914, 0.396);//yellow
+    coloreDue = vec3(0.333, 1, 0.235);//green
+    coloreTre = vec3(0.078, 0.643, 0.8);//azul
+    coloreQuattro = vec3(0.706, .0, 0.514);//violetwetr
+    coloreCinque = vec3(.0, .0, .0); //black
+  }
+  if (palette == 4){
+    coloreUno = vec3(0.055, 0.8, 0.812); // azul
+    coloreDue = vec3(0.702, 0.839, 0.38); // verde vomito
+    coloreTre = vec3(0.945, 0.757, 0.137); //giallo
+    coloreQuattro = vec3(0.902, 0.259, 0.141); //ocra CHANGE
+    coloreCinque = vec3(0.525, 0.094, 0.949);  //viola
+
+  }
+  if (palette == 5){
+    coloreUno = vec3(0.921568627, 0.960784314, 0.337254902);  // giallo limone
+    coloreDue = vec3(0.121568627, 0.760784314, 0.42745098);   // verde chiaro
+    coloreTre = vec3(1.0, 0.054901961, 0.152941176);          // rosso carminio
+    coloreQuattro = vec3(0.745098039, 0.8, 0.0);              // verde oliva chiaro
+    coloreCinque = vec3(0.0, 0.521568627, 0.980392157);       // azzurro
+  }
+
+  // coordinate fields
+  vec2 strecthedDentiUv = vec2(uv.x*20.0*scale, uv.y*6.*scale);
+  vec2 stDenti = vec2(0.5) - fract(strecthedDentiUv);
+  vec2 stDiagonal = rotate((vec2(0.5) - uv), PI/4.0);
+  vec2 stRombi = fract(stDiagonal * scale);
+
+  // textures
+  vec3 tex1 = texture2D(u_tex1, stRombi).xyz;
+  vec3 tex0 = texture2D(u_tex0, ((gl_FragCoord.xy/ u_resolution.xy)) * fillCenterTextureZoom).xyz;
+
+  // noise field
+  float zoom = 2.0;
+  vec2 dottedField = vectorFieldMg(uv, 12.1, 2.9, 3.9, 4.5, u_time * 0.02) * 2.0;
+  dottedField = fract(dottedField)-vec2(0.5);
+  float dots = sdCircle(dottedField, 0.4);
+  float dotMask = smoothstep(0.01, 0.07, dots);
+
+  // ELEMENTS
+  float sideRombo = 1.8;
+
+  // center rombo
+  float centerRombi = rectSDF(stRombi, vec2(sideRombo*0.4));
+  float fillCenterRombi = fill(centerRombi, .4);
+
+  //rombo bordo spesso
+  float rombi = rectSDF(stRombi, vec2(sideRombo));
+  float fillRombi = fill(rombi, .4) - fillCenterRombi;
+
+  // luce
+  vec2 offsetLuce = vec2(+0.0, -0.0);
+  float rombiLuce = rectSDF(stRombi-(offsetLuce), vec2(sideRombo * 1.2));
+  float fillRombiLuce = fill(rombiLuce, .4);
+  fillRombiLuce -= fillRombi;
+  fillRombiLuce -= fillCenterRombi;
+
+  // background
+  float background = max(.0, 1. - fillRombiLuce - fillRombi - fillCenterRombi);
+
+  // COLORS
+  vec3 color = vec3(0.0);
+  vec3 bgColor = vec3(0.0);
+  vec3 colorRombo = vec3(0.0);
+  float den = denti(stDenti, -0.5);
+
+  // Colora i rombi
+  vec3 coloreDenti = mix(coloreTre, coloreQuattro, den);
+  vec3 coloreDentiFlipped = mix(coloreTre, coloreQuattro, 1.0-den);
+  vec3 bicolorPiume =mix(coloreTre, coloreQuattro, smoothstep(0.1, 0.4, tex0.b));
+  vec3 colorePiume = CCbrightnessContrast(tex1.rgb, 0.2, 1.7);
+  vec3 dottedDentiPiume = mix(coloreDenti, colorePiume, dotMask);
+
+  colorRombo += fillRombiLuce * dottedDentiPiume;
+  colorRombo += fillCenterRombi * bicolorPiume;
+  colorRombo += fillRombi * colorePiume;
+  color += colorRombo;
+
+  // Colora il bg
+  bgColor = mix(coloreDenti, coloreDentiFlipped, dotMask) * background;
+  color += bgColor;
+  //color += bgColor * background;
+
+
+  gl_FragColor = pow(vec4(color, 1.0), vec4(vec3(1./2.2), 1.0));
+
+}
+
+</script>
+<script>
+const renderOnRequestEnabled = false;
+
+const clock = new THREE.Clock();
+let container, camera, scene, renderer, uniforms, material, mesh;
+let i = 1.0;
+let renderRequested = false;
+
+const loadManager = new THREE.LoadingManager();
+const loader = new THREE.TextureLoader(loadManager);
+
+const tex1 = loader.load('../../assets/media/pattern3-gondwana/sunbittern4.jpg');
+const tex0 = loader.load('../../assets/media/pattern3-gondwana/sunbittern5bw.jpg');
+
+loadManager.onLoad = () => {
+  init();
+  animate();
+}
+
+function init() {
+  // set texture repeat
+  tex1.wrapS = tex1.wrapT = THREE.RepeatWrapping;
+  tex1.repeat.set( 2, 2 );
+
+  tex0.wrapS = tex0.wrapT = THREE.RepeatWrapping;
+  tex0.repeat.set( 2, 2 );
+
+  container = document.getElementById('container');
+  camera = new THREE.Camera();
+  camera.position.z = 1;
+  scene = new THREE.Scene();
+  uniforms = {
+    u_time: { type: "f", value: 0.1 },
+    u_resolution: { type: "v2", value: new THREE.Vector2() },
+    u_tex0: {type: "t", value: tex0},
+    u_tex1: {type: "t", value: tex1},
+    u_mouse: {
+      type: 'v2',
+      value: new THREE.Vector2()
+    }
+  };
+  material = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: document.getElementById('vertexShader').textContent,
+    fragmentShader: document.getElementById('fragmentShader').textContent
+  });
+  mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+  scene.add(mesh);
+  renderer = new THREE.WebGLRenderer();
+  renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+  container.appendChild(renderer.domElement);
+  uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
+  uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  renderer.domElement.addEventListener('mousemove', function(e) {
+    updateMouseUniforms(e.clientX, e.clientY);
+  });
+  renderer.domElement.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    updateMouseUniforms(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+  });
+
+  window.addEventListener('resize', windowResized);
+}
+
+function animate() {
+  renderRequested = false;
+
+  if (renderOnRequestEnabled) {
+    uniforms.u_time.value = i;
+  }else{
+    uniforms.u_time.value += clock.getDelta();
+    requestAnimationFrame(animate);
+  }
+  renderer.render(scene, camera);
+}
+
+function requestRenderIfNotRequested() {
+    if (!renderRequested && renderOnRequestEnabled) {
+      renderRequested = true;
+      requestAnimationFrame(animate);
+    }
+}
+
+function updateMouseUniforms(clientX, clientY) {
+  i += 0.05;
+  uniforms.u_mouse.value.x = clientX * window.devicePixelRatio;
+  uniforms.u_mouse.value.y = (window.innerHeight - clientY) * window.devicePixelRatio;
+  requestRenderIfNotRequested();
+}
+
+function windowResized() {
+  uniforms.u_resolution.value.x = window.innerWidth * window.devicePixelRatio;
+  uniforms.u_resolution.value.y = window.innerHeight * window.devicePixelRatio ;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  requestRenderIfNotRequested();
+}
+</script>
+</body>
+</html>
