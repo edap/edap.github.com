@@ -40,7 +40,7 @@ Full-color version 🌈 available <a href="https://vimeo.com/324155852">here</a>
   {% include img-jpg.html pngName="11" assetPath="/assets/media/ausser-betrieb/" gridClass = "grid" %}
 
   <div class = "grid l3">
-  Realized with openFrameworks. 
+  2019
   </div>
 
 </div>

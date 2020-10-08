@@ -30,7 +30,7 @@ tags: []
 
 
 <div class = "grid l3">
-WebGL animation, 2019.
+2019.
 </div>
 
 </div>

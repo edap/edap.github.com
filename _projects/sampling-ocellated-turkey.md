@@ -10,7 +10,7 @@ tags: []
 <div class="grid-gutter"></div>
 
   <div class = "grid l3">
-  WebGL animations produced sampling the feathers of the <a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>. Mouse over to play the videos.
+Animations produced sampling the feathers of the <a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>. Mouse over to play the videos.
   </div>
 
   <video class="grid grid-sizer" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">

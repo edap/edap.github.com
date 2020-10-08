@@ -11,7 +11,7 @@ tags: []
 <div class="index-content">
 <div class="grid-gutter"></div>
 <div class = "grid l3">
-Stills from the visuals for the track <a href="https://www.youtube.com/watch?v=p_qtiPz5bUw">"I Am Mensch"</a> by Zeta Reticula & Helga Neuer, distributed by the electronic music label <a href="https://mechatronica.bandcamp.com/">"Mechatronica"</a>. <br />
+Video clip for the track <a href="https://www.youtube.com/watch?v=p_qtiPz5bUw">"I Am Mensch"</a> by Zeta Reticula & Helga Neuer, distributed by the electronic music label <a href="https://mechatronica.bandcamp.com/">"Mechatronica"</a>. <br />
 The visuals are generated in realtime using openFrameworks, textures from <a href='https://www.featherbase.info/en/home'>the featherbase</a>.
 </div>
   {% include img-jpg.html pngName="budgerigar-1" assetPath="/assets/media/i-am-mensch/" gridClass = "grid grid-sizer" %}
