@@ -8,9 +8,14 @@ tags: []
 <div class="content-container">
 <div class="index-content">
 <div class="grid-gutter"></div>
-
   <div class = "grid l3">
-Animations produced sampling the feathers of the <a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>. Mouse over to play the videos.
+  <p>2019</p>
+  <p>
+    Animations produced sampling the feathers of the <a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>.
+  </p> 
+  <p>
+    <i>Mouse over to play the videos.</i>
+  </p>
   </div>
 
   <video class="grid grid-sizer" muted="" loop="" playsinline="" onmouseover="this.play()" onmouseout="this.pause()">

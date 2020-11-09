@@ -8,6 +8,9 @@ tags: []
 <div class="content-container">
 <div class="index-content">
 <div class="grid-gutter"></div>
+<div class = "grid l3">
+2019
+</div>
 
 
 <a href = "/artworks/pattern2-argusianus-argus/1.html">
@@ -35,9 +38,7 @@ tags: []
 </a>
 
 
-<div class = "grid l3">
-2019
-</div>
+
 
 </div>
 </div>
