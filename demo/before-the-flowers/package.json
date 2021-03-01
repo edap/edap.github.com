@@ -37,7 +37,7 @@
     "glslify": "^5.0.0",
     "glslify-fancy-imports": "^1.0.1",
     "glslify-hex": "^2.0.1",
-    "three": "^0.85.2",
+    "three": "^0.125.0",
     "webvr-polyfill": "^0.9.29",
     "webvr-ui": "^0.9.4"
   },
