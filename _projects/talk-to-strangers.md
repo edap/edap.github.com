@@ -17,6 +17,10 @@ tags: []
 <p>Gefördert durch die Senatsverwaltung für Kultur und Europa.</p>
 </div>
 
+ {% include img-jpg.html pngName="17" assetPath="/assets/media/talk-to-strangers/" gridClass = "grid" %}
+
+ {% include img-jpg.html pngName="15b" assetPath="/assets/media/talk-to-strangers/" gridClass = "grid" %}
+
 
   {% include img-jpg.html pngName="raggio13" assetPath="/assets/media/talk-to-strangers/" gridClass = "grid" %}
 
