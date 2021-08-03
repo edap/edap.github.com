@@ -14,7 +14,7 @@ tags: []
 
 <p>2021</p>
 
-<p> 3D animation</p>
+<p>3D animation</p>
 
 <p>
 To find oneself in "alto mare" (at high seas), is an Italian expression often used to indicate the condition of being still far away from a goal, for example, to be late for an upcoming deadline. To be in “alto mare” implies that a lot of work still needs to be done. More steps need to be taken before something is complete. Also, it is important to note that you do not need to be at sea to find yourself in "alto mare." On the contrary, such a condition can happen even while hiking a mountain, that, according to your plans, was supposed to be an easy task but instead is not. Its peak just seems to never get closer. <br />
@@ -22,6 +22,11 @@ While observing abstract shapes, can one feel in "alto mare"?</p>
 
 <p>Gefördert durch die Senatsverwaltung für Kultur und Europa.</p>
 <p>Music: Al Sa.</p>
+<p><b>Screenings:</b></p>
+Screen Power Film Festival, London, March 2021 <br />
+6th Annual Digital Supernova Animation Festival, Denver, USA, September 2021 <br />
+Festival International de Cinéma de Kinshasa FICKIN, Kinshasa, République Démocratique du Congo, 6-12 September 2021. <br />
+
 
 </div>
 
