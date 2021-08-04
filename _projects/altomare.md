@@ -22,10 +22,12 @@ While observing abstract shapes, can one feel in "alto mare"?</p>
 
 <p>Gefördert durch die Senatsverwaltung für Kultur und Europa.</p>
 <p>Music: Al Sa.</p>
-<p><b>Screenings:</b></p>
-Screen Power Film Festival, London, March 2021 <br />
-6th Annual Digital Supernova Animation Festival, Denver, USA, September 2021 <br />
-Festival International de Cinéma de Kinshasa FICKIN, Kinshasa, République Démocratique du Congo, 6-12 September 2021. <br />
+<p>Screenings:</p>
+<ul>
+<li>Screen Power Film Festival, London, March 2021 </li>
+<li>6th Annual Digital Supernova Animation Festival, Denver, USA, September 2021 </li>
+<li>Festival International de Cinéma de Kinshasa FICKIN, Kinshasa, République Démocratique du Congo, 6-12 September 2021. </li>
+</ul>
 
 
 </div>
