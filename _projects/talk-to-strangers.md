@@ -14,7 +14,6 @@ tags: []
 <p>Digital prints, 42cm × 59,4 cm</p>
 <p>Serie developed in the frame of the <a href ="http://www.newdigitalcollage.art">New Digital Collage</a> project, curated by <a href="https://fabioparis.art/">Fabio Paris</a> and <a href="https://lindarocco.art/">Linda Rocco</a>.</p>
 
-<p>Gefördert durch die Berliner Senatsverwaltung für Kultur und Europa.</p>
 </div>
 
  {% include img-jpg.html pngName="19" assetPath="/assets/media/talk-to-strangers/" gridClass = "grid" %}
