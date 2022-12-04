@@ -6,14 +6,18 @@ layout: default
   <div class="grid-gutter"></div>
 
   <div class="grid l3 ghcard-intro">
-        List of open source libraries and addons related to 2D and 3D computer graphics developed since 2014.
+    List of open source libraries and addons related to 2D and 3D computer graphics developed since 2014.
   </div>
 
-  {% assign selected = "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxPhyllotaxis,ofxSpaceColonization,ofxBranchesPrimitive,ofxRaycaster,ofxLatheMesh" | split: "," %}
+  {% assign selected =
+  "PalmGenerator,flowers,ofxLSystem,ofxLSystemGrammar,LeafGeometry,ofxSpaceColonization,ofxBranchesPrimitive,ofxRaycaster,ofxLatheMesh,nannou_raycast"
+  | split: "," %}
   {% assign sorted = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
-  {% for repository in sorted  %}
-    {% if selected contains repository.name %}
-        {% include card.html repoName=repository.name repoDescription=repository.description repoUrl=repository.html_url ownerUrl=site.github.owner_url ownerAvatar=site.github.owner_gravatar_url stars=repository.stargazers_count forks=repository.forks_count language=repository.language gridClass = "grid" %}
-    {% endif %}
+  {% for repository in sorted %}
+  {% if selected contains repository.name %}
+  {% include card.html repoName=repository.name repoDescription=repository.description repoUrl=repository.html_url
+  ownerUrl=site.github.owner_url ownerAvatar=site.github.owner_gravatar_url stars=repository.stargazers_count
+  forks=repository.forks_count language=repository.language gridClass = "grid" %}
+  {% endif %}
   {% endfor %}
 </div>
