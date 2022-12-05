@@ -23,8 +23,9 @@
 
 <body style="margin: 0px; padding: 0px; overflow: hidden;">
     <canvas id="canvasWebGL" width="1000" height="1000"></canvas>
-    <video id="inputVideo" autoplay loop playsinline style="display:none; top:0px; left: 500px" width="400"
-        height="300"></video>
+    <!-- <video id="inputVideo" autoplay loop playsinline style="display:none; top:0px; left: 500px" width="400"
+        height="300"></video> -->
+    <video id="inputVideo" autoplay loop playsinline style=" top:0px; left: 500px" width="400" height="300"></video>
 
 
     <script type="text/javascript">
@@ -64,6 +65,7 @@
             }
             vid.onloadedmetadata = function () {
                 adjustVideoProportions();
+                ctrack.start(vid);
                 vid.play();
             }
             vid.onresize = function () {
@@ -135,7 +137,7 @@
                     nose.x = positions[62][0];
                     nose.y = positions[62][1]
                 }
-                var x = map_range(nose.x, 0, vid_width, 0, canvasWebGL.width);
+                var x = map_range(nose.x, vid_width, 0, 0, canvasWebGL.width);
                 var y = map_range(nose.y, 0, vid_height, 0, canvasWebGL.height);
                 var z = map_range(headHeight, 0, vid_height, 0, 1.0);
                 headPosition[0] = x;
@@ -236,7 +238,6 @@
             uniforms: {
                 iResolution: regl.prop('resolution'),
                 uSunSize: regl.prop('sunSize'),
-                //iTime:regl.prop('time'),
                 uHead: regl.prop('headPosition')
             },
             count: 6
