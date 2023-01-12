@@ -16,8 +16,8 @@ tags: []
   <p>Custom Software</p>
 
   <p>
-  T.U.O.T is a raytracer software that does not follow the physical laws of lights transmission, but instead it speculates on new immaginary rules that dictate the light behaviour. <br />
-  As software-generated digital images become more popular and help shape our sense of the world, what would that world look like if the software generating the images didn't follow the laws of physics we know?
+T.U.O.T is a ray tracer software that does not follow the physical laws of light transmission, but instead speculates on new imaginary rules that dictate light behaviour.<br />
+As software-generated digital images become increasingly popular and contribute to shape our perception of the world, the question arises, what that world would look like if the software generating the images did not follow the physical laws we are familiar with?
   </p>
 
   <p>
