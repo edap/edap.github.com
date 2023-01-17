@@ -198,7 +198,9 @@
                 void main() {
                     vec2 uv = gl_FragCoord.xy / iResolution.xy;
                     vec2 headNorm = uHead/iResolution;
-                    vec2 m = vec2(headNorm.x, parabola(headNorm.x, 1.2));
+                    // use parabola function to get the y coordinate
+                    //vec2 m = vec2(headNorm.x, parabola(headNorm.x, 1.2));
+                    vec2 m = vec2(headNorm.x, headNorm.y);
                     vec3 color = vec3(0.1, 0.4, 0.9);
                     color += vec3(0.9-m.y,0.6-uv.y, -(1.0-m.y));
                     uv.x *= iResolution.x / iResolution.y;
