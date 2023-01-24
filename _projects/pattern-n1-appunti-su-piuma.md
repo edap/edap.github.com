@@ -1,6 +1,6 @@
 ---
 layout: project
-title: "Pattern #1: Appunti su piuma"
+title: "Appunti su piuma"
 category: 
 tags: []
 ---
@@ -9,7 +9,9 @@ tags: []
 <div class="index-content">
 <div class="grid-gutter"></div>
 <div class = "grid l3">
-2019
+<p>2019</p>
+<p>Web animation</p>
+<p>Quill pens has been used for centuries as an instrument to write. Appunti su piuma (in italian, notes on feathers) is a web animation where the feathers are instead a surface on which can be written. Incidentally, the words “text” and “texture” shares the same root, the latin verb “texere”, which means “to weave”. Points, dots, brackets and commas are animated over the texture of a feather, waving an imaginary union between surface and text, pen and paper.</p>
 </div>
 
 
