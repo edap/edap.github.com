@@ -22,6 +22,9 @@ To find oneself in "alto mare" (at high seas), is an Italian expression  often u
 </p>
 
 <p>Music: Al Sa.</p>
+
+<p>Gefördert durch die Senatsverwaltung für Kultur und Europa</p>
+
 <p>Screenings:</p>
 <ul>
 <li>Screen Power Film Festival, London, March 2021 </li>
