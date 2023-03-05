@@ -8,7 +8,7 @@ tags: []
 <div class="content-container">
 <div class="index-content">
 <div class="grid-gutter"></div>
-<div class = "grid l3">
+<div class = "grid l3 project-intro">
 2019
 </div>
 

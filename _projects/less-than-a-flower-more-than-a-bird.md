@@ -9,14 +9,11 @@ tags: []
 
 
 <div class="grid-gutter"></div>
-<div class = "grid l3">
+<div class = "grid l3 project-intro">
 2018
 </div>
 
-<div class = "grid l3">
-<!-- -->
 
-</div>
 
 <a href='/artworks/less-than-a-flower-more-than-a-bird/ring-necked-parakeet/'>
 {% include img-jpg.html pngName="ring-necked-parakeet" assetPath="/assets/media/less-than-a-flower-more-than-a-bird/" gridClass = "grid l2" %}

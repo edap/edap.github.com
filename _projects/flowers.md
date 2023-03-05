@@ -10,10 +10,12 @@ tags: []
 
 
 <div class="grid-gutter"></div><div class="grid-sizer"></div>
-
+<div class = "grid l3">
+2016
+</div>
 <div class = "grid l3">
 
-3D models of abstract flowers generated procedurally using the <a href='https://github.com/thi-ng/morphogen'>Morphogen Library</a>. The software is available at this <a href='https://github.com/edap/flowers'>repository</a>
+3D models of abstract flowers generated procedurally in clojure using the <a href='https://github.com/thi-ng/morphogen'>Morphogen Library</a>. The software is available at this <a href='https://github.com/edap/flowers'>repository</a>
 
 </div>
 

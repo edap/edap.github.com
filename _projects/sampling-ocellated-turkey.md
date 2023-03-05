@@ -8,10 +8,10 @@ tags: []
 <div class="content-container">
 <div class="index-content">
 <div class="grid-gutter"></div>
-  <div class = "grid l3">
+  <div class = "grid l3 project-intro">
   <p>2019</p>
   <p>
-    Animations produced sampling the feathers of the <a href="https://en.wikipedia.org/wiki/Ocellated_turkey">Ocellated Turkey</a>.
+    3D loop Animations.
   </p> 
   <p>
     <i>Mouse over to play the videos.</i>

@@ -10,21 +10,10 @@ tags: []
 <div class="content-container">
 <div class="index-content">
 <div class="grid-gutter"></div>
-<div class = "grid l3">
+<div class = "grid l3 project-intro">
   <p>2022 - ongoing </p>
 
   <p>Custom Software</p>
-
-  <p>
-T.U.O.T is a ray tracer software that does not follow the physical laws of light transmission, but instead speculates on new imaginary rules that dictate light behaviour.<br />
-As software-generated digital images become increasingly popular and contribute to shape our perception of the world, the question arises, what that world would look like if the software generating the images did not follow the physical laws we are familiar with?
-  </p>
-
-  <p>
-  <i>
-  "... while we sleep here, we are awake elsewhere and that in this way every man is two men." </i> <br/>
-  Jorge Luis Borges, Tlön, Uqbar, Orbis Tertius 
-  </p>
 </div>
 
 
@@ -40,6 +29,17 @@ As software-generated digital images become increasingly popular and contribute 
 
 
 <div class = "grid l3">
+  <p>
+T.U.O.T is a ray tracer software that does not follow the physical laws of light transmission, but instead speculates on new imaginary rules that dictate light behaviour.<br />
+As software-generated digital images become increasingly popular and contribute to shape our perception of the world, the question arises, what that world would look like if the software generating the images did not follow the physical laws we are familiar with?
+  </p>
+
+  <p>
+  <i>
+  "... while we sleep here, we are awake elsewhere and that in this way every man is two men." </i> <br/>
+  Jorge Luis Borges, Tlön, Uqbar, Orbis Tertius 
+  </p>
+
   <p>
   Gefördert durch die Beauftragte der Bundesregierung für Kultur und Medien im Programm NEUSTART KULTUR Modul D – Digitale Vermittlungsformate
   </p>
