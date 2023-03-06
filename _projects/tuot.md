@@ -13,7 +13,7 @@ tags: []
 <div class = "grid l3 project-intro">
   <p>2022 - ongoing </p>
 
-  <p>Custom Software. Source code available [here](https://github.com/edap/tuot)</p>
+  <p>Custom Software. Source code available <a href="https://github.com/edap/tuot">here</a></p>
 </div>
 
 
