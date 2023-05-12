@@ -15,7 +15,7 @@ I've played a bit with the [ofxFaceTracker](https://github.com/kylemcdonald/ofxF
 I write here the steps followed to reach the final results, the code is available on [Github](https://github.com/edap/bubbles)
 
 ### Put the mouth over the eyes
-For each frame composing the video, I have identified the profile of the mouth with `tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH)`, then I have created a transparent image and I have copied to it only with the pixels inside the profile of the mouth.
+For each frame composing the video, I have identified the profile of the mouth with `tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH)`, then I have created a transparent image and I have copied to it the pixels inside the profile of the mouth.
 
 ```cpp
 ofImage ofApp::grabMouth(){
@@ -67,14 +67,14 @@ void ofApp::draw() {
     drawMouth(rightEye, mouthImage);
 }
 
-void ofApp::drawMouth(ofVec2f eye, ofImage mouth){
+void ofApp::drawMouth(ofVec2f eye, ofImage& mouth){
     mouth.draw(eye.x -mouth.width/2, eye.y - mouth.height/2);
 }
 ```
 
 ### Create the bubbles
 
-I've used ofxBox2D to create the bubbles that fill the screen while blowing. The `BallsGenerator` class contains an emissive particle system that has 2 origins over the eyes. The origins need to be constantly updated because the face is supposed to turn or move.
+I've used ofxBox2D to create the bubbles that fill the screen while blowing. The `BallsGenerator` class contains an emissive particle system that has 2 origins positioned over the eyes. The origins need to be constantly updated because the face is supposed to turn or move.
 
 ```cpp
 void ofApp::update() {
