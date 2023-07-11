@@ -9,12 +9,12 @@
 title: Davide Prati
 email: your-email@domain.com
 math: your-email@domain.com
-description_header: Software Developer 
+description_header: Graphics Developer 
 description: > # this means to ignore newlines until "baseurl:"
   I make videos and web animations.
 description_contact: I like hearing about possible new work. Get in touch
 description_metatag: > # this means to ignore newlines until "baseurl:"
-  Software developer based in Berlin. WebGL, WebGPU, Rust, c++, threejs, Unreal Engine, openFrameworks, shaders, computer vision.
+  Graphics developer based in Berlin. WebGL, WebGPU, Rust, c++, threejs, Unreal Engine, Unity, openFrameworks, shaders, computer vision.
 description_contact: I like hearing about possible new work. Get in touch
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://davideprati.com" # the base hostname & protocol for your site
