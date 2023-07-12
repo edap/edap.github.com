@@ -5,7 +5,7 @@ category:
 tags: []
 ---
 
-Here you can find information about how to setup a working enviroment to develop Unreal Engines projects on Linux, specifically Ubuntu and others Linux distros based on Ubuntu. Those instructions has been tested on PopOS 22.04 and Ubuntu 22.04.
+Here you can find information about how to setup a working enviroment to develop Unreal Engines projects on Linux, specifically Ubuntu and others Linux distros based on Ubuntu. Those instructions have been tested on PopOS 22.04 and Ubuntu 22.04.
 
 ### Installation
 
