@@ -1,13 +1,19 @@
+html, body, .container {
+    height: 99%;
+    margin: 0;
+}
+
 body {
-    margin: 0 auto;
     font-family: sans-serif;
     background-color: rgb(34, 15, 130);
 }
 
 .container {
+    margin: 0.3rem;
     display: flex;
-    margin: 0.5rem;
     border: 1px solid red;
+    gap: 0.5rem;
+    flex-wrap:wrap;
 }
 
 .container .row {
@@ -16,4 +22,12 @@ body {
 
 .container .col {
     flex-direction: column;
-  }
+}
+
+.item {
+    /* flex is first flex-grow, then flex-shrink, then flex-basis*/
+    /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+    flex: 1 1;
+    border: 2px dotted greenyellow;
+    flex-grow: 1;
+}

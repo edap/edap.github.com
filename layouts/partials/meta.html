@@ -1,0 +1,4 @@
+<meta charset="utf-8">
+<title>{{ .Page.Title }}</title>
+{{ $style := resources.Get "css/main.css" | resources.Minify }}
+<link rel="stylesheet" href="{{ $style.Permalink }}">
