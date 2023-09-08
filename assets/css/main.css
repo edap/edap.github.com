@@ -1,0 +1,19 @@
+body {
+    margin: 0 auto;
+    font-family: sans-serif;
+    background-color: rgb(34, 15, 130);
+}
+
+.container {
+    display: flex;
+    margin: 0.5rem;
+    border: 1px solid red;
+}
+
+.container .row {
+    flex-direction: row;
+}
+
+.container .col {
+    flex-direction: column;
+  }
