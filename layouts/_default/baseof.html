@@ -5,19 +5,17 @@
 </head>
 
 <body>
+    <header>{{ partial "menu.html" }}</header>
     <div class="flex container">
-    <div class="flex menu" >{{ partial "menu.html" }}</div>
-        
-        <div class="item">
-        <!-- {{ block "main" . }}
-        {{ end }} -->
-        {{ partial "split-hor.html" }}
-        </div>
+    <div class="item">
+    <!-- {{ block "main" . }}
+    {{ end }} -->
+    {{ partial "split-hor.html" }}
+    </div>
 
-        <div class="item">
-
-            {{ partial "split-ver.html" }}
-        </div>
+    <div class="item">
+        {{ partial "split-ver.html" }}
+    </div>
     </div>
 </body>
 </html>

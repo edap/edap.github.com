@@ -1,5 +1,10 @@
-html, body, .container{
-    height: 99%;
+body {
+    font-family: sans-serif;
+    background-color: rgb(34, 15, 130);
+    color: chartreuse;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
     margin: 0;
 }
 
@@ -8,19 +13,22 @@ html, body, .container{
     flex-wrap:wrap;
 }
 
-body {
-    font-family: sans-serif;
-    background-color: rgb(34, 15, 130);
-    color: chartreuse;
+nav {
+    float: right;
+    padding:0;
+    background-color: beige;
 }
-.menu {
-    flex-direction: row;
-    width: 100%;
-    background-color: aqua;
-    color: red;
+
+nav > ul{
+    list-style: none;
+}
+
+nav > ul > li {
+    display: inline;
 }
 
 .container{
+    flex: 1;
     margin: 0.3rem;
     border: 1px solid red;
     gap: 0.5rem;
@@ -42,16 +50,6 @@ body {
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 280px;
-    border: 2px dotted greenyellow;
-    align-items: stretch;
-}
-
-.item-menu{
-    /* flex is first flex-grow, then flex-shrink, then flex-basis*/
-    /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 100px;
     border: 2px dotted greenyellow;
     align-items: stretch;
 }
