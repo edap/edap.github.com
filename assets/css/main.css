@@ -31,20 +31,24 @@ nav > ul > li {
     flex: 1;
     margin: 0.3rem;
     border: 1px solid red;
-    gap: 0.5rem;
+    gap: 0.9rem;
     flex-direction: row;
 }
 
 .split-hor{
     flex-direction: row; 
     min-height: 100%;
+    gap: 0.9rem;
+    flex:1;
 }
 .split-ver{
     flex-direction: column;
     min-height: 100%;
+    gap: 0.9rem;
+    flex: 1;
 }
 
-.item{
+.window{
     /* flex is first flex-grow, then flex-shrink, then flex-basis*/
     /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
     flex-grow: 1;
@@ -52,4 +56,7 @@ nav > ul > li {
     flex-basis: 280px;
     border: 2px dotted greenyellow;
     align-items: stretch;
+    /* background: linear-gradient(90deg,#77ff00,#0050ff);
+border-radius: 12px 12px 0 0;
+box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22); */
 }
