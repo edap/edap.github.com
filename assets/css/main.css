@@ -1,7 +1,7 @@
 body {
     font-family: sans-serif;
-    background-color: rgb(34, 15, 130);
-    color: chartreuse;
+    background-color: rgb(141, 124, 227);
+    color: rgb(49, 110, 208);
     display: flex;
     min-height: 100vh;
     flex-direction: column;
@@ -62,8 +62,14 @@ nav > ul > li {
 }
 
 .window{
+    background-color: rgb(201, 199, 114);
     /* flex is first flex-grow, then flex-shrink, then flex-basis*/
     /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+
+    /* TODO, 
+    get scrollbar right
+    https://webdesign.tutsplus.com/how-to-make-responsive-scrollable-panels-with-flexbox--cms-23269t
+    */
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 280px;
@@ -73,21 +79,11 @@ nav > ul > li {
     align-items: stretch;
     border-radius: 12px 12px 0 0;
     box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22);
+    overflow-y: scroll;
 }
-.window-title{
-    display: inline;
-    /* background-color: brown; */
-    border-radius: 12px 12px 0 0;
-    padding: 0rem 12rem 0rem 1rem;
+
+h3.window-title{
     border-top: 3px double greenyellow;
     border-bottom: 3px double greenyellow;
-    /* border-left: 3px inset greenyellow; */
-    border-right: 3px double greenyellow;
-}
-.window-content{
-    /* background-color: brown; */
-    position: relative;
-    /* height: calc(100% - 20px); */
-
-    /* border-style: inset; */
+    margin: 0;
 }
