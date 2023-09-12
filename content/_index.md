@@ -1,4 +1,6 @@
 ---
 title: Home
 ---
-Under construction. 
+
+{{< figure src="img/posts/grass/grass.jpg" title="An elephant at sunset" >}}
+
