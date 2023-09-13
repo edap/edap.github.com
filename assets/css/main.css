@@ -1,5 +1,43 @@
+
+@font-face {
+    font-family: 'Iosevka';
+    src: url('/fonts/IosevkaNerdFontMono-Regular.ttf') format('truetype');
+}
+
+@font-face {
+font-family: 'BigBlue Terminal';
+        src: url('/fonts/BigBlueTerm437NerdFontMono-Regular.ttf') format('truetype');
+}
+
+/*
+
+@font-face {
+    font-family: 'Gohu';
+    src: url('/fonts/GohuFont14NerdFont-Regular.ttf') format('truetype');
+}
+
+@font-face {
+font-family: '3270';
+    src: url('/fonts/3270NerdFontMono-Condensed.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Cascadia Code';
+    src: url('/fonts/CaskaydiaCoveNerdFont-Light.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Terminus';
+    src: url('/fonts/TerminessNerdFontMono-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Hurmit';
+    src: url('/fonts/HurmitNerdFontMono-Regular.otf') format('opentype');
+} */
+
+ 
+
 body {
-    font-family: sans-serif;
+    font-family: 'Iosevka', sans-serif;
     background-color: rgb(141, 124, 227);
     color: rgb(49, 110, 208);
     display: flex;
@@ -8,13 +46,8 @@ body {
     margin: 0;
 }
 
-p {
-    margin: 0;
-    padding-top: 0.4rem
-}
-
 figure {
-    margin-top: 0px;
+    margin: 0px;
     padding-top: 0;
 }
 
@@ -29,6 +62,8 @@ img {
 }
 
 nav {
+    font-size: 16pt;
+    font-family: 'BigBlue Terminal', sans-serif;
     float: right;
     padding:0;
     background-color: beige;
@@ -66,9 +101,17 @@ nav > ul > li {
     /* flex is first flex-grow, then flex-shrink, then flex-basis*/
     /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 
-    /* TODO, 
+    /* TODO 1
+    Cerca di capire come utilizzare shortcodes tipo "win-img" per posizionare i tuoi elementi
+    Pensa a un layout per la pagina singola: About e Teaching
+    Uno per il singolo progetto (con sidebar menu per andare sugli altri progetti) */
+
+    /* TODO 2, 
     get scrollbar right
     https://webdesign.tutsplus.com/how-to-make-responsive-scrollable-panels-with-flexbox--cms-23269t
+
+    create a scrollable horizontal layout
+    https://medium.com/flexbox-and-grids/how-to-create-horizontally-scrollable-sections-with-flexbox-60d860f539b2
     */
     flex-grow: 1;
     flex-shrink: 1;
@@ -83,6 +126,8 @@ nav > ul > li {
 }
 
 h3.window-title{
+    font-weight: bold;
+    font-family: 'BigBlue Terminal', sans-serif;
     border-top: 3px double greenyellow;
     border-bottom: 3px double greenyellow;
     margin: 0;

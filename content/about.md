@@ -4,6 +4,9 @@ window_title: Bio
 ---
 
 
+{{< img src="/img/posts/grass/grass.jpg" caption="Steve Francia" >}}
+
+{{< win-img src="/img/posts/grass/grass.jpg" title="Steve Francia" >}}
 
 
 I am a graphics developer based in Berlin, I have experience programming in C++, c#, Rust, Ruby, javascript, Typescript, shaders, and I am familiar developing in Unreal Engine, Unity3D, openFrameworks, processing and three.js
