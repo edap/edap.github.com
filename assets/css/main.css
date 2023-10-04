@@ -101,10 +101,11 @@ nav > ul > li {
     /* flex is first flex-grow, then flex-shrink, then flex-basis*/
     /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 
-    /* TODO 1
-    Cerca di capire come utilizzare shortcodes tipo "win-img" per posizionare i tuoi elementi
-    Pensa a un layout per la pagina singola: About e Teaching
-    Uno per il singolo progetto (con sidebar menu per andare sugli altri progetti) */
+    /* Come eliminare il tag <p>
+    https://github.com/gohugoio/hugo/issues/7339#issuecomment-639228631
+    */
+
+    /*  TODO, get taxonomy page for categories and tags*/
 
     /* TODO 2, 
     get scrollbar right
@@ -120,9 +121,9 @@ nav > ul > li {
     border-left: 3px double greenyellow;
     border-right: 3px double greenyellow; */
 
-    border-bottom: 3px outset greenyellow;
-    border-left: 3px outset greenyellow;
-    border-right: 3px outset greenyellow;
+    border-bottom: 3px outset #f0f0b6;
+    border-left: 3px outset #f0f0b6;
+    border-right: 3px outset #f0f0b6;
 
     align-items: stretch;
     /* border-radius: 12px 12px 0 0; */
@@ -135,8 +136,8 @@ h3.window-title{
     font-family: 'BigBlue Terminal', sans-serif;
     /* border-top: 3px double greenyellow;
     border-bottom: 3px double greenyellow; */
-    background-color: rgb(155, 118, 68);
-    border-top: 3px outset greenyellow;
-    border-bottom: 3px outset greenyellow;
+    background-color: #dbd19e;
+    border-top: 3px outset #f0f0b6;
+    border-bottom: 3px outset #f0f0b6;
     margin: 0;
 }
