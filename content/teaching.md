@@ -5,8 +5,15 @@ window_title: Teaching
 
 {{< open-hor-split >}}{{< open-win title="Teaching">}}
 
-I am lecturing at the Universität Der Kunst, in the New Media class department, and I give workshops about creative coding, computer vision, fractals and algorithmic botany.
-- University Courses
+I am lecturing at the Universität Der Kunst, in the New Media class department, and I give workshops about computer graphics,creative coding, computer vision, fractals and algorithmic botany.
+
+## University Courses
+
+Gestalt mit CODE
+Wintersemester 2023/2024, Universität der Künste, Berlin
+
+Gestalt mit CODE
+Sommersemester 2023, Universität der Künste, Berlin
 
 Gestalt mit CODE
 Wintersemester 2022/2023, Universität der Künste, Berlin
@@ -57,10 +64,11 @@ Grundlagen Creative Coding mit openFrameworks
 Sommersemester 2018, Universität der Künste, Berlin
 
 Net Art
-2013/14 Net Art (72 hours, with IOCOSE), MFA Film and New Media, NABA, Milan - Italy
+2013/14 Net Art (with IOCOSE), MFA Film and New Media, NABA, Milan - Italy
 
 
-Workshops
+## Workshops
+
 Algorithmic Botany
 01/09/2020 - 07/09/2020, School of Machines, making & make believe, Berlin
 
