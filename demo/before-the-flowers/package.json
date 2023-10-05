@@ -34,7 +34,7 @@
     "dat-gui": "^0.5.0",
     "glsl-checker": "^1.0.1",
     "glsl-noise": "0.0.0",
-    "glslify": "^5.0.0",
+    "glslify": "^5.1.0",
     "glslify-fancy-imports": "^1.0.1",
     "glslify-hex": "^2.0.1",
     "three": "^0.85.2",
