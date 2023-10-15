@@ -12,4 +12,4 @@ He co-founded in 2006 the the [IOCOSE](http://iocose.org) art collective.
 
 He is freelancing as graphics programmer, mainly using Unreal Engine and Three.js
 
-For any inquiries write me at info@davideprati.com
+For any inquiries write at info @ davideprati.com
