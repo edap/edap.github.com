@@ -67,6 +67,9 @@ body {
     flex-direction: column;
     margin: 0;
 }
+.main{
+    margin-top: 6rem;
+}
 
 figure {
     margin: 0px;
@@ -109,34 +112,21 @@ nav > ul > li {
     gap: 0.9rem;
     padding-top: 5rem;
     flex: 1;
-    /* margin: 0.3rem; */
-    /* gap: 0.9rem; */
     flex-direction: row;
 }
 
-.split-hor{
-    flex-direction: col; 
-    min-height: 100%;
-    flex:1;
-}
-.split-ver{
-    flex-direction: column;
-    min-height: 100%;
-    flex: 1;
-}
 
 /* Mobile */
 @media (max-width: 500px) {
-    /*
-    
-    TODO
-    .wrapper {
-      flex-direction: column-reverse;
+    .container {
+        max-width: 100%;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
     }
-    ul {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    } */
-    
-  }
+    nav{
+        text-align: center;
+    }
+    nav > ul{
+        padding:1rem 0rem 1rem 0rem;
+    }    
+}
