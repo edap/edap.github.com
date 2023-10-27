@@ -1,0 +1,19 @@
+{{ $taxonomy := "tags" }}
+{{ with .GetTerms $taxonomy }}
+  <p>{{ (site.GetPage $taxonomy).LinkTitle }}:</p>
+  <ul>
+    {{ range . }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }}
+
+{{ $taxonomy := "categories" }}
+{{ with .GetTerms $taxonomy }}
+  <p>{{ (site.GetPage $taxonomy).LinkTitle }}:</p>
+  <ul>
+    {{ range . }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }}

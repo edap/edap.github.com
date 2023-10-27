@@ -3,10 +3,14 @@
 {{ end }}
 
 {{ define "main" }}
-<div class="flex split-hor">
-    <div class="window">
+
+    {{ if (isset .Params "cover") }}
+        {{ partial "figure.html" . }}
+    {{ end }}
+    <div class="container">
     {{ .Content }}
+
+    {{ partial "taxonomy.html" . }}
     </div>
-</div>
 {{ end }}
 

@@ -8,10 +8,11 @@ tags:
 - 3D Plants
 title: 'The Palm generator'
 layout: work
+cover: "/img/works/palm-generator/palm-generator-large.jpg"
 ---
 
 
-{{< win-img src="/img/works/palm-generator/palm-generator-large.jpg" title="generator large" >}}
+
 
 <!-- {{< img src="/img/works/palm-generator/palm-generator-large.jpg" caption="generator large" >}} -->
 
