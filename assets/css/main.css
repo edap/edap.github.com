@@ -1,5 +1,6 @@
 /*
 TODO: Layout colonna centrale e due voci nel menu, about e teaching. Sotto vengono listati i lavori
+La home si apre con una lista dei tuoi works. Per ora non divisi in categorie.
 I lavori hanno categories (personal projects, commissions) e tags (unreal engine, c++, etc..)
 La pagina personale di ogni singolo progetto:
 1) ha la taxonomy
@@ -11,6 +12,14 @@ La pagina personale di ogni singolo progetto:
 */
 
 
+/*
+Rules. Use rem for font size
+Width % and max-width
+use PX For anything you want a certain, fixed size, 
+use rem For anything you want to scale with font-size, 
+Use % for anything you want to scale to the available space in the window/container
+
+*/
 
 @font-face {
     font-family: 'Iosevka';
@@ -54,7 +63,7 @@ body {
     background-color: rgb(141, 124, 227);
     color: rgb(49, 110, 208);
     display: flex;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     flex-direction: column;
     margin: 0;
 }
@@ -75,14 +84,22 @@ img {
 }
 
 nav {
-    font-size: 16pt;
+    text-align: right;
+    top: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 4;
+    padding: 0.1rem;
+    /* font-size: 16pt; */
+    font-size: 1.5rem;
     font-family: 'BigBlue Terminal', sans-serif;
     float: right;
-    padding:0;
-    background-color: beige;
+    /* background-color: beige; */
+    background: transparent
 }
 
 nav > ul{
+    padding:1rem 3rem 1rem 0rem;
     list-style: none;
 }
 
@@ -91,6 +108,7 @@ nav > ul > li {
 }
 
 .container{
+    padding-top: 5rem;
     flex: 1;
     /* margin: 0.3rem; */
     border: 1px solid red;
