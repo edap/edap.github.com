@@ -1,3 +1,16 @@
+/*
+TODO: Layout colonna centrale e due voci nel menu, about e teaching. Sotto vengono listati i lavori
+I lavori hanno categories (personal projects, commissions) e tags (unreal engine, c++, etc..)
+La pagina personale di ogni singolo progetto:
+1) ha la taxonomy
+2) ti permette di andare al next
+3) ha una grande immagine sopra
+4) Supporta img gallery, code snippets e quant'altro
+5) supporta three.js
+
+*/
+
+
 
 @font-face {
     font-family: 'Iosevka';

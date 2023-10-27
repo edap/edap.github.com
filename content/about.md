@@ -5,7 +5,7 @@ window_title: Bio
 
 
 <!-- {{< img src="/img/posts/grass/grass.jpg" caption="Steve Francia" >}} -->
-{{< open-hor-split >}}{{< open-win title="Teaching">}}
+
 I am a graphics developer based in Berlin, I have experience programming in C++, c#, Rust, Ruby, javascript, Typescript, shaders, and I am familiar developing in Unreal Engine, Unity3D, openFrameworks, processing and three.js
 I am lecturing part-time at Universität der Künste in the New Media department and I co-founded in 2006 the IOCOSE art collective.
 
@@ -30,4 +30,4 @@ Mechatronica
 Heinrich Dressel
 
 
-Write me a line at info@davideprati.com for any inquiries.{{< close-div >}}{{< close-div >}}
+Write me a line at info@davideprati.com for any inquiries.

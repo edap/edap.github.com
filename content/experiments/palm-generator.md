@@ -1,6 +1,6 @@
 ---
 categories:
-- Experiment
+- Personal Projects
 slug: palm-generator
 tags:
 - Procedural Content Creation

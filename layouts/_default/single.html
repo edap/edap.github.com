@@ -2,4 +2,11 @@
     {{ .Params.window_title }}
 {{ end }}
 
-{{ define "main" }}{{ .Content }}{{ end }}
+{{ define "main" }}
+<div class="flex split-hor">
+    <div class="window">
+    {{ .Content }}
+    </div>
+</div>
+{{ end }}
+

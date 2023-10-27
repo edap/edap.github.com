@@ -3,7 +3,6 @@ title: Teaching
 window_title: Teaching
 ---
 
-{{< open-hor-split >}}{{< open-win title="Teaching">}}
 
 I am lecturing at the Universität Der Kunst, in the New Media class department, and I give workshops about computer graphics,creative coding, computer vision, fractals and algorithmic botany.
 
@@ -85,4 +84,4 @@ Algorithmic Botany
 28/01/2018, Spektrum, Berlin
 
 Algorithmic Botany
-9/09/2017, Spektrum, Berlin{{< close-div >}}{{< close-div >}}
+9/09/2017, Spektrum, Berlin
