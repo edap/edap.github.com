@@ -10,6 +10,14 @@
     {{ .Content }}
 
     {{ partial "taxonomy.html" . }}
+
+    {{ if .PrevInSection }}
+    <a href="{{.PrevInSection.Permalink}}">Previous Work</a>
+    {{ end }}
+    {{ if .NextInSection }}
+    <a href="{{.NextInSection.Permalink}}">Next Work</a>
+    {{ end }}
+
     </div>
 {{ end }}
 
