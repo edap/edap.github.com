@@ -1,0 +1,43 @@
+{{ define "main" }}
+  {{ range sort .Paginator.Pages }}
+  <article>
+    <h2>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </h2>
+    <p>
+      {{- .Summary -}}
+      {{ if .Truncated }}
+        <a href="{{ .RelPermalink }}">...</a>
+      {{ end }}
+    </p>
+  </article>
+  {{ end }}
+
+  
+{{ range os.ReadDir "content/works" }}
+  {{ .Name }} → {{ .IsDir }}
+  {{ $path := printf "works/%s/" .Name }}
+  <li><a href="{{ $path }}">{{ .Name }}</a></li>
+{{ end }}
+
+
+
+
+{{ range (readDir "content/works") }}
+  {{ if .IsDir }}
+    <p>{{ .Name | title }}</p>
+    <ul>
+    {{ $path := printf "works/%s/" .Name }}
+    {{ range where (where $.Site.RegularPages "Type" "work") "File.Dir" $path }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+  {{ end }}
+{{ end }}
+
+  {{ template "_internal/pagination.html" . }}
+
+{{ end }}
+
+
+
