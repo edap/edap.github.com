@@ -1,43 +1,16 @@
 {{ define "main" }}
-  {{ range sort .Paginator.Pages }}
-  <article>
-    <h2>
-      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-    </h2>
-    <p>
-      {{- .Summary -}}
-      {{ if .Truncated }}
-        <a href="{{ .RelPermalink }}">...</a>
-      {{ end }}
-    </p>
-  </article>
-  {{ end }}
+  <!-- Groups content according to content section. The ".Key" in this instance will be the section's title. -->
+  {{ $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
 
-  
-{{ range os.ReadDir "content/works" }}
-  {{ .Name }} → {{ .IsDir }}
-  {{ $path := printf "works/%s/" .Name }}
-  <li><a href="{{ $path }}">{{ .Name }}</a></li>
-{{ end }}
-
-
-
-
-{{ range (readDir "content/works") }}
-  {{ if .IsDir }}
-    <p>{{ .Name | title }}</p>
     <ul>
-    {{ $path := printf "works/%s/" .Name }}
-    {{ range where (where $.Site.RegularPages "Type" "work") "File.Dir" $path }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-    {{ end }}
+      {{ range $pages }}
+        <li>
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+          <div class="meta">{{ .Date.Format "Mon, Jan 2, 2006" }}</div>
+        </li>
+      {{ end }}
     </ul>
-  {{ end }}
-{{ end }}
-
-  {{ template "_internal/pagination.html" . }}
 
 {{ end }}
-
 
 
