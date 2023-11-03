@@ -7,7 +7,7 @@ tags:
 - Procedural Meshes
 - 3D Plants
 title: 'The Palm generator'
-layout: work
+layout: masonry
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
 year: 2017
 typology: software
