@@ -4,13 +4,14 @@ La home si apre con una lista dei tuoi works. Per ora non divisi in categorie.
 I lavori hanno categories (personal projects, commissions) e tags (unreal engine, c++, etc..)
 La pagina personale di ogni singolo progetto:
 0) home lista lavori
-1) ha la taxonomy
-2) ti permette di andare al next
+1) ha la taxonomy. Pagine per la taxonomy
 3) pagine singole about e teaching
 4) pagina singola palm generator
+4) pagina singola TUOT
 4) Supporta img gallery, code snippets e quant'altro
 5) supporta three.js
 
+Fare una chiusa. Quello che c'e' su deve essere perfetto.
 */
 
 
@@ -58,12 +59,19 @@ font-family: '3270';
     src: url('/fonts/HurmitNerdFontMono-Regular.otf') format('opentype');
 } */
 
- 
+
+/* Main structure*/
+
+:root {
+    --box-margin: 1em;
+    --text-color:rgb(255, 253, 237);
+    --link-color:rgb(153, 254, 53);
+}
 
 body {
     font-family: 'Iosevka', sans-serif;
     background-color: rgb(28, 27, 35);
-    color: rgb(247, 239, 185);
+    color: rgb(255, 253, 237);
     display: flex;
     /* min-height: 100vh; */
     flex-direction: column;
@@ -73,6 +81,19 @@ body {
     margin-top: 6rem;
 }
 
+a {
+    color: var(--text-color);
+    text-decoration: underline;
+}
+
+a:hover{
+    color: var(--link-color);
+}
+hr { border: 1px solid var(--link-color);
+}
+
+/* images*/
+
 figure {
     margin: 0px;
     padding-top: 0;
@@ -81,6 +102,8 @@ figure {
 img {
     width:100%;
 }
+
+/* Navigation */
 
 nav {
     text-align: right;
@@ -106,19 +129,35 @@ nav > ul > li {
     display: inline;
 }
 
+/* Flex containers*/
+
 .container{
     margin: auto;
-    max-width: 70%;
+    max-width: 80%;
     display: flex;
     flex-wrap:wrap;
     gap: 0.9rem;
     padding-top: 5rem;
     flex: 1;
-    flex-direction: row;
+    flex-direction: row; /* put it to row later*/
+    flex-basis: var(--card-margin);
 }
 
+.work-thumb{
+    display: flex;
+    flex-wrap: wrap;
+    margin: var(--box-margin);
+    flex: 1 1 280px;
+}
 
-/* Mobile */
+/* Case specific */
+.single-medium-column {
+    width: 40rem;
+    margin-left: auto;
+    margin-right: auto;  
+}
+
+/* Mobile adjsustments */
 @media (max-width: 500px) {
     .container {
         max-width: 100%;

@@ -1,15 +1,14 @@
 ---
 categories:
 - Personal Projects
-slug: tuot
+slug: kurt
 tags:
-- Raytracer
-- Rust
-title: 'T.U.O.T. an imaginary raytracer'
+- Procedural Content Creation
+- Procedural Meshes
+- 3D Plants
+title: 'kurt'
 layout: work
-cover: "/img/works/tuot/64.jpg"
-year: 2022
-typology: software
+cover: "/img/works/palm-generator/palm-generator-large.jpg"
 ---
 
 

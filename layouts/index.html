@@ -1,16 +1,18 @@
+
 {{ define "main" }}
+  <div class="container">
   <!-- Groups content according to content section. The ".Key" in this instance will be the section's title. -->
   {{ $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-
-    <ul>
-      {{ range $pages }}
-        <li>
-          <a href="{{ .Permalink }}">{{ .Title }}</a>
-          <div class="meta">{{ .Date.Format "Mon, Jan 2, 2006" }}</div>
-        </li>
-      {{ end }}
-    </ul>
-
+  {{ range $pages }}
+    <div class="work-thumb">
+      <a href="{{ .Permalink }}">
+        {{ partial "figure.html" . }}
+      </a>
+      <div class="meta">{{ .Title }} {{ .Date.Format "Mon, Jan 2, 2006" }}</div>
+    </div>
+    {{ end }}
+  </div>
 {{ end }}
+
 
 

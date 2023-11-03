@@ -9,6 +9,8 @@ tags:
 title: 'The Palm generator'
 layout: work
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
+year: 2017
+typology: software
 ---
 
 
