@@ -78,7 +78,7 @@ body {
     margin: 0;
 }
 .main{
-    margin-top: 6rem;
+    margin-top: 10rem;
 }
 
 a {
@@ -131,16 +131,18 @@ width: 100%;
 /* Navigation */
 
 nav {
-    text-align: right;
+    text-align: center;
     top: 0;
     width: 100%;
+    /* max-width: 450px; */
+    margin-left: auto;
+    margin-right: auto;
     position: fixed;
     z-index: 4;
     padding: 0.1rem;
     /* font-size: 16pt; */
     font-size: 1.5rem;
     font-family: 'BigBlue Terminal', sans-serif;
-    float: right;
     /* background-color: beige; */
     background: transparent
 }
