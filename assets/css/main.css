@@ -99,8 +99,33 @@ figure {
     padding-top: 0;
 }
 
-img {
-    width:100%;
+/* Masonry*/
+.masonry-container {
+    max-width: 2600px;
+    margin: 0 auto;
+  }
+  
+.grid-gutter {
+width: 1%;
+}
+
+.index-content{
+width: 96%;
+margin: 0 2% 0 2%;
+}
+
+.grid,
+.grid-sizer {
+width: 32.666%;
+margin: 0 0 1% 0;
+}
+
+.grid.l2 {
+width: 66.333%;
+}
+
+.grid.l3 {
+width: 100%;
 }
 
 /* Navigation */

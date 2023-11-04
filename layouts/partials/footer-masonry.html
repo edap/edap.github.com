@@ -5,7 +5,7 @@
 <script src="/js/isotope.pkgd.min.js"></script>
 
 <script>
-  const container = document.querySelector('.index-content');
+  const container = document.querySelector('.masonry-container');
 
   let toggleVideoControls = () => {
     const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -57,38 +57,38 @@
       let filterFns = {};
 
       // bind filter button click
-      let filtersElem = document.querySelector('.filters-button-group');
+      // let filtersElem = document.querySelector('.filters-button-group');
 
-      if (filtersElem) {
-        filtersElem.addEventListener( 'click', function( event ) {
-          // only work with buttons
-          if ( !matchesSelector( event.target, 'button' ) ) {
-            return;
-          }
-          let filterValue = event.target.getAttribute('data-filter');
-          // use matching filter function
-          filterValue = filterFns[ filterValue ] || filterValue;
-          iso.arrange({ filter: filterValue });
-        });
+      // if (filtersElem) {
+      //   filtersElem.addEventListener( 'click', function( event ) {
+      //     // only work with buttons
+      //     if ( !matchesSelector( event.target, 'button' ) ) {
+      //       return;
+      //     }
+      //     let filterValue = event.target.getAttribute('data-filter');
+      //     // use matching filter function
+      //     filterValue = filterFns[ filterValue ] || filterValue;
+      //     iso.arrange({ filter: filterValue });
+      //   });
 
-        // change is-checked class on buttons
-        let buttonGroups = document.querySelectorAll('.button-group');
-        for ( let i=0, len = buttonGroups.length; i < len; i++ ) {
-          let buttonGroup = buttonGroups[i];
-          radioButtonGroup( buttonGroup );
-        }
+      //   // change is-checked class on buttons
+      //   let buttonGroups = document.querySelectorAll('.button-group');
+      //   for ( let i=0, len = buttonGroups.length; i < len; i++ ) {
+      //     let buttonGroup = buttonGroups[i];
+      //     radioButtonGroup( buttonGroup );
+      //   }
 
-        function radioButtonGroup( buttonGroup ) {
-          buttonGroup.addEventListener( 'click', function( event ) {
-            // only work with buttons
-            if ( !matchesSelector( event.target, 'button' ) ) {
-              return;
-            }
-            buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
-            event.target.classList.add('is-checked');
-          });
-        }
-      }
+      //   function radioButtonGroup( buttonGroup ) {
+      //     buttonGroup.addEventListener( 'click', function( event ) {
+      //       // only work with buttons
+      //       if ( !matchesSelector( event.target, 'button' ) ) {
+      //         return;
+      //       }
+      //       buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
+      //       event.target.classList.add('is-checked');
+      //     });
+      //   }
+      // }
     });
   }
 </script>

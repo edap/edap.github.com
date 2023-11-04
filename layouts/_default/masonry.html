@@ -3,21 +3,21 @@
 {{ end }}
 
 {{ define "main" }}
-    {{ if (isset .Params "cover") }}
-        {{ partial "figure.html" . }}
-    {{ end }}
-    <div class="container">
-    {{ .Content }}
+    <div class="masonry-container">
+        <div class="index-content">
+        <div class="grid-gutter"></div>
+        {{ .Content }}
 
-    {{ partial "taxonomy.html" . }}
+        {{ partial "taxonomy.html" . }}
 
-    {{ if .PrevInSection }}
-    <a href="{{.PrevInSection.Permalink}}">Previous Work</a>
-    {{ end }}
-    {{ if .NextInSection }}
-    <a href="{{.NextInSection.Permalink}}">Next Work</a>
-    {{ end }}
+        {{ if .PrevInSection }}
+        <a href="{{.PrevInSection.Permalink}}">Previous Work</a>
+        {{ end }}
+        {{ if .NextInSection }}
+        <a href="{{.NextInSection.Permalink}}">Next Work</a>
+        {{ end }}
 
+        </div>
     </div>
     {{ partial "footer-masonry.html" . }}
 {{ end }}
