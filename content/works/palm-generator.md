@@ -18,6 +18,8 @@ description: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text use
 
 {{< img-cell src="/img/posts/grass/grass.jpg" width="l2" >}}
 
+{{< img-srcset path="/img/works/palm-generator/palm-generator-" width="l2" ext="png" >}}
+
 Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:
 
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."

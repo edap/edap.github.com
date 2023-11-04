@@ -1,0 +1,17 @@
+<!-- https://www.keycdn.com/blog/responsive-images -->
+
+<img sizes="(min-width: 1200px) 730w,
+            (max-width: 1199px) 610w,
+            (max-width: 380px) 350w"
+     srcset="{{ .Get "path" }}large.png 730w,
+             {{ .Get "path" }}medium.png 610w,
+             {{ .Get "path" }}small.png 350w"
+     src="{{ .Get "path" }}small.png"
+    {{ if .Get "caption"}}
+        alt="{{ .Get "caption" }}"
+    {{ end }}
+    {{ if .Get "width"}}
+        class = "grid {{ .Get "width" }}"
+    {{ end }}
+    
+    >
