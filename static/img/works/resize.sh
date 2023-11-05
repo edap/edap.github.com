@@ -22,6 +22,7 @@
 find "$1" \( -iname \*.jpg -o -iname \*.jpeg -o -iname \*.png \) -print0 | while read -r -d $'\0' file; do
   # base="${file##*/}" $base is the file name with all the directory stuff stripped off
   # dir="${file%/*}    $dir is the directory with the file name stripped off
+
   echo "starting with large images (1940 x)"
   convert "$file" -resize 1940x -quality 95 -set filename:area "%t-large" $1/%[filename:area].jpg
 

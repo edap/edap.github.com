@@ -4,11 +4,20 @@ La home si apre con una lista dei tuoi works. Per ora non divisi in categorie.
 I lavori hanno categories (personal projects, commissions) e tags (unreal engine, c++, etc..)
 La pagina personale di ogni singolo progetto:
 0) home lista lavori
+0) fare le grid in formato 1/12. POI fai
+1/4
+2/4
+3/4
+1/3
+2/3
+3/3 (che e' come 4/4)
+
+0) Fare bene la pagina di Nondual
+0) capire come mai non carica small images su piccolo schermo.
 1) ha la taxonomy. Pagine per la taxonomy
-3) pagine singole about e teaching
+3) pagine singole about (e teaching ?)
 4) pagina singola palm generator
 4) pagina singola TUOT
-4) Supporta img gallery, code snippets e quant'altro
 5) supporta three.js
 
 Fare una chiusa. Quello che c'e' su deve essere perfetto.
@@ -101,24 +110,25 @@ figure {
 
 /* Masonry*/
 .masonry-container {
-    max-width: 2600px;
-    margin: 0 auto;
-  }
+max-width: 2600px;
+margin: 0 auto;
+}
   
 .grid-gutter {
-width: 1%;
+    width: 1%;
 }
 
 .index-content{
-width: 96%;
-margin: 0 2% 0 2%;
+    width: 96%;
+    margin: 0 2% 0 2%;
 }
 
 .grid,
 .grid-sizer {
-width: 32.666%;
-margin: 0 0 1% 0;
+    width: 32.666%;
+    margin: 0 0 1% 0;
 }
+@media screen and (max-width: 600px) { .grid { width: 100% !important; margin-bottom: 4%; } }
 
 .grid.l2 {
 width: 66.333%;

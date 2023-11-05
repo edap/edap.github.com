@@ -2,10 +2,9 @@
 <!-- <script src="/js/jquery-2.2.3.min.js"></script> -->
 <script src="/js/masonry.pkgd.min.js"></script>
 <script src="/js/imagesloaded.pkgd.min.js"></script>
-<script src="/js/isotope.pkgd.min.js"></script>
 
 <script>
-  const container = document.querySelector('.masonry-container');
+  const container = document.querySelector('.index-content');
 
   let toggleVideoControls = () => {
     const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -21,74 +20,34 @@
     });
   };
 
+
   if (container) {
-    let iso;
+    
+    let msnry;
     imagesLoaded(container, function () {
-      iso = new Isotope( container, {
+      // init Masonry after all images have loaded
+      msnry = new Masonry(container, {
+        columnWidth: '.grid-sizer',
+        gutter: '.grid-gutter',
         itemSelector: '.grid',
-        percentPosition: true,
-        masonry: {
-          columnWidth: '.grid-sizer',
-          gutter: '.grid-gutter',
-          transitionDuration: '0.1s'
-        }
+        transitionDuration: '0.1s'
       });
 
-      // Images. As they load, call isotype. This is redundand with imagesLoaded
+      // Images. As they load, call masonry. This is redundand with imagesLoaded
       // but sometime it needs to be called twice
       document.querySelectorAll("img").forEach(img =>
         img.addEventListener('load', (event) => {
-          iso.layout();
+          msnry.layout();
         })
       )
-      // html5 videos. As they load, call Isotype.
+
+      // html5 videos. As they load, call masonry.
       let videos = document.querySelectorAll("video");
       videos.forEach(vid =>
         vid.addEventListener('loadeddata', (event) => {
-          iso.layout();
+          msnry.layout();
         })
       )
-
-      // add video controls for small screens
-      toggleVideoControls();
-      window.addEventListener('resize', toggleVideoControls);
-
-      // filter functions
-      let filterFns = {};
-
-      // bind filter button click
-      // let filtersElem = document.querySelector('.filters-button-group');
-
-      // if (filtersElem) {
-      //   filtersElem.addEventListener( 'click', function( event ) {
-      //     // only work with buttons
-      //     if ( !matchesSelector( event.target, 'button' ) ) {
-      //       return;
-      //     }
-      //     let filterValue = event.target.getAttribute('data-filter');
-      //     // use matching filter function
-      //     filterValue = filterFns[ filterValue ] || filterValue;
-      //     iso.arrange({ filter: filterValue });
-      //   });
-
-      //   // change is-checked class on buttons
-      //   let buttonGroups = document.querySelectorAll('.button-group');
-      //   for ( let i=0, len = buttonGroups.length; i < len; i++ ) {
-      //     let buttonGroup = buttonGroups[i];
-      //     radioButtonGroup( buttonGroup );
-      //   }
-
-      //   function radioButtonGroup( buttonGroup ) {
-      //     buttonGroup.addEventListener( 'click', function( event ) {
-      //       // only work with buttons
-      //       if ( !matchesSelector( event.target, 'button' ) ) {
-      //         return;
-      //       }
-      //       buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
-      //       event.target.classList.add('is-checked');
-      //     });
-      //   }
-      // }
-    });
-  }
+    }
+  )}
 </script>
