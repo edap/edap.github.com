@@ -38,35 +38,18 @@ Use % for anything you want to scale to the available space in the window/contai
     src: url('/fonts/IosevkaNerdFontMono-Regular.ttf') format('truetype');
 }
 
-@font-face {
-font-family: 'BigBlue Terminal';
-        src: url('/fonts/BigBlueTerm437NerdFontMono-Regular.ttf') format('truetype');
-}
-
-/*
 
 @font-face {
-    font-family: 'Gohu';
-    src: url('/fonts/GohuFont14NerdFont-Regular.ttf') format('truetype');
+    font-family: 'GenerateChanges';
+    src: url('/fonts/Generate-Changes.ttf') format('truetype');
 }
 
 @font-face {
-font-family: '3270';
-    src: url('/fonts/3270NerdFontMono-Condensed.ttf') format('truetype');
+font-family: 'MediumUnique';
+        src: url('/fonts/MEDIUM-UNIQUE.ttf') format('truetype');
 }
 
-@font-face {
-    font-family: 'Cascadia Code';
-    src: url('/fonts/CaskaydiaCoveNerdFont-Light.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Terminus';
-    src: url('/fonts/TerminessNerdFontMono-Regular.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Hurmit';
-    src: url('/fonts/HurmitNerdFontMono-Regular.otf') format('opentype');
-} */
+
 
 
 /* Main structure*/
@@ -75,19 +58,21 @@ font-family: '3270';
     --box-margin: 1em;
     --text-color:rgb(255, 253, 237);
     --link-color:rgb(153, 254, 53);
+    --border-color:rgb(153, 254, 53);
+    --font-header: 'GenerateChanges'
 }
 
 body {
     font-family: 'Iosevka', sans-serif;
     background-color: rgb(28, 27, 35);
-    color: rgb(255, 253, 237);
+    color: var(--text-color);
     display: flex;
     /* min-height: 100vh; */
     flex-direction: column;
     margin: 0;
 }
 .main{
-    margin-top: 10rem;
+    margin-top: 12rem;
 }
 
 a {
@@ -98,8 +83,11 @@ a {
 a:hover{
     color: var(--link-color);
 }
-hr { border: 1px solid var(--link-color);
+hr {
+    border: 1px solid var(--link-color);
 }
+
+
 
 /* images*/
 
@@ -110,8 +98,8 @@ figure {
 
 /* Masonry*/
 .masonry-container {
-max-width: 2600px;
-margin: 0 auto;
+    max-width: 2600px;
+    margin: 0 auto;
 }
   
 .grid-gutter {
@@ -128,7 +116,6 @@ margin: 0 auto;
     width: 32.666%;
     margin: 0 0 1% 0;
 }
-@media screen and (max-width: 600px) { .grid { width: 100% !important; margin-bottom: 4%; } }
 
 .grid.l2 {
 width: 66.333%;
@@ -152,9 +139,15 @@ nav {
     padding: 0.1rem;
     /* font-size: 16pt; */
     font-size: 1.5rem;
-    font-family: 'BigBlue Terminal', sans-serif;
+    font-family: var(--font-header);
+    /* font-family: 'MediumUnique'; */
     /* background-color: beige; */
     background: transparent
+}
+
+nav > h2.davide > a {
+    font-size: 3.5rem;
+    text-decoration: none;
 }
 
 nav > ul{
@@ -163,31 +156,72 @@ nav > ul{
 }
 
 nav > ul > li {
+    padding: 0rem 1rem 0rem 2rem;
     display: inline;
 }
 
-/* Flex containers*/
+/* Flex containers nn serve piu'*/
 
-.container{
-    margin: auto;
-    max-width: 80%;
+
+/* Work page*/
+
+.work-title{
+    font-family: var(--font-header);
+    display: inline;
+}
+
+.work-text{
+    width: 96%;
+    margin: 0 2%;
     display: flex;
-    flex-wrap:wrap;
-    gap: 0.9rem;
-    padding-top: 5rem;
-    flex: 1;
-    flex-direction: row; /* put it to row later*/
+    flex-wrap: wrap;
     flex-basis: var(--card-margin);
 }
 
-.work-thumb{
-    display: flex;
-    flex-wrap: wrap;
-    margin: var(--box-margin);
-    flex: 1 1 280px;
+.work-text > div{
+  color: white;
+  background: gray;
+  margin: .1em;
+  padding: .3em;
+  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 280px;
 }
 
-/* Case specific */
+.work-text > div.linkworks{
+    margin: .1em;
+    padding: .3em;
+    flex: 1;
+    flex-grow: auto;
+    flex-shrink: auto;
+    flex-basis: auto;
+}
+.linkworks.right{
+    text-align: right;
+}
+a.next-work {
+
+}
+
+a.prev-work{
+text-align: left;
+}
+
+/* client*/
+.client {
+    padding-top: 3rem;
+    display: block;
+
+
+}
+
+.client-name, .client-year{
+    border-left:1px solid var(--border-color)
+
+}
+
+/* About page */
 .single-medium-column {
     width: 40rem;
     margin-left: auto;
@@ -195,16 +229,29 @@ nav > ul > li {
 }
 
 /* Mobile adjsustments */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .container {
         max-width: 100%;
         margin-left: 0.5rem;
         margin-right: 0.5rem;
     }
-    nav{
-        text-align: center;
-    }
     nav > ul{
         padding:1rem 0rem 1rem 0rem;
-    }    
+    }
+    nav {
+        position: relative;
+    }
+    nav > ul > li {
+        padding: 0rem 0.5rem 0rem 0rem;
+    }
+    .main {
+        margin-top: 0rem;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+    .grid {
+        width: 100% !important; margin-bottom: 4%;
+    }
 }

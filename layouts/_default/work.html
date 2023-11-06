@@ -7,25 +7,39 @@
         <div class="index-content">
             <div class="grid-gutter"></div>
             <div class="grid-sizer"></div>
-            <div class = "grid l3">
-                {{ if .Params.client}}
-                    <b>client</b>: {{ .Params.client }}
-                {{ end}}
-            </div>
-            {{ partial "credits.html" . }}
+              
             {{ .Content }}
             
             <div class = "grid l3">
-            {{ partial "taxonomy.html" . }}
+            
 
+            </div>
+        </div>     
+
+        <div class = "work-text">
+            <div class="work-client">
+                {{ partial "client.html" . }}
+            </div>
+            <div class="work-description">
+                {{ .Params.description}}
+            </div>
+            <div class="taxonomy">
+                {{ partial "taxonomy.html" . }}
+            </div>
+
+
+
+        </div>
+
+        <div class = "work-text">
             {{ if .PrevInSection }}
-            <a href="{{.PrevInSection.Permalink}}">Previous Work</a>
+            <div class="linkworks left"><a href="{{.PrevInSection.Permalink}}" class="next-work">Previous Work</a></div>
             {{ end }}
             {{ if .NextInSection }}
-            <a href="{{.NextInSection.Permalink}}">Next Work</a>
+            <div class="linkworks right"><a href="{{.NextInSection.Permalink}}" class="prev-work">Next Work</a></div>
             {{ end }}
-            </div>
         </div>
+
     </div>
     {{ partial "footer-masonry.html" . }}
 {{ end }}

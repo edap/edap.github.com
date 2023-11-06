@@ -8,8 +8,10 @@ tags:
 - Shaders
 - openFrameworks
 - C++
-client: 'studio ANF'
-client_website: 'https://studioanf.com/'
+client:
+    name: 'Studio Anf'
+    website: 'https://studioanf.com/'
+myrole: 'Developer'
 year: '2020'
 cover: "/img/works/nondual/0003-small.jpg"
 description: "In 2020 I have worked for Studio ANF to make a particle system in openFrameworks for albert Van Abbe"
