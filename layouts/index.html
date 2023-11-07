@@ -1,17 +1,27 @@
 
 {{ define "main" }}
-  <div class="container">
+<div class="masonry-container">
+  <div class="index-content">
+      <div class="grid-gutter"></div>
+      <div class="grid-sizer"></div>
   <!-- Groups content according to content section. The ".Key" in this instance will be the section's title. -->
   {{ $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
   {{ range $pages }}
-    <div class="work-thumb">
+    <!-- <div class="grid">
       <a href="{{ .Permalink }}">
         {{ partial "figure.html" . }}
       </a>
       <div class="meta">{{ .Title }} {{ .Date.Format "Mon, Jan 2, 2006" }}</div>
-    </div>
+    </div> -->
+
+
+    <a href="{{ .Permalink }}">
+      <img src="/img/works/nondual/0003-small.jpg" class="grid">
+    </a>
+
     {{ end }}
   </div>
+  {{ partial "footer-masonry.html" . }}
 {{ end }}
 
 
