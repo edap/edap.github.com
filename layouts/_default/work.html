@@ -27,14 +27,7 @@
 
         </div>
 
-        <div class = "work-text">
-            {{ if .PrevInSection }}
-            <div class="linkworks left"><a href="{{.PrevInSection.Permalink}}" class="next-work">Previous Work</a></div>
-            {{ end }}
-            {{ if .NextInSection }}
-            <div class="linkworks right"><a href="{{.NextInSection.Permalink}}" class="prev-work">Next Work</a></div>
-            {{ end }}
-        </div>
+        {{ partial "prevnext.html" . }}
 
     </div>
     {{ partial "footer-masonry.html" . }}

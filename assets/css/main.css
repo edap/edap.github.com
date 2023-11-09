@@ -64,6 +64,7 @@ font-family: 'MediumUnique';
 
 body {
     font-family: 'Iosevka', sans-serif;
+    font-size: 1.2rem;
     background-color: rgb(28, 27, 35);
     color: var(--text-color);
     display: flex;
@@ -199,13 +200,18 @@ nav > ul > li {
 }
 .linkworks.right{
     text-align: right;
+    
+
 }
 a.next-work {
-
+    font-size: 5rem;
+    font-family: var(--font-header);
 }
 
 a.prev-work{
-text-align: left;
+    text-align: left;
+    font-size: 5rem;
+    font-family: var(--font-header);
 }
 
 /* client*/
@@ -217,7 +223,7 @@ text-align: left;
 }
 
 .client-name, .client-year{
-    border-left:1px solid var(--border-color)
+    /* border-left:1px solid var(--border-color) */
 
 }
 

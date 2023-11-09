@@ -1,0 +1,8 @@
+<div class = "work-text">
+    {{ if .PrevInSection }}
+    <div class="linkworks left"><a href="{{.PrevInSection.Permalink}}" alt="Previous" class="next-work"> << </a></div>
+    {{ end }}
+    {{ if .NextInSection }}
+    <div class="linkworks right"><a href="{{.NextInSection.Permalink}}" alt="Next" class="prev-work"> >> </a></div>
+    {{ end }}
+</div>
