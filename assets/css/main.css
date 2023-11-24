@@ -13,6 +13,7 @@ La pagina personale di ogni singolo progetto:
 3/3 (che e' come 4/4)
 
 0) Fare bene la pagina di Nondual
+0) link dalla home hanno la categoria nella URL
 0) capire come mai non carica small images su piccolo schermo.
 1) ha la taxonomy. Pagine per la taxonomy
 3) pagine singole about (e teaching ?)
@@ -159,6 +160,10 @@ nav > ul{
 nav > ul > li {
     padding: 0rem 1rem 0rem 2rem;
     display: inline;
+}
+
+nav > ul > li > a{
+    text-decoration: none;
 }
 
 /* Flex containers nn serve piu'*/

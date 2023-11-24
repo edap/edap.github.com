@@ -9,7 +9,7 @@
 {{ if .Params.client}}
     <div class="client-name">
         {{ if .Params.client.name }}
-        Client: {{ .Params.client.name }}
+        Client: {{ .Params.client.name | markdownify }}
         {{ end }}
     </div>
 {{ end}}

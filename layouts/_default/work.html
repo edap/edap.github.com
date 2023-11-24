@@ -17,14 +17,11 @@
                 {{ partial "client.html" . }}
             </div>
             <div class="work-description">
-                {{ .Params.description}}
+                {{ .Params.description | markdownify }}
             </div>
             <div class="taxonomy">
                 {{ partial "taxonomy.html" . }}
             </div>
-
-
-
         </div>
 
         {{ partial "prevnext.html" . }}

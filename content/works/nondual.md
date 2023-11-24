@@ -9,12 +9,11 @@ tags:
 - openFrameworks
 - C++
 client:
-    name: 'Studio Anf'
-    website: 'https://studioanf.com/'
+    name: "[Studio ANF](http://studioanf.com)"
 myrole: 'Developer'
 year: '2020'
 cover: "/img/works/nondual/0003-small.jpg"
-description: "In 2020 I have worked for Studio ANF to make a particle system in openFrameworks for albert Van Abbe"
+description: 'In 2020 I have worked for [Studio ANF](http://studioanf.com) to make a particle system in openFrameworks for Albert Van Abbe'
 ---
 
 
@@ -32,3 +31,4 @@ description: "In 2020 I have worked for Studio ANF to make a particle system in 
 {{< img-srcset path="/img/works/nondual/0617-"  >}}
 
 {{< img-srcset path="/img/works/nondual/0698-" ext="png" >}}
+
