@@ -1,14 +1,15 @@
 {{ $taxonomy := "tags" }}
 {{ with .GetTerms $taxonomy }}
-  <p>{{ (site.GetPage $taxonomy).LinkTitle }}:</p>
-  <ul>
+
+  <ul class="alltags">
+    <li>{{ (site.GetPage $taxonomy).LinkTitle }}:</li>
     {{ range . }}
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
     {{ end }}
   </ul>
 {{ end }}
 
-{{ $taxonomy := "categories" }}
+<!-- {{ $taxonomy := "categories" }}
 {{ with .GetTerms $taxonomy }}
   <p>{{ (site.GetPage $taxonomy).LinkTitle }}:</p>
   <ul>
@@ -16,4 +17,4 @@
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
     {{ end }}
   </ul>
-{{ end }}
+{{ end }} -->

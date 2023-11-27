@@ -166,17 +166,42 @@ nav > ul > li > a{
     text-decoration: none;
 }
 
-/* Flex containers nn serve piu'*/
+/* tags styling (tag page and single work page) */
+ul.alltags{
+    padding:1rem 0rem 0rem 0rem;
+    list-style: none;
+}
+ul.alltags > li{
+    display: inline;
+    padding-right: 1rem;
+}
 
+ul.alltags > li > a.tag-selected{
+    background-color: var(--border-color);
+}
 
 /* Work page*/
-
-.work-title{
+/* .work-title{
+    display: block;
+    padding-bottom: 2rem;
+}
+*/
+div.work-title{
     font-family: var(--font-header);
-    display: inline;
+    padding-bottom: 2rem;
+    width: 100%;
+} 
+
+.work-description {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
 }
 
 .work-text{
+    border-top: 1px solid var(--border-color);
+}
+
+.work-text, .prevnext{
     width: 96%;
     margin: 0 2%;
     display: flex;
@@ -184,18 +209,8 @@ nav > ul > li > a{
     flex-basis: var(--card-margin);
 }
 
-.work-text > div{
-  color: white;
-  background: gray;
-  margin: .1em;
-  padding: .3em;
-  flex: 1;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 280px;
-}
-
-.work-text > div.linkworks{
+/* Work bottom arrows navigation */
+.prevnext > div.linkworks{
     margin: .1em;
     padding: .3em;
     flex: 1;
@@ -205,8 +220,6 @@ nav > ul > li > a{
 }
 .linkworks.right{
     text-align: right;
-    
-
 }
 a.next-work {
     font-size: 5rem;
@@ -219,18 +232,7 @@ a.prev-work{
     font-family: var(--font-header);
 }
 
-/* client*/
-.client {
-    padding-top: 3rem;
-    display: block;
 
-
-}
-
-.client-name, .client-year{
-    /* border-left:1px solid var(--border-color) */
-
-}
 
 /* About page */
 .single-medium-column {

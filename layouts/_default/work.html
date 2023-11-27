@@ -13,13 +13,14 @@
         </div>     
 
         <div class = "work-text">
+            <div class="work-title"><h2>{{.Params.title}}</h2></div>
             <div class="work-client">
                 {{ partial "client.html" . }}
             </div>
             <div class="work-description">
                 {{ .Params.description | markdownify }}
             </div>
-            <div class="taxonomy">
+            <div >
                 {{ partial "taxonomy.html" . }}
             </div>
         </div>

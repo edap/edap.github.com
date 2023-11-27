@@ -1,8 +1,37 @@
-<ul>
-    {{ range .Data.Pages }}
-    <li>
-      <a href="{{.RelPermalink}}">{{ .Title }}</a>
-    </li>
-    {{ end }}
-  </ul>
+{{ define "main" }}
+    <div class="masonry-container">
+        <div class="index-content">
+            <div class="grid-gutter"></div>
+            <div class="grid-sizer"></div>
+
+            
+            <div>
+              <div class = "grid l3">
+                <ul class="alltags">
+                  <li>Tags:</li>
+
+                  {{$cLink := .Permalink}}
+                  {{ range .Site.Taxonomies.tags }}
+                  <li>
+                      <a class="{{if (eq .Page.Permalink $cLink)}}tag-selected{{end}}"   href="{{ .Page.Permalink }}">{{ .Page.Title }} </a>
+                  </li>
+                  {{ end }}
+                </ul>
+              </div>
+
+
+                {{ range .RegularPages }}
+                <a href="{{ .Permalink }}">
+                    <img src="/img/works/nondual/0003-small.jpg" class="grid">
+                  </a>
+                {{ end }}
+            </div>
+        </div>     
+
+
+        {{ partial "prevnext.html" . }}
+
+    </div>
+    {{ partial "footer-masonry.html" . }}
+{{ end }}
   

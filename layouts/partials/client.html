@@ -1,23 +1,23 @@
-
-<h2 class="work-title">{{.Params.title}}</h2>
 {{ if .Params.year}}
-    <div class="client-year">
+    <div>
     Year: {{ .Params.year }}
     </div>
 {{end}}
 
-{{ if .Params.client}}
-    <div class="client-name">
-        {{ if .Params.client.name }}
-        Client: {{ .Params.client.name | markdownify }}
-        {{ end }}
+{{ if .Params.client_name}}
+    <div>
+        Client: {{ .Params.client_name | markdownify }}
     </div>
 {{ end}}
 
 {{ if .Params.myrole}}
-    <div class="client-myrole">
-        {{ if .Params.myrole }}
+    <div>
         My role: {{ .Params.myrole }}
-        {{ end }}
+    </div>
+{{ end}}
+
+{{ if .Params.pictures_credit}}
+    <div>
+        Photo: {{ .Params.pictures_credit }}
     </div>
 {{ end}}
