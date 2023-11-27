@@ -10,6 +10,7 @@ client:
     name: "[Studio ANF](http://studioanf.com)"
 myrole: 'Developer'
 year: '2020'
+order: 2
 cover: "/img/works/nondual/0003-small.jpg"
 description: 'In 2020 I have worked for [Studio ANF](http://studioanf.com) to make a particle system in openFrameworks for Albert Van Abbe'
 ---

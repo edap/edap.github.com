@@ -6,8 +6,10 @@
 
             <h1>{{ .Title }}</h1>
             <div>
-                {{ range .Pages }}
-                    {{ .Render "li" }}
+                {{ range .RegularPages }}
+                <a href="{{ .Permalink }}">
+                    <img src="/img/works/nondual/0003-small.jpg" class="grid">
+                  </a>
                 {{ end }}
             </div>
             

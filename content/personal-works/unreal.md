@@ -6,6 +6,9 @@ tags:
 - 3D Plants
 title: 'Unreal'
 layout: work
+year: 2023
+home_grid: 'grid l2'
+order: 1
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
 ---
 

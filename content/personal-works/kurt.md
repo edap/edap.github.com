@@ -6,6 +6,9 @@ tags:
 - 3D Plants
 title: 'kurt'
 layout: work
+home_grid: 'grid'
+year: 2022
+order: 4
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
 ---
 

@@ -4,9 +4,10 @@
   <div class="index-content">
       <div class="grid-gutter"></div>
       <div class="grid-sizer"></div>
-  <!-- Groups content according to content section. The ".Key" in this instance will be the section's title. -->
-  {{ $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-  {{ range $pages }}
+  <!-- list all the works under the default_section -->
+  {{ $default_section := "personal-works" }}
+  {{ $pages := where site.RegularPages "Section" "in" (slice $default_section) }}
+  {{ range $pages.ByParam "order" }}
     <!-- <div class="grid">
       <a href="{{ .Permalink }}">
         {{ partial "figure.html" . }}
@@ -16,7 +17,7 @@
 
 
     <a href="{{ .Permalink }}">
-      <img src="/img/works/nondual/0003-small.jpg" class="grid">
+      <img src="/img/works/nondual/0003-small.jpg" class="{{ .Params.home_grid}}">
     </a>
 
     {{ end }}
