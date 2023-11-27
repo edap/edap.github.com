@@ -1,15 +1,15 @@
 ---
-categories:
-- Personal Projects
-slug: unreal
+slug: kurt
 tags:
 - Procedural Content Creation
 - Procedural Meshes
 - 3D Plants
-title: 'Unreal'
+title: 'kurt'
 layout: work
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
 ---
+
+
 
 
 

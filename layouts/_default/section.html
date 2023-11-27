@@ -1,0 +1,23 @@
+{{ define "main" }}
+    <div class="masonry-container">
+        <div class="index-content">
+            <div class="grid-gutter"></div>
+            <div class="grid-sizer"></div>
+
+            <h1>{{ .Title }}</h1>
+            <div>
+                {{ range .Pages }}
+                    {{ .Render "li" }}
+                {{ end }}
+            </div>
+            
+
+
+        </div>     
+
+
+        {{ partial "prevnext.html" . }}
+
+    </div>
+    {{ partial "footer-masonry.html" . }}
+{{ end }}

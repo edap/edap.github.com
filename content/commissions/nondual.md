@@ -1,8 +1,6 @@
 ---
 title: 'Nondual'
 layout: work
-categories:
-- Commissions
 slug: nondual
 tags:
 - Shaders
