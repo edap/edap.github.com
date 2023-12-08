@@ -7,9 +7,7 @@
             <h1>{{ .Title }}</h1>
             <div>
                 {{ range .RegularPages }}
-                <a href="{{ .Permalink }}">
-                    <img src="/img/works/nondual/0003-small.jpg" class="grid">
-                  </a>
+                {{ partial "work-thumb.html" .}}
                 {{ end }}
             </div>
             

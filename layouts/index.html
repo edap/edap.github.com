@@ -15,11 +15,7 @@
       <div class="meta">{{ .Title }} {{ .Date.Format "Mon, Jan 2, 2006" }}</div>
     </div> -->
 
-
-    <a href="{{ .Permalink }}">
-      <img src="/img/works/nondual/0003-small.jpg" class="{{ .Params.home_grid}}">
-    </a>
-
+    {{ partial "work-thumb.html" . }}
     {{ end }}
   </div>
   {{ partial "footer-masonry.html" . }}

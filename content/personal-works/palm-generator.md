@@ -1,28 +1,37 @@
 ---
 slug: palm-generator
 tags:
+- WebGL
+- Three.js
+- React
 - Procedural Content Creation
-- Procedural Meshes
-- 3D Plants
-title: 'The Palm generator'
-layout: work
+
+title: "The Palm Generator"
+layout: palmgenerator
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
 year: 2017
-home_grid: 'grid l2'
-order: 3
-description: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:"
+thumbclass: 'grid l2'
+order: 1
+description: " The Palm Generator is a Three.js module to generate palms.
+
+
+It follows a model that describes the arrangement of leaves on a plant stem, called [phyllotaxis](https://en.wikipedia.org/wiki/Phyllotaxis).
+
+[Here](https://github.com/edap/PalmGenerator) you can find information about the usage and the license.
+
+
+[Video](https://vimeo.com/204789237) - [Poster](/img/works/palm-generator/palm-generator-poster.png)"
 ---
 
 
 
-{{< img-cell src="/img/posts/grass/grass.jpg" width="l2" >}}
 
-{{< img-srcset path="/img/works/palm-generator/palm-generator-" width="l2" ext="png" >}}
+{{< img-srcset path="/img/works/palm-generator/palm-generator-" width="l8-12" ext="png" >}}
+ 
+{{< img-srcset path="/img/works/palm-generator/palm-generator-" ext="png" >}}
 
-Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:
+{{< img-srcset path="/img/works/palm-generator/palm-generator-" width="l8-12" ext="png" >}}
 
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+ {{< img-srcset path="/img/works/palm-generator/palm-generator-" width="l8-12" ext="png" >}}
 
-The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.) that doesn't distract from the layout. A practice not without controversy, laying out pages with meaningless filler text can be very useful when the focus is meant to be on design, not content.
-
-The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum. 
+ {{< img-srcset path="/img/works/palm-generator/palm-generator-" width="l12-12" ext="png" >}}

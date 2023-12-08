@@ -13,13 +13,11 @@ La pagina personale di ogni singolo progetto:
 3/3 (che e' come 4/4)
 
 0) Fare bene la pagina di Nondual
-0) link dalla home hanno la categoria nella URL
 0) capire come mai non carica small images su piccolo schermo.
-1) ha la taxonomy. Pagine per la taxonomy
-3) pagine singole about (e teaching ?)
+
 4) pagina singola palm generator
 4) pagina singola TUOT
-5) supporta three.js
+3) pagina  teaching ?
 
 Fare una chiusa. Quello che c'e' su deve essere perfetto.
 */
@@ -36,7 +34,7 @@ Use % for anything you want to scale to the available space in the window/contai
 
 @font-face {
     font-family: 'Iosevka';
-    src: url('/fonts/IosevkaNerdFontMono-Regular.ttf') format('truetype');
+    src: url('/fonts/IosevkaSS12-Regular.ttf') format('truetype');
 }
 
 
@@ -45,28 +43,23 @@ Use % for anything you want to scale to the available space in the window/contai
     src: url('/fonts/Generate-Changes.ttf') format('truetype');
 }
 
-@font-face {
-font-family: 'MediumUnique';
-        src: url('/fonts/MEDIUM-UNIQUE.ttf') format('truetype');
-}
-
-
 
 
 /* Main structure*/
 
 :root {
     --box-margin: 1em;
-    --text-color:rgb(255, 253, 237);
-    --link-color:rgb(153, 254, 53);
-    --border-color:rgb(153, 254, 53);
-    --font-header: 'GenerateChanges'
+    --text-color:rgb(235, 232, 205);
+    --link-color:rgb(194, 254, 53);
+    --border-color:rgb(194, 254, 53);
+    --font-header: 'GenerateChanges';
+    --background-color: rgb(28, 27, 35);
 }
 
 body {
     font-family: 'Iosevka', sans-serif;
     font-size: 1.2rem;
-    background-color: rgb(28, 27, 35);
+    background-color:var(--background-color);
     color: var(--text-color);
     display: flex;
     /* min-height: 100vh; */
@@ -119,12 +112,49 @@ figure {
     margin: 0 0 1% 0;
 }
 
-.grid.l2 {
-width: 66.333%;
+
+
+.grid.l4-12 {
+    width: 32.666%;
 }
 
-.grid.l3 {
-width: 100%;
+.grid.l8-12 {
+    width: 66.333%;
+}
+
+.grid.l12-12 {
+    width: 100%;
+}
+/* Palm Generator */
+
+#root {
+    text-align: center;
+    width: 80%;
+    height: 800px;
+    margin: auto;
+}
+
+.levaGUi{
+    width: 20rem;
+    position: absolute;
+    top:10rem;
+    right: 2rem;
+    z-index: 100;
+}
+  
+.canvasPalm{
+    width: 100%;
+    height: 100%;
+}
+
+.index-content.palm-generator {
+    font-family: 'IM Fell English', serif;
+    background-color: white;
+    color: var(--background-color);
+    text-align: center;
+    font-size: 0.8rem;
+    border: 8px double var(--background-color);
+    margin-bottom: 3rem;
 }
 
 /* Navigation */
@@ -133,17 +163,12 @@ nav {
     text-align: center;
     top: 0;
     width: 100%;
-    /* max-width: 450px; */
     margin-left: auto;
     margin-right: auto;
     position: fixed;
     z-index: 4;
-    padding: 0.1rem;
-    /* font-size: 16pt; */
     font-size: 1.5rem;
     font-family: var(--font-header);
-    /* font-family: 'MediumUnique'; */
-    /* background-color: beige; */
     background: transparent
 }
 
@@ -170,14 +195,17 @@ nav > ul > li > a{
 ul.alltags{
     padding:1rem 0rem 0rem 0rem;
     list-style: none;
+    text-align: center;
 }
 ul.alltags > li{
+
     display: inline;
     padding-right: 1rem;
 }
 
 ul.alltags > li > a.tag-selected{
     background-color: var(--border-color);
+    color:var(--background-color);
 }
 
 /* Work page*/
@@ -195,6 +223,7 @@ div.work-title{
 .work-description {
     padding-top: 2rem;
     padding-bottom: 1rem;
+    width: 100%;
 }
 
 .work-text{
@@ -207,6 +236,13 @@ div.work-title{
     display: flex;
     flex-wrap: wrap;
     flex-basis: var(--card-margin);
+}
+
+/*T.U.O.T*/
+.credits-tuot{
+    padding-top: 4rem;
+    font-style: italic;
+    font-size: smaller;
 }
 
 /* Work bottom arrows navigation */
@@ -234,16 +270,17 @@ a.prev-work{
 
 
 
-/* About page */
+/* About and Teaching page */
 .single-medium-column {
     width: 40rem;
     margin-left: auto;
-    margin-right: auto;  
+    margin-right: auto;
+    padding-top: 1rem;
 }
 
 /* Mobile adjsustments */
 @media (max-width: 600px) {
-    .container {
+    .container, .single-medium-column {
         max-width: 100%;
         margin-left: 0.5rem;
         margin-right: 0.5rem;
@@ -260,7 +297,13 @@ a.prev-work{
     .main {
         margin-top: 0rem;
     }
-
+    /* Palm Generator, disable gui and maximize canvas size */
+    .levaGUi {
+        display: none;
+    }
+    .canvasPalm {
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 600px) {

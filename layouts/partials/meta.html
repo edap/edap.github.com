@@ -2,4 +2,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" /> 
 <title>{{ if .IsHome }}Home - {{ else }}{{ if .Page.Title }}{{ .Page.Title }} - {{ end }}{{ end }}{{ .Site.Title }}</title>
 {{ $style := resources.Get "css/main.css" | resources.Minify }}
+
+{{ if (eq .Page.Title "The Palm Generator")}}
+    <link href="https://fonts.googleapis.com/css?family=IM+Fell+English" rel="stylesheet">
+{{ end }}
 <link rel="stylesheet" href="{{ $style.Permalink }}">

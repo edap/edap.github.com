@@ -22,7 +22,7 @@
 
                 {{ range .RegularPages }}
                 <a href="{{ .Permalink }}">
-                    <img src="/img/works/nondual/0003-small.jpg" class="grid">
+                    <img src="{{ .Params.cover }}" class="grid">
                   </a>
                 {{ end }}
             </div>

@@ -1,0 +1,6 @@
+<a href="{{ .Permalink }}">
+    {{ if (and (isset .Params "cover") (isset .Params "thumbclass"))}}
+        {{ $thumbclass := "grid" }}
+        <img src="{{ .Params.cover }}" class="{{ .Params.thumbclass }}">
+    {{ end }}
+</a>

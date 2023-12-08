@@ -11,6 +11,7 @@ pictures_credit: "Courtesy of Albert Van Abbe"
 myrole: 'Developer'
 year: '2020'
 order: 2
+thumbclass: 'grid'
 cover: "/img/works/nondual/0003-small.jpg"
 description: 'In 2020 I have worked for [Studio ANF](http://studioanf.com) to port their project [VOID](https://studioanf.com/supervoid-one-generative-software-art/) from Processing to openFrameworks, improving the overall performance. The GPU particle system has been adopted by the artist [Albert Van Abbe](https://www.albertvanabbe.nl/) (in the pictures) for his live audio-visual performance "NONDUAL".'
 ---
@@ -19,11 +20,11 @@ description: 'In 2020 I have worked for [Studio ANF](http://studioanf.com) to po
 
 
 
-{{< img-srcset path="/img/works/nondual/0003-" width="l2" ext="png" >}}
+{{< img-srcset path="/img/works/nondual/0003-" width="l8-12" ext="png" >}}
 
 {{< img-srcset path="/img/works/nondual/0004-" ext="png" >}}
 
-{{< img-srcset path="/img/works/nondual/0007-" width="l2" ext="png" >}}
+{{< img-srcset path="/img/works/nondual/0007-" width="l8-12" ext="png" >}}
 
 {{< img-srcset path="/img/works/nondual/0019-" ext="png" >}}
 

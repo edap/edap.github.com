@@ -1,0 +1,236 @@
+{
+  "preset": "tredici",
+  "remembered": {
+    "Default": {
+      "0": {
+        "spread": 0.2,
+        "angle": 137.5,
+        "num": 500,
+        "z_decrease": 0.05,
+        "foliage_start_at": 20,
+        "trunk_regular": true,
+        "buffers": false,
+        "angle_y": 29,
+        "starting_angle_y": 50,
+        "length": 50,
+        "length_stem": 4,
+        "width_stem": 0.5,
+        "leaf_width": 0.5,
+        "leaf_up": 1.5,
+        "density": 30,
+        "curvature": 0.03,
+        "curvature_border": 0.005,
+        "leaf_inclination": 0.2,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "sette": {
+      "0": {
+        "spread": 0.1,
+        "angle": 137.5,
+        "num": 406,
+        "z_decrease": 0.12,
+        "foliage_start_at": 86.19748205181567,
+        "trunk_regular": false,
+        "buffers": false,
+        "angle_y": 36.17438258159361,
+        "starting_angle_y": 50,
+        "length": 50,
+        "length_stem": 20,
+        "width_stem": 0.2,
+        "leaf_width": 0.8,
+        "leaf_up": 1.5,
+        "density": 11,
+        "curvature": 0.04,
+        "curvature_border": 0.005,
+        "leaf_inclination": 0.9,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "otto": {
+      "0": {
+        "spread": 0.1,
+        "angle": 137.5,
+        "num": 196,
+        "z_decrease": 0.25,
+        "foliage_start_at": 14.274685256476959,
+        "trunk_regular": false,
+        "buffers": false,
+        "angle_y": 49.40891279437177,
+        "starting_angle_y": 50,
+        "length": 50,
+        "length_stem": 26,
+        "width_stem": 0.5,
+        "leaf_width": 1,
+        "leaf_up": 0.1,
+        "density": 17,
+        "curvature": 0.05,
+        "curvature_border": 0.01,
+        "leaf_inclination": 1,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "nove": {
+      "0": {
+        "spread": 0.30000000000000004,
+        "angle": 135.71,
+        "num": 307,
+        "z_decrease": 0.25,
+        "foliage_start_at": 48.52363611140016,
+        "trunk_regular": false,
+        "buffers": false,
+        "angle_y": 52.938120851112615,
+        "starting_angle_y": 50,
+        "length": 50,
+        "length_stem": 26,
+        "width_stem": 0.5,
+        "leaf_width": 0.30000000000000004,
+        "leaf_up": 0.1,
+        "density": 11,
+        "curvature": 0.01,
+        "curvature_border": 0.01,
+        "leaf_inclination": 1,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "dieci": {
+      "0": {
+        "spread": 0.30000000000000004,
+        "angle": 136.62,
+        "num": 579,
+        "z_decrease": 0.2,
+        "foliage_start_at": 38.248950854923194,
+        "trunk_regular": false,
+        "buffers": false,
+        "angle_y": 6.176114099296472,
+        "starting_angle_y": 53.30863255319454,
+        "length": 90,
+        "length_stem": 2,
+        "width_stem": 0.5,
+        "leaf_width": 0.30000000000000004,
+        "leaf_up": 0.1,
+        "density": 11,
+        "curvature": 0.03,
+        "curvature_border": 0.004,
+        "leaf_inclination": 0.7000000000000001,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "undici": {
+      "0": {
+        "spread": 0.4,
+        "angle": 136.62,
+        "num": 1135,
+        "z_decrease": 0.25,
+        "foliage_start_at": 96.47216730829263,
+        "trunk_regular": false,
+        "buffers": false,
+        "angle_y": 47.644308766001345,
+        "starting_angle_y": 65.99172400710694,
+        "length": 90,
+        "length_stem": 7,
+        "width_stem": 0.8,
+        "leaf_width": 0.5,
+        "leaf_up": 6,
+        "density": 30,
+        "curvature": 0.02,
+        "curvature_border": 0.001,
+        "leaf_inclination": 0.9,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "dodici": {
+      "0": {
+        "spread": 0.7000000000000001,
+        "angle": 135.97,
+        "num": 962,
+        "z_decrease": 0.25,
+        "foliage_start_at": 130.72111816321583,
+        "trunk_regular": false,
+        "buffers": false,
+        "angle_y": 50.29121480855697,
+        "starting_angle_y": 59.374458900717855,
+        "length": 90,
+        "length_stem": 40,
+        "width_stem": 0.8,
+        "leaf_width": 0.5,
+        "leaf_up": 0.4,
+        "density": 7,
+        "curvature": 0.03,
+        "curvature_border": 0.003,
+        "leaf_inclination": 1,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    },
+    "tredici": {
+      "0": {
+        "spread": 0.5,
+        "angle": 137.66,
+        "num": 628,
+        "z_decrease": 0.25,
+        "foliage_start_at": 65.64811153886176,
+        "trunk_regular": true,
+        "buffers": false,
+        "angle_y": 75.87797321992808,
+        "starting_angle_y": 51.65431627659727,
+        "length": 90,
+        "length_stem": 2,
+        "width_stem": 0.2,
+        "leaf_width": 1,
+        "leaf_up": 6,
+        "density": 16,
+        "curvature": 0.01,
+        "curvature_border": 0.002,
+        "leaf_inclination": 0.8,
+        "color": 16769693,
+        "emissive": 5163084,
+        "backgroundColor": "#ffffff",
+        "ambientLight": "#3ccf00"
+      }
+    }
+  },
+  "closed": false,
+  "folders": {
+    "foliage": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "leaf": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "Material": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    },
+    "Scene": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    }
+  }
+}

@@ -19,6 +19,9 @@
             </div>
             <div class="work-description">
                 {{ .Params.description | markdownify }}
+                {{ if (isset .Params "creditstuot")}}
+                {{ partial "credits-tuot.html"}}
+                {{ end}}
             </div>
             <div >
                 {{ partial "taxonomy.html" . }}
