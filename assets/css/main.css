@@ -99,6 +99,7 @@ figure {
   
 .grid-gutter {
     width: 1%;
+    /* width: 10px; */
 }
 
 .index-content{
@@ -108,14 +109,27 @@ figure {
 
 .grid,
 .grid-sizer {
-    width: 32.666%;
-    margin: 0 0 1% 0;
+    /* width: 32.666%; */
+    /* width: 8.333%; */
+    /* width: 8.333%; */
+    width: 7.422%;
+    margin: 0 0 10px 0;
 }
 
+.grid.l2-12 {
+    width: 16.000%;
+}
 
+.grid.l3-12 {
+    width: 24.666%;
+}
 
 .grid.l4-12 {
     width: 32.666%;
+}
+
+.grid.l6-12 {
+    width: 46.333%;
 }
 
 .grid.l8-12 {
@@ -268,8 +282,6 @@ a.prev-work{
     font-family: var(--font-header);
 }
 
-
-
 /* About and Teaching page */
 .single-medium-column {
     width: 40rem;
@@ -279,7 +291,7 @@ a.prev-work{
 }
 
 /* Mobile adjsustments */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
     .container, .single-medium-column {
         max-width: 100%;
         margin-left: 0.5rem;
@@ -306,7 +318,7 @@ a.prev-work{
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .grid {
         width: 100% !important; margin-bottom: 4%;
     }

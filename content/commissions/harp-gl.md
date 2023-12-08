@@ -24,13 +24,56 @@ Harp.gl has been re-branded as [Here Maps Javascript API](https://developer.here
 
 
 
-{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l12-12">}}
+<!-- {{< img-srcset path="/img/works/harpgl/HarpGL-" width="l12-12">}}
 
 {{< img-srcset path="/img/works/harpgl/HarpGL3-" width="l8-12" >}}
 
-{{< img-srcset path="/img/works/harpgl/HarpGL4-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL4-" width="l6-12">}}
 
-{{< img-srcset path="/img/works/harpgl/HarpGL5-"  >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL5-" width="l6-12" >}}
 
-{{< img-srcset path="/img/works/harpgl/HarpGL6-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL6-" >}} -->
+
+{{< img-srcset path="/img/works/harpgl/HarpGL4-" width="l6-12">}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL5-" width="l6-12" >}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL4-" width="l8-12">}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL5-" width="l4-12" >}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL5-" width="l4-12" >}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL5-" width="l4-12" >}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL5-" width="l4-12" >}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL4-" width="l12-12">}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" >}}
+
+
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+
+
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l3-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l3-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l3-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l3-12">}}
 
