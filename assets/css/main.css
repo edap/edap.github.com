@@ -1,25 +1,9 @@
 /*
-TODO: Layout colonna centrale e due voci nel menu, about e teaching. Sotto vengono listati i lavori
-La home si apre con una lista dei tuoi works. Per ora non divisi in categorie.
-I lavori hanno categories (personal projects, commissions) e tags (unreal engine, c++, etc..)
-La pagina personale di ogni singolo progetto:
-0) home lista lavori
-0) fare le grid in formato 1/12. POI fai
-1/4
-2/4
-3/4
-1/3
-2/3
-3/3 (che e' come 4/4)
+TODO:
 
-0) Fare bene la pagina di Nondual
+1) Header che sparisce quando scrolli verso il basso
 0) capire come mai non carica small images su piccolo schermo.
 
-4) pagina singola palm generator
-4) pagina singola TUOT
-3) pagina  teaching ?
-
-Fare una chiusa. Quello che c'e' su deve essere perfetto.
 */
 
 
@@ -37,13 +21,10 @@ Use % for anything you want to scale to the available space in the window/contai
     src: url('/fonts/IosevkaSS12-Regular.ttf') format('truetype');
 }
 
-
 @font-face {
     font-family: 'GenerateChanges';
     src: url('/fonts/Generate-Changes.ttf') format('truetype');
 }
-
-
 
 /* Main structure*/
 
@@ -98,8 +79,8 @@ figure {
 }
   
 .grid-gutter {
-    width: 1%;
-    /* width: 10px; */
+    width: 0.5%;
+
 }
 
 .index-content{
@@ -109,35 +90,32 @@ figure {
 
 .grid,
 .grid-sizer {
-    /* width: 32.666%; */
-    /* width: 8.333%; */
-    /* width: 8.333%; */
-    width: 7.422%;
+    width: 7.8%;
     margin: 0 0 10px 0;
 }
 
 .grid.l2-12 {
-    width: 16.000%;
+    width: 16.222%;
 }
 
 .grid.l3-12 {
-    width: 24.666%;
+    width: 24.444%;
 }
 
 .grid.l4-12 {
-    width: 32.666%;
+    width: 32.777%;
 }
 
 .grid.l6-12 {
-    width: 46.333%;
+    width: 49.333%;
 }
 
 .grid.l8-12 {
-    width: 66.333%;
+    width: 66.0%;
 }
 
 .grid.l12-12 {
-    width: 100%;
+    width: 99.222%;
 }
 /* Palm Generator */
 
@@ -192,7 +170,7 @@ nav > h2.davide > a {
 }
 
 nav > ul{
-    padding:1rem 3rem 1rem 0rem;
+    padding:1rem 0rem 1rem 0rem;
     list-style: none;
 }
 

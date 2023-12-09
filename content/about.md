@@ -14,14 +14,14 @@ If you're interested in hiring me for freelance websites, games, VR experiences,
 
 Past collaborations include software companies, design studios, music label and artist such as:
 
-- HERE Technologies
-- Tomás Saraceno Studio
-- Neeeu
-- FIELD
-- Studio ANF
-- Heiner Franzen
-- Mechatronica
-- Heinrich Dressel
-- Studio NAND
+- [HERE Technologies](https://www.here.com/)
+- [Tomás Saraceno Studio](https://studiotomassaraceno.org/)
+- [Neeeu](https://neu.io/)
+- [FIELD](https://field.io/)
+- [Studio ANF](https://studioanf.com/)
+- [Heiner Franzen](http://www.heinerfranzen.de/)
+- [Mechatronica](https://mechatronica.bandcamp.com/)
+- [Heinrich Dressel](https://www.heinrichdressel.com/)
+- [Studio NAND](https://www.nand.io/)
 
 ---
