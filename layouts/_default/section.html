@@ -5,18 +5,14 @@
             <div class="grid-sizer"></div>
 
             <div>
-                {{ range .RegularPages }}
+                {{ range .RegularPages.ByParam "order"}}
                 {{ partial "work-thumb.html" .}}
                 {{ end }}
             </div>
-            
-
 
         </div>     
 
-
         {{ partial "prevnext.html" . }}
-
     </div>
     {{ partial "footer-masonry.html" . }}
 {{ end }}

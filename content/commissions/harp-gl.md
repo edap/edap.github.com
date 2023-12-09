@@ -11,7 +11,7 @@ client_name: "[Here Technologies](http://here.com)"
 pictures_credit: "Courtesy of Here Technologies"
 myrole: 'Graphics Programmer'
 year: '2018'
-order: 3
+order: 1
 thumbclass: 'grid l4-12'
 cover: "/img/works/harpgl/HarpGL-small.jpg"
 description: 'In 2018 I have worked for almost one year in a small team of circa ten people to develop Harp.gl. It is a 3D map technology that runs in the browser, developed using Three.js and Typescript. During my time there, I have worked on the mouse-picking functionality using raycasting, on the rendering of the sky, on how to render the lines that delimit the borders of a country and on preparing the examples that show how to integrate React with Harp.gl.
