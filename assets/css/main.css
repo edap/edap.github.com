@@ -91,7 +91,7 @@ figure {
 .grid,
 .grid-sizer {
     width: 7.8%;
-    margin: 0 0 10px 0;
+    margin: 0 0 0.4% 0;
 }
 
 .grid.l2-12 {

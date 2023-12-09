@@ -20,7 +20,8 @@ description: 'In 2020 I have worked for [Studio ANF](http://studioanf.com) to po
 
 
 
-{{< img-srcset path="/img/works/nondual/0003-" width="l8-12" >}}
+{{< img-srcset path="/img/works/nondual/0003-" width="l8-12">}}
+
 {{< img-srcset path="/img/works/nondual/0617-" width="l4-12" >}}
 
 {{< img-srcset path="/img/works/nondual/0698-" width="l8-12">}}

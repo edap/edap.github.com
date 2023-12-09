@@ -13,7 +13,7 @@ year: '2023'
 order: 4
 thumbclass: 'grid l4-12'
 cover: '/img/works/neu-photobooth/cover.jpg'
-description: 'I worked with Neeeu to develop the software that runs a photo booth stand. My goal was to create a generative solution for creating visual collages composed of geometric shapes and faces features. I have created a custom graphics pipeline that uses *Signed Distance Function* to add shadows, textures and colors gradients to the standard 2D drawing functions in openFrameworks.'
+description: 'I worked with Neeeu to develop the software that runs a photo booth stand. I created a generative solution for composing visual collages of geometric shapes and faces features. I implemented a custom graphics pipeline that uses *Signed Distance Function* to add shadows, textures and colors gradients to the standard 2D drawing functions in openFrameworks.'
 
 ---
 

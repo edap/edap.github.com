@@ -1,5 +1,9 @@
 <!-- https://www.keycdn.com/blog/responsive-images -->
 
+{{ if .Get "link"}}
+    <a href = "{{ .Get "link" }}" >
+{{ end }}
+
 
 <img sizes="(min-width: 1200px) 730w,
             (max-width: 1199px) 610w,
@@ -18,3 +22,7 @@
     {{ end }}
 
     >
+
+    {{ if .Get "link" }}
+    </a>
+    {{ end }}
