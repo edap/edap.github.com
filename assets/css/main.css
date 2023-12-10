@@ -60,8 +60,6 @@ hr {
     border: 1px solid var(--link-color);
 }
 
-
-
 /* images*/
 
 figure {
@@ -136,6 +134,7 @@ figure {
     height: 100%;
 }
 
+/* Palm Generator poster */
 .index-content.palm-generator {
     font-family: 'IM Fell English', serif;
     background-color: white;
@@ -144,6 +143,10 @@ figure {
     font-size: 0.8rem;
     border: 8px double var(--background-color);
     margin-bottom: 3rem;
+}
+
+.palm-generator > .grid > img {
+    width: 100%;
 }
 
 /* Navigation */
@@ -262,7 +265,7 @@ a.prev-work{
     padding-top: 0rem;
 }
 
-/* Mobile adjsustments */
+/* Tablet adjsustments */
 @media (max-width: 900px) {
     nav > ul{
         padding:0.2rem 0rem 0.2rem 0rem;
@@ -275,10 +278,8 @@ a.prev-work{
 
 /* Mobile adjsustments */
 @media (max-width: 700px) {
-    .container, .single-medium-column {
+    .masonry-container, .single-medium-column {
         max-width: 100%;
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
     }
     nav > ul{
         padding:0.0rem;
