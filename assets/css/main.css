@@ -263,7 +263,6 @@ a.prev-work{
     width: 40rem;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 0rem;
 }
 
 /* Tablet adjsustments */
@@ -279,8 +278,12 @@ a.prev-work{
 
 /* Mobile adjsustments */
 @media (max-width: 700px) {
-    .masonry-container, .single-medium-column {
+    .masonry-container{
         max-width: 100%;
+    }
+    .single-medium-column {
+        max-width: 96%;
+        margin: 0% 2% 0% 2%;
     }
     .grid {
         width: 100% !important; margin-bottom: 4%;
@@ -303,11 +306,7 @@ a.prev-work{
     .canvasPalm {
         width: 100%;
     }
-
-    /* .index-content{
-        width: 96%;
-        margin: 0 2% 0 2%;
-    } */
+    /* Palm Poster container */
     .palm-generator {
         width: 93%;
     }
