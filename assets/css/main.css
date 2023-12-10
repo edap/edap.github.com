@@ -299,12 +299,9 @@ a.prev-work{
     .main {
         margin-top: 0rem;
     }
-    /* Palm Generator, disable gui and maximize canvas size */
-    .levaGUi {
+    /* Palm Generator Editor, it is disable on mobiles */
+    #root {
         display: none;
-    }
-    .canvasPalm {
-        width: 100%;
     }
     /* Palm Poster container */
     .palm-generator {
