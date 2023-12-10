@@ -10,7 +10,7 @@
     const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     document.querySelectorAll("video").forEach(vid => {
       // enable controls on small screens
-      if (width < 700) {
+      if (width < 600) {
         vid.setAttribute("controls", "controls")
       } else {
         if (vid.hasAttribute("controls")) {
