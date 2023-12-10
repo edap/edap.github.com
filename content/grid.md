@@ -1,5 +1,5 @@
 ---
-title: 'Harp.gl'
+title: 'Grid Stress Test'
 layout: work
 slug: grid
 tags:
