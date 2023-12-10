@@ -143,6 +143,7 @@ figure {
     font-size: 0.8rem;
     border: 8px double var(--background-color);
     margin-bottom: 3rem;
+
 }
 
 .palm-generator > .grid > img {
@@ -281,6 +282,9 @@ a.prev-work{
     .masonry-container, .single-medium-column {
         max-width: 100%;
     }
+    .grid {
+        width: 100% !important; margin-bottom: 4%;
+    }
     nav > ul{
         padding:0.0rem;
     }
@@ -299,10 +303,13 @@ a.prev-work{
     .canvasPalm {
         width: 100%;
     }
-}
 
-@media screen and (max-width: 600px) {
-    .grid {
-        width: 100% !important; margin-bottom: 4%;
+    /* .index-content{
+        width: 96%;
+        margin: 0 2% 0 2%;
+    } */
+    .palm-generator {
+        width: 93%;
     }
 }
+
