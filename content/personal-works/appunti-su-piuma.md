@@ -1,5 +1,6 @@
 ---
 slug: appunti-su-piuma
+aliases: ['/projects/palm-generator']
 tags:
 - WebGL
 - Three.js

@@ -1,5 +1,6 @@
 ---
 slug: tuot
+aliases: ['/projects/tuot']
 tags:
 - Raytracer
 - Rust

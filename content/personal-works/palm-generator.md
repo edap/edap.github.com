@@ -1,5 +1,6 @@
 ---
 slug: palm-generator
+aliases: ['/projects/palm-generator']
 tags:
 - WebGL
 - Three.js
