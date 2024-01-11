@@ -4,7 +4,7 @@ layout: single-medium-column
 ---
 
 
-I am lecturing at the Universität Der Kunst, in the New Media class department, and I give workshops about computer graphics, creative coding, computer vision, fractals and algorithmic botany.
+I am lecturing at the Universität Der Künste, in the New Media class department, and I give workshops about computer graphics, creative coding, computer vision, fractals and algorithmic botany.
 
 ## University Courses
 
