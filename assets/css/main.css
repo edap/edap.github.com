@@ -265,6 +265,13 @@ a.prev-work{
     margin-right: auto;
 }
 
+/* Blog Post*/
+.single-large-column {
+    width: 75rem;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
 /* Tablet adjsustments */
 @media (max-width: 900px) {
     nav > ul{

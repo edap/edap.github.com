@@ -7,3 +7,27 @@
     <link href="https://fonts.googleapis.com/css?family=IM+Fell+English" rel="stylesheet">
 {{ end }}
 <link rel="stylesheet" href="{{ $style.Permalink }}">
+
+{{- with .Params.jsxgraphcore -}}
+ <!-- <script  type="text/javascript" src="/js/0.99.5-jsxgraphcore.js"></script> -->
+
+ <script type="text/javascript" charset="UTF-8"
+ src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/1.4.6/jsxgraphcore.js"></script>
+<link rel="stylesheet"
+ type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/1.4.6/jsxgraph.css" />
+ <!-- <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    tex2jax: {
+      processEscapes: true,
+    }
+  });
+  </script>
+  <script type="text/javascript" src="/js/MathJax-2.7.1.js">
+  </script> -->
+
+{{- end -}}

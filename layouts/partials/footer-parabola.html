@@ -1,0 +1,38 @@
+{{- with .Params.jsxgraphcore -}}
+
+<script  type="text/javascript">
+    JXG.Options.text.useMathJax = true;
+    var brd, k, brd2, k2, length2, x, x_0;
+    
+    brd = JXG.JSXGraph.initBoard('jxgbox', {boundingbox:[-5,20,5,-20], axis:true, showNavigation:true, showCopyright:false});
+    
+    console.log(brd);
+    
+    k = brd.create('slider',[[4,15],[4,-15],[-15,1,5]],{name:'a', snapWidth:1});
+    brd.create('functiongraph', [function(t) {
+        return ( JXG.Math.pow(t,2)*k.Value());
+    }],{strokeColor:'#ff0000'}
+    );
+    brd.create('text',[-4,15,
+      function() { 
+        return 'f(x) = ' + k.Value() + 'x^2';
+      }], {fontSize:24});
+    
+    brd2 = JXG.JSXGraph.initBoard('jxgbox-2', {boundingbox:[-1,10,40,-1], axis:true,showCopyright:false});
+    k2 = brd2.create('slider',[[35,9],[35,5],[-1.0,-0.03,-0.01]],{name:'a', snapWidth:0.001});
+    y0 = brd2.create('slider',[[38,9],[38,5],[3,7.0,8.0]],{name:'y_0', snapWidth:0.01});
+    x_0 = 15.0;
+    x = 30.0;
+    brd2.create('functiongraph', [function(t) {
+        return(k2.Value() * JXG.Math.pow((t - x_0),2) + y0.Value());
+    }],{strokeColor:'#ff0000'}
+    );
+    
+    brd2.create('text',[5,9,
+      function() { 
+        return 'f(x) = ' + k2.Value() + '(x - x0)^2 + ' + y0.Value();
+      }], {fontSize:24});
+    
+     
+    </script>
+    {{- end -}}

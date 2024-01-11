@@ -1,0 +1,15 @@
+{{ define "window_title"}}
+    {{ .Params.window_title }}
+{{ end }}
+
+{{ define "main" }}
+    <div class="container">
+        <div class="single-large-column">
+            {{ .Content }}
+        </div>
+    </div>
+    {{ partial "footer-parabola.html" . }}
+{{ end }}
+
+
+
