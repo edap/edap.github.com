@@ -21,9 +21,11 @@
 
 
                 {{ range .RegularPages }}
-                <a href="{{ .Permalink }}">
-                    <img src="{{ .Params.cover }}" class="grid l2-12">
-                  </a>
+                  {{ if .Params.cover }}
+                  <a href="{{ .Permalink }}">
+                      <img src="{{ .Params.cover }}" class="grid l2-12">
+                    </a>
+                  {{ end }}
                 {{ end }}
             </div>
         </div>     
