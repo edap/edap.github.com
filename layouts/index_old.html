@@ -1,0 +1,25 @@
+
+{{ define "main" }}
+<div class="masonry-container">
+  <div class="index-content">
+      <div class="grid-gutter"></div>
+      <div class="grid-sizer"></div>
+  <!-- list all the works under the default_section -->
+  {{ $default_section := "personal-works" }}
+  {{ $pages := where site.RegularPages "Section" "in" (slice $default_section) }}
+  {{ range $pages.ByParam "order" }}
+    <!-- <div class="grid">
+      <a href="{{ .Permalink }}">
+        {{ partial "figure.html" . }}
+      </a>
+      <div class="meta">{{ .Title }} {{ .Date.Format "Mon, Jan 2, 2006" }}</div>
+    </div> -->
+
+    {{ partial "work-thumb.html" . }}
+    {{ end }}
+  </div>
+  {{ partial "footer-masonry.html" . }}
+{{ end }}
+
+
+

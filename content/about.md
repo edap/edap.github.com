@@ -10,18 +10,19 @@ layout: single-medium-column
 I am a software developer based in Berlin.
 I am lecturing part-time at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
-If you're interested in hiring me for freelance websites, games, VR experiences, software, or artworks please [get in touch!](mailto:info@davideprati.com)
+If you're interested in hiring me for freelance work, [get in touch!](mailto:info@davideprati.com)
 
-Past collaborations include software companies, design studios, music label and artist such as:
+
+Past collaborations include software companies, design studios and public institutions such as:
 
 - [HERE Technologies](https://www.here.com/)
 - [Tomás Saraceno Studio](https://studiotomassaraceno.org/)
 - [Neeeu](https://neu.io/)
 - [FIELD](https://field.io/)
 - [Studio ANF](https://studioanf.com/)
-- [Heiner Franzen](http://www.heinerfranzen.de/)
-- [Mechatronica](https://mechatronica.bandcamp.com/)
-- [Heinrich Dressel](https://www.heinrichdressel.com/)
+- [Cognita.ch](https://cognita.ch/)
+- [Channelweb.it](https://www.channelweb.it/)
 - [Studio NAND](https://www.nand.io/)
+- [Humboldt University Berlin](https://www.hu-berlin.de/en)
 
 ---
