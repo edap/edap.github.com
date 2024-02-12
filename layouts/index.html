@@ -1,25 +1,30 @@
 
+
 {{ define "main" }}
-<div class="masonry-container">
-  <div class="index-content">
-      <div class="grid-gutter"></div>
-      <div class="grid-sizer"></div>
-  <!-- list all the works under the default_section -->
-  {{ $default_section := "personal-works" }}
-  {{ $pages := where site.RegularPages "Section" "in" (slice $default_section) }}
-  {{ range $pages.ByParam "order" }}
-    <!-- <div class="grid">
-      <a href="{{ .Permalink }}">
-        {{ partial "figure.html" . }}
-      </a>
-      <div class="meta">{{ .Title }} {{ .Date.Format "Mon, Jan 2, 2006" }}</div>
-    </div> -->
 
-    {{ partial "work-thumb.html" . }}
-    {{ end }}
-  </div>
-  {{ partial "footer-masonry.html" . }}
+
+<div class="single-medium-column">
+    <!-- raw HTML omitted -->
+<p>I am a software developer based in Berlin.
+I am lecturing part-time at Universität der Künste in the <a href="https://newmedia.udk-berlin.de/about">New Media</a> department and I have co-founded in 2006 the <a href="http://iocose.org">IOCOSE</a> art collective.</p>
+<p>If you’re interested in hiring me for freelance work, <a href="mailto:info@davideprati.com">get in touch!</a></p>
+<p>Past collaborations include software companies, design studios and public institutions such as:</p>
+<ul>
+<li><a href="https://www.here.com/">HERE Technologies</a></li>
+<li><a href="https://studiotomassaraceno.org/">Tomás Saraceno Studio</a></li>
+<li><a href="https://neu.io/">Neeeu</a></li>
+<li><a href="https://field.io/">FIELD</a></li>
+<li><a href="https://studioanf.com/">Studio ANF</a></li>
+<li><a href="https://cognita.ch/">Cognita.ch</a></li>
+<li><a href="https://www.channelweb.it/">Channelweb.it</a></li>
+<li><a href="https://www.nand.io/">Studio NAND</a></li>
+<li><a href="https://www.hu-berlin.de/en">Humboldt University Berlin</a></li>
+</ul>
+<hr>
+
+</div>
+
+
+
 {{ end }}
-
-
 
