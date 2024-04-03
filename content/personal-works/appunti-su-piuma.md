@@ -25,4 +25,4 @@ description: "Quill pens has been used for centuries as an instrument to write. 
 
  {{< img-srcset path="/img/works/appunti-su-piuma/rombi4-" width="l4-12" link="/pattern1-appunti-su-piuma/4.html" >}}
 
- {{< img-srcset path="/img/works/appunti-su-piuma/5-" width="l4-12" link="/pattern1-appunti-su-piuma/5.html">}}
+ {{< img-srcset path="/img/works/appunti-su-piuma/rombi5-" width="l4-12" link="/pattern1-appunti-su-piuma/5.html">}}
