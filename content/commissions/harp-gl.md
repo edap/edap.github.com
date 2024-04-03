@@ -7,6 +7,8 @@ tags:
 - WebGL
 - React
 - Three.js
+- Javascript
+- Typescript
 client_name: "[Here Technologies](http://here.com)"
 pictures_credit: "Courtesy of Here Technologies"
 myrole: 'Graphics Programmer'
