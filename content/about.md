@@ -13,10 +13,11 @@ I am lecturing part-time at Universität der Künste in the [New Media](https://
 If you're interested in hiring me for freelance work, [get in touch!](mailto:info@davideprati.com)
 
 
-Past collaborations include software companies, design studios and public institutions such as:
+Past collaborations include software companies, design studios, artists and public institutions such as:
 
 - [HERE Technologies](https://www.here.com/)
 - [Tomás Saraceno Studio](https://studiotomassaraceno.org/)
+- [Heiner Franzen](https://www.heinerfranzen.de/)
 - [Neeeu](https://neu.io/)
 - [FIELD](https://field.io/)
 - [Studio ANF](https://studioanf.com/)
@@ -24,5 +25,6 @@ Past collaborations include software companies, design studios and public instit
 - [Channelweb.it](https://www.channelweb.it/)
 - [Studio NAND](https://www.nand.io/)
 - [Humboldt University Berlin](https://www.hu-berlin.de/en)
+- [University of Art Berlin](https://newmedia.udk-berlin.de/)
 
 ---
