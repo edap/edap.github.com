@@ -8,7 +8,7 @@ I am lecturing at the Universität Der Künste, in the New Media class departmen
 
 ## University Courses
 
-Gestalt mit CODE, *Fundamentals of 3D animation for the web*
+Gestalt mit CODE, *Fundamentals of 3D animation for the web*  
 Course [Repository](https://github.com/edap/udk-3d-web-fundamentals)  
 Wintersemester 2023/2024, Universität der Künste, Berlin
 
@@ -39,7 +39,7 @@ Course [Repository](https://github.com/edap/udk-shaders)
 Wintersemester 2020/2021, Universität der Künste, Berlin
 
 Gestalt mit CODE, *[Expanding Spaces](https://newmedia.udk-berlin.de/projects/2020-ss)*  
-Course [Repository](https://github.com/edap/udk-2020-cosmodrome)
+Course [Repository](https://github.com/edap/udk-2020-cosmodrome)  
 Sommersemester 2020, Universität der Künste, Berlin
 
 Grundlagen Creative Coding mit Processing  
@@ -66,7 +66,7 @@ Gestalt mit CODE, *[Carte Blanche](https://newmedia.udk-berlin.de/projects/2018-
 Wintersemester 2018/2019, Universität der Künste, Berlin
 
 Grundlagen Creative Coding mit openFrameworks  
-Course [Repository](https://github.com/edap/intro-to-computer-vision)
+Course [Repository](https://github.com/edap/intro-to-computer-vision)  
 Wintersemester 2018/2019, Universität der Künste, Berlin
 
 Gestalt mit CODE, *[Mirror: Material, Metaphor, Medium](https://newmedia.udk-berlin.de/projects/2018-ss)*  
