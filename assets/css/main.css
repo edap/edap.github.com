@@ -193,6 +193,7 @@ ul.alltags{
     display: flex;
     flex-wrap: wrap;
 }
+
 ul.alltags > li{
     display: inline;
     padding-right: 1rem;
