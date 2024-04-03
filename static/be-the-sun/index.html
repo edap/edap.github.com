@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Be the sun</title>
+    <meta name="description"
+        content="A once in a life-time occasion to be the sun, making sunsets and sunrises whenever you want">
+    <meta name="author" content="Davide Prati">
+    <script src="./js/utils.js"></script>
+    <script src="./js/clmtracker.js"></script>
+    <script src="./js/regl.min.js"></script>
+
+    <script>
+        // getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+        if (window.location.protocol == "file:") {
+            alert("You seem to be running this example directly from a file. Note that these examples only work when served from a server or localhost due to canvas cross-domain restrictions.");
+        } else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:") {
+            window.location.protocol = "https";
+        }
+    </script>
+</head>
+
+<body style="margin: 0px; padding: 0px; overflow: hidden;">
+    <canvas id="canvasWebGL" width="1000" height="1000"></canvas>
+    <!-- <video id="inputVideo" autoplay loop playsinline style="display:none; top:0px; left: 500px" width="400"
+        height="300"></video> -->
+    <video id="inputVideo" autoplay loop playsinline style=" top:0px; left: 500px" width="400" height="300"></video>
+
+
+    <script type="text/javascript">
+        var debug = false;
+        var vid = document.getElementById('inputVideo');
+        var vid_width = vid.width;
+        var vid_height = vid.height;
+        var canvasWebGL = document.getElementById('canvasWebGL');
+
+
+        var insertAltVideo = function (video) {
+            // insert alternate video if getUserMedia not available
+            if (supports_video()) {
+                if (supports_webm_video()) {
+                    video.src = "./media/cap12_edit.webm";
+                } else if (supports_h264_baseline_video()) {
+                    video.src = "./media/cap12_edit.mp4";
+                } else {
+                    return false;
+                }
+                return true;
+            } else return false;
+        }
+
+        function adjustVideoProportions() {
+            var proportion = vid.videoWidth / vid.videoHeight;
+            vid_width = Math.round(vid_height * proportion);
+            vid.width = vid_width;
+        }
+
+        function gumSuccess(stream) {
+            // add camera stream if getUserMedia succeeded
+            if ("srcObject" in vid) {
+                vid.srcObject = stream;
+            } else {
+                vid.src = (window.URL && window.URL.createObjectURL(stream));
+            }
+            vid.onloadedmetadata = function () {
+                adjustVideoProportions();
+                ctrack.start(vid);
+                vid.play();
+            }
+            vid.onresize = function () {
+                adjustVideoProportions();
+                if (trackingStarted) {
+                    ctrack.stop();
+                    ctrack.reset();
+                    ctrack.start(vid);
+                }
+            }
+        }
+
+        function gumFail() {
+            alert("There was some problem trying to fetch video from your webcam, using the mouse instead.");
+        }
+
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
+
+        // set up video
+        if (navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(gumSuccess).catch(gumFail);
+        } else if (navigator.getUserMedia) {
+            navigator.getUserMedia({ video: true }, gumSuccess, gumFail);
+        } else {
+            alert("Your browser does not seem to support getUserMedia, using the mouse instead.");
+        }
+
+        var ctrack = new clm.tracker();
+        ctrack.init();
+        var trackingStarted = false;
+
+        function startVideo() {
+            vid.play();
+            ctrack.start(vid);
+            trackingStarted = true;
+        }
+
+        if (debug) {
+            canvasWebGL.width = 500;
+            canvasWebGL.height = 300;
+        } else {
+            canvasWebGL.width = window.innerWidth;
+            canvasWebGL.height = window.innerHeight;
+        }
+
+        var headPosition = [0.0, 0.0];
+        var sunSize = 0.05;
+
+        function map_range(value, low1, high1, low2, high2) {
+            var mapped = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+            return Math.min(Math.max(mapped, low2), high2);
+        }
+
+        // update uniforms on every iteration
+        document.addEventListener('clmtrackrIteration', function (event) {
+            var nose = { x: 0, y: 0 };
+            var headHeight;
+            if (event) {
+                var positions = ctrack.getCurrentPosition();
+                if (!positions && !positions[62]) {
+                    headHeight = 200;
+                } else {
+                    // pos 62 is the nose https://www.auduno.com/clmtrackr/examples/media/facemodel_numbering_new.png
+                    headHeight = getHeadHeight(positions);
+                    nose.x = positions[62][0];
+                    nose.y = positions[62][1]
+                }
+                var x = map_range(nose.x, vid_width, 0, 0, canvasWebGL.width);
+                var y = map_range(nose.y, 0, vid_height, 0, canvasWebGL.height);
+                var z = map_range(headHeight, 0, vid_height, 0, 1.0);
+                headPosition[0] = x;
+                headPosition[1] = y;
+                sunSize = z;
+            }else {
+                console.log("no new");
+            }
+        }, false);
+
+        function getHeadHeight(positions) {
+            var defaultHeadHeight = 200;
+            if (positions !== undefined && positions !== null) {
+                if (positions[33] !== undefined && positions[33] !== null && positions[7] !== undefined && positions[7] !== null) {
+                    var top = positions[33];
+                    var bottom = positions[7];
+                    return bottom[1] - top[1];
+                } else {
+                    return defaultHeadHeight;
+                }
+            } else {
+                return defaultHeadHeight;
+            }
+
+        }
+
+        var regl = createREGL({
+            canvas: canvasWebGL
+        });
+
+        const drawTriangle = regl({
+            frag: `
+                precision mediump float;
+                uniform float uSunSize;
+                uniform vec2 iResolution;
+                uniform vec2 uHead;
+
+                float circleSmooth(in vec2 st, in vec2 pos, in float begin, in float end) {
+                    float pct = 0.0;
+                    pct = 1. - smoothstep(begin, end, distance(st, pos));
+                    return pct;
+                }
+
+                float rectangleGradientBottom(in vec2 st, in vec2 origin, in vec2 dimensions, float smoothness) {
+                    vec2 center = step(origin, st); // it is actually the bottom left cornter
+                    float pct = center.x * center.y;
+                    vec2 full = step(1.0 - origin - dimensions, 1.0 - st);
+                    float height = origin.y+dimensions.y;
+                    pct *= full.x * full.y;
+                    pct *= smoothstep(height, origin.y+smoothness,st.y);
+                    return pct;
+                }
+
+                //  Function from Iñigo Quiles
+                //  www.iquilezles.org/www/articles/functions/functions.htm
+                float parabola( float x, float k ){
+                    return pow( 4.0*x*(1.0-x), k );
+                }
+
+                void main() {
+                    vec2 uv = gl_FragCoord.xy / iResolution.xy;
+                    vec2 headNorm = uHead/iResolution;
+                    // use parabola function to get the y coordinate
+                    //vec2 m = vec2(headNorm.x, parabola(headNorm.x, 1.2));
+                    vec2 m = vec2(headNorm.x, headNorm.y);
+                    vec3 color = vec3(0.1, 0.4, 0.9);
+                    color += vec3(0.9-m.y,0.6-uv.y, -(1.0-m.y));
+                    uv.x *= iResolution.x / iResolution.y;
+                    m.x *= iResolution.x / iResolution.y;
+                    vec2 recPos = vec2(0.0, 0.0);
+
+                    // kind of sun, with a lot of imagination
+                    color.rg += circleSmooth(uv, vec2(m), 0.05, 0.15 + uSunSize);
+                    float turnOffSky = smoothstep(0.25, 0.27,m.y);
+                    color*= turnOffSky;
+
+                    // earth
+                    vec3 earth = vec3(vec2(rectangleGradientBottom(uv, recPos, vec2(40.0, 0.3), 0.16)), 0.0);
+                    earth.r += 1.0 -m.y;
+                    color += earth;
+                    float turnOffEarth = smoothstep(0.09, 0.25,m.y);
+                    color*= turnOffEarth;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }`,
+
+            vert: `
+                precision mediump float;
+                attribute vec3 position;
+
+                void main() {
+                    gl_Position = vec4(position, 1);
+                }`,
+
+            attributes: {
+                position: regl.buffer([
+                    [[-1, -1, 0], [-1, 1, 0], [1, 1, 0]],
+                    [[1, 1, 0], [1, -1, 0], [-1, -1, 0]]
+                ])
+            },
+
+            uniforms: {
+                iResolution: regl.prop('resolution'),
+                uSunSize: regl.prop('sunSize'),
+                uHead: regl.prop('headPosition')
+            },
+            count: 6
+        })
+
+        regl.frame(function (context) {
+            drawTriangle({
+                resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
+                sunSize: sunSize,
+                headPosition: headPosition
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -190,9 +190,10 @@ ul.alltags{
     padding:1rem 0rem 0rem 0rem;
     list-style: none;
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
 }
 ul.alltags > li{
-
     display: inline;
     padding-right: 1rem;
 }
