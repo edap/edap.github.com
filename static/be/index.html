@@ -14,6 +14,20 @@
 	<script src="./js/facemesh.js"></script>
 
 <script>
+const FACE_UP = 10
+const FACE_DOWN = 152
+const NOSE_TIP = 2
+
+let canvas;
+let fmesh;
+let headPosition = [200.0, 200.0];
+let sunSize = 0.05;
+
+function map_range(value, low1, high1, low2, high2) {
+    let mapped = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+    return Math.min(Math.max(mapped, low2), high2);
+}
+
 async function setupCamera() {
   video = document.getElementById('video');
   const stream = await navigator.mediaDevices.getUserMedia({
@@ -48,34 +62,49 @@ async function renderPrediction() {
 };
 
 function drawVideo(){
-  ctx.drawImage(video, 0, 0);
+  //ctx.drawImage(video, 0, 0);
+  // TODO drawFace goes here, the sun is drawn even if the face is not detected
   for (face of curFaces){
     if (face.faceInViewConfidence > .95) {
-      drawFace(face);  
+      drawFace(face);
+      // TODO, here the variable sunSize and headPosition are updated
+      // they need to be scaled for the screen.
+      // the face object contains the features by name, get them out.
     }
   } 
   requestAnimationFrame(drawVideo);
 }
 
+
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFace(face){
    let i = 0;
-   ctx.fillStyle = 'cyan';
-   ctx.font = "10px Arial";
+//    ctx.fillStyle = 'cyan';
+//    ctx.font = "10px Arial";
+    //sunSize = 10;
     for (pt of face.scaledMesh){
-      ctx.beginPath();
-      ctx.ellipse(pt[0], pt[1], 3,3, 0, 0, 2*Math.PI)
-      ctx.fill();
+        //debugger
+        if(i == FACE_UP || i == FACE_DOWN || i == NOSE_TIP){
+            //console.log(pt[0], pt[1]);
+            // let headHeight = 200;
+            // var x = map_range(nose.x, vid_width, 0, 0, canvasWebGL.width);
+            // var y = map_range(nose.y, 0, vid_height, 0, canvasWebGL.height);
+            // var z = map_range(headHeight, 0, vid_height, 0, 1.0);
+            // headPosition[0] = x;
+            // headPosition[1] = y;
+            // sunSize = z;
+            // ctx.beginPath();
+            // ctx.ellipse(pt[0], pt[1], 3,3, 0, 0, 2*Math.PI)
+            // ctx.fill();
 
-      ctx.strokeText(i, pt[0], pt[1]);
-      i = i+1;
+            // ctx.strokeText(i, pt[0], pt[1]);
+        }
+        i = i+1;
     }
 }
 
 
-let canvas;
-let ctx;
-let fmesh;
+
 async function main() {
     fmesh = await facemesh.load({maxFaces:3});
 
@@ -90,12 +119,99 @@ async function main() {
     canvas.width = videoWidth;
     canvas.height = videoHeight;
 
-    // let regl = createREGL({
-    //         canvas: canvas
-    // });
-    ctx = canvas.getContext('2d');
+    let regl = createREGL({
+            canvas: canvas
+    });
 
-    drawVideo()
+    const drawTriangle = regl({
+            frag: `
+                precision mediump float;
+                uniform float uSunSize;
+                uniform vec2 iResolution;
+                uniform vec2 uHead;
+
+                float circleSmooth(in vec2 st, in vec2 pos, in float begin, in float end) {
+                    float pct = 0.0;
+                    pct = 1. - smoothstep(begin, end, distance(st, pos));
+                    return pct;
+                }
+
+                float rectangleGradientBottom(in vec2 st, in vec2 origin, in vec2 dimensions, float smoothness) {
+                    vec2 center = step(origin, st); // it is actually the bottom left cornter
+                    float pct = center.x * center.y;
+                    vec2 full = step(1.0 - origin - dimensions, 1.0 - st);
+                    float height = origin.y+dimensions.y;
+                    pct *= full.x * full.y;
+                    pct *= smoothstep(height, origin.y+smoothness,st.y);
+                    return pct;
+                }
+
+                //  Function from Iñigo Quiles
+                //  www.iquilezles.org/www/articles/functions/functions.htm
+                float parabola( float x, float k ){
+                    return pow( 4.0*x*(1.0-x), k );
+                }
+
+                void main() {
+                    vec2 uv = gl_FragCoord.xy / iResolution.xy;
+                    vec2 headNorm = uHead/iResolution;
+                    // use parabola function to get the y coordinate
+                    //vec2 m = vec2(headNorm.x, parabola(headNorm.x, 1.2));
+                    vec2 m = vec2(headNorm.x, headNorm.y);
+                    vec3 color = vec3(0.1, 0.4, 0.9);
+                    color += vec3(0.9-m.y,0.6-uv.y, -(1.0-m.y));
+                    uv.x *= iResolution.x / iResolution.y;
+                    m.x *= iResolution.x / iResolution.y;
+                    vec2 recPos = vec2(0.0, 0.0);
+
+                    // kind of sun, with a lot of imagination
+                    color.rg += circleSmooth(uv, vec2(m), 0.05, 0.15 + uSunSize);
+                    float turnOffSky = smoothstep(0.25, 0.27,m.y);
+                    color*= turnOffSky;
+
+                    // earth
+                    vec3 earth = vec3(vec2(rectangleGradientBottom(uv, recPos, vec2(40.0, 0.3), 0.16)), 0.0);
+                    earth.r += 1.0 -m.y;
+                    color += earth;
+                    float turnOffEarth = smoothstep(0.09, 0.25,m.y);
+                    color*= turnOffEarth;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }`,
+
+            vert: `
+                precision mediump float;
+                attribute vec3 position;
+
+                void main() {
+                    gl_Position = vec4(position, 1);
+                }`,
+
+            attributes: {
+                position: regl.buffer([
+                    [[-1, -1, 0], [-1, 1, 0], [1, 1, 0]],
+                    [[1, 1, 0], [1, -1, 0], [-1, -1, 0]]
+                ])
+            },
+
+            uniforms: {
+                iResolution: regl.prop('resolution'),
+                uSunSize: regl.prop('sunSize'),
+                uHead: regl.prop('headPosition')
+            },
+            count: 6
+        })
+    //ctx = canvas.getContext('2d');
+    
+    //drawRegl();
+    regl.frame(function (context) {
+            drawTriangle({
+                resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
+                sunSize: sunSize,
+                headPosition: headPosition
+            })
+        })
+    drawVideo();
     renderPrediction();
 }
 
@@ -107,12 +223,10 @@ main();
 </head>
 
 <body style="margin: 0px; padding: 0px; overflow: hidden;">
-
     <video autoplay muted 
         playsinline hidden id="video"
         style="width: auto; height: auto;">
 	</video>
     <canvas id="facecanvas"></canvas>
 </body>
-
 </html>
