@@ -17,11 +17,14 @@
 const FACE_UP = 10
 const FACE_DOWN = 152
 const NOSE_TIP = 2
+const VIDEO_WIDTH = 300
+const VIDEO_HEIGHT = 225
 
-let canvas;
-let fmesh;
-let headPosition = [200.0, 200.0];
-let sunSize = 0.05;
+let debug = true
+let canvas
+let fmesh
+let headPosition = [200.0, 200.0]
+let sunSize = 0.05
 
 function map_range(value, low1, high1, low2, high2) {
     let mapped = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
@@ -34,10 +37,8 @@ async function setupCamera() {
     'audio': false,
     'video': {
       facingMode: 'user',
-    //   width: {ideal:1920},
-    //   height: {ideal:1080},
-      width: {ideal:740},
-      height: {ideal:420},
+      width: {ideal:VIDEO_WIDTH},
+      height: {ideal:VIDEO_HEIGHT},
     },
   });
   video.srcObject = stream;
@@ -82,6 +83,8 @@ async function drawFace(face){
 //    ctx.fillStyle = 'cyan';
 //    ctx.font = "10px Arial";
     //sunSize = 10;
+    console.log(face);
+    getHeadPosition(face.mesh);
     for (pt of face.scaledMesh){
         //debugger
         if(i == FACE_UP || i == FACE_DOWN || i == NOSE_TIP){
@@ -103,11 +106,27 @@ async function drawFace(face){
     }
 }
 
+function getHeadPosition(mesh){
+    let nose = mesh[NOSE_TIP]
+    let faceUp = mesh[FACE_UP]
+    let faceDown = mesh[FACE_DOWN]
+    let headHeight = getHeadHeight(faceUp.y, faceDown.y)
+}
 
+function getHeadHeight(top, bottom){
+    if (!top || !bottom){
+        return 200
+    } else {
+        return bottom -top
+    }
+}
 
 async function main() {
     fmesh = await facemesh.load({maxFaces:3});
-
+// handle no camera
+//    setupCamera()
+// .then(function(){})
+//         .catch(function(){console.log("no")})
     // Set up front-facing camera
     await setupCamera();
     let videoWidth = video.videoWidth;
@@ -116,8 +135,13 @@ async function main() {
 
     // HTML Canvas for the video feed
     canvas = document.getElementById('facecanvas');
-    canvas.width = videoWidth;
-    canvas.height = videoHeight;
+    if (debug) {
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+    } else {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
 
     let regl = createREGL({
             canvas: canvas
