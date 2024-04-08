@@ -30,31 +30,25 @@
     <meta name="description"
         content="A once in a life-time occasion to be the sun, making sunsets and sunrises whenever you want">
     <meta name="author" content="Davide Prati">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh"></script> -->
     <script src="./js/regl.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 
-    <!-- https://github.com/google/mediapipe/blob/master/docs/solutions/face_detection.md -->
-
 
 <script type="module">
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/build/three.module.js';
 
 const FACE_UP = 10
 const FACE_DOWN = 152
 const NOSE_TIP = 2
 const VIDEO_WIDTH = 300
 const VIDEO_HEIGHT = 225
-// const VIDEO_WIDTH = 1400
-// const VIDEO_HEIGHT = 1050
 const SUN_SIZE_MAX = 1.0
 const SUN_SIZE_MIN = 0.2
 
 const videoElement = document.getElementById('video');
 const canvasElement = document.getElementById('facecanvas');
-
+canvasElement.width = window.innerWidth
+canvasElement.height = window.innerHeight
 
 const faceMesh = new FaceMesh({
     locateFile: (file) => {
@@ -68,125 +62,8 @@ faceMesh.setOptions({
     minTrackingConfidence: 0.5
 });
 
-/*
-function initThreeApp(canvas, w, h) {
-    const renderer = new THREE.WebGLRenderer({
-        canvas,
-        alpha: true,
-        antialias: true,
-    })
-
-    const fov = 75
-    const near = 0.01
-    const far = 1000
-    const camera = new THREE.PerspectiveCamera(fov, 1280/720, near, far)
-    camera.position.z = 2;
-
-    const scene = new THREE.Scene()
-
-    function resize() {
-        const width = w || window.innerWidth
-        const height = h || window.innerHeight
-
-        renderer.setSize(width, height)
-        renderer.setPixelRatio(window.pixelRatio)
-
-        if (camera.isPerspectiveCamera) {
-            camera.aspect = width / height
-        }
-        camera.updateProjectionMatrix()
-    }
-
-    function render() {
-        renderer.render(scene, camera)
-    }
-
-    // initial resize and render
-    resize()
-    render()
-
-
-    // add a light
-    const color = 0xFFFFFF
-    const intensity = 1
-    const light = new THREE.DirectionalLight(color, intensity)
-    light.position.set(-1, 2, 4)
-    scene.add(light)
-
-    // add a box
-    const boxWidth = 1
-    const boxHeight = 1
-    const boxDepth = 1
-    const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
-    const material = new THREE.MeshPhongMaterial({
-        color: 0x44aa88,
-        transparent: true,
-        opacity: 0.8
-    })
-    const cube = new THREE.Mesh(geometry, material)
-    scene.add(cube)
-
-    return {
-        renderer,
-        camera,
-        scene,
-        resize,
-        render,
-        cube
-    }
-}
-
-
-initVideo(videoElement, 320, 180)
-const threeApp = initThreeApp(canvasElement,1280,720)
-
-const onResults = function(res){
-    console.log("calles")
-  const landmarks = res.multiFaceLandmarks
-  if(!landmarks) return;
-  const {x, y, z} = landmarks[0][1];
-  // landmarks[0][1] == nose position(face center point)
-  // use landmarks xy value to calculate the screen xy
-  let vec = new THREE.Vector3();
-  let pos = new THREE.Vector3();
-  vec.set(
-    x * 2 - 1,
-    -y * 2 + 1,
-    0.5);
-  vec.unproject(threeApp.camera);
-  vec.sub(threeApp.camera.position).normalize();
-  let distance = -threeApp.camera.position.z / vec.z;
-  pos.copy(threeApp.camera.position).add(vec.multiplyScalar(distance));
-  threeApp.cube.position.x = pos.x;
-  threeApp.cube.position.y = pos.y;
-
-}
-
-faceMesh.onResults(onResults);
-
-const run = async function(){
-  threeApp.render()
-  await faceMesh.send({image: videoElement})
-  requestAnimationFrame(run)
-}
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
 let headPosition = [200.0, 200.0]
 let sunSize = 0.6
-
-
 
 initVideo(videoElement, 320, 180)
 const regl = createREGL({canvas: canvasElement})
@@ -274,15 +151,31 @@ function map_range(value, low1, high1, low2, high2) {
     return Math.min(Math.max(mapped, low2), high2)
 }
 
+function getHeadHeight(top, bottom){
+    if (!top || !bottom){
+        return 200
+    } else {
+        return bottom -top
+    }
+}
+
 const onResults = function(res){
     const landmarks = res.multiFaceLandmarks
     if(!landmarks || !landmarks[0]) return;
     const {x, y, z} = landmarks[0][1];
     //console.log(res)
-    let x_nose = map_range(x, 0 , videoElement.videoWidth, 0, canvasElement.width);
-    let y_nose = map_range(y, 0, videoElement.videoHeight, 0, canvasElement.height);
+    let x_nose = map_range(x, 0 , 1, 0, canvasElement.width);
+    let y_nose = map_range(y, 1, 0, 0, canvasElement.height);
+
+    let faceUp = landmarks[0][FACE_UP]
+    let faceDown = landmarks[0][FACE_DOWN]
+    console.log(faceUp, faceDown)
+    //let headHeight = getHeadHeight(faceUp[0], faceDown[1])
+
+    sunSize = map_range(z, -0.03, -0.12, SUN_SIZE_MIN, SUN_SIZE_MIN)
     headPosition = [x_nose, y_nose]
-    console.log(x_nose, y_nose);
+    console.log(z);
+    console.log(sunSize);
     //let z = map_range(headHeight, 0, video.videoHeight, 0, 1.0) * 0.8;
   // landmarks[0][1] == nose position(face center point)
   // use landmarks xy value to calculate the screen xy
@@ -310,21 +203,51 @@ function removeWaitingMessage(){
     msg.remove()
 }
 
+function addMouseListeners(){
+    addEventListener("mousemove", (event) => {
+            headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
+        })
+    addEventListener("wheel", (event) => {
+        let inc = event.wheelDelta / 1200
+        if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){
+            sunSize += inc
+        } else if (inc < 0 && sunSize - inc > SUN_SIZE_MIN){
+            sunSize += inc
+        }
+    })    
+}
+
+function playMouseDemo(){
+    regl.frame(function (context) {
+        drawTriangle({
+            resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
+            sunSize: sunSize,
+            headPosition: headPosition
+        })
+    })
+    requestAnimationFrame(playMouseDemo)
+}
+
 function initVideo(video, w, h){
-  if ( navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
-    const constraints = { video: { width: w, height: h, facingMode: 'user' } };
-    navigator.mediaDevices.getUserMedia( constraints ).then( function ( stream ) {
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
+    const constraints = {video: {width: w, height: h, facingMode: 'user'}}
+    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
         // apply the stream to the video element used in the texture
-        video.srcObject = stream;
-        video.play();
+        video.srcObject = stream
+        video.play()
         removeWaitingMessage()
-        run();
-    } ).catch( function ( error ) {
-        console.error( 'Unable to access the camera/webcam.', error );
-    } );
+        run()
+    }).catch(function (error){
+        removeWaitingMessage()
+        console.error('Unable to access the camera/webcam.', error)
+        addMouseListeners()
+        playMouseDemo()
+    })
     } else {
         removeWaitingMessage()
-        console.error( 'MediaDevices interface not available.' );
+        console.error('MediaDevices interface not available. Use the mouse as input');
+        addMouseListeners()
+        playMouseDemo()
     }
 }
 
