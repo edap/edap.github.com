@@ -26,11 +26,22 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh"></script> -->
     <script src="./js/regl.min.js"></script>
-    <script src="./js/tf.js"></script>
+    <!-- <script src="./js/tf.js"></script>
 	<script src="./js/facemesh.js"></script>
 
+    <script src="./js/face_detection.js"></script>
+    <script src="./js/camera_utils.js"></script> -->
 
-<script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js" crossorigin="anonymous"></script>
+
+
+    <!-- https://github.com/google/mediapipe/blob/master/docs/solutions/face_detection.md -->
+
+
+<script type="module">
 const FACE_UP = 10
 const FACE_DOWN = 152
 const NOSE_TIP = 2
@@ -142,7 +153,7 @@ function getHeadPosition(mesh){
 
     headPosition = [x, y]
     sunSize = z
-    console.log(nose)
+    console.log(canvas.width)
 }
 
 function updateFacePositionFromMouse(mousePos){
@@ -301,7 +312,47 @@ async function main() {
     })
 }
 
-main()
+//main()
+function onResults(results) {
+  console.log(results.detections[0])
+  // Draw the overlays.
+//   canvasCtx.save();
+//   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+//   canvasCtx.drawImage(
+//       results.image, 0, 0, canvasElement.width, canvasElement.height);
+//   if (results.detections.length > 0) {
+//     drawingUtils.drawRectangle(
+//         canvasCtx, results.detections[0].boundingBox,
+//         {color: 'blue', lineWidth: 4, fillColor: '#00000000'});
+//     drawingUtils.drawLandmarks(canvasCtx, results.detections[0].landmarks, {
+//       color: 'red',
+//       radius: 5,
+//     });
+//   }
+//   canvasCtx.restore();
+}
+
+const videoElement = document.getElementById('video');
+
+const faceDetection = new FaceDetection({locateFile: (file) => {
+  return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/${file}`;
+}});
+faceDetection.setOptions({
+  model: 'short',
+  minDetectionConfidence: 0.5
+});
+faceDetection.onResults(onResults);
+
+const camera = new Camera(videoElement, {
+  onFrame: async () => {
+    await faceDetection.send({image: videoElement});
+  },
+  width: 1280,
+  height: 720
+});
+
+camera.start();
+
 </script>
 
 
