@@ -189,6 +189,9 @@ function init(
     terrain = new THREE.Mesh(geometryPlane, customMaterial);
     scene.add(terrain);
 
+    // dog
+    var dogMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
+
     //path
     var splineVertices = readVerticesInSvg(svgPath);
     spline = createCurveFromVertices(splineVertices);
