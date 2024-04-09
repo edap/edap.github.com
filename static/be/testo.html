@@ -27,47 +27,53 @@
     </style>
     <meta charset="utf-8">
     <title>Be the sun</title>
-    <meta name="description"
-        content="A once in a life-time occasion to be the sun, making sunsets and sunrises whenever you want">
+    <meta name="description" content="Be The Sun">
     <meta name="author" content="Davide Prati">
     <script src="./js/regl.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 
+    <script type="module">
+    // 2017 first shadertoy version https://www.shadertoy.com/view/4lsyzn
+    // 2017 webcam version online at edapx.neocities.org. defunct
+    // 2018 online at davideprati.com, using headtracker.js
+    // 2022 update. Use clmtracker.js
+    // 2024 update. Use google mediapipe
 
-<script type="module">
+    const FACE_UP = 10
+    const FACE_DOWN = 152
+    const NOSE_TIP = 1
+    const VIDEO_WIDTH = 300
+    const VIDEO_HEIGHT = 225
+    const SUN_SIZE_MAX = 1.0
+    const SUN_SIZE_MIN = 0.2
+    const DEBUG = false;
 
-const FACE_UP = 10
-const FACE_DOWN = 152
-const NOSE_TIP = 2
-const VIDEO_WIDTH = 300
-const VIDEO_HEIGHT = 225
-const SUN_SIZE_MAX = 1.0
-const SUN_SIZE_MIN = 0.2
+    let headPosition = [200.0, 200.0]
+    let sunSize = 0.6
+    const videoElement = document.getElementById('video')
+    const canvasElement = document.getElementById('facecanvas')
+    canvasElement.width = window.innerWidth
+    canvasElement.height = window.innerHeight
 
-const videoElement = document.getElementById('video');
-const canvasElement = document.getElementById('facecanvas');
-canvasElement.width = window.innerWidth
-canvasElement.height = window.innerHeight
-
-const faceMesh = new FaceMesh({
-    locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+    if (!DEBUG) {
+        videoElement.setAttribute("hidden", "hidden")
     }
-});
 
-faceMesh.setOptions({
-    maxNumFaces: 1,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5
-});
+    const faceMesh = new FaceMesh({
+        locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+        }
+    })
 
-let headPosition = [200.0, 200.0]
-let sunSize = 0.6
+    faceMesh.setOptions({
+        maxNumFaces: 1,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+    });
 
-initVideo(videoElement, 320, 180)
-const regl = createREGL({canvas: canvasElement})
-const drawTriangle = regl({
+    initVideo(videoElement, 320, 180)
+    const regl = createREGL({canvas: canvasElement})
+    const drawTriangle = regl({
         frag: `
             precision mediump float;
             uniform float uSunSize;
@@ -146,126 +152,102 @@ const drawTriangle = regl({
         count: 6
     })    
 
-function map_range(value, low1, high1, low2, high2) {
-    let mapped = low2 + (high2 - low2) * (value - low1) / (high1 - low1)
-    return Math.min(Math.max(mapped, low2), high2)
-}
-
-function getHeadHeight(top, bottom){
-    if (!top || !bottom){
-        return 200
-    } else {
-        return bottom -top
+    function map_range(value, low1, high1, low2, high2) {
+        let mapped = low2 + (high2 - low2) * (value - low1) / (high1 - low1)
+        return Math.min(Math.max(mapped, low2), high2)
     }
-}
 
-const onResults = function(res){
-    const landmarks = res.multiFaceLandmarks
-    if(!landmarks || !landmarks[0]) return;
-    const {x, y, z} = landmarks[0][1];
-    //console.log(res)
-    let x_nose = map_range(x, 0 , 1, 0, canvasElement.width);
-    let y_nose = map_range(y, 1, 0, 0, canvasElement.height);
+    const onResults = function(res){
+        const landmarks = res.multiFaceLandmarks
+        if(!landmarks || !landmarks[0]) return
+        const {x, y, z} = landmarks[0][NOSE_TIP]
+        //console.log(res)
+        const x_nose = map_range(x, 1 , 0, 0, canvasElement.width)
+        const y_nose = map_range(y, 1, 0, 0, canvasElement.height)
 
-    let faceUp = landmarks[0][FACE_UP]
-    let faceDown = landmarks[0][FACE_DOWN]
-    console.log(faceUp, faceDown)
-    //let headHeight = getHeadHeight(faceUp[0], faceDown[1])
+        const faceUp = landmarks[0][FACE_UP]
+        const faceDown = landmarks[0][FACE_DOWN]
 
-    sunSize = map_range(z, -0.03, -0.12, SUN_SIZE_MIN, SUN_SIZE_MIN)
-    headPosition = [x_nose, y_nose]
-    console.log(z);
-    console.log(sunSize);
-    //let z = map_range(headHeight, 0, video.videoHeight, 0, 1.0) * 0.8;
-  // landmarks[0][1] == nose position(face center point)
-  // use landmarks xy value to calculate the screen xy
-
-
-}
-
-faceMesh.onResults(onResults);
-
-const run = async function(){
-    regl.frame(function (context) {
-        drawTriangle({
-            resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
-            sunSize: sunSize,
-            headPosition: headPosition
-        })
-    })
-    await faceMesh.send({image: videoElement})
-    requestAnimationFrame(run)
-}
-
-
-function removeWaitingMessage(){
-    let msg = document.getElementById('wait')
-    msg.remove()
-}
-
-function addMouseListeners(){
-    addEventListener("mousemove", (event) => {
-        headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
-    })
-    addEventListener("wheel", (event) => {
-        let inc = event.wheelDelta / 1200
-        if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){
-            sunSize += inc
-        } else if (inc < 0 && sunSize - inc > SUN_SIZE_MIN){
-            sunSize += inc
+        if (!faceUp.y || !faceDown.y) {
+            sunSize =  0.6
+        } else {
+            sunSize = faceDown.y -faceUp.y
         }
-    })    
-}
 
-function playMouseDemo(){
-    regl.frame(function (context) {
-        drawTriangle({
-            resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
-            sunSize: sunSize,
-            headPosition: headPosition
-        })
-    })
-    requestAnimationFrame(playMouseDemo)
-}
-
-function initVideo(video, w, h){
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
-    const constraints = {video: {width: w, height: h, facingMode: 'user'}}
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-        // apply the stream to the video element used in the texture
-        video.srcObject = stream
-        video.play()
-        removeWaitingMessage()
-        run()
-    }).catch(function (error){
-        removeWaitingMessage()
-        console.error('Unable to access the camera/webcam.', error)
-        addMouseListeners()
-        playMouseDemo()
-    })
-    } else {
-        removeWaitingMessage()
-        console.error('MediaDevices interface not available. Use the mouse as input');
-        addMouseListeners()
-        playMouseDemo()
+        //sunSize = map_range(z, -0.03, -0.12, SUN_SIZE_MIN, SUN_SIZE_MIN)
+        headPosition = [x_nose, y_nose]
     }
-}
 
+    faceMesh.onResults(onResults)
 
-</script>
+    const run = async function(){
+        regl.frame(function (context) {
+            drawTriangle({
+                resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
+                sunSize: sunSize,
+                headPosition: headPosition
+            })
+        })
+        await faceMesh.send({image: videoElement})
+        requestAnimationFrame(run)
+    }
 
+    function removeWaitingMessage(){
+        const msg = document.getElementById('wait')
+        msg.remove()
+    }
 
+    function addMouseListeners(){
+        addEventListener("mousemove", (event) => {
+            headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
+        })
+        addEventListener("wheel", (event) => {
+            const inc = event.wheelDelta / 1200
+            if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){
+                sunSize += inc
+            } else if (inc < 0 && sunSize - inc > SUN_SIZE_MIN){
+                sunSize += inc
+            }
+        })
+    }
+
+    function playMouseDemo(){
+        regl.frame(function (context) {
+            drawTriangle({
+                resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
+                sunSize: sunSize,
+                headPosition: headPosition
+            })
+        })
+        requestAnimationFrame(playMouseDemo)
+    }
+
+    function initVideo(video, w, h){
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
+            const constraints = {video: {width: w, height: h, facingMode: 'user'}}
+            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                // apply the stream to the video element used in the texture
+                video.srcObject = stream
+                video.play()
+                removeWaitingMessage()
+                run()
+            }).catch(function (error){
+                removeWaitingMessage()
+                console.error('Unable to access the camera/webcam.', error)
+                addMouseListeners()
+                playMouseDemo()
+            })
+        } else {
+            removeWaitingMessage()
+            console.error('MediaDevices interface not available. Use the mouse as input')
+            addMouseListeners()
+            playMouseDemo()
+        }
+    }
+    </script>
 </head>
-
 <body>
     <div id="wait">Wait for camera to be detected, otherwise use the mouse as input</div>
-    <!-- <video autoplay muted 
-        playsinline hidden id="video"
-        style=" top:0px; left: 500px"
-        width="300" height="225"
-        >
-	</video> -->
-
     <video id="video"></video>
     <canvas id="facecanvas"></canvas>
 </body>
