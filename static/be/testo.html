@@ -205,8 +205,8 @@ function removeWaitingMessage(){
 
 function addMouseListeners(){
     addEventListener("mousemove", (event) => {
-            headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
-        })
+        headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
+    })
     addEventListener("wheel", (event) => {
         let inc = event.wheelDelta / 1200
         if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){

@@ -279,9 +279,10 @@ const onResults = function(res){
     if(!landmarks || !landmarks[0]) return;
     const {x, y, z} = landmarks[0][1];
     //console.log(res)
-    let x_nose = map_range(x, 0 , videoElement.videoWidth, 0, canvasElement.width);
-    let y_nose = map_range(y, 0, videoElement.videoHeight, 0, canvasElement.height);
+    let x_nose = map_range(x, 0 , 1, 0, canvasElement.width);
+    let y_nose = map_range(y, 1, 0, 0, canvasElement.height);
     headPosition = [x_nose, y_nose]
+    sunSize = map_range(z, -0.03, -0.12, SUN_SIZE_MIN, SUN_SIZE_MIN)
     console.log(x_nose, y_nose);
     //let z = map_range(headHeight, 0, video.videoHeight, 0, 1.0) * 0.8;
   // landmarks[0][1] == nose position(face center point)
