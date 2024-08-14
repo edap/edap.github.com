@@ -38,6 +38,8 @@
     // 2018 online at davideprati.com, using headtracker.js
     // 2022 update. Use clmtracker.js
     // 2024 update. Use google mediapipe
+    import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
+    const { FaceLandmarker, FilesetResolver, DrawingUtils } = vision;
 
     const FACE_UP = 10
     const FACE_DOWN = 152
@@ -48,25 +50,40 @@
     const SUN_SIZE_MIN = 0.2
     const DEBUG = true;
 
+    let faceLandmarker;
+    let runningMode = "VIDEO";
     let headPosition = [200.0, 200.0]
     let sunSize = 0.6
-    const videoElement = document.getElementById('video')
+    const video = document.getElementById('video')
     const canvasElement = document.getElementById('facecanvas')
     canvasElement.width = window.innerWidth
     canvasElement.height = window.innerHeight
 
     if (!DEBUG) {
-        videoElement.setAttribute("hidden", "hidden")
+        video.setAttribute("hidden", "hidden")
     }
 
-    const faceMesh = new FaceMesh({
-        locateFile: (file) => {
-            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
-        }
-    })
 
+    initDemo(video, VIDEO_WIDTH, VIDEO_HEIGHT)
 
-    initVideo(videoElement, 320, 180)
+    // Before we can use FaceLandmarker class we must wait for it to finish
+    // loading. Machine Learning models can be large and take a moment to
+    // get everything needed to run.
+    async function createFaceLandmarker() {
+        const filesetResolver = await FilesetResolver.forVisionTasks(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+        );
+        faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+            baseOptions: {
+            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+            delegate: "GPU"
+            },
+            outputFaceBlendshapes: true,
+            runningMode,
+            numFaces: 1
+        });
+    };
+
 
 
     function map_range(value, low1, high1, low2, high2) {
@@ -102,21 +119,9 @@
         msg.remove()
     }
 
-    function initVideo(video, w, h){
+    function initDemo(video, w, h){
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
-            const constraints = {video: {width: w, height: h, facingMode: 'user'}}
-            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-                // apply the stream to the video element used in the texture
-                video.srcObject = stream
-                video.play()
-                removeWaitingMessage()
-                //run()
-            }).catch(function (error){
-                removeWaitingMessage()
-                console.error('Unable to access the camera/webcam.', error)
-                addMouseListeners()
-                //playMouseDemo()
-            })
+            initVideo();
         } else {
             removeWaitingMessage()
             console.error('MediaDevices interface not available. Use the mouse as input')
@@ -124,6 +129,64 @@
             //playMouseDemo()
         }
     }
+
+
+    async function initVideo(){
+        createFaceLandmarker().then(function(){
+                //const constraints = {video: {width: w, height: h, facingMode: 'user'}}
+                const constraints = {video: true}
+                navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                    // apply the stream to the video element used in the texture
+                    video.srcObject = stream
+                    //video.play()
+                    video.addEventListener("loadeddata", predictWebcam);
+                    removeWaitingMessage()
+
+                    //run()
+                })
+                // .catch(function (error){
+                //     removeWaitingMessage()
+                //     console.error('Unable to access the camera/webcam.', error)
+                //     addMouseListeners()
+                //     //playMouseDemo()
+                // })
+            }
+        );
+    }
+
+let lastVideoTime = -1;
+let results = undefined;
+
+async function predictWebcam() {
+  const ratio = video.VIDEO_HEIGHT / video.VIDEO_WIDTH;
+  video.style.width = VIDEO_WIDTH + "px";
+  video.style.height = VIDEO_WIDTH * ratio + "px";
+  canvasElement.style.width = VIDEO_WIDTH + "px";
+  canvasElement.style.height = VIDEO_WIDTH * ratio + "px";
+  canvasElement.width = video.videoWidth;
+  canvasElement.height = video.videoHeight;
+  //Now let's start detecting the stream.
+  let startTimeMs = performance.now();
+  if (lastVideoTime !== video.currentTime) {
+    lastVideoTime = video.currentTime;
+    results = faceLandmarker.detectForVideo(video, startTimeMs);
+  }
+  if (results.faceLandmarks) {
+    for (const landmarks of results.faceLandmarks) {
+        console.log(landmarks);
+    //   drawingUtils.drawConnectors(
+    //     landmarks,
+    //     FaceLandmarker.FACE_LANDMARKS_TESSELATION,
+    //     { color: "#C0C0C070", lineWidth: 1 }
+    //   );
+    }
+  }
+  //drawBlendShapes(videoBlendShapes, results.faceBlendshapes);
+
+  // Call this function again to keep predicting when the browser is ready.
+    window.requestAnimationFrame(predictWebcam);
+  
+}
 
     function addMouseListeners(){
         addEventListener("mousemove", (event) => {
@@ -144,7 +207,7 @@
 </head>
 <body>
     <div id="wait">Wait for camera to be detected, otherwise use the mouse as input</div>
-    <video id="video"></video>
+    <video id="video" autoplay playsinline></video>
     <canvas id="facecanvas"></canvas>
 </body>
 </html>
