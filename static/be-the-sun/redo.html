@@ -30,7 +30,7 @@
     <meta name="description" content="Be The Sun">
     <meta name="author" content="Davide Prati">
     <script src="./js/regl.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
 
     <script type="module">
     // 2017 first shadertoy version https://www.shadertoy.com/view/4lsyzn
@@ -58,6 +58,85 @@
     const canvasElement = document.getElementById('facecanvas')
     canvasElement.width = window.innerWidth
     canvasElement.height = window.innerHeight
+    const regl = createREGL({canvas: canvasElement})
+    const drawTriangle = regl({
+        frag: `
+            precision mediump float;
+            uniform float uSunSize;
+            uniform vec2 iResolution;
+            uniform vec2 uHead;
+
+            float circleSmooth(in vec2 st, in vec2 pos, in float begin, in float end) {
+                float pct = 0.0;
+                pct = 1. - smoothstep(begin, end, distance(st, pos));
+                return pct;
+            }
+
+            float rectangleGradientBottom(in vec2 st, in vec2 origin, in vec2 dimensions, float smoothness) {
+                vec2 center = step(origin, st); // it is actually the bottom left cornter
+                float pct = center.x * center.y;
+                vec2 full = step(1.0 - origin - dimensions, 1.0 - st);
+                float height = origin.y+dimensions.y;
+                pct *= full.x * full.y;
+                pct *= smoothstep(height, origin.y+smoothness,st.y);
+                return pct;
+            }
+
+            //  Function from Iñigo Quiles
+            //  www.iquilezles.org/www/articles/functions/functions.htm
+            float parabola( float x, float k ){
+                return pow( 4.0*x*(1.0-x), k );
+            }
+
+            void main() {
+                vec2 uv = gl_FragCoord.xy / iResolution.xy;
+                vec2 headNorm = uHead/iResolution;
+                // use parabola function to get the y coordinate
+                //vec2 m = vec2(headNorm.x, parabola(headNorm.x, 1.2));
+                vec2 m = vec2(headNorm.x, headNorm.y);
+                vec3 color = vec3(0.1, 0.4, 0.9);
+                color += vec3(0.9-m.y,0.6-uv.y, -(1.0-m.y));
+                uv.x *= iResolution.x / iResolution.y;
+                m.x *= iResolution.x / iResolution.y;
+                vec2 recPos = vec2(0.0, 0.0);
+
+                // kind of sun, with a lot of imagination
+                color.rg += circleSmooth(uv, vec2(m), 0.05, 0.15 + uSunSize);
+                float turnOffSky = smoothstep(0.25, 0.27,m.y);
+                color*= turnOffSky;
+
+                // earth
+                vec3 earth = vec3(vec2(rectangleGradientBottom(uv, recPos, vec2(40.0, 0.3), 0.16)), 0.0);
+                earth.r += 1.0 -m.y;
+                color += earth;
+                float turnOffEarth = smoothstep(0.09, 0.25,m.y);
+                color*= turnOffEarth;
+
+                gl_FragColor = vec4(color, 1.0);
+            }`,
+
+        vert: `
+            precision mediump float;
+            attribute vec3 position;
+
+            void main() {
+                gl_Position = vec4(position, 1);
+            }`,
+
+        attributes: {
+            position: regl.buffer([
+                [[-1, -1, 0], [-1, 1, 0], [1, 1, 0]],
+                [[1, 1, 0], [1, -1, 0], [-1, -1, 0]]
+            ])
+        },
+
+        uniforms: {
+            iResolution: regl.prop('resolution'),
+            uSunSize: regl.prop('sunSize'),
+            uHead: regl.prop('headPosition')
+        },
+        count: 6
+    })   
 
     if (!DEBUG) {
         video.setAttribute("hidden", "hidden")
@@ -91,16 +170,16 @@
         return Math.min(Math.max(mapped, low2), high2)
     }
 
-    const onResults = function(res){
-        const landmarks = res.multiFaceLandmarks
-        if(!landmarks || !landmarks[0]) return
-        const {x, y, z} = landmarks[0][NOSE_TIP]
+    const setSunPosition = function(landmarks){
+        //const landmarks = res.multiFaceLandmarks
+        if(!landmarks) return
+        const {x, y, z} = landmarks[NOSE_TIP]
         //console.log(res)
         const x_nose = map_range(x, 1 , 0, 0, canvasElement.width)
         const y_nose = map_range(y, 1, 0, 0, canvasElement.height)
 
-        const faceUp = landmarks[0][FACE_UP]
-        const faceDown = landmarks[0][FACE_DOWN]
+        const faceUp = landmarks[FACE_UP]
+        const faceDown = landmarks[FACE_DOWN]
 
         if (!faceUp.y || !faceDown.y) {
             sunSize =  0.6
@@ -141,15 +220,13 @@
                     //video.play()
                     video.addEventListener("loadeddata", predictWebcam);
                     removeWaitingMessage()
-
-                    //run()
                 })
-                // .catch(function (error){
-                //     removeWaitingMessage()
-                //     console.error('Unable to access the camera/webcam.', error)
-                //     addMouseListeners()
-                //     //playMouseDemo()
-                // })
+                .catch(function (error){
+                    removeWaitingMessage()
+                    console.error('Unable to access the camera/webcam.', error)
+                    addMouseListeners()
+                    //playMouseDemo()
+                })
             }
         );
     }
@@ -161,10 +238,10 @@ async function predictWebcam() {
   const ratio = video.VIDEO_HEIGHT / video.VIDEO_WIDTH;
   video.style.width = VIDEO_WIDTH + "px";
   video.style.height = VIDEO_WIDTH * ratio + "px";
-  canvasElement.style.width = VIDEO_WIDTH + "px";
-  canvasElement.style.height = VIDEO_WIDTH * ratio + "px";
-  canvasElement.width = video.videoWidth;
-  canvasElement.height = video.videoHeight;
+//   canvasElement.style.width = VIDEO_WIDTH + "px";
+//   canvasElement.style.height = VIDEO_WIDTH * ratio + "px";
+//   canvasElement.width = video.videoWidth;
+//   canvasElement.height = video.videoHeight;
   //Now let's start detecting the stream.
   let startTimeMs = performance.now();
   if (lastVideoTime !== video.currentTime) {
@@ -173,7 +250,8 @@ async function predictWebcam() {
   }
   if (results.faceLandmarks) {
     for (const landmarks of results.faceLandmarks) {
-        console.log(landmarks);
+        setSunPosition(landmarks)
+        //console.log(landmarks);
     //   drawingUtils.drawConnectors(
     //     landmarks,
     //     FaceLandmarker.FACE_LANDMARKS_TESSELATION,
@@ -184,23 +262,36 @@ async function predictWebcam() {
   //drawBlendShapes(videoBlendShapes, results.faceBlendshapes);
 
   // Call this function again to keep predicting when the browser is ready.
+  regl.frame(function (context) {
+            drawTriangle({
+                resolution: [context.drawingBufferWidth, context.drawingBufferHeight],
+                sunSize: sunSize,
+                headPosition: headPosition
+            })
+        })
     window.requestAnimationFrame(predictWebcam);
   
 }
 
-    function addMouseListeners(){
-        addEventListener("mousemove", (event) => {
-            headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
-        })
-        addEventListener("wheel", (event) => {
-            const inc = event.wheelDelta / 1200
-            if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){
-                sunSize += inc
-            } else if (inc < 0 && sunSize - inc > SUN_SIZE_MIN){
-                sunSize += inc
-            }
-        })
-    }
+
+
+function addMouseListeners(){
+    addEventListener("mousemove", (event) => {
+        headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
+    })
+    addEventListener("wheel", (event) => {
+        const inc = event.wheelDelta / 1200
+        if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){
+            sunSize += inc
+        } else if (inc < 0 && sunSize - inc > SUN_SIZE_MIN){
+            sunSize += inc
+        }
+    })
+}
+
+
+
+ 
 
 
     </script>
