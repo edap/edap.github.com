@@ -4,7 +4,7 @@ layout: single-medium-column
 ---
 
 
-I am lecturing at the Universität Der Künste, in the New Media class department, and I give workshops about computer graphics, creative coding, computer vision, fractals and algorithmic botany.
+I have been lecturing at the Universität Der Künste, in the New Media class department, and I give workshops about computer graphics, creative coding, computer vision, fractals and algorithmic botany.
 
 ## University Courses
 
@@ -82,6 +82,9 @@ Net Art
 
 ---
 ## Workshops
+
+Blender Fundamentals  
+13/06/2024, Universität der Künste, Berlin
 
 Algorithmic Botany  
 01/09/2020 - 07/09/2020, School of Machines, making & make believe, Berlin

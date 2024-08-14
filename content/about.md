@@ -7,10 +7,13 @@ layout: single-medium-column
 
 <!-- {{< img src="/img/posts/grass/grass.jpg" caption="Steve Francia" >}} -->
 
-I am a software developer based in Berlin.
-I am lecturing part-time at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
-If you're interested in hiring me for freelance work, [get in touch!](mailto:info@davideprati.com)
+{{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
+
+I am an artist and software developer based in Berlin.
+I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
+
+If you're interested in hiring me for freelance work get in touch! info (at) davideprati (dot) com
 
 
 Past collaborations include software companies, design studios, artists and public institutions such as:

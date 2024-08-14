@@ -318,3 +318,12 @@ a.prev-work{
     }
 }
 
+/* Video
+* via https://css-tricks.com/snippets/sass/maintain-aspect-ratio-mixin/
+* and from comments http://codepen.io/jakob-e/pen/LEdWNB
+*/
+.sixteen-nine { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; }
+.sixteen-nine iframe { position: absolute; width: 100%; height: 100%; left: 0; top: 0; }
+
+.four-three { position: relative; width: 100%; height: 0; padding-bottom: 75%; }
+.four-three iframe { position: absolute; width: 100%; height: 100%; left: 0; top: 0; }
