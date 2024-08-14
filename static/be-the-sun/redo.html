@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <style>
+        body{
+            background-color: black;
+            margin: 0px; padding: 0px; overflow: hidden;
+        }
+        #wait{
+            color:white;
+            font-family: system-ui;
+            font-size: 42px;
+            z-index: 3000;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            padding-top: 15%;
+        }
+        #video {
+            position:absolute;
+            top: -0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+    <meta charset="utf-8">
+    <title>Be the sun</title>
+    <meta name="description" content="Be The Sun">
+    <meta name="author" content="Davide Prati">
+    <script src="./js/regl.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
+    <script type="module">
+    // 2017 first shadertoy version https://www.shadertoy.com/view/4lsyzn
+    // 2017 webcam version online at edapx.neocities.org. defunct
+    // 2018 online at davideprati.com, using headtracker.js
+    // 2022 update. Use clmtracker.js
+    // 2024 update. Use google mediapipe
+
+    const FACE_UP = 10
+    const FACE_DOWN = 152
+    const NOSE_TIP = 1
+    const VIDEO_WIDTH = 300
+    const VIDEO_HEIGHT = 225
+    const SUN_SIZE_MAX = 1.0
+    const SUN_SIZE_MIN = 0.2
+    const DEBUG = true;
+
+    let headPosition = [200.0, 200.0]
+    let sunSize = 0.6
+    const videoElement = document.getElementById('video')
+    const canvasElement = document.getElementById('facecanvas')
+    canvasElement.width = window.innerWidth
+    canvasElement.height = window.innerHeight
+
+    if (!DEBUG) {
+        videoElement.setAttribute("hidden", "hidden")
+    }
+
+    const faceMesh = new FaceMesh({
+        locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+        }
+    })
+
+
+    initVideo(videoElement, 320, 180)
+
+
+    function map_range(value, low1, high1, low2, high2) {
+        let mapped = low2 + (high2 - low2) * (value - low1) / (high1 - low1)
+        return Math.min(Math.max(mapped, low2), high2)
+    }
+
+    const onResults = function(res){
+        const landmarks = res.multiFaceLandmarks
+        if(!landmarks || !landmarks[0]) return
+        const {x, y, z} = landmarks[0][NOSE_TIP]
+        //console.log(res)
+        const x_nose = map_range(x, 1 , 0, 0, canvasElement.width)
+        const y_nose = map_range(y, 1, 0, 0, canvasElement.height)
+
+        const faceUp = landmarks[0][FACE_UP]
+        const faceDown = landmarks[0][FACE_DOWN]
+
+        if (!faceUp.y || !faceDown.y) {
+            sunSize =  0.6
+        } else {
+            sunSize = faceDown.y -faceUp.y
+        }
+
+        //sunSize = map_range(z, -0.03, -0.12, SUN_SIZE_MIN, SUN_SIZE_MIN)
+        headPosition = [x_nose, y_nose]
+    }
+
+
+
+    function removeWaitingMessage(){
+        const msg = document.getElementById('wait')
+        msg.remove()
+    }
+
+    function initVideo(video, w, h){
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
+            const constraints = {video: {width: w, height: h, facingMode: 'user'}}
+            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                // apply the stream to the video element used in the texture
+                video.srcObject = stream
+                video.play()
+                removeWaitingMessage()
+                //run()
+            }).catch(function (error){
+                removeWaitingMessage()
+                console.error('Unable to access the camera/webcam.', error)
+                addMouseListeners()
+                //playMouseDemo()
+            })
+        } else {
+            removeWaitingMessage()
+            console.error('MediaDevices interface not available. Use the mouse as input')
+            addMouseListeners()
+            //playMouseDemo()
+        }
+    }
+
+    function addMouseListeners(){
+        addEventListener("mousemove", (event) => {
+            headPosition = [event.clientX, (canvasElement.height - event.clientY)]        
+        })
+        addEventListener("wheel", (event) => {
+            const inc = event.wheelDelta / 1200
+            if (inc > 0 && sunSize + inc < SUN_SIZE_MAX){
+                sunSize += inc
+            } else if (inc < 0 && sunSize - inc > SUN_SIZE_MIN){
+                sunSize += inc
+            }
+        })
+    }
+
+
+    </script>
+</head>
+<body>
+    <div id="wait">Wait for camera to be detected, otherwise use the mouse as input</div>
+    <video id="video"></video>
+    <canvas id="facecanvas"></canvas>
+</body>
+</html>
