@@ -61,6 +61,7 @@
         canvasElement.height = window.innerHeight
 
         const regl = createREGL({ canvas: canvasElement })
+
         const drawTriangle = regl({
             frag: `
             precision mediump float;
@@ -155,7 +156,7 @@
             } else {
                 removeWaitingMessage()
                 console.error('MediaDevices interface not available. Use the mouse as input')
-                addMouseListeners()
+                addPointerListeners()
                 playMouseDemo()
             }
         }
@@ -194,7 +195,7 @@
                     .catch(function (error) {
                         removeWaitingMessage()
                         console.error('Unable to access the camera/webcam.', error)
-                        addMouseListeners()
+                        addPointerListeners()
                         playMouseDemo()
                     })
             }
@@ -223,10 +224,11 @@
             window.requestAnimationFrame(predictWebcam)
         }
 
-        const addMouseListeners = () => {
-            addEventListener("mousemove", (event) => {
+        const addPointerListeners = () => {
+            canvasElement.addEventListener("pointermove", (event) => {
                 headPosition = [event.clientX, (canvasElement.height - event.clientY)]
-            })
+            }, false)
+
             addEventListener("wheel", (event) => {
                 const inc = event.wheelDelta / 1200
                 if (inc > 0 && sunSize + inc < SUN_SIZE_MAX) {
