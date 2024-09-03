@@ -37,7 +37,7 @@
     <title>Be the sun</title>
     <meta name="description" content="Be The Sun">
     <meta name="author" content="Davide Prati">
-    <script src="./js/regl.min.js"></script>
+    <script src="/be-the-sun/js/regl.min.js"></script>
 
     <script type="module">
         // 2017 first shadertoy version https://www.shadertoy.com/view/4lsyzn
@@ -201,7 +201,7 @@
             )
             faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
                 baseOptions: {
-                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                    modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
                     delegate: "GPU"
                 },
                 outputFaceBlendshapes: true,
