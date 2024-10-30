@@ -5,7 +5,7 @@
       <div class="grid-gutter"></div>
       <div class="grid-sizer"></div>
   <!-- list all the works under the default_section -->
-  {{ $default_section := "personal-works" }}
+  {{ $default_section := "demo" }}
   {{ $pages := where site.RegularPages "Section" "in" (slice $default_section) }}
   {{ range $pages.ByParam "order" }}
     <!-- <div class="grid">

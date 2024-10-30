@@ -18,6 +18,7 @@ If you're interested in hiring me for freelance work get in touch! info (at) dav
 
 Past collaborations include software companies, design studios, artists and public institutions such as:
 
+- [Volkswagen Future Center](https://schiffbauergasse.de/poi/vw-group-future-center-europe)
 - [HERE Technologies](https://www.here.com/)
 - [Tomás Saraceno Studio](https://studiotomassaraceno.org/)
 - [Heiner Franzen](https://www.heinerfranzen.de/)

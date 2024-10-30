@@ -6,6 +6,7 @@ tags:
 - Shaders
 
 title: "Psychedelic Post Process Materials"
+aliases: ['/personal-works/psychedelic-post-process-materials']
 layout: work
 cover: "/img/works/psychedelic-post-process-materials/EmoryInfiniteSquares.0220.jpeg"
 year: 2023

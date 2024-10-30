@@ -1,6 +1,6 @@
 ---
 slug: be-the-sun
-aliases: ['/demo/be-the-sun', /be-the-sun]
+aliases: ['/personal-works/be-the-sun', /be-the-sun]
 tags:
 - WebGL
 - Shaders

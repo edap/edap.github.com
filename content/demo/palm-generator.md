@@ -1,6 +1,6 @@
 ---
 slug: palm-generator
-aliases: ['/projects/palm-generator']
+aliases: ['/projects/palm-generator', '/personal-works/palm-generator']
 tags:
 - WebGL
 - Three.js
