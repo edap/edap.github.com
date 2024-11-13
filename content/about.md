@@ -13,7 +13,7 @@ layout: single-medium-column
 I am an artist and software developer based in Berlin.
 I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
-If you're interested in hiring me for freelance work get in touch! info (at) davideprati (dot) com
+If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com 
 
 
 Past collaborations include software companies, design studios, artists and public institutions such as:
@@ -30,5 +30,9 @@ Past collaborations include software companies, design studios, artists and publ
 - [Studio NAND](https://www.nand.io/)
 - [Humboldt University Berlin](https://www.hu-berlin.de/en)
 - [University of Art Berlin](https://newmedia.udk-berlin.de/)
+
+
+
+Social profiles: [![Instagram](/img/social/instagram.png)](https://www.instagram.com/edapx) [![Github](/img/social/github.png)](https://www.github.com/edap)
 
 ---
