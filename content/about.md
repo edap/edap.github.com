@@ -33,6 +33,6 @@ Past collaborations include software companies, design studios, artists and publ
 
 
 
-Social profiles: [![Mastodon](/img/social/mastodon.png)] (https://mastodon.gamedev.place/@edapx)[![Instagram](/img/social/instagram.png)](https://www.instagram.com/edapx) [![Github](/img/social/github.png)](https://www.github.com/edap)
+Social profiles: [![Mastodon](/img/social/mastodon.png)](https://mastodon.gamedev.place/@edapx) [![Instagram](/img/social/instagram.png)](https://www.instagram.com/edapx) [![Github](/img/social/github.png)](https://www.github.com/edap)
 
 ---
