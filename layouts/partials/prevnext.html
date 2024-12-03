@@ -1,25 +1,28 @@
-{{ $default_section := "demo" }}
-{{ $pages := where site.RegularPages "Section" "in" (slice $default_section) }}
-{{ $sortedPages := $pages.ByParam "order" }}
+{{ if .IsPage }}
+    {{ $defaultSection := "demo" }}
+    {{ $currentSection := .Section }}
+    {{ $pages := where site.RegularPages "Section" $currentSection }}
+    {{ $sortedPages := $pages.ByParam "order" }}
 
-{{ $currentPage := . }}
-{{ $currentIndex := -1 }}
+    {{ $currentPage := . }}
+    {{ $currentIndex := -1 }}
 
-{{ range $index, $page := $sortedPages }}
-    {{ if eq $page.Permalink $currentPage.Permalink }}
-        {{ $currentIndex = $index }}
+    {{ range $index, $page := $sortedPages }}
+        {{ if eq $page.Permalink $currentPage.Permalink }}
+            {{ $currentIndex = $index }}
+        {{ end }}
     {{ end }}
+
+    <div class="prevnext">
+        {{ if gt $currentIndex 0 }}
+            <div class="linkworks left">
+                <a href="{{ (index $sortedPages (sub $currentIndex 1)).Permalink }}" alt="Previous" class="next-work"> &lt;&lt; </a>
+            </div>
+        {{ end }}
+        {{ if lt (add $currentIndex 1) (len $sortedPages) }}
+            <div class="linkworks right">
+                <a href="{{ (index $sortedPages (add $currentIndex 1)).Permalink }}" alt="Next" class="prev-work"> &gt;&gt; </a>
+            </div>
+        {{ end }}
+    </div>
 {{ end }}
-
-<div class="prevnext">
-    {{ if gt $currentIndex 0 }}
-        <div class="linkworks left">
-            <a href="{{ (index $sortedPages (sub $currentIndex 1)).Permalink }}" alt="Previous" class="next-work"> &lt;&lt; </a>
-        </div>
-    {{ end }}
-    {{ if lt (add $currentIndex 1) (len $sortedPages) }}
-        <div class="linkworks right">
-            <a href="{{ (index $sortedPages (add $currentIndex 1)).Permalink }}" alt="Next" class="prev-work"> &gt;&gt; </a>
-        </div>
-    {{ end }}
-</div>
