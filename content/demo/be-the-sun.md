@@ -10,8 +10,8 @@ title: "Be the sun"
 layout: bethesun
 cover: "/img/works/be-the-sun/cover.jpg"
 year: 2017
-thumbclass: 'grid l4-12'
-order: 2
+thumbclass: 'grid l3-12'
+order: 7
 description: "move your head and be the sun"
 ---
 
