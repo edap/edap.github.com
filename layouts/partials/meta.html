@@ -5,6 +5,8 @@
 
 {{ if (eq .Page.Title "The Palm Generator")}}
     <link href="https://fonts.googleapis.com/css?family=IM+Fell+English" rel="stylesheet">
+    {{ $palmstyle := resources.Get "css/palmgenerator.css" | resources.Minify }}
+    <link rel="stylesheet" href="{{ $palmstyle.Permalink }}">
 {{ end }}
 <link rel="stylesheet" href="{{ $style.Permalink }}">
 

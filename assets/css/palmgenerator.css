@@ -1,0 +1,37 @@
+/* Palm Generator */
+
+#root {
+    text-align: center;
+    width: 80%;
+    height: 800px;
+    margin: auto;
+}
+
+.levaGUi{
+    width: 20rem;
+    position: absolute;
+    top:10rem;
+    right: 2rem;
+    z-index: 100;
+}
+  
+.canvasPalm{
+    width: 100%;
+    height: 100%;
+}
+
+/* Palm Generator poster */
+.index-content.palm-generator {
+    font-family: 'IM Fell English', serif;
+    background-color: white;
+    color: var(--background-color);
+    text-align: center;
+    font-size: 0.8rem;
+    border: 8px double var(--background-color);
+    margin-bottom: 3rem;
+
+}
+
+.palm-generator > .grid > img {
+    width: 100%;
+}
