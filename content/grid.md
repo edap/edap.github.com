@@ -50,3 +50,8 @@ description: ''
 {{< img-srcset path="/img/works/harpgl/HarpGL-" width="l8-12">}}
 
 {{< img-srcset path="/img/works/harpgl/HarpGL-" width="l4-12" >}}
+
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
+{{< img-srcset path="/img/works/harpgl/HarpGL-" width="l2-12">}}
