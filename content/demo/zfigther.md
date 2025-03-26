@@ -10,8 +10,8 @@ title: "Z-Fighter"
 layout: zfighter
 cover: "/img/works/z-fighter/cover.jpg"
 year: 2024
-thumbclass: 'grid l4-12'
-order: 3
+thumbclass: 'grid l3-12'
+order: 4
 description: "Z-Fighter never gives up"
 ---
 

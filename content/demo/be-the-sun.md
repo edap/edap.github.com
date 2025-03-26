@@ -11,7 +11,7 @@ layout: bethesun
 cover: "/img/works/be-the-sun/cover.jpg"
 year: 2017
 thumbclass: 'grid l3-12'
-order: 7
+order: 8
 description: "move your head and be the sun"
 ---
 
