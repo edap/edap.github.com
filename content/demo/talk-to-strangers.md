@@ -7,7 +7,7 @@ title: "Talk to strangers"
 layout: work
 cover: "/img/works/talk-to-strangers/cover.jpg"
 year: 2020
-thumbclass: 'grid l3-12'
+thumbclass: 'grid l4-12'
 order: 3
 description: "Serie developed in the frame of the New Digital Collage project, curated by Fabio Paris and Linda Rocco."
 ---

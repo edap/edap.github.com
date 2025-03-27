@@ -12,7 +12,7 @@ title: "The Palm Generator"
 layout: palmgenerator
 cover: "/img/works/palm-generator/palm-generator-large.jpg"
 year: 2017
-thumbclass: 'grid l3-12'
+thumbclass: 'grid l4-12'
 order: 6
 description: " The Palm Generator is a Three.js module to generate palms.
 
