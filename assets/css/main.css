@@ -271,14 +271,6 @@ a.prev-work{
     .main {
         margin-top: 0rem;
     }
-    /* Palm Generator Editor, it is disable on mobiles */
-    #root {
-        display: none;
-    }
-    /* Palm Poster container */
-    .palm-generator {
-        width: 93%;
-    }
 }
 
 /* Video

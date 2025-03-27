@@ -1,0 +1,15 @@
+from the repository of the project (2025-painthead), run `npm run build`, then `npm run preview` to check it locally.
+
+If you are just updating js or css, do this:
+- copy the .js and .css file that are in dist/assets/ to edap.github.com/static/painthead/assets
+
+
+If you are redoing everyhing, assets included, do this:
+- copy the dist/assets folder to edap.github.com/static/painthead/assets
+
+
+
+In both cases, 
+- open the .js file. Change all the occurency of `/assets/` with `/painthead/assets/`
+- correct the path of the new .js and .css in the layout file located at edap.github.com/layouts/painthead.html
+- deploy and test.

@@ -35,3 +35,15 @@
 .palm-generator > .grid > img {
     width: 100%;
 }
+
+/* Mobile adjsustments */
+@media (max-width: 700px) {
+    /* Palm Generator Editor, it is disable on mobiles */
+    #root {
+        display: none;
+    }
+    /* Palm Poster container */
+    .palm-generator {
+        width: 93%;
+    }
+}

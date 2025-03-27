@@ -229,12 +229,12 @@
                     video.addEventListener("loadeddata", predictWebcam)
                     removeWaitingMessage()
                 })
-                    .catch(function (error) {
-                        removeWaitingMessage()
-                        console.error('Unable to access the camera/webcam.', error)
-                        addPointerListeners()
-                        playMouseDemo()
-                    })
+                .catch(function (error) {
+                    removeWaitingMessage()
+                    console.error('Unable to access the camera/webcam.', error)
+                    addPointerListeners()
+                    playMouseDemo()
+                })
             }
             )
         }
@@ -322,7 +322,7 @@
 
     <div class="prevnext">
         <div class="linkworks left"><a href="/demo/appunti-su-piuma/" alt="Previous" class="next-work"> &lt;&lt; </a></div>
-        <div class="linkworks right"><a href="/demo/tuot" alt="Next" class="prev-work"> &gt;&gt; </a></div>
+        <div class="linkworks right"><a href="/demo/painthead" alt="Next" class="prev-work"> &gt;&gt; </a></div>
     </div>
 </body>
 
