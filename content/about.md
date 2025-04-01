@@ -10,7 +10,7 @@ layout: single-medium-column
 
 {{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
-I am an artist and software developer based in Berlin.
+I am a software developer based in Berlin.
 I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
 If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com 
