@@ -21,7 +21,6 @@ Past collaborations include software companies, design studios, artists and publ
 - [Volkswagen Future Center](https://schiffbauergasse.de/poi/vw-group-future-center-europe)
 - [HERE Technologies](https://www.here.com/)
 - [Tomás Saraceno Studio](https://studiotomassaraceno.org/)
-- [Heiner Franzen](https://www.heinerfranzen.de/)
 - [Neeeu](https://neu.io/)
 - [FIELD](https://field.io/)
 - [Studio ANF](https://studioanf.com/)
@@ -30,6 +29,9 @@ Past collaborations include software companies, design studios, artists and publ
 - [Studio NAND](https://www.nand.io/)
 - [Humboldt University Berlin](https://www.hu-berlin.de/en)
 - [University of Art Berlin](https://newmedia.udk-berlin.de/)
+- [University of Helsinki](https://www.helsinki.fi/en)
+- [Heiner Franzen](https://www.heinerfranzen.de/)
+- [Philipp Lachenmann](https://philipp-lachenmann.com/)
 
 
 
