@@ -1,0 +1,66 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Racket Racket - Try the Hilarious Ping Pong Experience!</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: #000;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        #score {
+            position: absolute;
+            top: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 2rem;
+            font-family: monospace;
+            background: rgba(0,0,0,0.4);
+            padding: 0.5em 1.5em;
+            border-radius: 1em;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Disable pull-to-refresh on mobile */
+        body {
+            overscroll-behavior: none;
+        }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@v0.178.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.178.0/examples/jsm/",
+        "stats" : "https://cdn.jsdelivr.net/npm/stats.js@0.17.0/build/stats.min.js"
+      }
+    }
+    </script>
+    <script type="module" src="src/main.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="score">0 : 0</div>
+    </div>
+</body>
+
+</html>
