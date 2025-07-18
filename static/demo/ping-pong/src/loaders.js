@@ -40,7 +40,7 @@ export const loadRandomSounds = async () =>{
     ];
 
     let randomSounds = await Promise.all(
-        soundFiles.map(file => createAudioElement(`audio/RND/${file}`, volume))
+        soundFiles.map(file => createAudioElement(`./audio/RND/${file}`, volume))
     );
     randomSounds = randomSounds.filter(Boolean); // Filter out nulls
     console.log('✅ Loaded', randomSounds.length, 'Random Mode sounds');
@@ -60,7 +60,7 @@ export const loadBallSounds = async () => {
 
 export const loadCategorySounds = async (categoryFolder, categoryFiles) => {
     let categorySounds = await Promise.all(
-        categoryFiles.map(file => createAudioElement(`audio/category_sounds/${categoryFolder}/${file}`, volume))
+        categoryFiles.map(file => createAudioElement(`./audio/category_sounds/${categoryFolder}/${file}`, volume))
     );
     categorySounds = categorySounds.filter(Boolean); // Filter out nulls
     console.log('✅ Loaded', categorySounds.length, 'categorySounds ');
@@ -69,7 +69,7 @@ export const loadCategorySounds = async (categoryFolder, categoryFiles) => {
 
 export const loadLongPressSound = async () => {
     // You'll need a specific sound file for the 0.4s to 2s feedback
-    const soundPath = 'audio/chg1.wav'; // <--- IMPORTANT: Replace with your actual sound file path
+    const soundPath = './audio/chg1.wav'; // <--- IMPORTANT: Replace with your actual sound file path
     let longPressSound = await createAudioElement(soundPath, volume * 0.7); // Adjust volume
     if (longPressSound) {
         longPressSound.loop = true; // Make it loop for continuous feedback
@@ -97,7 +97,7 @@ export const loadModel = (url = '/models/scene.glb') => {
     });
 }
 
-export const loadCategoriesMapping = async (jsonUrl = '/audio/category_sounds.json') => {
+export const loadCategoriesMapping = async (jsonUrl = './audio/category_sounds.json') => {
     try {
         const response = await fetch(jsonUrl);
         if (!response.ok) {
