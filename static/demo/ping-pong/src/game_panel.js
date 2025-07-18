@@ -123,12 +123,12 @@ class GamePanel {
                     console.log('✨ Very Long Press: New Random Category:', category);
                     this.selectedCategory = category;
                     // Load category sounds
+                    updateIndicators(category);
                     loadCategorySounds(category.key, category.sounds)
                     .then(loadedSoundsArray => {
                         // This block runs ONLY if loadCategorySounds successfully loads the sounds
                         console.log('Loaded Audio Elements:', loadedSoundsArray);
                         this.gameScene.updateCategorySounds(loadedSoundsArray);
-                        updateIndicators(category);
                     })
                     .catch(error => {
                         console.error('❌ Failed to load category sounds:', error);
