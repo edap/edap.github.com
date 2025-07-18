@@ -7,44 +7,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Racket Racket - Try the Hilarious Ping Pong Experience!</title>
-
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-            background-color: #000;
-        }
-
-        #container {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-        }
-        #score {
-            position: absolute;
-            top: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #fff;
-            font-size: 2rem;
-            font-family: monospace;
-            background: rgba(0,0,0,0.4);
-            padding: 0.5em 1.5em;
-            border-radius: 1em;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        /* Disable pull-to-refresh on mobile */
-        body {
-            overscroll-behavior: none;
-        }
-    </style>
-
+    <link rel="stylesheet" href="style.css">
     <script type="importmap">
     {
       "imports": {
@@ -58,7 +21,23 @@
 </head>
 
 <body>
+    <div id="controlPanel">
+        <!-- Indicators -->
+        <div id="indicators">
+          <div class="indicator" data-index="0"></div>
+          <div class="indicator" data-index="1"></div>
+          <div class="indicator" data-index="2"></div>
+          <div class="indicator" data-index="3"></div>
+          <div class="indicator" data-index="4"></div>
+        </div>
+      
+        <!-- Mode Select Button -->
+        <button id="modeSelectButton">Mode Select</button>
+      </div>
+
+    <div id="loading">Loading sounds...</div>
     <div id="container">
+        <button id="audio-panel-toggle-btn" >SELECT</button>
         <div id="score">0 : 0</div>
     </div>
 </body>

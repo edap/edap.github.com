@@ -24,8 +24,8 @@ class Physics {
         this.audio = new AudioManager();
     }
 
-    init(settings) {
-        this.audio.init(settings);
+    init(settings, randomSounds, ballSounds) {
+        this.audio.init(settings,randomSounds, ballSounds);
     }
 
     addBox(b) {
@@ -122,4 +122,25 @@ class Physics {
     }
 }
 
-export default Physics;
+const calculatePaddleTrajectory = (paddleTrajectory) => {
+    let now = Date.now();
+    let trayectory = new THREE.Vector3(0, 0, 0);
+    let prevT = null;
+    for (let i = 0; i < paddleTrajectory.length; ++i) {
+        let t = paddleTrajectory[i];
+        if (now - t.time > 200) {
+            continue; //we only check 200ms trayectory
+        }
+        if (!prevT) {
+            prevT = t;
+            continue;
+        }
+        trayectory.set(trayectory.x + t.x - prevT.x,
+            trayectory.y + t.y - prevT.y,
+            trayectory.z + t.z - prevT.z);
+        prevT = t;
+    }
+    return trayectory;
+}
+
+export { Physics, calculatePaddleTrajectory};

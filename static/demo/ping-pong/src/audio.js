@@ -1,18 +1,12 @@
-/* 
- * Racket Racket Ping Pong Audio System
- * Enhanced for mobile compatibility and Random Mode sounds
- * Copyright (c) 2024 - Based on original PingPongWebGL by MortimerGoro
- */
-
-
 class AudioManager {
     constructor() {
         this.randomSounds = [];
         this.ballSounds = [];
+        this.categorySounds = [];
         this.isUnlocked = false;
         this.volume = 0.7;
         this.lastSoundIndex = -1;
-        this.recentSounds = []; // Track recent sounds to avoid repetition
+        this.recentSounds = [];
         this.maxRecentSounds = 5;
 
         // Feedback tracking
@@ -21,63 +15,11 @@ class AudioManager {
         this.sessionStartTime = Date.now();
     }
 
-    init(settings) {
-        this.loadRandomSounds();
-        this.loadBallSounds(settings);
+    init(settings, randomSounds, ballSounds) {
+        this.randomSounds = randomSounds;
+        this.ballSounds = ballSounds;
         this.setupMobileAudioUnlock();
         this.initFeedbackTracking();
-    }
-
-    loadRandomSounds() {
-        // Load all 46 Random Mode sounds from the copied files
-        const soundFiles = [
-            '0.wav', '1.wav', '2.wav', '3.wav', '4.wav', '5.wav', '6.wav', '7.wav', '8.wav', '9.wav',
-            '10.wav', '11.wav', '12.wav', '13.wav', '14.wav', '15.wav', '16.wav', '17.wav', '18.wav', '19.wav',
-            '20.wav', '55.wav', '69.wav', '76.wav', '87.wav', '99.wav', '108.wav', '124.wav', '132.wav',
-            '141.wav', '149.wav', '155.wav', '164.wav', '170.wav', '177.wav', '184.wav', '193.wav', '199.wav',
-            '206.wav', '220.wav', '229.wav', '236.wav', '249.wav', '257.wav', '268.wav', '279.wav'
-        ];
-
-        for (let i = 0; i < soundFiles.length; i++) {
-            const audio = new Audio();
-            audio.src = 'audio/' + soundFiles[i];
-            audio.preload = 'auto';
-            audio.volume = this.volume;
-
-            // Add error handling
-            audio.addEventListener('error', function (e) {
-                console.warn('Failed to load random sound:', soundFiles[i]);
-            });
-
-            this.randomSounds.push(audio);
-        }
-
-        console.log('Loaded', this.randomSounds.length, 'Random Mode sounds');
-    }
-
-    loadBallSounds(settings) {
-        // Use dedicated bounce sounds from user's bounces folder
-        const ballSoundFiles = ['1.wav', '2.wav', '3.wav', '4.wav', '5.wav'];
-
-        for (let i = 0; i < ballSoundFiles.length; i++) {
-            const audio = new Audio();
-            audio.src = './audio/bounces/' + ballSoundFiles[i]; // Use relative path with ./
-            audio.preload = 'auto';
-            audio.volume = this.volume * 0.4; // Quieter than racket sounds
-
-            audio.addEventListener('error', function (e) {
-                console.warn('Failed to load bounce sound:', ballSoundFiles[i], 'Error:', e);
-                console.warn('Attempted path:', audio.src);
-            });
-
-            audio.addEventListener('canplaythrough', function () {
-                console.log('Successfully loaded bounce sound:', ballSoundFiles[i]);
-            });
-
-            this.ballSounds.push(audio);
-        }
-
-        console.log('Loading', ballSoundFiles.length, 'dedicated bounce sounds for ball hits');
     }
 
     setupMobileAudioUnlock() {
@@ -100,15 +42,9 @@ class AudioManager {
                 // Simple approach: just unlock the audio context with the silent audio
                 // Don't play any actual game sounds during unlock
                 console.log('MOBILE AUDIO: Silent audio played successfully, context unlocked');
-                if (PingPong.MobileDebug) {
-                    PingPong.MobileDebug.log('Audio context unlocked silently for mobile device');
-                }
             }).catch(() => {
                 // Even simpler fallback - just mark as unlocked
                 console.log('MOBILE AUDIO: Silent audio failed, using fallback unlock');
-                if (PingPong.MobileDebug) {
-                    PingPong.MobileDebug.log('Audio unlock fallback - context may need manual unlock');
-                }
             });
 
             this.isUnlocked = true;
@@ -213,42 +149,29 @@ class AudioManager {
     playRandomSound(volume) {
         if (!this.isUnlocked || this.randomSounds.length === 0) {
             console.log('AUDIO: Cannot play - unlocked:', this.isUnlocked, 'sounds loaded:', this.randomSounds.length);
-            this.showAudioFeedback('❌ Audio not ready');
+            //this.showAudioFeedback('❌ Audio not ready');
             return;
         }
 
         volume = volume !== undefined ? volume : this.volume;
 
-        // Select a sound that wasn't played recently
-        let attempts = 0;
-        let selectedIndex;
+        // Play from RND folder or play randomly from the category sounds?
+        // it depends wheter categorySounds is set or not
 
-        do {
-            selectedIndex = Math.floor(Math.random() * this.randomSounds.length);
-            attempts++;
-        } while (this.recentSounds.includes(selectedIndex) && attempts < 10);
+        const playRandomlyFromCategory = this.categorySounds.length !== 0;
+        let selectedIndex = this.getSoundNotPlayedRecently(playRandomlyFromCategory);
 
-        // Update recent sounds tracking
-        this.recentSounds.push(selectedIndex);
-        if (this.recentSounds.length > this.maxRecentSounds) {
-            this.recentSounds.shift();
+        let selectedSound;
+        if (playRandomlyFromCategory) {
+            selectedSound = this.categorySounds[selectedIndex];
+        } else {
+            selectedSound = this.randomSounds[selectedIndex];
         }
 
         // Play the selected sound
-        const selectedSound = this.randomSounds[selectedIndex];
         selectedSound.volume = volume;
         selectedSound.currentTime = 0; // Reset to beginning
-
-        const playPromise = selectedSound.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log('✅ AUDIO: Successfully played sound', selectedIndex);
-                this.showAudioFeedback('🔊 Sound #' + selectedIndex);
-            }).catch(error => {
-                console.warn('❌ AUDIO: Play failed for sound', selectedIndex, ':', error);
-                this.showAudioFeedback('❌ Audio failed - upload files to server');
-            });
-        }
+        selectedSound.play();
 
         // Track usage
         this.playCount++;
@@ -260,41 +183,39 @@ class AudioManager {
         }
         this.soundFeedback[selectedIndex].plays++;
 
-        return selectedIndex; // Return for potential feedback UI
+        return selectedIndex;
     }
 
-    showAudioFeedback(message) {
-        // Show brief visual feedback for audio status
-        let feedbackDiv = document.getElementById('audio-feedback');
-        if (!feedbackDiv) {
-            feedbackDiv = document.createElement('div');
-            feedbackDiv.id = 'audio-feedback';
-            feedbackDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: rgba(0, 0, 0, 0.8);
-                color: white;
-                padding: 8px 12px;
-                border-radius: 5px;
-                font-family: Arial, sans-serif;
-                font-size: 14px;
-                z-index: 9999;
-                transition: opacity 0.3s ease;
-                pointer-events: none;
-            `;
-            document.body.appendChild(feedbackDiv);
+    getSoundNotPlayedRecently(fromCategoryFolder) {
+        // Select a sound that wasn't played recently
+        let attempts = 0;
+        //let selectedIndex;
+        let selectedIndex = 0;
+        let limitAttempts;
+        if (fromCategoryFolder) {
+            limitAttempts = 2;
+            do {
+                selectedIndex = Math.floor(Math.random() * this.categorySounds.length);
+                attempts++;
+            } while (this.categorySounds.includes(selectedIndex) && attempts < limitAttempts);
+        } else {
+            limitAttempts = 10;
+            do {
+                selectedIndex = Math.floor(Math.random() * this.randomSounds.length);
+                attempts++;
+            } while (this.recentSounds.includes(selectedIndex) && attempts < limitAttempts);
         }
 
-        feedbackDiv.textContent = message;
-        feedbackDiv.style.opacity = '1';
 
-        // Auto-hide after 2 seconds
-        clearTimeout(this.feedbackTimeout);
-        this.feedbackTimeout = setTimeout(() => {
-            feedbackDiv.style.opacity = '0';
-        }, 2000);
+
+        // Update recent sounds tracking
+        this.recentSounds.push(selectedIndex);
+        if (this.recentSounds.length > this.maxRecentSounds) {
+            this.recentSounds.shift();
+        }
+        return selectedIndex;
     }
+
 
     playBallSound(volume) {
         if (!this.isUnlocked || this.ballSounds.length === 0) {
@@ -315,7 +236,7 @@ class AudioManager {
                 console.log('✅ BALL AUDIO: Successfully played bounce sound', randomIndex);
             }).catch(error => {
                 console.warn('❌ BALL AUDIO: Play failed:', error);
-                this.showAudioFeedback('❌ Ball sounds failed - upload files');
+                //this.showAudioFeedback('❌ Ball sounds failed - upload files');
             });
         }
     }
@@ -325,45 +246,10 @@ class AudioManager {
         return this.playRandomSound(volume);
     }
 
-    // Feedback methods for future UI integration
-    likSound(soundIndex) {
-        if (soundIndex !== undefined && this.soundFeedback[soundIndex]) {
-            this.soundFeedback[soundIndex].likes++;
-            this.saveFeedbackData();
-        }
-    }
-
-    dislikeSound(soundIndex) {
-        if (soundIndex !== undefined && this.soundFeedback[soundIndex]) {
-            this.soundFeedback[soundIndex].dislikes++;
-            this.saveFeedbackData();
-        }
-    }
-
-    getSessionStats() {
-        return {
-            soundsPlayed: this.playCount,
-            sessionLength: Date.now() - this.sessionStartTime,
-            totalSoundsAvailable: this.randomSounds.length,
-            feedbackData: this.soundFeedback
-        };
-    }
-
-    setVolume(volume) {
-        this.volume = Math.max(0, Math.min(1, volume));
-
-        // Update all loaded sounds
-        this.randomSounds.forEach(sound => {
-            sound.volume = this.volume;
-        });
-
-        this.ballSounds.forEach(sound => {
-            sound.volume = this.volume * 0.6;
-        });
+    setCategorySounds(catSounds) {
+        this.categorySounds = catSounds;
+        this.recentSounds = [];
     }
 }
 
-// TODO Initialize audio
-// Global instance
-//PingPong.Audio = new PingPong.AudioManager();
 export default AudioManager;

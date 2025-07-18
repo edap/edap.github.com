@@ -95,3 +95,54 @@ export const toWorld = (x, y, zPlane = 0, camera) => {
     // Return the world coordinate on the given z-plane
     return camera.position.clone().add(dir.multiplyScalar(distance));
 }
+
+export const createSettings = () => {
+
+    //size in meters
+    let width = 10;
+    let depth = 20;
+    let height = 5;
+    let tableWidth = 1.5;
+
+    let quality = 0;
+
+    let settings = {
+        debug: false,
+        wallMode: false,
+        width: width,
+        height: height,
+        depth: depth,
+        table: {
+            model: "models/table.glb",
+            width: tableWidth,
+            // color: 0x2b476e,
+            // texture: "images/table.jpg"
+        },
+
+        audio: {
+            ball: ["audio/ball1.ogg", "audio/ball2.ogg"]
+            // Random Mode sounds loaded automatically by AudioManager
+        },
+
+        mobile: {
+            enabled: /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+            touchSensitivity: 0.8
+        }
+    };
+
+    return settings;
+}
+
+export const getRandomCategory = (data) => {
+    const keys = Object.keys(data);
+    if (keys.length === 0) {
+        console.warn('No categories found in JSON.');
+        return null;
+    }
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+
+    return {
+        key: randomKey,
+        ...data[randomKey]
+    };
+}

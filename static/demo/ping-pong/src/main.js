@@ -1,53 +1,12 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
-import GameScene from "./game_scene.js"
+import GamePanel from "./game_panel.js"
+import { createSettings } from "./utils.js";
+import { loadBallSounds, loadRandomSounds, loadLongPressSound, loadModel, loadCategoriesMapping } from "./loaders.js";
 
 let renderer;
-let gameScene;
+let gamePanel;
 
-
-
-const createSettings = () => {
-
-    //size in meters
-    let width = 10;
-    let depth = 20;
-    let height = 5;
-    let tableWidth = 1.5;
-
-    let quality = 0;
-
-    let settings = {
-        debug: false,
-        wallMode: false,
-        width: width,
-        height: height,
-        depth: depth,
-        table: {
-            model: "models/table.glb",
-            width: tableWidth,
-            // color: 0x2b476e,
-            // texture: "images/table.jpg"
-        },
-
-        audio: {
-            ball: ["audio/ball1.ogg", "audio/ball2.ogg"]
-            // Random Mode sounds loaded automatically by AudioManager
-        },
-
-        mobile: {
-            enabled: /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-            touchSensitivity: 0.8
-        }
-    };
-
-    return settings;
-}
-
-const init = () => {
-    let settings = createSettings();
-
+const init = (settings, categories, longPressSound, randomSounds, ballSounds, glbModel) => {
     let canvas = document.createElement("canvas");
     canvas.screencanvas = true; //for cocoonjs
     canvas.width = window.innerWidth;
@@ -74,31 +33,51 @@ const init = () => {
 
     document.getElementById('container').appendChild(renderer.domElement);
 
-    gameScene = new GameScene(renderer, settings);
-    gameScene.init();
+    gamePanel = new GamePanel();
+    gamePanel.init(categories, longPressSound, randomSounds, ballSounds, renderer, settings, glbModel)
 
     // Handle window resize
     window.addEventListener('resize', handleResize, false);
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
-            gameScene.mobileDebug.init();
-        });
-    } else {
-        gameScene.mobileDebug.init();
-    }
 }
 
 const handleResize = () => { 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    gameScene.resize(width, height)
+    gamePanel.gameScene.resize(width, height)
 }
 
 const render = () => {
-    gameScene.render();
+    gamePanel.gameScene.render();
     requestAnimationFrame(render);
 }
 
-init();
-render();
+async function loadGame() {
+    const loadingEl = document.getElementById('loading');
+    if (!loadingEl) {
+        console.error("Error: '#loading' element not found in the DOM.");
+        return; // Exit if the element isn't found
+    }
+    loadingEl.style.display = 'block';
+
+    try {
+        let settings = createSettings();
+        // Await all initial asset loads
+        const [categories,longPressSound, randomSounds, ballSounds, glbModel] = await Promise.all([
+            loadCategoriesMapping(),
+            loadLongPressSound(),
+            loadRandomSounds(),
+            loadBallSounds(),
+            loadModel(settings.table.model)
+        ]);
+
+        loadingEl.style.display = 'none';
+        init(settings, categories, longPressSound, randomSounds, ballSounds, glbModel);
+        render();
+    } catch (error) {
+        console.error('❌ Error loading game assets:', error);
+        loadingEl.innerText = 'Failed to load game. Check console for details.';
+    }
+}
+
+// Attach loadGame to the DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', loadGame);

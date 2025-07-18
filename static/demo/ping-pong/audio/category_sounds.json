@@ -1,0 +1,752 @@
+{
+  "AA": {
+    "code": "2111",
+    "category": "Dogs",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BB": {
+    "code": "2112",
+    "category": "Cats",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "CC": {
+    "code": "3333",
+    "category": "Farts",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "DD": {
+    "code": "2114",
+    "category": "Toys",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "EE": {
+    "code": "4431",
+    "category": "Bells",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "FF": {
+    "code": "4433",
+    "category": "Bounces",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "GG": {
+    "code": "2123",
+    "category": "Smash",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "HH": {
+    "code": "2124",
+    "category": "Sir Snooty",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "II": {
+    "code": "4313",
+    "category": "Burps",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "JJ": {
+    "code": "2132",
+    "category": "Cartoon Voices",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "KK": {
+    "code": "4324",
+    "category": "Poultry",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "LL": {
+    "code": "2134",
+    "category": "Ninjas",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "MM": {
+    "code": "2141",
+    "category": "Cowboys",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "NN": {
+    "code": "4311",
+    "category": "Cows",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "OO": {
+    "code": "2143",
+    "category": "Explosions",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "PP": {
+    "code": "3134",
+    "category": "Goats,  Horses & Sheep",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "QQ": {
+    "code": "2211",
+    "category": "Jungle",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "RR": {
+    "code": "4113",
+    "category": "Girl Giggles",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "SS": {
+    "code": "2213",
+    "category": "Common Cold",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "TT": {
+    "code": "4144",
+    "category": "Cockney",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "UU": {
+    "code": "2221",
+    "category": "Femme Fatale",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "VV": {
+    "code": "2222",
+    "category": "Lethario",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "WW": {
+    "code": "3324",
+    "category": "Holy Proclamations",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "XX": {
+    "code": "2224",
+    "category": "Horns",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "YY": {
+    "code": "2231",
+    "category": "Yodel",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "ZZ": {
+    "code": "1114",
+    "category": "Crowd",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AB": {
+    "code": "2233",
+    "category": "Slide Whistle",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AC": {
+    "code": "1222",
+    "category": "Trumpets",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AD": {
+    "code": "2241",
+    "category": "Trains",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AE": {
+    "code": "4341",
+    "category": "Caveman",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AF": {
+    "code": "2243",
+    "category": "Guitars",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AG": {
+    "code": "4241",
+    "category": "Guns",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AH": {
+    "code": "2311",
+    "category": "Laser Blasts",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AI": {
+    "code": "1342",
+    "category": "Giggles",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AJ": {
+    "code": "2313",
+    "category": "Air Force",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AK": {
+    "code": "3433",
+    "category": "Primates",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AL": {
+    "code": "2321",
+    "category": "Orc Laughter",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AM": {
+    "code": "4243",
+    "category": "Pigs",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AN": {
+    "code": "2323",
+    "category": "Pirates",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AO": {
+    "code": "4242",
+    "category": "Dingers",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AP": {
+    "code": "2331",
+    "category": "Toilet",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AQ": {
+    "code": "2332",
+    "category": "Thunder",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AR": {
+    "code": "4231",
+    "category": "Surfer Dude",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AS": {
+    "code": "2334",
+    "category": "Retro Gamer",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AT": {
+    "code": "3341",
+    "category": "Sports Announcer",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AU": {
+    "code": "3142",
+    "category": "Mouth Sounds",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AV": {
+    "code": "2343",
+    "category": "Kissing",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AW": {
+    "code": "2442",
+    "category": "Snoring",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AX": {
+    "code": "2411",
+    "category": "Teen Girl",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AY": {
+    "code": "4432",
+    "category": "Zombie",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "AZ": {
+    "code": "2413",
+    "category": "Mafia",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BA": {
+    "code": "3413",
+    "category": "Rapper",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BC": {
+    "code": "3343",
+    "category": "Bird Tweets",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BD": {
+    "code": "1331",
+    "category": "Spooky",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BE": {
+    "code": "2423",
+    "category": "Opera",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BF": {
+    "code": "1241",
+    "category": "New Jersey",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BG": {
+    "code": "2431",
+    "category": "Toddler",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BH": {
+    "code": "4133",
+    "category": "Police",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BI": {
+    "code": "2434",
+    "category": "Crying",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BJ": {
+    "code": "4423",
+    "category": "Dinosaurs",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BK": {
+    "code": "3234",
+    "category": "Drums",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BL": {
+    "code": "2341",
+    "category": "Ta Da",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BM": {
+    "code": "4331",
+    "category": "Chainsaws",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BN": {
+    "code": "3123",
+    "category": "Cartoon Excitement",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BO": {
+    "code": "2424",
+    "category": "Demon",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BP": {
+    "code": "3112",
+    "category": "Wind Instruments",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BQ": {
+    "code": "2444",
+    "category": "Robot Voice",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BR": {
+    "code": "3124",
+    "category": "Race Cars",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BS": {
+    "code": "2312",
+    "category": "Ouch",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BT": {
+    "code": "4234",
+    "category": "Incantations",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BU": {
+    "code": "3113",
+    "category": "I Love You",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BV": {
+    "code": "3114",
+    "category": "Hello Goodbye",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BW": {
+    "code": "3214",
+    "category": "Screams",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BX": {
+    "code": "4123",
+    "category": "Jazz Scat",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  },
+  "BY": {
+    "code": "3411",
+    "category": "Witches",
+    "sounds": [
+      "0.wav",
+      "1.wav",
+      "2.wav",
+      "3.wav"
+    ]
+  }
+}

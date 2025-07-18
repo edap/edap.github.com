@@ -1,23 +1,20 @@
 import * as THREE from "three"
-import Physics from "./physics.js";
+import {Physics, calculatePaddleTrajectory }from "./physics.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import AI from "./AI.js"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import MobileDebug from './debug.js';
 import { isMobile, updateCameraForTableVisibility, addDebugBox3D } from "./utils.js";
 import Stats from 'three/addons/libs/stats.module.js'
-import { updateScoreUI, showWinLose } from './ui.js';
+import { updateScoreUI } from './ui.js';
 import { createBGMaterial } from './background.js';
 
-const textureLoader = new THREE.TextureLoader();
 const glbLoader = new GLTFLoader();
 
-const PLAYER_CAMERA_ENABLED = false;
 
 let controls;
-
 let tableSize, paddleSize, ballSize;
-let paddle, paddleAI;
+
 let paddleTrajectory = [];
 let ball;
 let STATES = {
@@ -26,8 +23,7 @@ let STATES = {
     PLAYING: 2
 }
 let state = STATES.LOADING;
-let input = { x: 0, y: 0 };
-let inputPlane;
+
 
 // Realistic ping pong scoring letiables
 let lastHitter = null; // 'player' or 'ai'
@@ -45,7 +41,7 @@ class GameScene {
         this.screenSize = { width: window.innerWidth, height: window.innerHeight };
         this.tableSize = null;
         this.inputPlane = null;
-        //this.camera = new THREE.PerspectiveCamera(30, this.screenSize.width / this.screenSize.height, 0.01, 15);
+        this.input = { x: 0, y: 0 };
         this.camera = new THREE.PerspectiveCamera(30, this.screenSize.width / this.screenSize.height, 0.01, 15);
         this.simulation = new Physics();
         this.mobileDebug = new MobileDebug;
@@ -53,23 +49,14 @@ class GameScene {
         this.controls = null;
         this.ai = null;
         this.score = { player: 0, ai: 0 };
+        this.paddle;
+        this.paddleAI;
     }
 
-
-    init() {
-        // if (window.PingPong && this.mobileDebug) {
-        //     this.mobileDebug.logGameState('INITIALIZING', 'Starting game scene setup');
-        // }
-
-        //create scene
-        //screenSize = {width:window.innerWidth, height: window.innerHeight};
-        // TODO
-        //window.screenSize = screenSize; // Make accessible for resize handler
-
-        //initialize camera
+    init(randomSounds, ballSounds, glbModel) {
+        //console.error(glbModel)
         this.scene.add(this.camera);
         this.camera.position.set(0, 1, 3);
-        //this.camera.position.set(0, this.settings.height / 2, this.settings.depth / 2);
         this.camera.lookAt(this.scene.position);
         this.stats.showPanel(0);
 
@@ -77,16 +64,11 @@ class GameScene {
             this.controls = new OrbitControls(this.camera, this.renderer.domElement);
             document.body.appendChild(this.stats.dom);
         }
-
-        //initialize audio
-        //if (this.mobileDebug) this.mobileDebug.logGameState('AUDIO_INIT', 'Initializing audio system');
-
-        this.simulation.init(this.settings)
-
-
-        //initialize world
-        //this.loadLight();
+        this.simulation.init(this.settings,randomSounds, ballSounds)
         this.setupLighting();
+        // TODO, we are loading the model two times, one here, one in main.js
+        // refactor the code so that we remove loadModels and we use only "parseGlb(model)"
+        //this.parseGlb(glbModel)
         this.loadModels();
         this.initInput();
         updateScoreUI(this.score);
@@ -114,16 +96,21 @@ class GameScene {
         }
     }
 
-    loadModels() {
+    parseGlb(glb){
+    }
 
+    loadModels() {
         let me = this;
 
         const onGlbTableLoad = (glb) => {
-            console.log(glb.scene.children)
+            //console.error(glb)
             const table = glb.scene.getObjectByName("table");
             const net = glb.scene.getObjectByName("net");
-            paddle = glb.scene.getObjectByName("paddle");
+            this.paddle = glb.scene.getObjectByName("paddle");
 
+            // console.error(table)
+            // console.error(net)
+            // console.error(this.paddle)
 
             // Compute the model's bounding box to get original dimensions
             const box = new THREE.Box3().setFromObject(table);
@@ -137,7 +124,7 @@ class GameScene {
             const scale = me.settings.table.width / modelSize.width;
             table.scale.set(scale, scale, scale);
             net.scale.set(scale, scale, scale);
-            paddle.scale.set(scale, scale, scale);
+            this.paddle.scale.set(scale, scale, scale);
 
             this.tableSize = {
                 width: modelSize.width * scale,
@@ -191,14 +178,14 @@ class GameScene {
             this.scene.add(net);
 
             // Paddle
-            paddle.position.set(0, this.tableSize.height, this.tableSize.depth / 2);
-            this.scene.add(paddle);
+            this.paddle.position.set(0, this.tableSize.height, this.tableSize.depth / 2);
+            this.scene.add(this.paddle);
 
-            paddleAI = paddle.clone();
-            paddleAI.position.set(0, this.tableSize.height, -this.tableSize.depth / 2);
-            this.scene.add(paddleAI);
+            this.paddleAI = this.paddle.clone();
+            this.paddleAI.position.set(0, this.tableSize.height, -this.tableSize.depth / 2);
+            this.scene.add(this.paddleAI);
 
-            const paddleBox = new THREE.Box3().setFromObject(paddle);
+            const paddleBox = new THREE.Box3().setFromObject(this.paddle);
             paddleSize = {
                 width: paddleBox.max.x - paddleBox.min.x,
                 depth: paddleBox.max.z - paddleBox.min.z,
@@ -213,7 +200,7 @@ class GameScene {
             this.scene.add(ball);
             me.simulation.setBall(ball, ballRadius);
 
-            this.ai = new AI(me.simulation, this.tableSize, paddleAI, paddleSize, ball, ballRadius);
+            this.ai = new AI(me.simulation, this.tableSize,this.paddleAI, paddleSize, ball, ballRadius);
 
             // Set AI difficulty - can be changed to 'easy' or 'hard'
             // me.ai.setDifficulty('normal'); // TEMPORARILY DISABLED until AI.js is updated
@@ -258,7 +245,7 @@ class GameScene {
                     console.warn('Serve error:', error);
                     // Fallback serve
                     state = STATES.PLAYING;
-                    ball.position.set(paddle.position.x, paddle.position.y + paddleSize.height, paddle.position.z);
+                    ball.position.set(this.paddle.position.x, this.paddle.position.y + paddleSize.height, this.paddle.position.z);
                     let dir = new THREE.Vector3(0, -0.5, -1);
                     me.simulation.hitBall(dir, 0.02);
                     if (me.updateTouchpadMessage) me.updateTouchpadMessage();
@@ -275,10 +262,10 @@ class GameScene {
                     let x = ev.targetTouches ? ev.targetTouches[0].clientX : ev.clientX;
                     let y = ev.targetTouches ? ev.targetTouches[0].clientY : ev.clientY;
                     let touchpadZone = {
-                        left: screenSize.width * 0.1,
-                        right: screenSize.width * 0.9,
-                        top: screenSize.height * 0.67,
-                        bottom: screenSize.height * 0.95
+                        left: me.screenSize.width * 0.1,
+                        right: me.screenSize.width * 0.9,
+                        top: me.screenSize.height * 0.67,
+                        bottom: me.screenSize.height * 0.95
                     };
                     let isInTouchpad = (x >= touchpadZone.left && x <= touchpadZone.right &&
                         y >= touchpadZone.top && y <= touchpadZone.bottom);
@@ -293,7 +280,7 @@ class GameScene {
                             console.warn('Touch serve error:', error);
                             // Fallback serve
                             state = STATES.PLAYING;
-                            ball.position.set(paddle.position.x, paddle.position.y + paddleSize.height, paddle.position.z);
+                            ball.position.set(this.paddle.position.x, this.paddle.position.y + paddleSize.height, this.paddle.position.z);
                             let dir = new THREE.Vector3(0, -0.5, -1);
                             me.simulation.hitBall(dir, 0.02);
                             if (me.updateTouchpadMessage) me.updateTouchpadMessage();
@@ -443,13 +430,14 @@ class GameScene {
 
     processInput(x, y) {
         if (isMobile()) {
+            console.log("UAAA", x,y);
             // VIRTUAL TOUCHPAD SYSTEM for mobile
             // Define touchpad area (red rectangle from user's image)
             let touchpadZone = {
-                left: screenSize.width * 0.1,    // 10% from left edge
-                right: screenSize.width * 0.9,   // 90% from left edge
-                top: screenSize.height * 0.67,   // 67% from top (20% shorter height)
-                bottom: screenSize.height * 0.95 // 95% from top (near bottom)
+                left: this.screenSize.width * 0.1,    // 10% from left edge
+                right: this.screenSize.width * 0.9,   // 90% from left edge
+                top: this.screenSize.height * 0.67,   // 67% from top (20% shorter height)
+                bottom: this.screenSize.height * 0.95 // 95% from top (near bottom)
             };
 
             // Check if touch is in the virtual touchpad area
@@ -467,22 +455,22 @@ class GameScene {
                 // Map touchpad to screen coordinates for paddle control
                 // X: full left-right movement
                 // Y: forward/back movement (up in touchpad = toward net)
-                input.x = touchpadX * screenSize.width;
-                input.y = touchpadY * screenSize.height * 0.4 + screenSize.height * 0.3; // Map to upper part of screen
+                this.input.x = touchpadX * this.screenSize.width;
+                this.input.y = touchpadY * this.screenSize.height * 0.4 + this.screenSize.height * 0.3; // Map to upper part of screen
             } else {
                 // Touch outside touchpad - ignore and maintain last known position
                 return;
             }
         } else {
             // DESKTOP: Direct input (unchanged)
-            input.x = x;
-            input.y = y;
+            this.input.x = x;
+            this.input.y = y;
         }
     }
 
     serve() {
         state = STATES.PLAYING;
-        ball.position.set(paddle.position.x, paddle.position.y + paddleSize.height, paddle.position.z);
+        ball.position.set(this.paddle.position.x, this.paddle.position.y + paddleSize.height, this.paddle.position.z);
 
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
@@ -497,67 +485,6 @@ class GameScene {
 
     }
 
-    cameraFollowPlayer(px,py) {
-        // Raw input converted to normalized coordinates
-
-        //set this.camera position - AGGRESSIVE motion sickness prevention for mobile
-
-        // Mobile vs desktop this.camera handling
-
-        if (isMobile()) {
-            // MOBILE: Optimized this.camera for mobile touchpad control
-            let smoothing = 0.06;    // More responsive for better control
-            let deadzone = 0.1;      // Standard deadzone
-            let movementScale = 0.15; // Reduced movement for stability
-
-            if (Math.abs(px) > deadzone) {
-                let targetCx = this.tableSize.width * movementScale * px;
-                this.camera.position.x += (targetCx - this.camera.position.x) * smoothing;
-            }
-
-            // MOBILE: Fixed this.camera position for optimal mobile viewing
-            // Position this.camera for clear view of table with touchpad below
-            let targetCy = this.tableSize.height * 1.6; // Proper height for good table view
-            let targetCz = this.tableSize.depth * 1.8;  // Further back for full table visibility
-
-
-            this.camera.position.y += (targetCy - this.camera.position.y) * 0.12;
-            this.camera.position.z += (targetCz - this.camera.position.z) * 0.12;
-
-        } else {
-            // DESKTOP: Normal responsive this.camera
-            let smoothing = 0.05;
-            let deadzone = 0.1;
-            let movementScale = 0.2;
-
-            if (Math.abs(px) > deadzone) {
-                let targetCx = this.tableSize.width * movementScale * px;
-                this.camera.position.x += (targetCx - this.camera.position.x) * smoothing;
-            }
-
-            let targetCy = this.tableSize.height * 1.4;
-            let targetCz = this.tableSize.depth * 1.3;
-
-            this.camera.position.y += (targetCy - this.camera.position.y) * 0.1;
-            this.camera.position.z += (targetCz - this.camera.position.z) * 0.1;
-        }
-
-        // Both mobile and desktop use same smooth lookAt
-        // Halfway between center and player edge center
-        this.camera.lookAt(new THREE.Vector3(0, this.tableSize.height, this.tableSize.depth * 0.25));
-
-        // Enhanced mobile debugging
-        if (isMobile() && this.mobileDebug && this.debugFrameCount % 60 === 0) {
-            this.mobileDebug.log('📹 Mobile this.Camera: pos(' +
-                this.camera.position.x.toFixed(2) + ',' +
-                this.camera.position.y.toFixed(2) + ',' +
-                this.camera.position.z.toFixed(2) + ') input(' +
-                px.toFixed(2) + ',' + py.toFixed(2) + ')');
-        }
-        this.debugFrameCount = (this.debugFrameCount || 0) + 1;
-
-    }
-
     update() {
         if (state === STATES.LOADING) {
             return;
@@ -568,12 +495,8 @@ class GameScene {
             this.simulation.simulate();
         }
 
-        let px = (input.x / this.screenSize.width) * 2 - 1;
-        let py = - (input.y / this.screenSize.height) * 2 + 1;
-        if (PLAYER_CAMERA_ENABLED){
-            this.cameraFollowPlayer(px,py);
-        }
-
+        let px = (this.input.x / this.screenSize.width) * 2 - 1;
+        let py = - (this.input.y / this.screenSize.height) * 2 + 1;
 
         //this.camera.rotation.y = Math.PI * -0.05 * px;
 
@@ -600,14 +523,14 @@ class GameScene {
         intersect.x = Math.max(-maxX, Math.min(maxX, intersect.x));
 
         //set paddle position
-        paddle.position.x = intersect.x;
-        paddle.position.z = intersect.z;
-        paddle.position.y = this.tableSize.height;
+        this.paddle.position.x = intersect.x;
+        this.paddle.position.z = intersect.z;
+        this.paddle.position.y = this.tableSize.height;
 
 
 
         if (state == STATES.SERVING) {
-            ball.position.set(paddle.position.x, paddle.position.y + paddleSize.height, paddle.position.z);
+            ball.position.set(this.paddle.position.x, this.paddle.position.y + paddleSize.height, this.paddle.position.z);
         }
         else {
             this.checkBallHit();
@@ -617,18 +540,18 @@ class GameScene {
         }
 
         //set paddle rotation
-        let dx = Math.min(1, Math.abs(paddle.position.x / (this.tableSize.width * 0.6)));
-        let dxAI = Math.min(1, Math.abs(paddleAI.position.x / (this.tableSize.width * 0.6)));
+        let dx = Math.min(1, Math.abs(this.paddle.position.x / (this.tableSize.width * 0.6)));
+        let dxAI = Math.min(1, Math.abs(this.paddleAI.position.x / (this.tableSize.width * 0.6)));
 
 
-        paddle.rotation.z = Math.PI * 0.5 * dx * (paddle.position.x > 0 ? -1.0 : 1.0);
-        paddle.rotation.x = Math.PI * 0.2 * dx;
-        paddle.rotation.y = Math.PI * 0.2 * dx * (paddle.position.x > 0 ? 1.0 : -1.0);
+        this.paddle.rotation.z = Math.PI * 0.5 * dx * (this.paddle.position.x > 0 ? -1.0 : 1.0);
+        this.paddle.rotation.x = Math.PI * 0.2 * dx;
+        this.paddle.rotation.y = Math.PI * 0.2 * dx * (this.paddle.position.x > 0 ? 1.0 : -1.0);
 
-        paddleAI.rotation.z = Math.PI * 0.5 * dxAI * (paddleAI.position.x > 0 ? 1.0 : -1.0);
-        paddleAI.rotation.x = -Math.PI * 0.2 * dxAI;
-        paddleAI.rotation.y = Math.PI * 0.2 * dxAI * (paddleAI.position.x > 0 ? -1.0 : 1.0);
-        paddleAI.rotation.y += Math.PI;
+        this.paddleAI.rotation.z = Math.PI * 0.5 * dxAI * (this.paddleAI.position.x > 0 ? 1.0 : -1.0);
+        this.paddleAI.rotation.x = -Math.PI * 0.2 * dxAI;
+        this.paddleAI.rotation.y = Math.PI * 0.2 * dxAI * (this.paddleAI.position.x > 0 ? -1.0 : 1.0);
+        this.paddleAI.rotation.y += Math.PI;
 
     }
 
@@ -754,20 +677,20 @@ class GameScene {
         let hitting = false;
         let hit = false;
         //check if paddle and ball are close
-        if (this.simulation.getLinearVelocity().z > 0 && paddle.position.z > ball.position.z) {
+        if (this.simulation.getLinearVelocity().z > 0 && this.paddle.position.z > ball.position.z) {
             //store trayectory
             let trayectory = {
                 time: Date.now(),
-                x: paddle.position.x,
-                y: paddle.position.y,
-                z: paddle.position.z
+                x: this.paddle.position.x,
+                y: this.paddle.position.y,
+                z: this.paddle.position.z
             }
             paddleTrajectory.push(trayectory);
 
             //check hit distances
-            let zDistance = paddle.position.z - ball.position.z;
-            let xDistance = Math.abs(paddle.position.x - ball.position.x);
-            let yDistance = paddle.position.y - ball.position.y;
+            let zDistance = this.paddle.position.z - ball.position.z;
+            let xDistance = Math.abs(this.paddle.position.x - ball.position.x);
+            let yDistance = this.paddle.position.y - ball.position.y;
             hit = zDistance < this.tableSize.depth * 0.03 && xDistance < paddleSize.width && Math.abs(yDistance) < paddleSize.height * 0.75;
             hitting = zDistance < this.tableSize.depth * 0.2 && xDistance < paddleSize.width;
         }
@@ -777,11 +700,11 @@ class GameScene {
         if (hitting) {
             targetY = ball.position.y;
         }
-        let diffY = paddle.position.y - targetY;
-        paddle.position.y += Math.min(Math.abs(diffY), paddleSize.height * 0.1) * (diffY ? -1 : 1);
+        let diffY = this.paddle.position.y - targetY;
+        this.paddle.position.y += Math.min(Math.abs(diffY), paddleSize.height * 0.1) * (diffY ? -1 : 1);
 
         if (hit) {
-            let trayectory = this.calculatePaddleTrajectory();
+            let trayectory = calculatePaddleTrajectory(paddleTrajectory);
             trayectory.z = Math.min(trayectory.z, 0);
 
             let dir = new THREE.Vector3(0, 0, 0);
@@ -804,7 +727,7 @@ class GameScene {
             }
 
             dir.y -= force * 2;
-            if (paddle.position.z < this.tableSize.depth / 2) {
+            if (this.paddle.position.z < this.tableSize.depth / 2) {
                 dir.y -= 0.1;
             }
 
@@ -824,27 +747,11 @@ class GameScene {
         }
     }
 
-    calculatePaddleTrajectory() {
-        let now = Date.now();
-        let trayectory = new THREE.Vector3(0, 0, 0);
-        let prevT = null;
-        for (let i = 0; i < paddleTrajectory.length; ++i) {
-            let t = paddleTrajectory[i];
-            if (now - t.time > 200) {
-                continue; //we only check 200ms trayectory
-            }
-            if (!prevT) {
-                prevT = t;
-                continue;
-            }
-            trayectory.set(trayectory.x + t.x - prevT.x,
-                trayectory.y + t.y - prevT.y,
-                trayectory.z + t.z - prevT.z);
-            prevT = t;
-        }
-        return trayectory;
-
+    updateCategorySounds(sounds){
+        this.simulation.audio.categorySounds = sounds;
     }
+
+
 
     resize(width, height) {
         this.camera.aspect = width / height;
