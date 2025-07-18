@@ -1,0 +1,110 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: #000;
+}
+
+#container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+#score {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 2rem;
+    font-family: monospace;
+    background: rgba(0,0,0,0.4);
+    padding: 0.5em 1.5em;
+    border-radius: 1em;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#audio-panel-toggle-btn {
+    position: fixed;
+    top: 10px;
+    right: 40px;
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 107, 53, 0.9);
+    color: white;
+    border: none;
+    border-radius: 18px;
+    font-size: 14px;
+    z-index: 10000;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(255,107,53,0.4);
+    touch-action: manipulation;
+    }
+
+#controlPanel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 90vh;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid limegreen;
+    border-radius: 20px;
+    z-index: 10000;
+    display: none; /* Keep as flex */
+    flex-direction: column; /* Changed to column to stack main items */
+    justify-content: center; /* Centers items vertically in the column */
+    align-items: center; /* Centers items horizontally in the column */
+    padding: 20px;
+    box-shadow: 0 2px 20px rgba(0, 255, 0, 0.4);
+    overflow-y: auto;
+    /* Added a gap for spacing between the stacked items */
+    gap: 30px; /* Adjust as needed for vertical spacing between indicators and button */
+}
+
+#indicators {
+    display: flex;
+    gap: 15px;
+    /* Ensure indicators themselves are centered within their row */
+    justify-content: center;
+    align-items: center;
+    /* Add margin to separate from the button if 'gap' on parent is not enough */
+    /* margin-bottom: 30px; /* Alternative to parent gap */
+}
+
+.indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #444; /* default color */
+    border: 2px solid #ccc;
+    transition: background-color 0.3s ease;
+}
+
+#modeSelectButton {
+    padding: 20px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    background-color: #1e90ff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    /* Since #controlPanel is now flex-direction: column and align-items: center,
+       this button will naturally be centered. */
+}
+
+#modeSelectButton:hover {
+    background-color: #0b70d0;
+}
+
+
+/* Disable pull-to-refresh on mobile */
+body {
+    overscroll-behavior: none;
+}
