@@ -13,7 +13,7 @@ const glbLoader = new GLTFLoader();
 
 
 let controls;
-let tableSize, paddleSize, ballSize;
+let paddleSize;
 
 let paddleTrajectory = [];
 let ball;
@@ -207,7 +207,6 @@ class GameScene {
 
             state = STATES.SERVING;
             // Update touchpad message for initial state
-            me.updateTouchpadMessage();
         }
 
         // TODO, renable logging
@@ -221,80 +220,78 @@ class GameScene {
     }
 
     initInput() {
-
-        let me = this;
+        let me = this; // Capture 'this' context
+    
+        // Unified input handler for mousemove and touchmove
         function inputHandler(ev) {
-            if (ev.targetTouches && ev.targetTouches.length > 1) {
-                // Only serve if in SERVING state (prevent multiple balls)
-                if (state === STATES.SERVING) {
-                    me.serve();
-                }
-                return;
+            // Prevent default touch behavior (e.g., scrolling, zooming)
+            if (ev.type.startsWith('touch')) {
+                ev.preventDefault();
             }
+    
+            // Handle multi-touch: only serve if two fingers are down (or more)
+            if (ev.targetTouches && ev.targetTouches.length > 1) {
+                if (state === STATES.SERVING) {
+                    me.serve(); // Two fingers = serve
+                }
+                return; // Ignore multi-touch for paddle movement
+            }
+    
+            // Get single touch/mouse coordinates
             let x = ev.targetTouches ? ev.targetTouches[0].clientX : ev.clientX;
             let y = ev.targetTouches ? ev.targetTouches[0].clientY : ev.clientY;
-            me.processInput(x, y);
+    
+            me.processInput(x, y); // Process movement regardless of device
         }
-
-        // Only serve if in SERVING state (prevent multiple balls)
-        this.renderer.domElement.addEventListener("mousedown", function () {
+    
+        // Desktop: Mouse down for serve, mouse move for paddle control
+        this.renderer.domElement.addEventListener("mousedown", function (ev) {
             if (state === STATES.SERVING) {
                 try {
-                    me.serve();
+                    me.serve(); // Desktop: Mouse down anywhere serves
                 } catch (error) {
-                    console.warn('Serve error:', error);
-                    // Fallback serve
+                    console.warn('Desktop Serve error:', error);
+                    // Fallback serve (ensure 'me' context for paddle/ball)
                     state = STATES.PLAYING;
-                    ball.position.set(this.paddle.position.x, this.paddle.position.y + paddleSize.height, this.paddle.position.z);
+                    me.ball.position.set(me.paddle.position.x, me.paddle.position.y + paddleSize.height, me.paddle.position.z);
                     let dir = new THREE.Vector3(0, -0.5, -1);
                     me.simulation.hitBall(dir, 0.02);
-                    if (me.updateTouchpadMessage) me.updateTouchpadMessage();
                 }
             }
         });
         this.renderer.domElement.addEventListener("mousemove", inputHandler);
+    
+    
+        // Mobile: Touch start for serve (single tap), touch move for paddle control
         this.renderer.domElement.addEventListener("touchstart", function (ev) {
-            console.log('MOBILE TOUCH: touchstart event fired, state:', state);
-
-            // Handle serving on tap in touchpad area
-            if (state === STATES.SERVING) {
-                if (isMobile()) {
-                    let x = ev.targetTouches ? ev.targetTouches[0].clientX : ev.clientX;
-                    let y = ev.targetTouches ? ev.targetTouches[0].clientY : ev.clientY;
-                    let touchpadZone = {
-                        left: me.screenSize.width * 0.1,
-                        right: me.screenSize.width * 0.9,
-                        top: me.screenSize.height * 0.67,
-                        bottom: me.screenSize.height * 0.95
-                    };
-                    let isInTouchpad = (x >= touchpadZone.left && x <= touchpadZone.right &&
-                        y >= touchpadZone.top && y <= touchpadZone.bottom);
-
-                    console.log('MOBILE TOUCH: touch at', x, y, 'in touchpad:', isInTouchpad);
-
-                    if (isInTouchpad) {
-                        try {
-                            console.log('MOBILE TOUCH: attempting to serve');
-                            me.serve();
-                        } catch (error) {
-                            console.warn('Touch serve error:', error);
-                            // Fallback serve
-                            state = STATES.PLAYING;
-                            ball.position.set(this.paddle.position.x, this.paddle.position.y + paddleSize.height, this.paddle.position.z);
-                            let dir = new THREE.Vector3(0, -0.5, -1);
-                            me.simulation.hitBall(dir, 0.02);
-                            if (me.updateTouchpadMessage) me.updateTouchpadMessage();
-                        }
-                    }
+            console.log('MOBILE TOUCH: touchstart event fired, state:', state, 'touches:', ev.targetTouches.length);
+    
+            // Prevent default touch behavior (e.g., scrolling, zooming)
+            ev.preventDefault();
+    
+            // Handle serving on a single tap
+            if (state === STATES.SERVING && ev.targetTouches.length === 1) {
+                try {
+                    console.log('MOBILE TOUCH: attempting to serve (single tap)');
+                    me.serve();
+                } catch (error) {
+                    console.warn('Touch serve error:', error);
+                    // Fallback serve (ensure 'me' context for paddle/ball)
+                    state = STATES.PLAYING;
+                    me.ball.position.set(me.paddle.position.x, me.paddle.position.y + paddleSize.height, me.paddle.position.z);
+                    let dir = new THREE.Vector3(0, -0.5, -1);
+                    me.simulation.hitBall(dir, 0.02);
                 }
             }
-            inputHandler(ev);
-        });
-        this.renderer.domElement.addEventListener("touchmove", inputHandler);
-
-        // Add visual touchpad indicator for mobile
-        this.createTouchpadIndicator();
-
+            
+            // Always pass to inputHandler for immediate paddle positioning (even on touchstart)
+            // This ensures the paddle jumps to the initial touch position.
+            inputHandler(ev); 
+        }, { passive: false }); // Use passive: false to allow preventDefault
+    
+        this.renderer.domElement.addEventListener("touchmove", inputHandler, { passive: false }); // Use passive: false to allow preventDefault
+    
+    
         // Fallback: Force remove any blocking overlays after 5 seconds
         setTimeout(function () {
             let audioOverlay = document.getElementById('audio-unlock-overlay');
@@ -304,168 +301,54 @@ class GameScene {
             }
         }, 5000);
     }
-
-    createTouchpadIndicator() {
-        if (isMobile()) {
-            // Create OBVIOUS light pink touchpad overlay
-            let touchpadDiv = document.createElement('div');
-            touchpadDiv.id = 'touchpad-indicator';
-            touchpadDiv.style.position = 'absolute';
-            touchpadDiv.style.left = '10%';
-            touchpadDiv.style.right = '10%';
-            touchpadDiv.style.top = '67%';
-            touchpadDiv.style.bottom = '5%';
-            touchpadDiv.style.border = '3px solid rgba(255, 182, 193, 0.6)'; // Light pink border
-            touchpadDiv.style.borderRadius = '15px';
-            touchpadDiv.style.backgroundColor = 'rgba(255, 182, 193, 0.15)'; // Light pink transparent
-            touchpadDiv.style.pointerEvents = 'none'; // Don't interfere with touch events
-            touchpadDiv.style.zIndex = '1000';
-            touchpadDiv.style.transition = 'all 0.3s ease';
-            touchpadDiv.style.boxShadow = 'inset 0 0 20px rgba(255, 182, 193, 0.3)';
-
-            // Add launch message (shows when waiting to serve)
-            let launchMessage = document.createElement('div');
-            launchMessage.id = 'launch-message';
-            launchMessage.innerHTML = '🏓 TAP HERE TO PING!';
-            launchMessage.style.position = 'absolute';
-            launchMessage.style.top = '50%';
-            launchMessage.style.left = '50%';
-            launchMessage.style.transform = 'translate(-50%, -50%)';
-            launchMessage.style.color = 'rgba(255, 182, 193, 0.9)';
-            launchMessage.style.fontSize = '24px';
-            launchMessage.style.fontFamily = 'Arial, sans-serif';
-            launchMessage.style.fontWeight = 'bold';
-            launchMessage.style.textAlign = 'center';
-            launchMessage.style.textShadow = '2px 2px 4px rgba(0, 0, 0, 0.5)';
-            launchMessage.style.animation = 'pulse 1.5s ease-in-out infinite';
-            touchpadDiv.appendChild(launchMessage);
-
-            // Add directional hint
-            let hint = document.createElement('div');
-            hint.innerHTML = '↑ Move up to approach net • ← → Move left/right';
-            hint.style.position = 'absolute';
-            hint.style.bottom = '15px';
-            hint.style.left = '50%';
-            hint.style.transform = 'translateX(-50%)';
-            hint.style.color = 'rgba(255, 182, 193, 0.7)';
-            hint.style.fontSize = '12px';
-            hint.style.fontFamily = 'Arial, sans-serif';
-            hint.style.textAlign = 'center';
-            hint.style.lineHeight = '1.3';
-            touchpadDiv.appendChild(hint);
-
-            document.body.appendChild(touchpadDiv);
-
-            // Add CSS animation for pulse effect
-            let style = document.createElement('style');
-            style.textContent = `
-                @keyframes pulse {
-                    0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
-                    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-                }
-            `;
-            document.head.appendChild(style);
-
-            // Store reference for later updates
-            this.touchpadDiv = touchpadDiv;
-            this.launchMessage = launchMessage;
-
-            if (this.mobileDebug) {
-                this.mobileDebug.log('🎮 Enhanced pink touchpad indicator created');
-            }
-        }
-    }
-
-    updateTouchpadMessage() {
-        if (isMobile() && this.launchMessage) {
-            if (state === STATES.SERVING) {
-                this.launchMessage.style.display = 'block';
-                this.launchMessage.innerHTML = '🏓 TAP HERE TO PING!';
-            } else if (state === STATES.PLAYING) {
-                this.launchMessage.style.display = 'block';
-                this.launchMessage.innerHTML = '🎮 PLAYING!';
-                this.launchMessage.style.animation = 'none'; // Stop pulsing during play
-            } else {
-                this.launchMessage.style.display = 'none';
-            }
-        }
-    }
-
-
-
-
-
-    createModelDebugOverlay(modelName) {
-        // Create a simple debug overlay showing current table model
-        let debugDiv = document.createElement('div');
-        debugDiv.id = 'model-debug-overlay';
-        debugDiv.style.position = 'absolute';
-        debugDiv.style.top = '10px';
-        debugDiv.style.left = '10px';
-        debugDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        debugDiv.style.color = 'white';
-        debugDiv.style.padding = '8px 12px';
-        debugDiv.style.borderRadius = '5px';
-        debugDiv.style.fontFamily = 'Arial, sans-serif';
-        debugDiv.style.fontSize = '12px';
-        debugDiv.style.zIndex = '10000';
-        debugDiv.style.pointerEvents = 'none';
-        debugDiv.innerHTML = '🏓 Table: ' + modelName;
-
-        // Remove any existing debug overlay
-        let existing = document.getElementById('model-debug-overlay');
-        if (existing) {
-            existing.remove();
-        }
-
-        document.body.appendChild(debugDiv);
-
-        // Auto-hide after 5 seconds
-        setTimeout(function () {
-            if (debugDiv.parentNode) {
-                debugDiv.style.opacity = '0.3';
-            }
-        }, 5000);
-    }
-
+    
     processInput(x, y) {
-        if (isMobile()) {
-            console.log("UAAA", x,y);
-            // VIRTUAL TOUCHPAD SYSTEM for mobile
-            // Define touchpad area (red rectangle from user's image)
-            let touchpadZone = {
-                left: this.screenSize.width * 0.1,    // 10% from left edge
-                right: this.screenSize.width * 0.9,   // 90% from left edge
-                top: this.screenSize.height * 0.67,   // 67% from top (20% shorter height)
-                bottom: this.screenSize.height * 0.95 // 95% from top (near bottom)
-            };
-
-            // Check if touch is in the virtual touchpad area
-            let isInTouchpad = (x >= touchpadZone.left && x <= touchpadZone.right &&
-                y >= touchpadZone.top && y <= touchpadZone.bottom);
-
-            // Check if touch is within the defined touchpad area
-
-            if (isInTouchpad) {
-                // Map touchpad coordinates to game coordinates
-                // Convert touchpad local coordinates to normalized game coordinates
-                let touchpadX = (x - touchpadZone.left) / (touchpadZone.right - touchpadZone.left);  // 0-1 across width
-                let touchpadY = (y - touchpadZone.top) / (touchpadZone.bottom - touchpadZone.top);   // 0-1 across height
-
-                // Map touchpad to screen coordinates for paddle control
-                // X: full left-right movement
-                // Y: forward/back movement (up in touchpad = toward net)
-                this.input.x = touchpadX * this.screenSize.width;
-                this.input.y = touchpadY * this.screenSize.height * 0.4 + this.screenSize.height * 0.3; // Map to upper part of screen
-            } else {
-                // Touch outside touchpad - ignore and maintain last known position
-                return;
-            }
-        } else {
-            // DESKTOP: Direct input (unchanged)
-            this.input.x = x;
-            this.input.y = y;
-        }
+        // Both mobile and desktop will now use the raw x, y coordinates
+        // and map them directly to the screen.
+        // The previous touchpad zone logic is removed.
+    
+        console.log("Processing input:", x, y, "on screen size:", this.screenSize.width, this.screenSize.height);
+    
+        // Map screen X to game X (full width)
+        this.input.x = x; // Use the raw X coordinate
+    
+        // Map screen Y to game Y (a portion of screen height for forward/backward)
+        // We want a range for Y movement, let's say roughly the middle 50% of the screen height
+        // Adjust these multipliers and offsets to control how much vertical screen movement
+        // translates to paddle forward/backward movement.
+        // Example: Map Y from 0 to 1 across the screen's height to a smaller range for paddle Z
+        // If paddle moves along Z, map screen Y to paddle Z.
+        // A common approach is to map a section of the screen (e.g., top 60% of screen) to the table's depth.
+        let paddleZRangeFactor = 0.5; // Controls how much of the screen's height affects paddle Z
+        let paddleZOffsetFactor = 0.25; // Shifts the effective Y range on screen
+    
+        this.input.y = (y / this.screenSize.height) * this.screenSize.height * paddleZRangeFactor + (this.screenSize.height * paddleZOffsetFactor);
+        // The above calculation for this.input.y might still need fine-tuning
+        // depending on what this.input.y actually controls (is it paddle Z or paddle Y?).
+        // If this.input.y controls the Z position of the paddle in 3D space:
+        // It should map screen Y (vertical) to world Z (depth).
+        // Let's assume positive Y screen means further down, and further Z means closer to player.
+        // So, larger screen Y should mean larger world Z.
+    
+        // A more direct mapping example:
+        // Map the screen's Y-coordinate (0 to screenSize.height) to a desired Z-range for the paddle.
+        // Let's say paddle can move from zMin to zMax.
+        // const paddleZMin = -2; // Example: furthest back from net
+        // const paddleZMax = 2;  // Example: closest to net
+        // this.input.y = (y / this.screenSize.height) * (paddleZMax - paddleZMin) + paddleZMin;
+        // THIS IS A HYPOTHETICAL MAPPING. YOU NEED TO ADAPT THIS BASED ON YOUR GAME'S COORDINATE SYSTEM.
+    
+        // Given your original `this.input.y = touchpadY * this.screenSize.height * 0.4 + this.screenSize.height * 0.3;`
+        // was effectively mapping a normalized 0-1 touchpad Y to a screen Y range:
+        // We'll revert to simply using screen Y, and you should adjust what 'this.input.y' *means* in your game logic.
+        // For now, let's remove the mapping and let your game logic handle it.
+        this.input.x = x; // Raw screen X
+        this.input.y = y; // Raw screen Y
+    
+        // Your game logic (e.g., in `GameScene` or paddle update) will then map these `this.input.x` and `this.input.y`
+        // to your 3D paddle's X and Z (depth) coordinates based on the camera's perspective.
+        // Example: paddle.position.x = this.input.x * scaleX;
+        //          paddle.position.z = this.input.y * scaleZ; (where scaleZ accounts for perspective)
     }
 
     serve() {
@@ -480,8 +363,6 @@ class GameScene {
         ballBouncedOnOpponentSide = false;
         ballHitTable = false;
 
-        // Update touchpad message for new state
-        this.updateTouchpadMessage();
 
     }
 
@@ -662,7 +543,6 @@ class GameScene {
 
             // Reset for next serve
             state = STATES.SERVING;
-            this.updateTouchpadMessage();
 
             // Reset ball position
             ball.position.set(0, this.tableSize.height * 2, this.tableSize.depth * 0.25);

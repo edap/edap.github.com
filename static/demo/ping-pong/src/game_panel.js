@@ -1,25 +1,26 @@
 import { loadCategorySounds, loadRandomSounds } from "./loaders.js";
 import GameScene from "./game_scene.js";
 import { getRandomCategory } from "./utils.js"
-import { turnRedFirstIndicator, updateIndicators, resetIndicators } from "./ui_indicators.js"
+import { turnRedFirstIndicator, updateIndicators, resetIndicators, loadingCategoryIndicators } from "./ui_indicators.js"
+import { showCategoryName, resetCategoryName } from "./ui_category.js";
+
+const ANIMATION_DURATION = 1600;
+const ANIMATION_DELAY = 400;
 class GamePanel {
     constructor() {
         this.container = null;
         this.volume = 1.0;
         this.isVisible = false;
-        // this.randomSounds = [];
-        // this.ballSounds = [];
-        // this.categorySounds = [];
-        this.pressTimer = null; // To track long press
-        this.pressStartTime = 0; // To measure press duration
-        this.longPressSound = null; // To hold the sound that plays on long press
+        this.pressTimer = null;
+        this.pressStartTime = 0;
+        this.longPressSound = null;
         this.gameScene = null;
         this.categories = null;
         this.selectedCategory = null;
 
         this.getAudioPanel();
-        this.addPanelToggleButton(); // Renamed for clarity, original was fine
-        this.addModeSelectButtonListener(); // New method for the modeSelectButton
+        this.addPanelToggleButton();
+        this.addModeSelectButtonListener();
     }
 
     init(categories, longPressSound, randomSounds, ballSounds, renderer, settings, glbModel) {
@@ -109,6 +110,7 @@ class GamePanel {
             if (this.longPressSound) {
                 this.longPressSound.play().catch(e => console.warn('Error playing long press sound:', e));
             }
+            loadingCategoryIndicators(ANIMATION_DURATION);
 
             // Set another timer for 2 seconds (very long press trigger)
             this.pressTimer = setTimeout(() => {
@@ -124,6 +126,7 @@ class GamePanel {
                     this.selectedCategory = category;
                     // Load category sounds
                     updateIndicators(category);
+                    showCategoryName(category);
                     loadCategorySounds(category.key, category.sounds)
                     .then(loadedSoundsArray => {
                         // This block runs ONLY if loadCategorySounds successfully loads the sounds
@@ -135,8 +138,8 @@ class GamePanel {
                     });
                 }
                 this.pressTimer = null; // Clear timer as action is complete
-            }, 1600); // 2000ms (2s) - 400ms (0.4s initial delay) = 1600ms
-        }, 400); // 0.4 seconds
+            }, ANIMATION_DURATION); // 2000ms (2s) - 400ms (0.4s initial delay) = 1600ms
+        }, ANIMATION_DELAY); // 0.4 seconds
     }
 
     handlePressEnd() {
@@ -148,25 +151,23 @@ class GamePanel {
             this.pressTimer = null;
         }
 
-        // Stop the long press sound if it was playing
         if (this.longPressSound && !this.longPressSound.paused) {
             this.longPressSound.pause();
-            this.longPressSound.currentTime = 0; // Reset sound to beginning
+            this.longPressSound.currentTime = 0;
         }
 
         if (pressDuration < 400) {
             // Short press (less than 0.4 seconds)
             console.log('Short press (less than 0.4s) - calling loadRandomSounds.');
-            //this.randomSounds = loadRandomSounds();
             this.selectedCategory = null;
             turnRedFirstIndicator();
         } else if (pressDuration >= 400 && pressDuration < 2000) {
             // Medium press (between 0.4 and 2 seconds)
             console.log('Medium press (0.4s to 2s) - calling loadRandomSounds.');
-            // Sound should have started and now stops on release.
-            //this.randomSounds = loadRandomSounds();
             this.selectedCategory = null;
         }
+
+        this.togglePanelDelayed();
         // If pressDuration is >= 2000, the 2-second timer would have already fired
         // and called getRandomCategory(), so no action is needed here.
     }
@@ -187,9 +188,16 @@ class GamePanel {
     resetCategory() {
         console.log('🔄 Resetting category and indicators...');
         this.selectedCategory = null;
+        resetCategoryName();
         resetIndicators();
     }
 
+
+    togglePanelDelayed(delay = 1000) {
+        setTimeout(() => {
+            this.toggle();
+        }, delay);
+    }
 }
 
 export default GamePanel;

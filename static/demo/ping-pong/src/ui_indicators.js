@@ -1,9 +1,40 @@
+const RESET_COLOR = '#444';
+
 export const turnRedFirstIndicator = () => {
     const indicatorsContainer = document.getElementById('indicators');
     const indicators = indicatorsContainer.querySelectorAll('.indicator');
     indicators[0].style.backgroundColor = 'red'; 
+    indicators[1].style.backgroundColor = RESET_COLOR;
+    indicators[2].style.backgroundColor = RESET_COLOR;
+    indicators[3].style.backgroundColor = RESET_COLOR;
+    indicators[4].style.backgroundColor = RESET_COLOR;
 }
 
+export const loadingCategoryIndicators = (animationDuration) => {
+    const indicatorsContainer = document.getElementById('indicators');
+    if (!indicatorsContainer) {
+        console.warn('Indicators container not found for loadingCategoryIndicators.');
+        return;
+    }
+    const indicators = indicatorsContainer.querySelectorAll('.indicator');
+    const totalIndicators = indicators.length;
+    const delayPerIndicator = animationDuration / totalIndicators; // Time between each indicator turning green
+
+    console.log('⏳ Starting loading category indicators animation...');
+
+    // First, ensure all are reset to default
+    indicators.forEach(indicator => {
+        indicator.style.backgroundColor = RESET_COLOR;
+    });
+
+    indicators.forEach((indicator, index) => {
+        setTimeout(() => {
+            if (indicator) { // Check if indicator still exists (prevents errors if DOM changes)
+                indicator.style.backgroundColor = 'limegreen';
+            }
+        }, index * delayPerIndicator); // Stagger the delay for each indicator
+    });
+}
 
 export const updateIndicators = (currentCategory) => {
     const indicatorsContainer = document.getElementById('indicators');
@@ -23,7 +54,7 @@ export const updateIndicators = (currentCategory) => {
     // Ensure we have a current category and its code
     if (!currentCategory || !currentCategory.code) {
         console.warn('Cannot update indicators: currentCategory or its code is missing.');
-        indicators.forEach(indicator => indicator.style.backgroundColor = '#444');
+        indicators.forEach(indicator => indicator.style.backgroundColor = RESET_COLOR);
         return;
     }
 
@@ -42,7 +73,7 @@ export const updateIndicators = (currentCategory) => {
                 indicator.style.backgroundColor = color;
             } else {
                 console.warn(`Unknown code digit or no mapping for '${codeDigit}' at indicator index ${index}. Setting to default.`);
-                indicator.style.backgroundColor = '#444'
+                indicator.style.backgroundColor = RESET_COLOR
             }
         }
     });
@@ -55,7 +86,7 @@ export const resetIndicators = () => {
     if (indicatorsContainer) {
         const indicators = indicatorsContainer.querySelectorAll('.indicator');
         indicators.forEach(indicator => {
-            indicator.style.backgroundColor = '#444';
+            indicator.style.backgroundColor = RESET_COLOR;
         });
     } else {
         console.warn('Indicators container not found for reset.');

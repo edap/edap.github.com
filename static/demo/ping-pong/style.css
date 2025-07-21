@@ -26,6 +26,7 @@ body {
     border-radius: 1em;
     z-index: 10;
     pointer-events: none;
+    white-space: nowrap;
 }
 
 #audio-panel-toggle-btn {
@@ -65,6 +66,18 @@ body {
     overflow-y: auto;
     /* Added a gap for spacing between the stacked items */
     gap: 30px; /* Adjust as needed for vertical spacing between indicators and button */
+}
+
+.category-title {
+    font-size: 1.8em; /* Make it noticeable */
+    font-weight: bold;
+    color: white; /* Or any color that fits your theme */
+    text-align: center; /* Ensures text is centered within its own div */
+    margin-bottom: 10px; /* Space below the title */
+    min-height: 1.8em; /* Ensures the div takes up space even when empty */
+    display: flex; /* Use flex to easily center text vertically if needed */
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
 }
 
 #indicators {
