@@ -28,6 +28,7 @@ export function createBGMaterial(scene, gradientCenterCol, gradientBorderCol) {
             side: THREE.DoubleSide
     })
     let p = new THREE.Mesh(g, m);
+    p.renderOrder = -1;
     p.position.set(0,1,-2.3);
     scene.add(p)
     return m;

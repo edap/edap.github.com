@@ -1,11 +1,10 @@
 import { loadCategorySounds, loadRandomSounds } from "./loaders.js";
 import GameScene from "./game_scene.js";
 import { getRandomCategory } from "./utils.js"
-import { turnRedFirstIndicator, updateIndicators, resetIndicators, loadingCategoryIndicators } from "./ui_indicators.js"
+import { turnRedFirstIndicator, updateIndicators, resetIndicators, loadingCategoryIndicators, clearLoadingIndicators } from "./ui_indicators.js"
 import { showCategoryName, resetCategoryName } from "./ui_category.js";
+import { PANEL_ANIMATION_DELAY, PANEL_ANIMATION_DURATION, PANEL_CLOSE_DELAY } from "./constants.js";
 
-const ANIMATION_DURATION = 1600;
-const ANIMATION_DELAY = 400;
 class GamePanel {
     constructor() {
         this.container = null;
@@ -30,7 +29,6 @@ class GamePanel {
         this.categories = categories;
     }
 
-
     addPanelToggleButton() {
         const button = document.getElementById("audio-panel-toggle-btn");
         if (!button) {
@@ -39,17 +37,16 @@ class GamePanel {
         }
 
         button.addEventListener('click', (e) => {
-            // Prevent double-triggering if both click and touch are present
             if (e.pointerType === 'touch' && !this.touchStarted) return;
             this.toggle();
-            this.touchStarted = false; // Reset for next interaction
+            this.touchStarted = false;
         });
 
         button.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
-            this.touchStarted = true; // Flag to prevent click event if touch initiated
+            e.preventDefault();
+            this.touchStarted = true;
             this.toggle();
-        }, { passive: false }); // Use passive: false for preventDefault
+        }, { passive: false });
     }
 
 
@@ -60,17 +57,19 @@ class GamePanel {
         }
     }
 
+
     toggle() {
         if (!this.container) return;
+        if (this.hideTimeout) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
 
         this.isVisible = !this.isVisible;
-        this.container.style.display = this.isVisible ? 'flex' : 'none';
-
         if (this.isVisible) {
-            console.log('👁️ Debug console opened');
+            this.container.classList.add('is-visible');
         } else {
-            console.log('🙈 Debug console closed');
-            // Stop any ongoing long press sound if the panel is closed
+            this.container.classList.remove('is-visible');
             if (this.longPressSound && !this.longPressSound.paused) {
                 this.longPressSound.pause();
                 this.longPressSound.currentTime = 0;
@@ -110,7 +109,7 @@ class GamePanel {
             if (this.longPressSound) {
                 this.longPressSound.play().catch(e => console.warn('Error playing long press sound:', e));
             }
-            loadingCategoryIndicators(ANIMATION_DURATION);
+            loadingCategoryIndicators(PANEL_ANIMATION_DURATION);
 
             // Set another timer for 2 seconds (very long press trigger)
             this.pressTimer = setTimeout(() => {
@@ -139,7 +138,7 @@ class GamePanel {
                 }
                 this.pressTimer = null; // Clear timer as action is complete
             }, ANIMATION_DURATION); // 2000ms (2s) - 400ms (0.4s initial delay) = 1600ms
-        }, ANIMATION_DELAY); // 0.4 seconds
+        }, PANEL_ANIMATION_DELAY); // 0.4 seconds
     }
 
     handlePressEnd() {
@@ -158,23 +157,25 @@ class GamePanel {
 
         if (pressDuration < 400) {
             // Short press (less than 0.4 seconds)
-            console.log('Short press (less than 0.4s) - calling loadRandomSounds.');
+            //console.log('Short press (less than 0.4s) - calling loadRandomSounds.');
             this.selectedCategory = null;
+            clearLoadingIndicators();
             turnRedFirstIndicator();
         } else if (pressDuration >= 400 && pressDuration < 2000) {
             // Medium press (between 0.4 and 2 seconds)
-            console.log('Medium press (0.4s to 2s) - calling loadRandomSounds.');
+            //console.log('Medium press (0.4s to 2s) - calling loadRandomSounds.');
+            clearLoadingIndicators();
+            turnRedFirstIndicator();
             this.selectedCategory = null;
         }
 
         this.togglePanelDelayed();
         // If pressDuration is >= 2000, the 2-second timer would have already fired
-        // and called getRandomCategory(), so no action is needed here.
     }
 
     handlePressCancel() {
         // This handles cases where the pointer (mouse or finger) leaves the button while pressed
-        console.log('Press cancelled (pointer left button).');
+        //console.log('Press cancelled (pointer left button).');
         if (this.pressTimer) {
             clearTimeout(this.pressTimer);
             this.pressTimer = null;
@@ -193,7 +194,7 @@ class GamePanel {
     }
 
 
-    togglePanelDelayed(delay = 1000) {
+    togglePanelDelayed(delay = PANEL_CLOSE_DELAY) {
         setTimeout(() => {
             this.toggle();
         }, delay);

@@ -33,40 +33,55 @@ body {
     position: fixed;
     top: 10px;
     right: 40px;
-    width: 35px;
-    height: 35px;
-    background: rgba(255, 107, 53, 0.9);
-    color: white;
+    width: 60px;
+    height: 60px;
+    background: rgba(53, 208, 255, 0.9);
     border: none;
-    border-radius: 18px;
+    border-radius: 35px;
     font-size: 14px;
     z-index: 10000;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(255,107,53,0.4);
     touch-action: manipulation;
+    font-size: 30px;
+    color: transparent;  
+    text-shadow: 0 0 0 rgb(255, 0, 225);
     }
 
-#controlPanel {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80vw;
-    height: 90vh;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid limegreen;
-    border-radius: 20px;
-    z-index: 10000;
-    display: none; /* Keep as flex */
-    flex-direction: column; /* Changed to column to stack main items */
-    justify-content: center; /* Centers items vertically in the column */
-    align-items: center; /* Centers items horizontally in the column */
-    padding: 20px;
-    box-shadow: 0 2px 20px rgba(0, 255, 0, 0.4);
-    overflow-y: auto;
-    /* Added a gap for spacing between the stacked items */
-    gap: 30px; /* Adjust as needed for vertical spacing between indicators and button */
-}
+    #controlPanel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateX(-100%); /* Initial hidden position */
+        width: 80vw;
+        height: 90vh;
+        background: rgba(0, 135, 255, 0.9);
+        border: 2px solid #f700ff;
+        border-radius: 20px;
+        z-index: 10000;
+        
+        /* ALWAYS display as flex */
+        display: flex; /* <-- IMPORTANT: Keep this as flex ALWAYS */
+        
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-shadow: 0 2px 20px rgba(0, 255, 0, 0.4);
+        overflow-y: auto;
+        gap: 30px;
+    
+        /* Transition properties for smooth animation */
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        opacity: 0; /* Initially hidden */
+        pointer-events: none; /* Initially non-interactive */
+    }
+    
+    #controlPanel.is-visible {
+        transform: translate(-50%, -50%) translateX(0); /* Slides to centered ON-SCREEN position */
+        opacity: 1; /* Becomes fully opaque */
+        pointer-events: all; /* Becomes interactive */
+    }
 
 .category-title {
     font-size: 1.8em; /* Make it noticeable */
@@ -104,7 +119,7 @@ body {
     font-size: 18px;
     border-radius: 30px;
     border: none;
-    background-color: #1e90ff;
+    background-color: #ed1eff;
     color: white;
     cursor: pointer;
     transition: background-color 0.2s;

@@ -6,6 +6,8 @@ import { loadBallSounds, loadRandomSounds, loadLongPressSound, loadModel, loadCa
 let renderer;
 let gamePanel;
 
+
+
 const init = (settings, categories, longPressSound, randomSounds, ballSounds, glbModel) => {
     let canvas = document.createElement("canvas");
     canvas.screencanvas = true; //for cocoonjs
@@ -34,7 +36,7 @@ const init = (settings, categories, longPressSound, randomSounds, ballSounds, gl
     document.getElementById('container').appendChild(renderer.domElement);
 
     gamePanel = new GamePanel();
-    gamePanel.init(categories, longPressSound, randomSounds, ballSounds, renderer, settings, glbModel)
+    gamePanel.init(categories, longPressSound, randomSounds, ballSounds, renderer, settings, glbModel);
 
     // Handle window resize
     window.addEventListener('resize', handleResize, false);

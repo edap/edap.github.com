@@ -1,9 +1,12 @@
 const RESET_COLOR = '#444';
 
+let activeIndicatorTimeouts = [];
+
+
 export const turnRedFirstIndicator = () => {
     const indicatorsContainer = document.getElementById('indicators');
     const indicators = indicatorsContainer.querySelectorAll('.indicator');
-    indicators[0].style.backgroundColor = 'red'; 
+    indicators[0].style.backgroundColor = 'red';
     indicators[1].style.backgroundColor = RESET_COLOR;
     indicators[2].style.backgroundColor = RESET_COLOR;
     indicators[3].style.backgroundColor = RESET_COLOR;
@@ -18,23 +21,45 @@ export const loadingCategoryIndicators = (animationDuration) => {
     }
     const indicators = indicatorsContainer.querySelectorAll('.indicator');
     const totalIndicators = indicators.length;
-    const delayPerIndicator = animationDuration / totalIndicators; // Time between each indicator turning green
+    const delayPerIndicator = animationDuration / totalIndicators;
 
-    console.log('⏳ Starting loading category indicators animation...');
+    //console.log('⏳ Starting loading category indicators animation...');
 
-    // First, ensure all are reset to default
+    // Clear any previously active timeouts before starting new ones
+    clearLoadingIndicators();
+
     indicators.forEach(indicator => {
         indicator.style.backgroundColor = RESET_COLOR;
     });
 
     indicators.forEach((indicator, index) => {
-        setTimeout(() => {
-            if (indicator) { // Check if indicator still exists (prevents errors if DOM changes)
+        const timeoutId = setTimeout(() => { // Store the ID
+            if (indicator) {
                 indicator.style.backgroundColor = 'limegreen';
             }
-        }, index * delayPerIndicator); // Stagger the delay for each indicator
+        }, index * delayPerIndicator);
+        activeIndicatorTimeouts.push(timeoutId); // Add the ID to our tracking array
     });
-}
+    console.log(activeIndicatorTimeouts);
+};
+
+export const clearLoadingIndicators = () => {
+    //console.log('🛑 Clearing loading category indicators animation...');
+    activeIndicatorTimeouts.forEach(timeoutId => {
+        clearTimeout(timeoutId); // Clear each stored timeout
+    });
+    activeIndicatorTimeouts = []; // Reset the array
+
+
+    // Optionally, reset all indicators to their default color immediately
+    const indicatorsContainer = document.getElementById('indicators');
+    if (indicatorsContainer) {
+        const indicators = indicatorsContainer.querySelectorAll('.indicator');
+        indicators.forEach(indicator => {
+            indicator.style.backgroundColor = RESET_COLOR;
+        });
+    }
+};
 
 export const updateIndicators = (currentCategory) => {
     const indicatorsContainer = document.getElementById('indicators');
@@ -78,7 +103,7 @@ export const updateIndicators = (currentCategory) => {
         }
     });
 
-    console.log('📊 Indicators updated for code:', codeString);
+    //console.log('📊 Indicators updated for code:', codeString);
 }
 
 export const resetIndicators = () => {
