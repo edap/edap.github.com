@@ -43,7 +43,7 @@ export const createTable = (glb, settings, simulation, scene, tableSize) => {
     return table;
 }
 
-export const createNet = (glb, settings, simulation, scene, tableSize) => {
+export const createNet = (glb, settings, simulation, scene, tableSize, scaleFactor = 1) => {
     const net = glb.scene.getObjectByName("net");
     if (!net) {
         console.warn("Net object not found in GLB model!");
@@ -51,7 +51,7 @@ export const createNet = (glb, settings, simulation, scene, tableSize) => {
     }
 
     // Scale net based on table scale
-    net.scale.set(tableSize.scale, tableSize.scale, tableSize.scale);
+    net.scale.set(tableSize.scale, tableSize.scale/scaleFactor, tableSize.scale);
     scene.add(net);
 
     // Optional wall mode for net collision

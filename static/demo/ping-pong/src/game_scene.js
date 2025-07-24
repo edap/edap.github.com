@@ -8,7 +8,7 @@ import Stats from 'three/addons/libs/stats.module.js'
 import { updateScoreUI } from './ui_score.js';
 import { createBGMaterial } from './background.js';
 import { createBall, createPaddles, createTable, createNet } from "./model_utils.js";
-import { InputManager } from "./input_manager.js"; // Import the new manager
+import { InputManager } from "./input_manager.js";
 import { STATES, SERVE_AFTER_ERROR_DELAY } from "./constants.js";
 import { drawArrow } from "./debug_helpers.js";
 import {
@@ -51,6 +51,11 @@ class GameScene {
 
         this.state = STATES.LOADING;
         this.pointScoredTime = 0;
+
+        this.tempVector = new THREE.Vector3();
+        this.tempRay = new THREE.Ray();
+        this.tempIntersect = new THREE.Vector3();
+        this.tempPlane = new THREE.Plane();
     }
 
     init(randomSounds, ballSounds, glbModel) {
@@ -88,13 +93,14 @@ class GameScene {
     parseGlb = (glb) => {
         this.tableSize = {};
         const objectScaleFactor = (isMobile() && this.settings.mobile && this.settings.mobile.objectScale) ? this.settings.mobile.objectScale : 1;
+        //const objectScaleFactor = 1.6;
         const table = createTable(glb, this.settings, this.simulation, this.scene, this.tableSize);
         if (!table) {
             console.error("Failed to load table model.");
             return;
         }
 
-        const net = createNet(glb, this.settings, this.simulation, this.scene, this.tableSize);
+        const net = createNet(glb, this.settings, this.simulation, this.scene, this.tableSize, objectScaleFactor);
         if (!net) {
             console.warn("Net model not found or created.");
         }
@@ -182,25 +188,32 @@ class GameScene {
         let py = - (this.input.y / this.screenSize.height) * 2 + 1;
 
         let maxpy = Math.min(0, py);
-        let vector = new THREE.Vector3(px, maxpy, 0.5);
-        vector.unproject(this.camera);
-        let ray = new THREE.Ray(this.camera.position, vector.sub(this.camera.position).normalize());
-        let intersect = new THREE.Vector3(0, 0, 0);
-        ray.intersectPlane(this.inputPlane, intersect);
+        //let vector = new THREE.Vector3(px, maxpy, 0.5);
+        this.tempVector.set(px, maxpy, 0.5);
+        this.tempVector.unproject(this.camera);
+        // Replace: let ray = new THREE.Ray(this.camera.position, vector.sub(this.camera.position).normalize());
+        this.tempRay.origin.copy(this.camera.position);
+        this.tempRay.direction.copy(this.tempVector).sub(this.camera.position).normalize();
 
-        if (!intersect) {
-            intersect = this.paddle.position.clone();
+        // Replace: let intersect = new THREE.Vector3(0, 0, 0);
+        // Replace: ray.intersectPlane(this.inputPlane, intersect);
+        // Use this.tempIntersect directly for the result
+        this.tempRay.intersectPlane(this.inputPlane, this.tempIntersect);
+
+        if (!this.tempIntersect) { // Check the reused object
+            this.tempIntersect.copy(this.paddle.position); // Use copy instead of clone if possible
         }
 
         let minZ = this.tableSize.depth * 0.10;
         let maxZ = this.tableSize.depth * 0.60;
         let maxX = this.tableSize.width * 0.50;
 
-        intersect.z = Math.max(minZ, Math.min(maxZ, intersect.z));
-        intersect.x = Math.max(-maxX, Math.min(maxX, intersect.x));
+        this.tempIntersect.z = Math.max(minZ, Math.min(maxZ, this.tempIntersect.z));
+        this.tempIntersect.x = Math.max(-maxX, Math.min(maxX, this.tempIntersect.x));
 
-        this.paddle.position.x = intersect.x;
-        this.paddle.position.z = intersect.z;
+
+        this.paddle.position.x = this.tempIntersect.x;
+        this.paddle.position.z = this.tempIntersect.z;
         if (this.state == STATES.SERVING) {
             this.paddle.position.z = this.tableSize.depth / 2;
         }
