@@ -413,6 +413,7 @@ class GameScene {
             this.stats.begin();
         }
         this.update();
+
         this.renderer.render(this.scene, this.camera);
         if (this.settings.debug) { this.stats.end() };
     }

@@ -21,6 +21,8 @@ const init = (settings, categories, longPressSound, randomSounds, ballSounds, gl
         powerPreference: "high-performance"
     };
 
+    console.log(rendererConfig);
+
     renderer = new THREE.WebGLRenderer(rendererConfig);
     renderer.setClearColor(0x000000);
     renderer.setSize(canvas.width, canvas.height);

@@ -104,7 +104,6 @@ class AI {
                 }
 
                 if (makeMistake) {
-                    console.log("error")
                     // Mistake: Poor angle or timing, still allow for some net hits, but less often
                     // Range will be (baseDirY - 0.1) to (baseDirY - 0.1 + 0.3)
                     dir.y = (baseDirY - 0.1) + Math.random() * 0.3; 

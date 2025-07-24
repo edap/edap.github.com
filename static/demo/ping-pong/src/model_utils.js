@@ -40,6 +40,8 @@ export const createTable = (glb, settings, simulation, scene, tableSize) => {
     table.matrixAutoUpdate = false;
     table.updateMatrix();
     scene.add(table);
+
+    //console.log('tableSize dimensions:', tableSize.width, tableSize.height, tableSize.depth);
     return table;
 }
 
@@ -63,6 +65,7 @@ export const createNet = (glb, settings, simulation, scene, tableSize, scaleFact
             addDebugBox3D(collisionBoxNet, scene);
         }
     }
+    //console.log("net created")
     return net;
 }
 
@@ -94,7 +97,7 @@ export const createPaddles = (glb, scene, tableSize, settings, scaleFactor = 1) 
 
     addMarkerToPaddle(playerPaddle, paddleSize, "paddle-tip", settings.debug, scaleFactor);
     //addMarkerToPaddle(aiPaddle, paddleSize, "ai-paddle-tip", settings.debug, scaleFactor);
-
+    //console.log("paddle created")
     return { player: playerPaddle, ai: aiPaddle, size: paddleSize };
 }
 
