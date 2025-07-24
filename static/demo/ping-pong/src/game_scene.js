@@ -9,11 +9,16 @@ import { updateScoreUI } from './ui_score.js';
 import { createBGMaterial } from './background.js';
 import { createBall, createPaddles, createTable, createNet } from "./model_utils.js";
 import { InputManager } from "./input_manager.js"; // Import the new manager
-import { STATES } from "./constants.js";
-
-let controls; // This can probably remain global if only used for debug controls or removed if not needed.
-
-let paddleTrajectory = []; // This should probably also be an instance variable of GameScene if it's related to the current game instance.
+import { STATES, SERVE_AFTER_ERROR_DELAY } from "./constants.js";
+import { drawArrow } from "./debug_helpers.js";
+import {
+    checkBallHitTable as checkBallHitTableRule,
+    isBallOffSide,
+    isBallBelowTable,
+    isBallPastPlayerBoundary,
+    isBallPastAIBoundary,
+    determineScorer,
+} from './game_rules.js';
 
 class GameScene {
     constructor(renderer, settings) {
@@ -40,8 +45,12 @@ class GameScene {
         this.lastHitter = null; // 'player' or 'ai'
         this.ballBouncedOnOpponentSide = false; // Track if ball bounced on opponent's side
         this.ballHitTable = false; // Track if ball hit table at all
+        this.paddleTrajectory = [];
+        this.debugArrow = null;
+        this.paddleTip = new THREE.Vector3();
 
         this.state = STATES.LOADING;
+        this.pointScoredTime = 0;
     }
 
     init(randomSounds, ballSounds, glbModel) {
@@ -63,12 +72,22 @@ class GameScene {
         this.inputManager = new InputManager(this.renderer.domElement, this);
         this.inputManager.initListeners();
         updateScoreUI(this.score);
+
+        if (this.settings.debug) {
+            this.debugArrow = drawArrow(this.scene, new THREE.Vector3(), new THREE.Vector3(0, 1, 0), 0.5, 0.1, 0.05);
+        }
+    }
+    // This is already correctly set as an arrow function
+    setLastHitter = (hitter) => {
+        this.lastHitter = hitter;
+        this.ballBouncedOnOpponentSide = false;
+        this.ballHitTable = false;
+        //console.log(`GameScene: lastHitter set to ${hitter}`);
     }
 
     parseGlb = (glb) => {
         this.tableSize = {};
         const objectScaleFactor = (isMobile() && this.settings.mobile && this.settings.mobile.objectScale) ? this.settings.mobile.objectScale : 1;
-
         const table = createTable(glb, this.settings, this.simulation, this.scene, this.tableSize);
         if (!table) {
             console.error("Failed to load table model.");
@@ -101,18 +120,19 @@ class GameScene {
 
         updateCameraForTableVisibility(this.tableSize, this.camera, this.screenSize);
 
-        this.ai = new AI(this.simulation, this.tableSize, this.paddleAI, this.paddleSize, this.ball, this.ballRadius);
+        // Correctly passing the arrow function
+        this.ai = new AI(this.simulation, this.tableSize, this.paddleAI, this.paddleSize, this.ball, this.ballRadius, this.setLastHitter);
 
-        // Update to instance state:
-        this.state = STATES.SERVING; // <-- USE this.state
+        this.state = STATES.SERVING;
     }
 
     fallbackServe() {
-        // Update to instance state:
-        this.state = STATES.PLAYING; // <-- USE this.state
+        this.state = STATES.PLAYING;
         this.ball.position.set(this.paddle.position.x, this.paddle.position.y + this.paddleSize.height, this.paddle.position.z);
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
+        // Using setLastHitter for fallback serve as well
+        this.setLastHitter('player');
     }
 
     processInput(x, y) {
@@ -126,28 +146,36 @@ class GameScene {
     }
 
     serve() {
-        // Update to instance state:
-        this.state = STATES.PLAYING; // <-- USE this.state
+        this.state = STATES.PLAYING;
         this.ball.position.set(this.paddle.position.x, this.paddle.position.y + this.paddleSize.height, this.paddle.position.z);
 
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
 
-        this.lastHitter = 'player';
-        this.ballBouncedOnOpponentSide = false;
-        this.ballHitTable = false;
+        // Use the setLastHitter function
+        this.setLastHitter('player');
     }
 
     update() {
-        // Update to instance state:
-        if (this.state === STATES.LOADING) { // <-- USE this.state
+        if (this.state === STATES.LOADING) {
             return;
         }
 
-        // Update to instance state:
-        if (this.state === STATES.PLAYING) { // <-- USE this.state
+        if (this.state === STATES.PLAYING) {
             this.ai.play();
             this.simulation.simulate();
+            //this.simulation.simulate();
+            this.checkBallHit();
+            this.checkPointConditions();
+        }else if (this.state === STATES.POINT_SCORED) {
+            const delayDuration = SERVE_AFTER_ERROR_DELAY;
+            if (Date.now() - this.pointScoredTime > delayDuration) {
+                // Delay has passed, now reset the game for the next serve
+                this.state = STATES.SERVING;
+                this.ball.position.set(0, this.tableSize.height * 2, this.tableSize.depth * 0.25);
+                this.setLastHitter(null);
+                this.simulation.lastCollidedBoxName = null;
+            }
         }
 
         let px = (this.input.x / this.screenSize.width) * 2 - 1;
@@ -194,79 +222,69 @@ class GameScene {
 
         if (this.state == STATES.SERVING) {
             setBallPosition(this.paddle, this.ballRadius, this.ball)
-        } else {
-            this.checkBallHit();
-            this.checkBallOutOfBounds();
         }
+        //  else {
+        //     this.checkBallHit();
+        //     this.checkPointConditions();
+        // }
     }
 
-    checkBallOutOfBounds() {
-        let ballOutOfBounds = false;
+    checkPointConditions() {
         let scoreForPlayer = false;
         let scoreForAI = false;
         let reasonForPoint = '';
+        let pointScored = false;
 
-        let ballNearTable = Math.abs(this.ball.position.y - this.tableSize.height) < this.ballRadius * 2 &&
-            Math.abs(this.ball.position.x) < this.tableSize.width * 0.5 &&
-            Math.abs(this.ball.position.z) < this.tableSize.depth * 0.5;
+        // --- Update ball hit table state ---
+        const ballHitTableResult = checkBallHitTableRule(
+            this.ball,
+            this.tableSize,
+            this.ballRadius,
+            this.lastHitter,
+            this.ballHitTable
+        );
+        this.ballHitTable = ballHitTableResult.ballHitTable;
+        // Only update ballBouncedOnOpponentSide if it's set to true by the function
+        // This ensures it doesn't get reset if it was already true from a previous check
+        if (ballHitTableResult.ballBouncedOnOpponentSide) {
+             this.ballBouncedOnOpponentSide = true;
+        }
 
-        if (ballNearTable && !this.ballHitTable) {
-            this.ballHitTable = true;
-            if (this.ball.position.z > 0) {
-                if (this.lastHitter === 'ai') {
-                    this.ballBouncedOnOpponentSide = true;
-                }
-            } else {
-                if (this.lastHitter === 'player') {
-                    this.ballBouncedOnOpponentSide = true;
-                }
+        // net?
+        if (this.lastHitter && this.simulation.lastCollidedBoxName === 'net') {
+            pointScored = true;
+            reasonForPoint = `Ball hit the net after ${this.lastHitter} hit.`;
+            if (this.lastHitter === 'player') {
+                scoreForAI = true;
+                reasonForPoint += ' (Player fault)';
+            } else { // lastHitter === 'ai'
+                scoreForPlayer = true;
+                reasonForPoint += ' (AI fault)';
             }
         }
 
-        if (Math.abs(this.ball.position.x) > this.tableSize.width * 0.6) {
-            ballOutOfBounds = true;
+        else if (isBallOffSide(this.ball, this.tableSize)) {
+            pointScored = true;
             reasonForPoint = 'Ball went off side of table';
-        }
-
-        if (this.ball.position.y < this.tableSize.height * 0.3) {
-            ballOutOfBounds = true;
+        } else if (isBallBelowTable(this.ball, this.tableSize)) {
+            pointScored = true;
             reasonForPoint = 'Ball fell below table';
-        }
-
-        if (this.ball.position.z > this.tableSize.depth * 0.7) {
-            ballOutOfBounds = true;
+        } else if (isBallPastPlayerBoundary(this.ball, this.tableSize)) {
+            pointScored = true;
             reasonForPoint = 'Ball went past player';
-        }
-
-        if (this.ball.position.z < -this.tableSize.depth * 0.7) {
-            ballOutOfBounds = true;
+        } else if (isBallPastAIBoundary(this.ball, this.tableSize)) {
+            pointScored = true;
             reasonForPoint = 'Ball went past AI';
         }
 
-        if (ballOutOfBounds) {
-            if (this.lastHitter === 'player') {
-                if (!this.ballBouncedOnOpponentSide) {
-                    scoreForAI = true;
-                    reasonForPoint += ' (Player hit, no bounce on AI side)';
-                } else {
-                    scoreForPlayer = true;
-                    reasonForPoint += ' (Ball bounced on AI side after player hit)';
-                }
-            } else if (this.lastHitter === 'ai') {
-                if (!this.ballBouncedOnOpponentSide) {
-                    scoreForPlayer = true;
-                    reasonForPoint += ' (AI hit, no bounce on player side)';
-                } else {
-                    scoreForAI = true;
-                    reasonForPoint += ' (Ball bounced on player side after AI hit)';
-                }
-            } else {
-                if (this.ball.position.z > 0) {
-                    scoreForAI = true;
-                } else {
-                    scoreForPlayer = true;
-                }
-                reasonForPoint += ' (Fallback rule)';
+        if (pointScored) {
+            this.state = STATES.POINT_SCORED; // Set the new state
+            this.pointScoredTime = Date.now();
+            let scorer = determineScorer(this.lastHitter, this.ballBouncedOnOpponentSide, this.ball.position.z);
+            if (scorer === 'player') {
+                scoreForPlayer = true;
+            } else if (scorer === 'ai') {
+                scoreForAI = true;
             }
 
             if (scoreForPlayer) {
@@ -276,17 +294,20 @@ class GameScene {
             }
 
             updateScoreUI(this.score);
+            //console.log(reasonForPoint);
 
-            // Update to instance state:
-            this.state = STATES.SERVING; // <-- USE this.state
-
-            this.ball.position.set(0, this.tableSize.height * 2, this.tableSize.depth * 0.25);
+            // this.state = STATES.SERVING;
+            // this.ball.position.set(0, this.tableSize.height * 2, this.tableSize.depth * 0.25);
+            // this.setLastHitter(null);
+            // this.simulation.lastCollidedBoxName = null;
         }
     }
+
 
     checkBallHit() {
         let hitting = false;
         let hit = false;
+        //console.log(this.simulation.getLinearVelocity().z)
         if (this.simulation.getLinearVelocity().z > 0 && this.paddle.position.z > this.ball.position.z) {
             let trayectory = {
                 time: Date.now(),
@@ -294,7 +315,7 @@ class GameScene {
                 y: this.paddle.position.y,
                 z: this.paddle.position.z
             }
-            paddleTrajectory.push(trayectory);
+            this.paddleTrajectory.push(trayectory);
 
             let zDistance = this.paddle.position.z - this.ball.position.z;
             let xDistance = Math.abs(this.paddle.position.x - this.ball.position.x);
@@ -311,7 +332,7 @@ class GameScene {
         this.paddle.position.y += Math.min(Math.abs(diffY), this.paddleSize.height * 0.1) * (diffY ? -1 : 1);
 
         if (hit) {
-            let trayectory = calculatePaddleTrajectory(paddleTrajectory);
+            let trayectory = calculatePaddleTrajectory(this.paddleTrajectory);
             trayectory.z = Math.min(trayectory.z, 0);
 
             let dir = new THREE.Vector3(0, 0, 0);
@@ -322,7 +343,7 @@ class GameScene {
             tz = Math.min(Math.abs(tz), 1);
             let force = 0.02 + tz * 0.01;
 
-            dir.y = 0.4;
+            dir.y = 0.45;
             if (this.ball.position.y < this.tableSize.height) {
                 dir.y += 0.1;
             }
@@ -336,11 +357,22 @@ class GameScene {
             }
 
             this.simulation.hitBall(dir, force);
-            paddleTrajectory.length = 0;
+            this.paddleTrajectory.length = 0;
 
-            this.lastHitter = 'player';
-            this.ballBouncedOnOpponentSide = false;
-            this.ballHitTable = false;
+            // Use the setLastHitter function
+            this.setLastHitter('player');
+        }
+
+        if (this.settings.debug) {
+            const paddleTipMarker = this.paddle.getObjectByName('paddle-tip');
+            if (paddleTipMarker) {
+                paddleTipMarker.getWorldPosition(this.paddleTip);
+
+                this.debugArrow.position.copy(this.paddleTip);
+                if (hit) {
+                    this.debugArrow.setDirection(this.simulation.getLinearVelocity());
+                }
+            }
         }
     }
 

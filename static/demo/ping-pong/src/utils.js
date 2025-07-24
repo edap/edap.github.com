@@ -8,18 +8,6 @@ export const isMobile = () => {
 
 const worldPosition = new Vector3()
 
-export function addDebugBox(w, h, d, scene) {
-    let mat = new MeshBasicMaterial({ color: 0xff0000 });
-    let g = new BoxGeometry(w, h, d);
-    let m = new Mesh(g, mat);
-    scene.add(m);
-}
-
-export function addDebugBox3D(box, scene) {
-    const boxHelper = new Box3Helper(box, 0x00ff00);
-    scene.add(boxHelper);
-}
-
 export const setupLighting = (scene) => {
     // Minimal, clean lighting
     const ambient = new AmbientLight(0xffffff, 0.5);
@@ -88,7 +76,7 @@ export const createSettings = () => {
 
     let settings = {
         debug: false,
-        wallMode: false,
+        wallMode: true,
         width: width,
         height: height,
         depth: depth,
@@ -107,7 +95,7 @@ export const createSettings = () => {
         mobile: {
             enabled: /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
             touchSensitivity: 0.8,
-            objectScale: 1.5 
+            objectScale: 1.6
         }
     };
 

@@ -137,7 +137,7 @@ class GamePanel {
                     });
                 }
                 this.pressTimer = null; // Clear timer as action is complete
-            }, ANIMATION_DURATION); // 2000ms (2s) - 400ms (0.4s initial delay) = 1600ms
+            }, PANEL_ANIMATION_DURATION); // 2000ms (2s) - 400ms (0.4s initial delay) = 1600ms
         }, PANEL_ANIMATION_DELAY); // 0.4 seconds
     }
 

@@ -88,7 +88,6 @@ export const updateCameraForTableVisibility = (tableSize, camera, screenSize) =>
     camera.position.set(0, cameraY, cameraZ);
     camera.lookAt(new Vector3(0, lookAtY, 0));
 
-    // --- 5. Debugging output (VERY IMPORTANT FOR TUNING) ---
     const debugMessage =
         `📐 Camera adjusted: ` +
         `pos(${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}) ` +
@@ -98,5 +97,5 @@ export const updateCameraForTableVisibility = (tableSize, camera, screenSize) =>
         ` | Debug Params: fovMP=${fovDegreesMobilePortrait}, fovML=${fovDegreesMobileLandscape}, fovD=${fovDegreesDesktop}, ` +
         `zBufM=${cameraZBufferMobile}, zBufD=${cameraZBufferDesktop}, yBuf=${verticalPlayAreaBuffer}, yFacM=${cameraYFactorMobile}, yFacD=${cameraYFactorDesktop}`;
 
-    console.log(debugMessage);
+    //console.log(debugMessage);
 };

@@ -22,6 +22,7 @@ class Physics {
         this.ball = null;
         this.boxes = [];
         this.audio = new AudioManager();
+        this.lastCollidedBoxName = null;
     }
 
     init(settings, randomSounds, ballSounds) {
@@ -69,6 +70,8 @@ class Physics {
         for (var i = 0; i < this.boxes.length; ++i) {
             var box = this.boxes[i];
             if (this.isSphereIntersectingBox(box, ball.position, ballRadius)) {
+                // if box.name == 'net', then the player (or the AI) has hit the net
+                this.lastCollidedBoxName = box.name;
                 this.collideBall(ball, box, vg);
             }
         }
@@ -98,7 +101,10 @@ class Physics {
 
         var top = sphereInterserctsPlane(0, -1, 0, box.max.y, ball.position, ballRadius);
         var front = sphereInterserctsPlane(0, 0, -1, box.max.z, ball.position, ballRadius);
-        //TODO: check remaining planes and handle edge collisions.
+        //var bottom = sphereInterserctsPlane(0, 1, 0, -box.min.y, ball.position, ballRadius);
+        var back = sphereInterserctsPlane(0, 0, 1, -box.min.z, ball.position, ballRadius);
+        //var left = sphereInterserctsPlane(1, 0, 0, -box.min.x, ball.position, ballRadius);
+        //var right = sphereInterserctsPlane(-1, 0, 0, box.max.x, ball.position, ballRadius);
 
 
         if (top) {
@@ -107,10 +113,30 @@ class Physics {
             gravityTime = 0;
             prevGravity = 0;
         }
+        // else if (bottom) {
+        //     ball.position.y = box.min.y - ballRadius;
+        //     linearVelocity.y = -restitution * (linearVelocity.y + g); // Gravity still applies to Y velocity
+        //     gravityTime = 0;
+        //     prevGravity = 0;
+        // }
+
         if (front) {
             ball.position.z = box.max.z + ballRadius;
             linearVelocity.z *= -restitution;
         }
+        else if (back) { // Added back collision
+            ball.position.z = box.min.z - ballRadius;
+            linearVelocity.z *= -restitution;
+        }
+
+        // if (left) { // Added left collision
+        //     ball.position.x = box.min.x - ballRadius;
+        //     linearVelocity.x *= -restitution;
+        // }
+        // else if (right) { // Added right collision
+        //     ball.position.x = box.max.x + ballRadius;
+        //     linearVelocity.x *= -restitution;
+        // }
 
         //TODO: Angular velocity
 

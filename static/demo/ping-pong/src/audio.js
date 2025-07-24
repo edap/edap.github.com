@@ -233,7 +233,7 @@ class AudioManager {
         const playPromise = selectedSound.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                console.log('✅ BALL AUDIO: Successfully played bounce sound', randomIndex);
+                //console.log('✅ BALL AUDIO: Successfully played bounce sound', randomIndex);
             }).catch(error => {
                 console.warn('❌ BALL AUDIO: Play failed:', error);
                 //this.showAudioFeedback('❌ Ball sounds failed - upload files');

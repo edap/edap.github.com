@@ -1,14 +1,9 @@
-/* 
- * PingPongWebGL is licensed under MIT licensed. See LICENSE.md file for more information.
- * Copyright (c) 2014 Imanol Fernandez @MortimerGoro
-*/
 import { Vector3 } from "three"
-
 
 let targetPos = new Vector3(0, 0, 0);
 
 class AI {
-    constructor(simulation, tableSize, paddle, paddleSize, ball, ballRadius) {
+    constructor(simulation, tableSize, paddle, paddleSize, ball, ballRadius,setLastHitterCallback) {
         this.simulation = simulation;
         this.tableSize = tableSize;
         this.paddle = paddle;
@@ -19,8 +14,8 @@ class AI {
         this.force = 0.4;   // Reduced from 0.5 - less powerful hits
         this.difficulty = 'normal'; // normal, easy, hard
         this.errorRate = 0.15; // 15% chance of imperfect positioning
+        this.setLastHitterCallback = setLastHitterCallback;
     }
-
 
     setSpeed(speed) {
         this.speed = speed;
@@ -87,20 +82,45 @@ class AI {
                 let dir = new Vector3(0, 0, 0);
                 //fixed z
                 dir.z = 1.0;
-                console.log("called")
                 let hitForce;
+
+                // --- START AI.js MODIFICATIONS ---
+                // Adjust vertical direction (dir.y) based on ball height and difficulty
+                let baseDirY = 0.3; // A more robust starting point for y
+                
+                // If ball is lower than table height, aim for a higher trajectory
+                if (ballPos.y < tableSize.height) { 
+                    baseDirY = 0.4; // Give it more upward push when ball is low
+                }
+                
+                // Apply difficulty adjustments to baseDirY
+                switch (this.difficulty) {
+                    case 'easy':
+                        baseDirY = Math.max(0.25, baseDirY - 0.1); // Can be a bit lower, allowing for more net hits
+                        break;
+                    case 'hard':
+                        baseDirY = Math.min(0.5, baseDirY + 0.05); // Aim a bit higher for more reliable clears
+                        break;
+                }
+
                 if (makeMistake) {
-                    // Mistake: Poor angle or timing
-                    dir.y = 0.1 + Math.random() * 0.4; // More letiable height
-                    let rx = Math.random() * tableSize.width * 0.8; // Less precise targeting
+                    console.log("error")
+                    // Mistake: Poor angle or timing, still allow for some net hits, but less often
+                    // Range will be (baseDirY - 0.1) to (baseDirY - 0.1 + 0.3)
+                    dir.y = (baseDirY - 0.1) + Math.random() * 0.3; 
+                    dir.y = Math.max(dir.y, 0.2); // Ensure a minimum lift even on a mistake, prevent too many net hits
+                    
+                    let rx = Math.random() * tableSize.width * 0.8; // Less precise targeting for x
                     rx *= Math.random() > 0.5 ? 1 : -1;
                     let dirAngle = Math.atan2(-tableSize.depth + ballPos.z, rx - myPos.x);
                     dir.x = Math.cos(dirAngle);
                     dir.x = Math.min(Math.abs(dir.x), 0.7) * (dir.x > 0 ? 1 : -1); // Can hit wider
                     hitForce = 0.015 + this.force * 0.015 * Math.random(); // Weaker hit on mistake
                 } else {
-                    // Normal hit - but still not perfect
-                    dir.y = 0.2 + Math.random() * 0.25;
+                    // Normal hit - improved vertical control
+                    // Range will be baseDirY to (baseDirY + 0.2)
+                    dir.y = baseDirY + Math.random() * 0.2; 
+                    
                     let rx = Math.random() * tableSize.width * 0.6; // Slightly less precise than before
                     rx *= Math.random() > 0.5 ? 1 : -1;
                     let dirAngle = Math.atan2(-tableSize.depth + ballPos.z, rx - myPos.x);
@@ -108,20 +128,12 @@ class AI {
                     dir.x = Math.min(Math.abs(dir.x), 0.5) * (dir.x > 0 ? 1 : -1);
                     hitForce = 0.02 + this.force * 0.02 * Math.random();
                 }
+                // --- END AI.js MODIFICATIONS ---
 
                 this.simulation.hitBall(dir, hitForce);
 
                 // Track that AI hit the ball for realistic scoring
-                if (typeof lastHitter !== 'undefined') {
-                    lastHitter = 'ai';
-                    ballBouncedOnOpponentSide = false; // Reset bounce tracking
-                    ballHitTable = false; // Reset table hit tracking
-
-                    // TODO, check if needed
-                    // if (typeof PingPong !== 'undefined' && PingPong.MobileDebug) {
-                    //     PingPong.MobileDebug.log('🤖 AI HIT BALL - lastHitter set to ai');
-                    // }
-                }
+                this.setLastHitterCallback('ai'); 
             }
         }
 
