@@ -24,13 +24,7 @@ export const getRendererSize = () => {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    if (isMobile()) {
-        // Render at a lower resolution on mobile to save GPU power
-        // Experiment with factors like 0.75 or 0.5 for mobile
-        const mobileResolutionScale = 0.75; // Or 0.5 for even bigger perf gain
-        width = Math.floor(width * mobileResolutionScale);
-        height = Math.floor(height * mobileResolutionScale);
-    } else if (is4KMonitor()) { // You'd need a function to detect this
+    if (is4KMonitor()) {
         // For 4K, target 1080p equivalent internal resolution
         const desktop4KResolutionScale = 0.5; // Render at half width/height for 4K = 1080p
         width = Math.floor(width * desktop4KResolutionScale);
@@ -62,44 +56,7 @@ export const setupLighting = (scene) => {
     }
 }
 
-// Not used
-export const toScreen = (x, y, z, camera) => {
-    const vector = new THREE.Vector3(x, y, z);
-    vector.project(camera); // Projects to normalized device coordinates (NDC)
-
-    const widthHalf = screenSize.width / 2;
-    const heightHalf = screenSize.height / 2;
-
-    vector.x = (vector.x * widthHalf) + widthHalf;
-    vector.y = -(vector.y * heightHalf) + heightHalf;
-
-    return vector;
-}
-
-// Not used
-export const toWorld = (x, y, zPlane = 0, camera) => {
-    // Convert screen coords to normalized device coordinates (NDC)
-    const vector = new THREE.Vector3(
-        (x / screenSize.width) * 2 - 1,
-        -(y / screenSize.height) * 2 + 1,
-        0.5
-    );
-
-    // Convert NDC to world coordinates
-    vector.unproject(camera);
-
-    // Calculate a direction vector from the camera to the unprojected point
-    const dir = vector.sub(camera.position).normalize();
-
-    // Determine the distance from the camera to the desired z-plane
-    const distance = (zPlane - camera.position.z) / dir.z;
-
-    // Return the world coordinate on the given z-plane
-    return camera.position.clone().add(dir.multiplyScalar(distance));
-}
-
 export const createSettings = () => {
-
     //size in meters
     let width = 10;
     let depth = 20;
