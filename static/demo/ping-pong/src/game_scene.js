@@ -2,12 +2,12 @@ import * as THREE from "three"
 import { Physics, calculatePaddleTrajectory } from "./physics.js";
 import AI from "./AI.js"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { isMobile, setupLighting, setBallPosition, getRendererSize } from "./utils.js";
+import { isMobile, setupLighting, setBallPosition } from "./utils.js";
 import { updateCameraForTableVisibility } from "./camera_utils.js";
 import Stats from 'three/addons/libs/stats.module.js'
 import { updateScoreUI, updateReasonForPointUI,getCurrentScoreFromHTML } from './ui_score.js';
 import { createBGMaterial } from './background.js';
-import { createBall, createPaddles, createTable, createNet } from "./model_utils.js";
+import { createBall, createPaddles, createTable, createNet, getMaterialFromGlb } from "./model_utils.js";
 import { InputManager } from "./input_manager.js";
 import { STATES, SERVE_AFTER_ERROR_DELAY,REDIRECT_AFTER_WIN_URL, REDIRECT_AFTER_WIN_DELAY } from "./constants.js";
 import { drawArrow } from "./debug_helpers.js";
@@ -27,7 +27,7 @@ class GameScene {
         this.settings = settings;
         this.scene = new THREE.Scene();
         this.bg = createBGMaterial(this.scene, 0xff00ff, 0xff0000);
-        this.screenSize = getRendererSize();
+        this.screenSize = { width: window.innerWidth, height: window.innerHeight };
         this.tableSize = null;
         this.inputPlane = null;
         this.input = { x: 0, y: 0 };
@@ -42,9 +42,9 @@ class GameScene {
         this.paddleSize = {};
         this.ballRadius = 0;
         this.ball = null;
-        this.lastHitter = null;
-        this.ballBouncedOnOpponentSide = false;
-        this.ballHitTable = false;
+        this.lastHitter = null; // 'player' or 'ai'
+        this.ballBouncedOnOpponentSide = false; // Track if ball bounced on opponent's side
+        this.ballHitTable = false; // Track if ball hit table at all
         this.paddleTrajectory = [];
         this.debugArrow = null;
         this.paddleTip = new THREE.Vector3();
@@ -73,6 +73,7 @@ class GameScene {
 
         this.parseGlb(glbModel)
 
+        // Pass 'this' (the GameScene instance) to InputManager
         this.inputManager = new InputManager(this.renderer.domElement, this);
         this.inputManager.initListeners();
         this.updateScore();
@@ -100,25 +101,30 @@ class GameScene {
         this.lastHitter = hitter;
         this.ballBouncedOnOpponentSide = false;
         this.ballHitTable = false;
-
+        //console.log(`GameScene: lastHitter set to ${hitter}`);
     }
 
     parseGlb = (glb) => {
         this.tableSize = {};
         const objectScaleFactor = (isMobile() && this.settings.mobile && this.settings.mobile.objectScale) ? this.settings.mobile.objectScale : 1;
         //const objectScaleFactor = 1.6;
-        const table = createTable(glb, this.settings, this.simulation, this.scene, this.tableSize);
+
+        // original material is too expensive on mobile. Use a Lambert one
+        const originalMat = getMaterialFromGlb(glb);
+        const mat = new THREE.MeshLambertMaterial({map: originalMat.map});
+
+        const table = createTable(glb, this.settings, this.simulation, this.scene, this.tableSize, mat);
         if (!table) {
             console.error("Failed to load table model.");
             return;
         }
 
-        const net = createNet(glb, this.settings, this.simulation, this.scene, this.tableSize, objectScaleFactor);
+        const net = createNet(glb, this.settings, this.simulation, this.scene, this.tableSize, objectScaleFactor, mat);
         if (!net) {
             console.warn("Net model not found or created.");
         }
 
-        const paddles = createPaddles(glb, this.scene, this.tableSize, this.settings, objectScaleFactor);
+        const paddles = createPaddles(glb, this.scene, this.tableSize, this.settings, objectScaleFactor, mat);
         this.paddle = paddles.player;
         this.paddleAI = paddles.ai;
         this.paddleSize = paddles.size;
@@ -134,11 +140,14 @@ class GameScene {
         }
         this.ballRadius = ballCreated.radius;
         this.ball = ballCreated.object;
+
         this.inputPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), this.tableSize.height * 0.95);
 
         updateCameraForTableVisibility(this.tableSize, this.camera, this.screenSize);
 
+        // Correctly passing the arrow function
         this.ai = new AI(this.simulation, this.tableSize, this.paddleAI, this.paddleSize, this.ball, this.ballRadius, this.setLastHitter);
+
         this.state = STATES.SERVING;
     }
 
@@ -147,7 +156,7 @@ class GameScene {
         this.ball.position.set(this.paddle.position.x, this.paddle.position.y + this.paddleSize.height, this.paddle.position.z);
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
-
+        // Using setLastHitter for fallback serve as well
         this.setLastHitter('player');
     }
 
@@ -168,6 +177,7 @@ class GameScene {
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
 
+        // Use the setLastHitter function
         this.setLastHitter('player');
     }
 
@@ -179,11 +189,13 @@ class GameScene {
         if (this.state === STATES.PLAYING) {
             this.ai.play();
             this.simulation.simulate();
+            //this.simulation.simulate();
             this.checkBallHit();
             this.checkPointConditions();
         }else if (this.state === STATES.POINT_SCORED) {
             const delayDuration = SERVE_AFTER_ERROR_DELAY;
             if (Date.now() - this.pointScoredTime > delayDuration) {
+                // Delay has passed, now reset the game for the next serve
                 this.state = STATES.SERVING;
                 this.ball.position.set(0, this.tableSize.height * 2, this.tableSize.depth * 0.25);
                 this.setLastHitter(null);
@@ -195,14 +207,20 @@ class GameScene {
         let py = - (this.input.y / this.screenSize.height) * 2 + 1;
 
         let maxpy = Math.min(0, py);
+        //let vector = new THREE.Vector3(px, maxpy, 0.5);
         this.tempVector.set(px, maxpy, 0.5);
         this.tempVector.unproject(this.camera);
+        // Replace: let ray = new THREE.Ray(this.camera.position, vector.sub(this.camera.position).normalize());
         this.tempRay.origin.copy(this.camera.position);
         this.tempRay.direction.copy(this.tempVector).sub(this.camera.position).normalize();
+
+        // Replace: let intersect = new THREE.Vector3(0, 0, 0);
+        // Replace: ray.intersectPlane(this.inputPlane, intersect);
+        // Use this.tempIntersect directly for the result
         this.tempRay.intersectPlane(this.inputPlane, this.tempIntersect);
 
-        if (!this.tempIntersect) {
-            this.tempIntersect.copy(this.paddle.position);
+        if (!this.tempIntersect) { // Check the reused object
+            this.tempIntersect.copy(this.paddle.position); // Use copy instead of clone if possible
         }
 
         let minZ = this.tableSize.depth * 0.10;
@@ -271,7 +289,7 @@ class GameScene {
             if (this.lastHitter === 'player') {
                 scoreForAI = true;
                 reasonForPoint += ' (Player fault)';
-            } else {
+            } else { // lastHitter === 'ai'
                 scoreForPlayer = true;
                 reasonForPoint += ' (AI fault)';
             }
@@ -292,7 +310,7 @@ class GameScene {
         }
 
         if (pointScored) {
-            this.state = STATES.POINT_SCORED;
+            this.state = STATES.POINT_SCORED; // Set the new state
             this.pointScoredTime = Date.now();
             let scorer = determineScorer(this.lastHitter, this.ballBouncedOnOpponentSide, this.ball.position.z);
             if (scorer === 'player') {
@@ -316,6 +334,7 @@ class GameScene {
     checkBallHit() {
         let hitting = false;
         let hit = false;
+        //console.log(this.simulation.getLinearVelocity().z)
         if (this.simulation.getLinearVelocity().z > 0 && this.paddle.position.z > this.ball.position.z) {
             let trayectory = {
                 time: Date.now(),
@@ -367,6 +386,7 @@ class GameScene {
             this.simulation.hitBall(dir, force);
             this.paddleTrajectory.length = 0;
 
+            // Use the setLastHitter function
             this.setLastHitter('player');
         }
 
@@ -387,24 +407,20 @@ class GameScene {
         this.simulation.audio.categorySounds = sounds;
     }
 
-    resize() {
-        this.screenSize = getRendererSize();
+    resize(width, height) {
+        this.camera.aspect = width / height;
+
+        this.screenSize.width = width;
+        this.screenSize.height = height;
+
         if (this.tableSize) {
             updateCameraForTableVisibility(this.tableSize, this.camera, this.screenSize);
         }
 
-        this.setRendererSize()
-    }
-
-    setRendererSize = () => {
-        this.renderer.setSize(this.screenSize.width, this.screenSize.height);
-        this.camera.aspect = this.screenSize.width/ this.screenSize.height;
         this.camera.updateProjectionMatrix();
-
-        this.renderer.domElement.style.width = '100%';
-        this.renderer.domElement.style.height = '100%';
-    };
-
+        this.renderer.setSize(width, height);
+        this.bg.uniforms.ratio.value = width / height;
+    }
 
     render() {
         if (this.settings.debug) {

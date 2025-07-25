@@ -1,19 +1,18 @@
 import * as THREE from "three";
 import GamePanel from "./game_panel.js"
-import { createSettings, getRendererSize } from "./utils.js";
+import { createSettings } from "./utils.js";
 import { loadBallSounds, loadRandomSounds, loadLongPressSound, loadModel, loadCategoriesMapping } from "./loaders.js";
 
 let renderer;
 let gamePanel;
 
 
+
 const init = (settings, categories, longPressSound, randomSounds, ballSounds, glbModel) => {
     let canvas = document.createElement("canvas");
-    const { width: renderWidth, height: renderHeight } = getRendererSize();
-
-    // Set canvas dimensions to the *scaled* rendering size
-    canvas.width = renderWidth;
-    canvas.height = renderHeight;
+    canvas.screencanvas = true; //for cocoonjs
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     // Mobile-optimized renderer settings
     let rendererConfig = {
@@ -26,28 +25,29 @@ const init = (settings, categories, longPressSound, randomSounds, ballSounds, gl
 
     renderer = new THREE.WebGLRenderer(rendererConfig);
     renderer.setClearColor(0x000000);
-    renderer.setSize(renderWidth, renderHeight);
+    renderer.setSize(canvas.width, canvas.height);
 
     // Mobile-specific optimizations  
     if (settings.mobile.enabled) {
+        // Check if setPixelRatio exists (Three.js r60 doesn't have it)
         if (renderer.setPixelRatio) {
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }
     }
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    renderer.domElement.style.display = 'block';
+
     document.getElementById('container').appendChild(renderer.domElement);
 
     gamePanel = new GamePanel();
     gamePanel.init(categories, longPressSound, randomSounds, ballSounds, renderer, settings, glbModel);
-    
+
     // Handle window resize
     window.addEventListener('resize', handleResize, false);
 }
 
 const handleResize = () => { 
-    gamePanel.gameScene.resize()
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    gamePanel.gameScene.resize(width, height)
 }
 
 const render = () => {

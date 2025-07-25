@@ -1,7 +1,3 @@
-/**
- * Gets the .category-title DOM element.
- * @returns {HTMLElement | null} The category title element, or null if not found.
- */
 function getCategoryTitleElement() {
     // Assuming #controlPanel exists when this function is called in context
     const controlPanel = document.getElementById("controlPanel");
@@ -17,11 +13,6 @@ function getCategoryTitleElement() {
     }
 }
 
-/**
- * Displays the name of the chosen category in the .category-title div.
- * @param {object | null} category The category object, or null to clear the text.
- * Expected to have a 'category' property (e.g., { category: "Yodel" }).
- */
 export function showCategoryName(category) {
     const categoryTitleElement = getCategoryTitleElement();
     if (!categoryTitleElement) {
@@ -37,7 +28,6 @@ export function showCategoryName(category) {
         console.log('Category name cleared.');
     }
 }
-
 
 export function resetCategoryName() {
     showCategoryName(null);

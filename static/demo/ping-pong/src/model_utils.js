@@ -7,11 +7,26 @@ const getModelScale = (model, desiredWidth) => {
     return desiredWidth / modelActualWidth;
 }
 
-export const createTable = (glb, settings, simulation, scene, tableSize) => {
+export const getMaterialFromGlb = (glb) => {
+    const table = glb.scene.getObjectByName("table");
+    console.log(table.material)
+    if (!table && !table.material) {
+        console.error("Table not found in GLB model!");
+        return new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+    } else {
+        return table.material;
+    }
+}
+
+export const createTable = (glb, settings, simulation, scene, tableSize, mat) => {
     const table = glb.scene.getObjectByName("table");
     if (!table) {
         console.error("Table object not found in GLB model!");
         return null;
+    }
+
+    if (mat) {
+        table.material = mat;
     }
 
     const scale = getModelScale(table, settings.table.width);
@@ -45,15 +60,19 @@ export const createTable = (glb, settings, simulation, scene, tableSize) => {
     return table;
 }
 
-export const createNet = (glb, settings, simulation, scene, tableSize, scaleFactor = 1) => {
+export const createNet = (glb, settings, simulation, scene, tableSize, scaleFactor = 1, mat) => {
     const net = glb.scene.getObjectByName("net");
     if (!net) {
         console.warn("Net object not found in GLB model!");
         return null;
     }
 
+    if (mat) {
+        net.material = mat;
+    }
+
     // Scale net based on table scale
-    net.scale.set(tableSize.scale, tableSize.scale/scaleFactor, tableSize.scale);
+    net.scale.set(tableSize.scale, tableSize.scale / scaleFactor, tableSize.scale);
     scene.add(net);
 
     // Optional wall mode for net collision
@@ -65,15 +84,18 @@ export const createNet = (glb, settings, simulation, scene, tableSize, scaleFact
             addDebugBox3D(collisionBoxNet, scene);
         }
     }
-    //console.log("net created")
     return net;
 }
 
-export const createPaddles = (glb, scene, tableSize, settings, scaleFactor = 1) => {
+export const createPaddles = (glb, scene, tableSize, settings, scaleFactor = 1, mat) => {
     const playerPaddle = glb.scene.getObjectByName("paddle");
     if (!playerPaddle) {
         console.error("Paddle object not found in GLB model!");
         return { player: null, ai: null };
+    }
+
+    if (mat) {
+        playerPaddle.material = mat;
     }
 
     const finalPaddleScale = tableSize.scale * scaleFactor;
@@ -96,8 +118,6 @@ export const createPaddles = (glb, scene, tableSize, settings, scaleFactor = 1) 
     };
 
     addMarkerToPaddle(playerPaddle, paddleSize, "paddle-tip", settings.debug, scaleFactor);
-    //addMarkerToPaddle(aiPaddle, paddleSize, "ai-paddle-tip", settings.debug, scaleFactor);
-    //console.log("paddle created")
     return { player: playerPaddle, ai: aiPaddle, size: paddleSize };
 }
 
@@ -107,7 +127,6 @@ export const createBall = (scene, simulation, tableSize, paddleSize, scaleFactor
     let ballGeometry = new THREE.SphereGeometry(ballRadius, 16, 16);
     let ballMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
     const ball = new THREE.Mesh(ballGeometry, ballMaterial);
-
 
     ball.position.set(0, tableSize.height * 2, tableSize.depth * 0.25);
     scene.add(ball);
@@ -131,6 +150,6 @@ const addMarkerToPaddle = (paddle, paddleSize, name, debug, scaleFactor = 1) => 
         childObject.visible = false;
     }
 
-    childObject.position.set(0,paddleSize.height/scaleFactor,0,(-paddleSize.depth / 2));
+    childObject.position.set(0, paddleSize.height / scaleFactor, 0, (-paddleSize.depth / 2));
     paddle.add(childObject);
 }

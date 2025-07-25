@@ -1,59 +1,31 @@
-import {
-    SpotLight, 
-    AmbientLight, 
-    DirectionalLight,  
-    Vector3
-} from "three"
+import { 
+    Box3Helper, BoxGeometry, MeshBasicMaterial, Mesh, 
+    SpotLight, AmbientLight, DirectionalLight,  Vector3} from "three"
 
 export const isMobile = () => {
     return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
-export const is4KMonitor = () => {
-    const min4KWidth = 3840;
-    const min4KHeight = 2160;
-
-    if (screen.width >= min4KWidth && screen.height >= min4KHeight) {
-        return true;
-    }
-
-    return false;
-}
-
-export const getRendererSize = () => {
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-
-    if (is4KMonitor()) {
-        // For 4K, target 1080p equivalent internal resolution
-        const desktop4KResolutionScale = 0.5; // Render at half width/height for 4K = 1080p
-        width = Math.floor(width * desktop4KResolutionScale);
-        height = Math.floor(height * desktop4KResolutionScale);
-    }
-
-    return {width, height};
 }
 
 const worldPosition = new Vector3()
 
 export const setupLighting = (scene) => {
     // Minimal, clean lighting
-    const ambient = new AmbientLight(0xffffff, 0.5);
-    scene.add(ambient);
-    const dir = new DirectionalLight(0xffffff, 1.7);
+    //const ambient = new AmbientLight(0xffffff, 1.9);
+    //scene.add(ambient);
+    const dir = new DirectionalLight(0xffffff, 4.7);
     dir.position.set(5, 10, 7);
     scene.add(dir);
 
-    if (!isMobile()) {
-        let spotLight = new SpotLight(0xffffff, 13.8);
-        spotLight.position.set(0, 1.0, 2.6);
-        spotLight.target.position.set(0, 0, 0.0);
-        spotLight.target.updateMatrixWorld();
-        scene.add(spotLight);
+    // if (!isMobile()) {
+    //     let spotLight = new SpotLight(0xffffff, 13.8);
+    //     spotLight.position.set(0, 1.0, 2.6);
+    //     spotLight.target.position.set(0, 0, 0.0);
+    //     spotLight.target.updateMatrixWorld();
+    //     scene.add(spotLight);
 
-        //const spotLightHelper = new SpotLightHelper( spotLight );
-        //scene.add( spotLightHelper );
-    }
+    //     //const spotLightHelper = new SpotLightHelper( spotLight );
+    //     //scene.add( spotLightHelper );
+    // }
 }
 
 export const createSettings = () => {
