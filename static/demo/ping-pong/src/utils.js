@@ -1,9 +1,43 @@
-import { 
-    Box3Helper, BoxGeometry, MeshBasicMaterial, Mesh, 
-    SpotLight, AmbientLight, DirectionalLight,  Vector3} from "three"
+import {
+    SpotLight, 
+    AmbientLight, 
+    DirectionalLight,  
+    Vector3
+} from "three"
 
 export const isMobile = () => {
     return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+export const is4KMonitor = () => {
+    const min4KWidth = 3840;
+    const min4KHeight = 2160;
+
+    if (screen.width >= min4KWidth && screen.height >= min4KHeight) {
+        return true;
+    }
+
+    return false;
+}
+
+export const getRendererSize = () => {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    if (isMobile()) {
+        // Render at a lower resolution on mobile to save GPU power
+        // Experiment with factors like 0.75 or 0.5 for mobile
+        const mobileResolutionScale = 0.75; // Or 0.5 for even bigger perf gain
+        width = Math.floor(width * mobileResolutionScale);
+        height = Math.floor(height * mobileResolutionScale);
+    } else if (is4KMonitor()) { // You'd need a function to detect this
+        // For 4K, target 1080p equivalent internal resolution
+        const desktop4KResolutionScale = 0.5; // Render at half width/height for 4K = 1080p
+        width = Math.floor(width * desktop4KResolutionScale);
+        height = Math.floor(height * desktop4KResolutionScale);
+    }
+
+    return {width, height};
 }
 
 const worldPosition = new Vector3()

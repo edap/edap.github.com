@@ -38,10 +38,17 @@ export function showCategoryName(category) {
     }
 }
 
-/**
- * Clears the content of the .category-title div.
- */
+
 export function resetCategoryName() {
-    showCategoryName(null); // Reuse the existing logic to clear the text
+    showCategoryName(null);
     console.log('Category title content cleared by resetCategoryName.');
+}
+
+export function updateShowCategoryUI(text) {
+    const showCategoryDiv = document.querySelector('.show-category');
+    if (showCategoryDiv) { 
+        showCategoryDiv.textContent = text;
+    } else {
+        console.warn('Warning: .show-category element not found.');
+    }
 }

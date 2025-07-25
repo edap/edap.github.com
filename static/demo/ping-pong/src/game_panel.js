@@ -2,7 +2,7 @@ import { loadCategorySounds, loadRandomSounds } from "./loaders.js";
 import GameScene from "./game_scene.js";
 import { getRandomCategory } from "./utils.js"
 import { turnRedFirstIndicator, updateIndicators, resetIndicators, loadingCategoryIndicators, clearLoadingIndicators } from "./ui_indicators.js"
-import { showCategoryName, resetCategoryName } from "./ui_category.js";
+import { showCategoryName, resetCategoryName, updateShowCategoryUI } from "./ui_category.js";
 import { PANEL_ANIMATION_DELAY, PANEL_ANIMATION_DURATION, PANEL_CLOSE_DELAY } from "./constants.js";
 
 class GamePanel {
@@ -126,11 +126,13 @@ class GamePanel {
                     // Load category sounds
                     updateIndicators(category);
                     showCategoryName(category);
+                    updateShowCategoryUI(`Category: ${category.category}`);
                     loadCategorySounds(category.key, category.sounds)
                     .then(loadedSoundsArray => {
                         // This block runs ONLY if loadCategorySounds successfully loads the sounds
                         console.log('Loaded Audio Elements:', loadedSoundsArray);
                         this.gameScene.updateCategorySounds(loadedSoundsArray);
+                        this.gameScene.simulation.audio.playRandomSound();
                     })
                     .catch(error => {
                         console.error('❌ Failed to load category sounds:', error);
@@ -161,11 +163,13 @@ class GamePanel {
             this.selectedCategory = null;
             clearLoadingIndicators();
             turnRedFirstIndicator();
+            updateShowCategoryUI("Random Mode")
         } else if (pressDuration >= 400 && pressDuration < 2000) {
             // Medium press (between 0.4 and 2 seconds)
             //console.log('Medium press (0.4s to 2s) - calling loadRandomSounds.');
             clearLoadingIndicators();
             turnRedFirstIndicator();
+            updateShowCategoryUI("Random Mode")
             this.selectedCategory = null;
         }
 
