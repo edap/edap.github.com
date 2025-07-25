@@ -54,7 +54,28 @@ export class InputManager {
         let x = ev.targetTouches ? ev.targetTouches[0].clientX : ev.clientX;
         let y = ev.targetTouches ? ev.targetTouches[0].clientY : ev.clientY;
 
-        this.game.processInput(x, y); // Call processInput on game instance
+        // Scale input coordinates based on canvas rendered size ---
+        const canvasWidth = this.domElement.width;
+        const canvasHeight = this.domElement.height;
+
+        const clientRect = this.domElement.getBoundingClientRect();
+
+        // Calculate the scale factor between the CSS display size and the internal rendering size
+        const scaleX = canvasWidth / clientRect.width;
+        const scaleY = canvasHeight / clientRect.height;
+
+        // Adjust coordinates based on the canvas's position and scale
+        // First, normalize to the canvas's display area (0 to clientRect.width/height)
+        let scaledX = (x - clientRect.left) * scaleX;
+        let scaledY = (y - clientRect.top) * scaleY;
+
+        // Add a y-offset for mobile if needed
+        // This offset is now applied relative to the scaled coordinates.
+        if (ev.type.startsWith('touch')) {
+            scaledY += this.mobileYOffsetPixels;
+        }
+
+        this.game.processInput(scaledX, scaledY); // Call processInput on game instance
     }
 
     handleMouseDown(ev) {
