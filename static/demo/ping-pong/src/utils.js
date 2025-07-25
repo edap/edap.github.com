@@ -109,7 +109,7 @@ export const createSettings = () => {
     let quality = 0;
 
     let settings = {
-        debug: true,
+        debug: false,
         wallMode: true,
         width: width,
         height: height,
