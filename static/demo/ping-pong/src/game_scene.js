@@ -5,11 +5,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { isMobile, setupLighting, setBallPosition, getRendererSize } from "./utils.js";
 import { updateCameraForTableVisibility } from "./camera_utils.js";
 import Stats from 'three/addons/libs/stats.module.js'
-import { updateScoreUI } from './ui_score.js';
+import { updateScoreUI, updateReasonForPointUI,getCurrentScoreFromHTML } from './ui_score.js';
 import { createBGMaterial } from './background.js';
 import { createBall, createPaddles, createTable, createNet } from "./model_utils.js";
 import { InputManager } from "./input_manager.js";
-import { STATES, SERVE_AFTER_ERROR_DELAY } from "./constants.js";
+import { STATES, SERVE_AFTER_ERROR_DELAY,REDIRECT_AFTER_WIN_URL, REDIRECT_AFTER_WIN_DELAY } from "./constants.js";
 import { drawArrow } from "./debug_helpers.js";
 import {
     checkBallHitTable as checkBallHitTableRule,
@@ -75,10 +75,24 @@ class GameScene {
 
         this.inputManager = new InputManager(this.renderer.domElement, this);
         this.inputManager.initListeners();
-        updateScoreUI(this.score);
+        this.updateScore();
 
         if (this.settings.debug) {
             this.debugArrow = drawArrow(this.scene, new THREE.Vector3(), new THREE.Vector3(0, 1, 0), 0.5, 0.1, 0.05);
+        }
+    }
+
+    updateScore(){
+        const previousScore = getCurrentScoreFromHTML();
+        console.log(previousScore);
+        //const currentScore = { player: this.score.player, ai: this.score.ai }; // Update currentScore for the next round
+
+        // Now call updateScoreUI with both new and old scores
+        updateScoreUI(this.score, previousScore); // Pass both scores
+        if (this.score.player >= 11 || this.score.ai >= 11 ){
+            setTimeout(() => {
+                window.location.href = REDIRECT_AFTER_WIN_URL;
+            }, REDIRECT_AFTER_WIN_DELAY);
         }
     }
 
@@ -293,7 +307,8 @@ class GameScene {
                 this.score.ai++;
             }
 
-            updateScoreUI(this.score);
+            this.updateScore();
+            updateReasonForPointUI(reasonForPoint);
         }
     }
 
