@@ -13,75 +13,128 @@ body {
     height: 100vh;
     position: relative;
 }
-#score {
-    position: absolute;
+
+
+/* Styles for the container of score elements only */
+#top-bar-container {
+    position: absolute; /* Still relative to #container */
     top: 32px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the score text */
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9; /* Ensure it's below the control panel and audio button */
+    pointer-events: none; /* Keep clicks passing through */
+    border-bottom-left-radius: 15px; /* Adjust value as desired */
+    border-bottom-right-radius: 15px; /* Adjust value as desired */
+    border-top-left-radius: 15px; /* Adjust value as desired */
+    border-top-right-radius: 15px; /* Adjust value as desired */
     left: 50%;
     transform: translateX(-50%);
+}
+
+/* #score-container remains flex column for its internal content */
+#score-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1; /* Allows it to take available space */
+}
+
+#score {
     color: #fff;
     font-size: 2rem;
     font-family: monospace;
-    background: rgba(0,0,0,0.4);
-    padding: 0.5em 1.5em;
-    border-radius: 1em;
-    z-index: 10;
-    pointer-events: none;
     white-space: nowrap;
+    line-height: 1;
 }
 
+.player-score-point {
+    font-size: 2.5rem !important; /* Temporarily bigger */
+    color: orange !important;    /* Temporary color */
+}
+
+/* Class for AI score animation */
+.ai-score-point {
+    font-size: 2.5rem !important; /* Temporarily bigger */
+    color: orange !important;    /* Temporary color */
+}
+
+.show-category {
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: monospace;
+    text-align: center;
+    margin-bottom: 5px;
+    min-height: 1em;
+}
+
+.reason-for-point {
+    color: #fff;
+    font-size: 0.8rem;
+    font-family: monospace;
+    text-align: center;
+    margin-top: 5px;
+    min-height: 1em;
+}
+
+/* UPDATED: audio-panel-toggle-btn positioning and z-index */
 #audio-panel-toggle-btn {
-    position: fixed;
+    position: fixed; /* Make it fixed relative to the viewport */
     top: 10px;
-    right: 40px;
-    width: 60px;
-    height: 60px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
     background: rgba(53, 208, 255, 0.9);
     border: none;
-    border-radius: 35px;
-    font-size: 14px;
-    z-index: 10000;
+    border-radius: 50%;
+    font-size: 24px;
+    z-index: 10001; /* Must be higher than #controlPanel's z-index */
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(255,107,53,0.4);
     touch-action: manipulation;
-    font-size: 30px;
-    color: transparent;  
+    color: transparent;
     text-shadow: 0 0 0 rgb(255, 0, 225);
-    }
+    pointer-events: auto; /* Ensure it's clickable */
+}
 
-    #controlPanel {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) translateX(-100%); /* Initial hidden position */
-        width: 80vw;
-        height: 90vh;
-        background: rgba(0, 135, 255, 0.9);
-        border: 2px solid #f700ff;
-        border-radius: 20px;
-        z-index: 10000;
-        
-        /* ALWAYS display as flex */
-        display: flex; /* <-- IMPORTANT: Keep this as flex ALWAYS */
-        
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        box-shadow: 0 2px 20px rgba(0, 255, 0, 0.4);
-        overflow-y: auto;
-        gap: 30px;
+
+#controlPanel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateX(-100%); /* Initial hidden position */
+    width: 80vw;
+    height: 90vh;
+    background: rgba(0, 135, 255, 0.9);
+    border: 2px solid #f700ff;
+    border-radius: 20px;
+    z-index: 90;
     
-        /* Transition properties for smooth animation */
-        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-        opacity: 0; /* Initially hidden */
-        pointer-events: none; /* Initially non-interactive */
-    }
+    /* ALWAYS display as flex */
+    display: flex; /* <-- IMPORTANT: Keep this as flex ALWAYS */
     
-    #controlPanel.is-visible {
-        transform: translate(-50%, -50%) translateX(0); /* Slides to centered ON-SCREEN position */
-        opacity: 1; /* Becomes fully opaque */
-        pointer-events: all; /* Becomes interactive */
-    }
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 2px 20px rgba(0, 255, 0, 0.4);
+    overflow-y: auto;
+    gap: 30px;
+
+    /* Transition properties for smooth animation */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Initially non-interactive */
+}
+
+#controlPanel.is-visible {
+    transform: translate(-50%, -50%) translateX(0); /* Slides to centered ON-SCREEN position */
+    opacity: 1; /* Becomes fully opaque */
+    pointer-events: all; /* Becomes interactive */
+}
 
 .category-title {
     font-size: 1.8em; /* Make it noticeable */
@@ -131,8 +184,46 @@ body {
     background-color: #0b70d0;
 }
 
+/* Media query for mobile devices (e.g., screens up to 768px wide) */
+@media (max-width: 768px) {
+    /* Make audio-panel-toggle-btn 50% smaller */
+    #audio-panel-toggle-btn {
+        width: 25px;   /* 50% of 50px */
+        height: 25px;  /* 50% of 50px */
+        font-size: 12px; /* 50% of 24px */
+        top: 34px;      /* Adjust position for smaller size */
+        right: 5px;    /* Adjust position for smaller size */
+    }
+
+    #top-bar-container {
+        top: 10px;
+        width: 100%;
+        left:auto;
+        transform: none;
+    }
+
+    /* Make the score text smaller on mobile */
+    #score {
+        font-size: 1.2rem; /* Reduced font size for mobile, adjust as needed */
+    }
+    
+    .player-score-point,
+    .ai-score-point {
+        font-size: 1.8rem !important; /* Adjust for mobile - e.g., 1.8rem from 1.2rem base */
+    }
+
+    /* You might also want to reduce font sizes for category and reason if desired */
+    .show-category {
+        font-size: 0.7rem; /* Example: slightly smaller */
+    }
+    .reason-for-point {
+        font-size: 0.6rem; /* Example: slightly smaller */
+    }
+}
+
 
 /* Disable pull-to-refresh on mobile */
 body {
     overscroll-behavior: none;
 }
+
