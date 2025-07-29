@@ -88,7 +88,6 @@ class GamePanel {
         // Alternative: Use mouseup/mousedown + touchend/touchstart if pointer events are problematic
         modeSelectButton.addEventListener('pointerdown', this.handlePressStart.bind(this));
         modeSelectButton.addEventListener('pointerup', this.handlePressEnd.bind(this));
-        // Important: Add a pointerleave/cancel to handle cases where user drags finger off button
         modeSelectButton.addEventListener('pointerleave', this.handlePressCancel.bind(this));
         modeSelectButton.addEventListener('pointercancel', this.handlePressCancel.bind(this));
     }

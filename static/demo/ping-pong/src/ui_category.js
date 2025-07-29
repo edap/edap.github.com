@@ -1,5 +1,4 @@
 function getCategoryTitleElement() {
-    // Assuming #controlPanel exists when this function is called in context
     const controlPanel = document.getElementById("controlPanel");
     if (controlPanel) {
         const element = controlPanel.querySelector('.category-title');
@@ -16,7 +15,6 @@ function getCategoryTitleElement() {
 export function showCategoryName(category) {
     const categoryTitleElement = getCategoryTitleElement();
     if (!categoryTitleElement) {
-        // Warning already logged by getCategoryTitleElement
         return;
     }
 
@@ -24,7 +22,7 @@ export function showCategoryName(category) {
         categoryTitleElement.textContent = category.category;
         console.log(`Category name displayed: ${category.category}`);
     } else {
-        categoryTitleElement.textContent = ''; // Clear the text if no category or category name
+        categoryTitleElement.textContent = '';
         console.log('Category name cleared.');
     }
 }

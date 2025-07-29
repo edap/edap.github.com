@@ -10,10 +10,10 @@ class AI {
         this.paddleSize = paddleSize;
         this.ball = ball;
         this.ballRadius = ballRadius;
-        this.speed = 0.35;  // Reduced from 0.5 - slower paddle movement
-        this.force = 0.4;   // Reduced from 0.5 - less powerful hits
-        this.difficulty = 'normal'; // normal, easy, hard
-        this.errorRate = 0.15; // 15% chance of imperfect positioning
+        this.speed = 0.35;
+        this.force = 0.4;
+        this.difficulty = 'normal';
+        this.errorRate = 0.15;
         this.setLastHitterCallback = setLastHitterCallback;
     }
 
@@ -31,18 +31,17 @@ class AI {
             case 'easy':
                 this.speed = 0.25;
                 this.force = 0.3;
-                this.errorRate = 0.25; // 25% chance of mistakes
+                this.errorRate = 0.25;
                 break;
             case 'normal':
                 this.speed = 0.35;
                 this.force = 0.4;
-                this.errorRate = 0.15; // 15% chance of mistakes
+                this.errorRate = 0.15;
                 break;
             case 'hard':
                 this.speed = 0.6;
                 this.force = 0.7;
-                this.errorRate = 0.05; // 5% chance of mistakes
-                break;
+                this.errorRate = 0.05;
         }
     }
 
@@ -84,7 +83,6 @@ class AI {
                 dir.z = 1.0;
                 let hitForce;
 
-                // --- START AI.js MODIFICATIONS ---
                 // Adjust vertical direction (dir.y) based on ball height and difficulty
                 let baseDirY = 0.3; // A more robust starting point for y
                 
@@ -127,7 +125,6 @@ class AI {
                     dir.x = Math.min(Math.abs(dir.x), 0.5) * (dir.x > 0 ? 1 : -1);
                     hitForce = 0.02 + this.force * 0.02 * Math.random();
                 }
-                // --- END AI.js MODIFICATIONS ---
 
                 this.simulation.hitBall(dir, hitForce);
 
@@ -140,12 +137,12 @@ class AI {
         //myPos.y+= Math.min(Math.abs(diffY), paddleSize.height* 0.1) * (diffY ? -1 : 1);
 
         let diffX = Math.abs(targetPos.x - myPos.x);
-        let speedX = tableSize.width * 0.04 * this.speed; // Reduced from 0.05 - slower movement
+        let speedX = tableSize.width * 0.04 * this.speed;
 
         // Add slight movement imperfection
         let movementAccuracy = 1.0;
         if (Math.random() < this.errorRate * 0.3) {
-            movementAccuracy = 0.7 + Math.random() * 0.3; // Sometimes move at 70-100% efficiency
+            movementAccuracy = 0.7 + Math.random() * 0.3;
         }
 
         myPos.x += Math.min(diffX, speedX * movementAccuracy) * (myPos.x > targetPos.x ? -1 : 1);

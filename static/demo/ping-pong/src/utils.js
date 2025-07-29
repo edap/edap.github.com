@@ -1,6 +1,4 @@
-import { 
-    Box3Helper, BoxGeometry, MeshBasicMaterial, Mesh, 
-    SpotLight, AmbientLight, DirectionalLight,  Vector3} from "three"
+import { DirectionalLight,  Vector3} from "three"
 
 export const isMobile = () => {
     return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -15,17 +13,6 @@ export const setupLighting = (scene) => {
     const dir = new DirectionalLight(0xffffff, 4.7);
     dir.position.set(5, 10, 7);
     scene.add(dir);
-
-    // if (!isMobile()) {
-    //     let spotLight = new SpotLight(0xffffff, 13.8);
-    //     spotLight.position.set(0, 1.0, 2.6);
-    //     spotLight.target.position.set(0, 0, 0.0);
-    //     spotLight.target.updateMatrixWorld();
-    //     scene.add(spotLight);
-
-    //     //const spotLightHelper = new SpotLightHelper( spotLight );
-    //     //scene.add( spotLightHelper );
-    // }
 }
 
 export const createSettings = () => {
@@ -34,8 +21,6 @@ export const createSettings = () => {
     let depth = 20;
     let height = 5;
     let tableWidth = 1.5;
-
-    let quality = 0;
 
     let settings = {
         debug: false,
@@ -46,13 +31,10 @@ export const createSettings = () => {
         table: {
             model: "models/table.glb",
             width: tableWidth,
-            // color: 0x2b476e,
-            // texture: "images/table.jpg"
         },
 
         audio: {
             ball: ["audio/ball1.ogg", "audio/ball2.ogg"]
-            // Random Mode sounds loaded automatically by AudioManager
         },
 
         mobile: {

@@ -1,57 +1,55 @@
-import { DISAPPEAR_REASON_FOR_POINT_DELAY } from "./constants.js";
+import { DISAPPEAR_REASON_FOR_POINT_DELAY, UPDATE_SCORE_DELAY } from "./constants.js";
 
 let reasonForPointTimeoutId;
 let playerScoreAnimationTimeoutId;
 let aiScoreAnimationTimeoutId;
 
 
-export function updateScoreUI(newScore, oldScore) { // Added oldScore parameter
-  const scoreDiv = document.getElementById('score');
-  scoreDiv.textContent = `You ${newScore.player} : AI ${newScore.ai}`;
+export function updateScoreUI(newScore, oldScore) {
+  const playerScoreSpan = document.getElementById('player-score');
+  const aiScoreSpan = document.getElementById('ai-score');
 
-  // Find the specific text nodes or create spans if needed for more precise animation
-  // For simplicity, we'll animate the whole score div's text content.
-  // If you need to animate "You" and "AI" parts independently, you'd need separate spans in HTML.
+  if (!playerScoreSpan || !aiScoreSpan) {
+    console.warn('Score spans not found. Cannot update score UI.');
+    return;
+  }
 
-  // Determine which player scored
-  if (oldScore) { // Only animate if an oldScore is provided
+  playerScoreSpan.textContent = newScore.player;
+  aiScoreSpan.textContent = newScore.ai;
+
+  if (oldScore) {
     if (newScore.player > oldScore.player) {
-      // Player scored
-      scoreDiv.classList.add('player-score-point');
-      // Clear any existing animation timeout for player
+      playerScoreSpan.classList.add('player-score-point-anim');
+
       if (playerScoreAnimationTimeoutId) {
         clearTimeout(playerScoreAnimationTimeoutId);
       }
       playerScoreAnimationTimeoutId = setTimeout(() => {
-        scoreDiv.classList.remove('player-score-point');
-      }, 500); // Animation lasts 0.5 seconds (adjust this duration to match your CSS transition or desired effect)
+        playerScoreSpan.classList.remove('player-score-point-anim');
+      }, UPDATE_SCORE_DELAY);
     } else if (newScore.ai > oldScore.ai) {
-      // AI scored
-      scoreDiv.classList.add('ai-score-point');
-      // Clear any existing animation timeout for AI
+      aiScoreSpan.classList.add('ai-score-point-anim');
+
       if (aiScoreAnimationTimeoutId) {
         clearTimeout(aiScoreAnimationTimeoutId);
       }
       aiScoreAnimationTimeoutId = setTimeout(() => {
-        scoreDiv.classList.remove('ai-score-point');
-      }, 500); // Animation lasts 0.5 seconds
+        aiScoreSpan.classList.remove('ai-score-point-anim');
+      }, UPDATE_SCORE_DELAY);
     }
   }
 }
-
 export function getCurrentScoreFromHTML() {
-  const scoreDiv = document.getElementById('score');
-  if (scoreDiv && scoreDiv.textContent) {
-    const text = scoreDiv.textContent;
-    // Use a regular expression to extract numbers after "You" and "AI"
-    const match = text.match(/You (\d+) : AI (\d+)/);
-    if (match && match.length === 3) {
-      const player = parseInt(match[1], 10);
-      const ai = parseInt(match[2], 10);
-      return { player, ai };
-    }
+  const playerScoreSpan = document.getElementById('player-score');
+  const aiScoreSpan = document.getElementById('ai-score');
+
+  if (playerScoreSpan && aiScoreSpan) {
+    const player = parseInt(playerScoreSpan.textContent, 10);
+    const ai = parseInt(aiScoreSpan.textContent, 10);
+    return { player, ai };
   }
-  // Return default score if element not found or parsing fails
+
+  console.warn('Warning: #player-score or #ai-score elements not found. Returning default score.');
   return { player: 0, ai: 0 };
 }
 
@@ -62,9 +60,7 @@ export function updateReasonForPointUI(reason) {
     if (reasonForPointTimeoutId) {
       clearTimeout(reasonForPointTimeoutId);
     }
-
     reasonDiv.textContent = reason;
-
     reasonForPointTimeoutId = setTimeout(() => {
       reasonDiv.textContent = '';
     }, DISAPPEAR_REASON_FOR_POINT_DELAY);
