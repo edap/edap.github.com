@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import GamePanel from "./game_panel.js"
-import { createSettings } from "./utils.js";
-import { loadBallSounds, loadRandomSounds, loadLongPressSound, loadModel, loadCategoriesMapping } from "./loaders.js";
+import { createSettings } from "./settings.js";
+import { loadBallSounds, loadRandomSounds, loadLongPressSound, loadModel, loadCategoriesMapping } from "./utils/loaders.js";
 
 let renderer;
 let gamePanel;
@@ -10,13 +10,12 @@ let gamePanel;
 
 const init = (settings, categories, longPressSound, randomSounds, ballSounds, glbModel) => {
     let canvas = document.createElement("canvas");
-    canvas.screencanvas = true; //for cocoonjs
+    canvas.screencanvas = true;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Mobile-optimized renderer settings
     let rendererConfig = {
-        antialias: !settings.mobile.enabled, // Disable antialiasing on mobile for performance
+        antialias: !settings.mobile.enabled,
         canvas: canvas,
         powerPreference: "high-performance"
     };
@@ -27,7 +26,6 @@ const init = (settings, categories, longPressSound, randomSounds, ballSounds, gl
     renderer.setClearColor(0x000000);
     renderer.setSize(canvas.width, canvas.height);
 
-    // Mobile-specific optimizations  
     if (settings.mobile.enabled) {
         // Check if setPixelRatio exists (Three.js r60 doesn't have it)
         if (renderer.setPixelRatio) {
@@ -40,7 +38,6 @@ const init = (settings, categories, longPressSound, randomSounds, ballSounds, gl
     gamePanel = new GamePanel();
     gamePanel.init(categories, longPressSound, randomSounds, ballSounds, renderer, settings, glbModel);
 
-    // Handle window resize
     window.addEventListener('resize', handleResize, false);
 }
 
@@ -57,16 +54,17 @@ const render = () => {
 
 async function loadGame() {
     const loadingEl = document.getElementById('loading');
-    if (!loadingEl) {
-        console.error("Error: '#loading' element not found in the DOM.");
-        return; // Exit if the element isn't found
-    }
-    loadingEl.style.display = 'block';
+    const loadingTextEl = document.getElementById('loading-text');
+    const topBarContainer = document.getElementById('top-bar-container');
+    const audioPanelButton = document.getElementById('audio-panel-toggle-btn');
+
+    // loadingEl.style.display = 'flex';
+    // loadingTextEl.textContent = 'Loading';
+    // loadingTextEl.style.color = '#fff';
 
     try {
         let settings = createSettings();
-        // Await all initial asset loads
-        const [categories,longPressSound, randomSounds, ballSounds, glbModel] = await Promise.all([
+        const [categories, longPressSound, randomSounds, ballSounds, glbModel] = await Promise.all([
             loadCategoriesMapping(),
             loadLongPressSound(),
             loadRandomSounds(),
@@ -75,13 +73,19 @@ async function loadGame() {
         ]);
 
         loadingEl.style.display = 'none';
+        topBarContainer.style.display = 'flex';
+        audioPanelButton.style.display = 'block'
+
         init(settings, categories, longPressSound, randomSounds, ballSounds, glbModel);
         render();
     } catch (error) {
         console.error('❌ Error loading game assets:', error);
-        loadingEl.innerText = 'Failed to load game. Check console for details.';
+        if (loadingTextEl) {
+            loadingTextEl.textContent = 'Failed to load game. Check console for details.';
+            loadingTextEl.style.color = 'red';
+        }
+        loadingEl.style.display = 'flex';
     }
 }
 
-// Attach loadGame to the DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', loadGame);

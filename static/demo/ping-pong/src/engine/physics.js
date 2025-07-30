@@ -1,20 +1,13 @@
-/* 
- * PingPongWebGL is licensed under MIT licensed. See LICENSE.md file for more information.
- * Copyright (c) 2014 MortimerGoro
-*/
-
 import * as THREE from "three"
 import AudioManager from "./audio.js";
 
 let linearVelocity = new THREE.Vector3(0, 0, 0);
-let angularVelocity = new THREE.Vector3(0, 0, 0);
 let ballRadius = 0;
 const gravity = -4.8;
 let prevGravity = 0;
 let gravityTime = 0;
 let restitution = 0.75;
 let ballBoundingBox = new THREE.Box3();
-
 
 
 class Physics {

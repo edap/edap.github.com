@@ -1,6 +1,3 @@
-import * as THREE from 'three'; // Import if any functions internally use THREE (like Vector3, Box3 if needed later)
-
-
 export const checkBallHitTable = (ball, tableSize, ballRadius, lastHitter, ballHitTable) => {
     let updatedBallHitTable = ballHitTable;
     let updatedBallBouncedOnOpponentSide = false;

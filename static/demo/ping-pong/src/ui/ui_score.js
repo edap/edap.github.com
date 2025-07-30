@@ -1,4 +1,4 @@
-import { DISAPPEAR_REASON_FOR_POINT_DELAY, UPDATE_SCORE_DELAY } from "./constants.js";
+import { DISAPPEAR_REASON_FOR_POINT_DELAY, UPDATE_SCORE_DELAY } from "../constants.js";
 
 let reasonForPointTimeoutId;
 let playerScoreAnimationTimeoutId;
@@ -66,3 +66,17 @@ export function updateReasonForPointUI(reason) {
     }, DISAPPEAR_REASON_FOR_POINT_DELAY);
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const reasonDiv = document.querySelector('.reason-for-point');
+  if (reasonDiv) {
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isMobileScreen = window.matchMedia("(max-width: 768px)").matches;
+
+      if (isTouchDevice || isMobileScreen) {
+          reasonDiv.textContent = 'Tap to Play';
+      } else {
+          reasonDiv.textContent = 'Click to Play';
+      }
+  }
+});

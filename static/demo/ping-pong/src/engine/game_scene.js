@@ -2,15 +2,15 @@ import * as THREE from "three"
 import { Physics, calculatePaddleTrajectory } from "./physics.js";
 import AI from "./AI.js"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { isMobile, setupLighting, setBallPosition } from "./utils.js";
-import { updateCameraForTableVisibility } from "./camera_utils.js";
+import { isMobile, setBallPosition } from "../utils/scene_utils.js";
+import { updateCameraForTableVisibility } from "../utils/camera_utils.js";
 import Stats from 'three/addons/libs/stats.module.js'
-import { updateScoreUI, updateReasonForPointUI,getCurrentScoreFromHTML } from './ui_score.js';
+import { updateScoreUI, updateReasonForPointUI,getCurrentScoreFromHTML } from '../ui/ui_score.js';
 import { createBGMaterial } from './background.js';
-import { createBall, createPaddles, createTable, createNet, getMaterialFromGlb } from "./model_utils.js";
+import { createBall, createPaddles, createTable, createNet, getMaterialFromGlb } from "../utils/model_utils.js";
 import { InputManager } from "./input_manager.js";
-import { STATES, SERVE_AFTER_ERROR_DELAY,REDIRECT_AFTER_WIN_URL, REDIRECT_AFTER_WIN_DELAY } from "./constants.js";
-import { drawArrow } from "./debug_helpers.js";
+import { STATES, SERVE_AFTER_ERROR_DELAY,REDIRECT_AFTER_WIN_URL, REDIRECT_AFTER_WIN_DELAY } from "../constants.js";
+import { drawArrow } from "../utils/debug_helpers.js";
 import {
     checkBallHitTable as checkBallHitTableRule,
     isBallOffSide,
@@ -42,9 +42,9 @@ class GameScene {
         this.paddleSize = {};
         this.ballRadius = 0;
         this.ball = null;
-        this.lastHitter = null; // 'player' or 'ai'
-        this.ballBouncedOnOpponentSide = false; // Track if ball bounced on opponent's side
-        this.ballHitTable = false; // Track if ball hit table at all
+        this.lastHitter = null;
+        this.ballBouncedOnOpponentSide = false;
+        this.ballHitTable = false;
         this.paddleTrajectory = [];
         this.debugArrow = null;
         this.paddleTip = new THREE.Vector3();
@@ -69,11 +69,13 @@ class GameScene {
             document.body.appendChild(this.stats.dom);
         }
         this.simulation.init(this.settings, randomSounds, ballSounds)
-        setupLighting(this.scene);
+        
+        const dir = new THREE.DirectionalLight(0xffffff, 4.7);
+        dir.position.set(5, 10, 7);
+        this.scene.add(dir);
 
         this.parseGlb(glbModel)
 
-        // Pass 'this' (the GameScene instance) to InputManager
         this.inputManager = new InputManager(this.renderer.domElement, this);
         this.inputManager.initListeners();
         this.updateScore();
@@ -85,11 +87,7 @@ class GameScene {
 
     updateScore(){
         const previousScore = getCurrentScoreFromHTML();
-        console.log(previousScore);
-        //const currentScore = { player: this.score.player, ai: this.score.ai }; // Update currentScore for the next round
-
-        // Now call updateScoreUI with both new and old scores
-        updateScoreUI(this.score, previousScore); // Pass both scores
+        updateScoreUI(this.score, previousScore);
         if (this.score.player >= 11 || this.score.ai >= 11 ){
             setTimeout(() => {
                 window.location.href = REDIRECT_AFTER_WIN_URL;
@@ -101,15 +99,12 @@ class GameScene {
         this.lastHitter = hitter;
         this.ballBouncedOnOpponentSide = false;
         this.ballHitTable = false;
-        //console.log(`GameScene: lastHitter set to ${hitter}`);
     }
 
     parseGlb = (glb) => {
         this.tableSize = {};
         const objectScaleFactor = (isMobile() && this.settings.mobile && this.settings.mobile.objectScale) ? this.settings.mobile.objectScale : 1;
-        //const objectScaleFactor = 1.6;
 
-        // original material is too expensive on mobile. Use a Lambert one
         const originalMat = getMaterialFromGlb(glb);
         const mat = new THREE.MeshLambertMaterial({map: originalMat.map});
 
@@ -145,7 +140,6 @@ class GameScene {
 
         updateCameraForTableVisibility(this.tableSize, this.camera, this.screenSize);
 
-        // Correctly passing the arrow function
         this.ai = new AI(this.simulation, this.tableSize, this.paddleAI, this.paddleSize, this.ball, this.ballRadius, this.setLastHitter);
 
         this.state = STATES.SERVING;
@@ -156,7 +150,7 @@ class GameScene {
         this.ball.position.set(this.paddle.position.x, this.paddle.position.y + this.paddleSize.height, this.paddle.position.z);
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
-        // Using setLastHitter for fallback serve as well
+
         this.setLastHitter('player');
     }
 
@@ -177,8 +171,10 @@ class GameScene {
         let dir = new THREE.Vector3(0, -0.5, -1);
         this.simulation.hitBall(dir, 0.02);
 
-        // Use the setLastHitter function
         this.setLastHitter('player');
+        setTimeout(() => {
+            updateReasonForPointUI('');
+        }, 500);
     }
 
     update() {
@@ -189,13 +185,11 @@ class GameScene {
         if (this.state === STATES.PLAYING) {
             this.ai.play();
             this.simulation.simulate();
-            //this.simulation.simulate();
             this.checkBallHit();
             this.checkPointConditions();
         }else if (this.state === STATES.POINT_SCORED) {
             const delayDuration = SERVE_AFTER_ERROR_DELAY;
             if (Date.now() - this.pointScoredTime > delayDuration) {
-                // Delay has passed, now reset the game for the next serve
                 this.state = STATES.SERVING;
                 this.ball.position.set(0, this.tableSize.height * 2, this.tableSize.depth * 0.25);
                 this.setLastHitter(null);
@@ -207,20 +201,16 @@ class GameScene {
         let py = - (this.input.y / this.screenSize.height) * 2 + 1;
 
         let maxpy = Math.min(0, py);
-        //let vector = new THREE.Vector3(px, maxpy, 0.5);
+
         this.tempVector.set(px, maxpy, 0.5);
         this.tempVector.unproject(this.camera);
-        // Replace: let ray = new THREE.Ray(this.camera.position, vector.sub(this.camera.position).normalize());
+
         this.tempRay.origin.copy(this.camera.position);
         this.tempRay.direction.copy(this.tempVector).sub(this.camera.position).normalize();
-
-        // Replace: let intersect = new THREE.Vector3(0, 0, 0);
-        // Replace: ray.intersectPlane(this.inputPlane, intersect);
-        // Use this.tempIntersect directly for the result
         this.tempRay.intersectPlane(this.inputPlane, this.tempIntersect);
 
-        if (!this.tempIntersect) { // Check the reused object
-            this.tempIntersect.copy(this.paddle.position); // Use copy instead of clone if possible
+        if (!this.tempIntersect) {
+            this.tempIntersect.copy(this.paddle.position);
         }
 
         let minZ = this.tableSize.depth * 0.10;
@@ -255,10 +245,6 @@ class GameScene {
         if (this.state == STATES.SERVING) {
             setBallPosition(this.paddle, this.ballRadius, this.ball)
         }
-        //  else {
-        //     this.checkBallHit();
-        //     this.checkPointConditions();
-        // }
     }
 
     checkPointConditions() {
@@ -267,7 +253,6 @@ class GameScene {
         let reasonForPoint = '';
         let pointScored = false;
 
-        // --- Update ball hit table state ---
         const ballHitTableResult = checkBallHitTableRule(
             this.ball,
             this.tableSize,
@@ -288,10 +273,10 @@ class GameScene {
             reasonForPoint = `Ball hit the net after ${this.lastHitter} hit.`;
             if (this.lastHitter === 'player') {
                 scoreForAI = true;
-                reasonForPoint += ' (Player fault)';
-            } else { // lastHitter === 'ai'
+                //reasonForPoint += ' (Player fault)';
+            } else {
                 scoreForPlayer = true;
-                reasonForPoint += ' (AI fault)';
+                //reasonForPoint += ' (AI fault)';
             }
         }
 
@@ -334,7 +319,6 @@ class GameScene {
     checkBallHit() {
         let hitting = false;
         let hit = false;
-        //console.log(this.simulation.getLinearVelocity().z)
         if (this.simulation.getLinearVelocity().z > 0 && this.paddle.position.z > this.ball.position.z) {
             let trayectory = {
                 time: Date.now(),
@@ -386,7 +370,6 @@ class GameScene {
             this.simulation.hitBall(dir, force);
             this.paddleTrajectory.length = 0;
 
-            // Use the setLastHitter function
             this.setLastHitter('player');
         }
 

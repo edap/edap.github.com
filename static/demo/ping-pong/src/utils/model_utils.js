@@ -9,7 +9,6 @@ const getModelScale = (model, desiredWidth) => {
 
 export const getMaterialFromGlb = (glb) => {
     const table = glb.scene.getObjectByName("table");
-    console.log(table.material)
     if (!table && !table.material) {
         console.error("Table not found in GLB model!");
         return new THREE.MeshLambertMaterial({ color: 0x00ff00 });

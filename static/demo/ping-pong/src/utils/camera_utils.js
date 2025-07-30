@@ -96,6 +96,4 @@ export const updateCameraForTableVisibility = (tableSize, camera, screenSize) =>
         `Device: ${isMobile ? 'Mobile' : 'Desktop'}` +
         ` | Debug Params: fovMP=${fovDegreesMobilePortrait}, fovML=${fovDegreesMobileLandscape}, fovD=${fovDegreesDesktop}, ` +
         `zBufM=${cameraZBufferMobile}, zBufD=${cameraZBufferDesktop}, yBuf=${verticalPlayAreaBuffer}, yFacM=${cameraYFactorMobile}, yFacD=${cameraYFactorDesktop}`;
-
-    //console.log(debugMessage);
 };

@@ -19,7 +19,7 @@ body {
     top: 32px;
     padding: 10px;
     box-sizing: border-box;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.4);
@@ -32,7 +32,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 500px;
-    height: 100px;
+    height: 120px;
 }
 
 #score-container {
@@ -40,6 +40,7 @@ body {
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
+    justify-content: space-between;
 }
 
 #score {
@@ -48,6 +49,12 @@ body {
     font-family: monospace;
     white-space: nowrap;
     line-height: 1;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 #player-score,
@@ -59,13 +66,13 @@ body {
 }
 
 .player-score-point-anim {
-    font-size: 2.5rem;
-    color: orange;
+    font-size: 2.5rem !important;
+    color: orange !important;
 }
 
 .ai-score-point-anim {
-    font-size: 2.5rem;
-    color: orange;
+    font-size: 2.5rem !important;
+    color: orange !important;
 }
 
 .show-category {
@@ -73,13 +80,23 @@ body {
     font-size: 0.9rem;
     font-family: monospace;
     text-align: center;
-    margin-bottom: 5px;
     min-height: 1em;
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: auto;
+    box-sizing: content-box;
+    z-index: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 5px;
 }
 
 .reason-for-point {
-    color: #fff;
-    font-size: 0.8rem;
+    color: orange;
+    font-size: 1.2rem;
+    font-weight: bold;
     font-family: monospace;
     text-align: center;
     margin-top: 5px;
@@ -87,6 +104,7 @@ body {
 }
 
 #audio-panel-toggle-btn {
+    display: none;
     top: 55px;
     width: 50px;
     height: 50px;
@@ -196,6 +214,42 @@ body {
     background-color: #31f061;
 }
 
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    color: #fff;
+    font-family: monospace;
+}
+
+#loading-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+#loading-text {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.05); opacity: 1; }
+}
+
+#loading-logo {
+    animation: pulse 1.5s infinite alternate;
+}
+
 @media (max-width: 768px) {
     #audio-panel-toggle-btn {
         width: 40px;
@@ -210,15 +264,17 @@ body {
         width: 100%;
         left: auto;
         transform: none;
+        height: 100px;
     }
 
     #score {
         font-size: 1.2rem;
+        min-height: 1.8rem;
     }
 
     .player-score-point-anim,
     .ai-score-point-anim {
-        font-size: 1.8rem;
+        font-size: 1.8rem !important;
     }
 
     #player-score,
@@ -228,10 +284,12 @@ body {
 
     .show-category {
         font-size: 0.7rem;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     .reason-for-point {
-        font-size: 0.6rem;
+        font-size: 0.8rem;
     }
 }
 

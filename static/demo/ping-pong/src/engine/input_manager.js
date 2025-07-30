@@ -1,11 +1,11 @@
 // InputManager.js
-import { STATES } from "./constants.js";
+import { STATES } from "../constants.js";
 
 export class InputManager {
     constructor(rendererDomElement, gameSceneInstance) {
         this.domElement = rendererDomElement;
-        this.game = gameSceneInstance; // Reference to GameScene instance
-        this.mobileYOffsetPixels = -40; // Can be a setting
+        this.game = gameSceneInstance;
+        this.mobileYOffsetPixels = -40;
 
         // Bind all event handlers to this instance
         this.handleMouseMoveOrTouchMove = this.handleMouseMoveOrTouchMove.bind(this);
@@ -22,8 +22,7 @@ export class InputManager {
         this.domElement.addEventListener("touchstart", this.handleTouchStart, { passive: false });
         this.domElement.addEventListener("touchmove", this.handleMouseMoveOrTouchMove, { passive: false });
 
-        // Fallback: Force remove any blocking overlays after 5 seconds
-        setTimeout(() => { // Use arrow function to preserve 'this'
+        setTimeout(() => {
             let audioOverlay = document.getElementById('audio-unlock-overlay');
             if (audioOverlay) {
                 console.log('MOBILE FIX: Force removing stuck audio overlay');
@@ -45,8 +44,8 @@ export class InputManager {
         }
 
         if (ev.targetTouches && ev.targetTouches.length > 1) {
-            if (this.game.state === STATES.SERVING) { // Access state from game instance
-                this.game.serve(); // Call serve method on game instance
+            if (this.game.state === STATES.SERVING) {
+                this.game.serve();
             }
             return;
         }
@@ -54,7 +53,7 @@ export class InputManager {
         let x = ev.targetTouches ? ev.targetTouches[0].clientX : ev.clientX;
         let y = ev.targetTouches ? ev.targetTouches[0].clientY : ev.clientY;
 
-        this.game.processInput(x, y); // Call processInput on game instance
+        this.game.processInput(x, y);
     }
 
     handleMouseDown(ev) {
