@@ -16,6 +16,8 @@ I have been [lecturing](/teaching) at Universität der Künste in the [New Media
 
 I work across both visual and technical layers of the web: I create immersive 3D experiences in the browser and build backend infrastructure and developer tools with a focus on clarity, performance, and long-term maintainability.
 
+{{< separator >}}
+
 I currently offer two core freelance services:
 
 ### 3D Web Graphics & Interactive Visualization

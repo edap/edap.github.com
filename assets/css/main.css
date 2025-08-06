@@ -223,11 +223,15 @@ a.prev-work{
     font-family: var(--font-header);
 }
 
-/* About and Teaching page */
+/* About(now Index) and Teaching page */
 .single-medium-column {
     width: 40rem;
     margin-left: auto;
     margin-right: auto;
+}
+
+hr.green{
+    border-top: 1px solid var(--border-color);
 }
 
 /* Blog Post*/
