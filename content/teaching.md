@@ -4,7 +4,7 @@ layout: single-medium-column
 ---
 
 
-I have been lecturing at the Universität Der Künste, in the New Media class department, and I give workshops about computer graphics, creative coding, computer vision, fractals and algorithmic botany.
+I have been lecturing at the Universität Der Künste, in the New Media class department, and I give workshops about computer graphics, computer vision and fractals using exclusively open source software.
 
 
 ## University Courses
