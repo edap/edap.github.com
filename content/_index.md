@@ -11,7 +11,7 @@ I am a software developer, artist and educator based in Berlin.
 I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
 
-I design and build immersive 3D web experiences, focusing on clarity, performance, and long-term maintainability for both the visual layers and the underlying infrastructure.
+<!-- I design and build immersive 3D web experiences, focusing on clarity, performance, and long-term maintainability for both the visual layers and the underlying infrastructure.
 
 {{< separator >}}
 
@@ -23,7 +23,7 @@ I currently offer two core freelance services:
 
 ### Backend Infrastructure, APIs & CLI Tools
 
-- I build fast, secure backend systems and custom CLI tools using Ruby, Rust, and Go — with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications — from internal dev tools to user-facing services.
+- I build fast, secure backend systems and custom CLI tools using Ruby, Rust, and Go — with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications — from internal dev tools to user-facing services. -->
 
 If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com
 
