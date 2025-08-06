@@ -5,16 +5,13 @@ layout: single-medium-column
 ---
 
 
-<!-- {{< img src="/img/posts/grass/grass.jpg" caption="Steve Francia" >}} -->
-
-
 {{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
 I am a software developer, artist and educator based in Berlin.
 I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
 
-I work across both visual and technical layers of the web: I create immersive 3D experiences in the browser and build backend infrastructure and developer tools with a focus on clarity, performance, and long-term maintainability.
+I design and build immersive 3D web experiences, focusing on clarity, performance, and long-term maintainability for both the visual layers and the underlying infrastructure.
 
 {{< separator >}}
 
