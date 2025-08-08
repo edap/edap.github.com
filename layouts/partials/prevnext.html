@@ -16,12 +16,12 @@
     <div class="prevnext">
         {{ if gt $currentIndex 0 }}
             <div class="linkworks left">
-                <a href="{{ (index $sortedPages (sub $currentIndex 1)).Permalink }}" alt="Previous" class="next-work"> &lt;&lt; </a>
+                <a href="{{ (index $sortedPages (sub $currentIndex 1)).Permalink }}" alt="Previous" class="next-work"> &#9756; </a>
             </div>
         {{ end }}
         {{ if lt (add $currentIndex 1) (len $sortedPages) }}
             <div class="linkworks right">
-                <a href="{{ (index $sortedPages (add $currentIndex 1)).Permalink }}" alt="Next" class="prev-work"> &gt;&gt; </a>
+                <a href="{{ (index $sortedPages (add $currentIndex 1)).Permalink }}" alt="Next" class="prev-work"> &#9758; </a>
             </div>
         {{ end }}
     </div>

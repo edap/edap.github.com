@@ -16,6 +16,109 @@ var camY = 50;
 var camZ = -200;
 var lightPos = new THREE.Vector3(0,100, raySpheroDome - 90);
 
+
+var vertexShader = `
+        precision mediump float;
+        uniform float globalTime;
+        uniform float magnitude;
+        uniform vec2 uvScale;
+        uniform vec3 lightPos;
+        varying vec2 vUv;
+        varying vec3 vNormal;
+        varying vec4 vLightPos;
+        varying vec4 vecPos;
+
+        float random (in vec2 st) {
+            return fract(sin(dot(st.xy,
+                                vec2(12.9898,78.233)))
+                * 43758.5453123);
+        }
+
+
+        // 2D Noise based on Morgan McGuire @morgan3d
+        // https://www.shadertoy.com/view/4dS3Wd
+        float noise (in vec2 st) {
+            vec2 i = floor(st);
+            vec2 f = fract(st);
+
+            // Four corners in 2D of a tile
+            float a = random(i);
+            float b = random(i + vec2(1.0, 0.0));
+            float c = random(i + vec2(0.0, 1.0));
+            float d = random(i + vec2(1.0, 1.0));
+
+            // Cubic Hermine Curve.  Same as SmoothStep()
+            vec2 u = f*f*(3.0-2.0*f);
+            // u = smoothstep(0.,1.,f);
+
+            // Mix 4 coorners porcentages
+            return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
+            (d - b) * u.x * u.y;
+        }
+
+
+        void main() {
+            vNormal =  (modelMatrix * vec4(normal, 0.0)).xyz;
+            vec3 pos = position;
+            // animate only the pixels that are upon the ground
+            if (pos.y > 1.0) {
+                float noised = noise(pos.xy);
+                pos.y += sin(globalTime * magnitude * noised);
+                pos.z += sin(globalTime * magnitude * noised);
+                if (pos.y > 1.7){
+                    pos.x += sin(globalTime * noised);
+                }
+            }
+            vUv = uvScale * uv;
+            vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
+            vLightPos = projectionMatrix * modelViewMatrix * vec4(lightPos, 1.0);
+            vecPos = projectionMatrix * mvPosition;
+            gl_Position = vecPos;
+        }
+`;
+
+var fragmentShader = `
+          uniform vec3 lightColor;
+          uniform float lightPower;
+          uniform float ambientLightPower;
+          uniform sampler2D texture;
+          varying vec3 vNormal;
+          varying vec2 vUv;
+          varying vec4 vLightPos;
+          varying vec4 vecPos;
+
+          const float threshold = 0.48;
+          void main() {
+              vec4 textureColor = texture2D(texture, vec2(vUv.s, vUv.t));
+              if (textureColor[0] < threshold && textureColor[1] < threshold && textureColor[2] < threshold) {
+                  discard;
+              } else {
+                  // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-8-basic-shading/
+
+                  // shadow at the end of the word, add this value in the final moltiplication
+                  // in order to see it, ex
+                  // depthColor * textureColor * lightColor * lightPower * cosTheta / (dist * dist);
+                  // float depth = gl_FragCoord.z / gl_FragCoord.w;
+                  // float near = 250.0;
+                  // float far = 500.0;
+                  // float depthcolor = 0.8 - smoothstep( near, far, depth );
+                  // float depthcolor = smoothstep( near, far, depth ) - 0.2;
+                  float dist = length(vLightPos - vecPos) * 0.0015;
+                  vec4 lightColor = vec4(lightColor, 1.0);
+                  vec3 lightDirection = normalize(vecPos.xyz - vLightPos.xyz);
+                  float cosTheta = clamp( dot( vNormal,lightDirection ),0.0, 1.0);
+                  vec4 materialAmbientColor = vec4(vec3(ambientLightPower), 1.0) * textureColor;
+                  //float attenuation = 1.0 / (1.0 + 0.2 * pow(length(vLightPos - vecPos), 2.0));
+                  gl_FragColor = materialAmbientColor +
+                                 //attenuation +
+                                 textureColor * lightColor * lightPower * cosTheta / (dist * dist);
+
+
+              }
+          }
+`;
+
 //gui
 var Config = function(){
     this.lightColor = '#872b17';
@@ -26,11 +129,11 @@ var Config = function(){
 var config = new Config();
 
 $.when(
-    loadTexture('images/portugal-seamless-gold.jpg'),
+    loadTexture('/grass/images/portugal-seamless-gold.jpg'),
     //loadTexture('images/thingrass-gold.jpg'),
     //loadTexture('images/thingrass-gold2.jpg'),
-    loadTexture('images/thingrass-gold3.jpg'),
-    loadTexture('images/ground-diffuse.jpg')
+    loadTexture('/grass/images/thingrass-gold3.jpg'),
+    loadTexture('/grass/images/ground-diffuse.jpg')
 ).then(
     function(bg, grass, ground) {
         init(bg, grass, ground);
@@ -81,7 +184,6 @@ function init(bgTex, grassTex, groundTex) {
     window.addEventListener('keypress', maybeGuiPressed, false);
 
     //SPHEREDOME
-    var sphereWidth = 400;
     var bgGeometry = new THREE.SphereBufferGeometry(raySpheroDome, 12, 12, 0, Math.PI*2, 0, Math.PI*0.5);
     var bgMaterial = new THREE.MeshBasicMaterial(
         {color: 0x999999, map: bgTexture, fog: false, side: THREE.BackSide});
@@ -94,10 +196,8 @@ function init(bgTex, grassTex, groundTex) {
     scene.add(sky);
 
     //GRASS
-    //materiale di test
     uniforms = setUniforms(grassTexture);
     grassMaterial = getGrassShaderMaterial(uniforms);
-    var delMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     var planesGeometry = createPlanesGeometry(350);
     planesGeometry.applyMatrix( new THREE.Matrix4().setPosition( new THREE.Vector3( 0, 0, -200 ) ) );
     var planes = new THREE.Mesh(planesGeometry, grassMaterial);
@@ -181,8 +281,6 @@ function createPlanesGeometry(n_planes){
         mesh.updateMatrix();
         containerGeometry.merge(mesh.geometry, mesh.matrix);
     };
-    // I've used a BufferGeometry only here, and not previously, because buffered geometries
-    // do not work with the merge method
     var bufferedGeometry = new THREE.BufferGeometry().fromGeometry(containerGeometry);
     return bufferedGeometry;
 }
@@ -207,8 +305,8 @@ function setUniforms(texture){
 function getGrassShaderMaterial(uniforms){
     var material = new THREE.ShaderMaterial( {
         uniforms:       uniforms,
-        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
-        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+        vertexShader:   vertexShader,
+        fragmentShader: fragmentShader,
         wireframe:      false,
         side:           THREE.DoubleSide
     });
@@ -220,15 +318,12 @@ function loadTexture(filename){
     var textureLoader = new THREE.TextureLoader();
     textureLoader.load(
         filename,
-        //success callback
         function (texture) {
             d.resolve(texture);
         },
-        //progress callback
         function (xhr) {
             d.notify((xhr.loaded / xhr.total * 100) + '% loaded');
         },
-        //error callback
         function (error) {
             console.log('error while loading texture: ' + filename);
             d.reject(error);
@@ -243,7 +338,7 @@ function addGui() {
     gui.add(config, 'magnitude', 0.1, 13.0).step(0.1).onChange( onMagnitudeUpdate );
     gui.add(config, 'lightPower', 0.02, 2.0).step(0.02).onChange( onLightPowerUpdate );
     gui.add(config, 'ambientLightPower', 0.0, 1.0).step(0.05).onChange( onAmbientLightPowerUpdate );
-    gui.addColor(config, 'lightColor').name('light color').onChange( onLightColorUpdate );
+    //gui.addColor(config, 'lightColor').name('light color').onChange( onLightColorUpdate );
     gui.open();
     if(debug == false){
         dat.GUI.toggleHide();
@@ -259,7 +354,6 @@ function addStats() {
     }
 }
 
-
 var maybeGuiPressed = function(ev) {
     console.log(ev.keyCode);
     if ( ev.keyCode === 103) {
@@ -274,28 +368,26 @@ function onWindowResize() {
     render();
 }
 
-var onMagnitudeUpdate = function(ev) {
+var onMagnitudeUpdate = function(_) {
     grassMaterial.uniforms.magnitude.value = config.magnitude;
 };
 
-var onLightPowerUpdate = function(ev) {
+var onLightPowerUpdate = function(_) {
     grassMaterial.uniforms.lightPower.value = config.lightPower;
 };
 
-var onAmbientLightPowerUpdate = function(ev) {
+var onAmbientLightPowerUpdate = function(_) {
     grassMaterial.uniforms.ambientLightPower.value = config.ambientLightPower;
 };
 
-var onLightColorUpdate = function(ev) {
+var onLightColorUpdate = function(_) {
     light.color.set(config.lightColor);
     grassMaterial.uniforms.lightColor.value.set(config.lightColor);
 };
 
 function setOrbitControlsLimits(controls){
-    controls.minPolarAngle = 1.2; // radians
-    controls.maxPolarAngle = Math.PI/2.1; // radians
-    //controls.minDistance = 5;
-    //controls.maxDistance = 14;
+    controls.minPolarAngle = 1.2;
+    controls.maxPolarAngle = Math.PI/2.1;
 }
 
 
