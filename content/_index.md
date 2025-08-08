@@ -47,6 +47,6 @@ Past collaborations include software companies, design studios, artists and publ
 - [Mechatronica](https://mechatronica.bandcamp.com/)
 
 
-Social profiles: [![Bluesky](/img/social/bluesky.png)](https://bsky.app/profile/edapx.bsky.social) [![Mastodon](/img/social/mastodon.png)](https://mastodon.gamedev.place/@edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap)
+Social profiles: [![Bluesky](/img/social/bluesky.png)](https://bsky.app/profile/edapx.bsky.social) [![Mastodon](/img/social/mastodon.png)](https://chaos.social/@edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap)
 
 ---
