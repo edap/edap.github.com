@@ -213,8 +213,11 @@ div.work-title{
     text-align: right;
 }
 .linkworks.quit{
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 a.next-work {
     font-size: 5rem;
     font-family: var(--font-header);
@@ -222,7 +225,7 @@ a.next-work {
 }
 
 a.quit {
-    font-size: 5rem;
+    font-size: 3rem;
     font-family: var(--font-header);
     text-decoration: none;
 }
