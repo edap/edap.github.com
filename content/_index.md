@@ -25,6 +25,8 @@ I currently offer two core freelance services:
 
 - I build fast, secure backend systems and custom CLI tools using Ruby, Rust, and Go — with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications — from internal dev tools to user-facing services.
 
+{{< separator >}}
+
 If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com
 
 Past collaborations include software companies, design studios, artists and public institutions such as:
