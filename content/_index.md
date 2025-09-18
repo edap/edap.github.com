@@ -23,7 +23,7 @@ I currently offer two core freelance services:
 
 ### Backend Infrastructure, APIs & CLI Tools
 
-- I build fast, secure backend systems and custom CLI tools using Ruby, Rust, and Go — with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications — from internal dev tools to user-facing services.
+- I build fast, secure backend systems and custom CLI tools using Ruby and Rust — with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications — from internal dev tools to user-facing services.
 
 {{< separator >}}
 
