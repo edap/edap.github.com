@@ -1,0 +1,199 @@
+/* Font Face Declaration */
+@font-face {
+    font-family: 'GT Maru Mega';
+    src: url('assets/GT-Maru-Mega-VF.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* CSS Variables */
+:root {
+    --color-cream: #FFECC0;
+    --color-peach: #FFC29B;
+    --color-coral: #F39F9F;
+    --color-dusty-rose: #B95E82;
+    --color-background: #f5f0b0;
+    --color-title: #a439ff;
+}
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Blinker', sans-serif;
+    font-weight: 200;
+    background: var(--color-background);
+    min-height: 100vh;
+    color: var(--color-dusty-rose);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    /* font-family: 'Mogra', cursive; */
+    font-family: 'GT Maru Mega', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    color: var(--color-title);
+    text-shadow: 2px 2px 4px rgba(164, 57, 255, 0.3);
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.design-tool {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 0.2rem;
+    box-shadow: 0 8px 32px rgba(185, 94, 130, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#wristband-canvas {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    background: white;
+}
+
+.controls-panel {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(185, 94, 130, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#wristband-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-family: 'Blinker', sans-serif;
+    font-weight: 200;
+    font-size: 1rem;
+    color: var(--color-dusty-rose);
+}
+
+.form-group select {
+    padding: 0.75rem;
+    border: 1px solid var(--color-dusty-rose);
+    border-radius: 8px;
+    background: white;
+    font-family: 'Blinker', sans-serif;
+    font-size: 1rem;
+    color: var(--color-dusty-rose);
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-title);
+    box-shadow: 0 0 0 2px rgba(164, 57, 255, 0.2);
+}
+
+.form-group button {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--color-title);
+    border-radius: 8px;
+    background: var(--color-title);
+    color: white;
+    font-family: 'Blinker', sans-serif;
+    font-size: 1rem;
+    font-weight: 200;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.form-group button:hover {
+    background: white;
+    color: var(--color-title);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(164, 57, 255, 0.3);
+}
+
+.form-group button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(164, 57, 255, 0.3);
+}
+
+.text {
+    font-family: 'Blinker', sans-serif;
+    font-weight: 200;
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    max-width: 800px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(185, 94, 130, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .title {
+        margin-bottom: 2rem;
+    }
+    
+    .text {
+        padding: 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .text {
+        padding: 1rem;
+        border-radius: 15px;
+    }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summer Counts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Mogra&family=Blinker:wght@200&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Blinker:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Summer Counts</h1>
+        </header>
+        <main>
+            <div class="design-tool">
+                <canvas id="wristband-canvas" resize></canvas>
+            </div>
+            <div class="controls-panel">
+                <form id="wristband-form">
+                    <div class="form-group">
+                        <label for="palette-select">Palette:</label>
+                        <select id="palette-select" name="palette">
+                            <option value="coral_sunset">Coral Sunset</option>
+                            <option value="ocean_depths">Ocean Depths</option>
+                            <option value="lavender_dreams">Lavender Dreams</option>
+                            <option value="earthy_warmth">Earthy Warmth</option>
+                            <option value="mint_fresh">Mint Fresh</option>
+                            <option value="sage_garden">Sage Garden</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="children-patterns-select">Children Patterns:</label>
+                        <select id="children-patterns-select" name="children-patterns">
+                            <option value="fill">Fill</option>
+                            <option value="dots">Dots</option>
+                            <option value="circle">Circles</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="random-button">Random</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script type="text/javascript" src="js/paper.js"></script>
+    <script type="module" src="js/index.js"></script>
+</body>
+</html>
