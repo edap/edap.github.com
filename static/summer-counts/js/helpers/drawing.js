@@ -1,5 +1,5 @@
 // Drawing utilities for creating shapes and patterns
-import { createCirclePattern, createDotsPattern } from './patterns.js';
+import { createCirclePattern, createDotsPattern, createDiagonalLinesPattern } from './patterns.js';
 
 /**
  * Draw a rectangle with optional pattern support
@@ -30,6 +30,8 @@ function createPattern(patternType, x, y, width, height, fillColor, scale) {
             return createCirclePattern(x, y, width, height, fillColor, scale);
         case 'dots':
             return createDotsPattern(x, y, width, height, fillColor, scale);
+        case 'diagonal_lines':
+            return createDiagonalLinesPattern(x, y, width, height, fillColor, scale);
         default:
             // Fallback to solid color if pattern not recognized
             const rect = new paper.Path.Rectangle(x, y, width, height);

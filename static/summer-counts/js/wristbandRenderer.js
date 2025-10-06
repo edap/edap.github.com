@@ -4,10 +4,12 @@ import { drawRect } from './helpers/drawing.js';
 import { getWristbandConfig } from './wristbandConfig.js';
 import { getPalette } from './paletteCollection.js';
 import { createSonsRectangles } from './helpers/sons.js';
+import { drawCounter } from './helpers/counter.js';
 import { DEFAULT_SCALE } from './index.js';
 
 // Constants
 const ME_RECT_HEIGHT_RATIO = 0.6; // Height of "me" rectangles as ratio of wristband height
+export const OLDER_ME = 0.6;
 
 /**
  * Calculate wristband dimensions and positioning
@@ -76,8 +78,13 @@ export function drawWristband(scale = 1) {
     // Create the "me" rectangles (life from 0-60 and 60-100)
     createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, finalScale);
     
+    drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, finalScale);
+    
     // Create the sons' rectangles
     createSonsRectangles(centerX, centerY, rectWidth, rectHeight, config, finalScale);
+    
+    // Draw counter text
+    drawCounter(centerX, centerY, rectWidth, rectHeight, config, finalScale);
     
     createRuler(centerX, centerY, rectWidth, rectHeight, finalScale, config);
     
@@ -198,30 +205,122 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     const meRectHeight = rectHeight * printableHeightRatio;
     const meRectY = centerY; // Center vertically on the wristband
     
-    // First rectangle: 0 to 60 years (60% of the width)
-    const meRect1Width = rectWidth * 0.6; // 60% of wristband width
+    // Calculate current age
+    const currentYear = new Date().getFullYear();
+    const myAge = currentYear - config.me.born_year;
     
-    // Use drawRect function for first rectangle
+    // A1: From 0 to current age
+    const a1Width = (myAge / 100) * rectWidth;
     drawRect(
         wristbandStartX,
         meRectY - meRectHeight / 2,
-        meRect1Width,
+        a1Width,
         meRectHeight,
         palette.me_color
     );
     
-    // Second rectangle: 60 to 100 years (40% of the width)
-    const meRect2Width = rectWidth * 0.4; // 40% of wristband width
-    const meRect2StartX = wristbandStartX + meRect1Width; // Start where first rectangle ends
+    // A2: From current age until youngest son reaches age_holyday_alone (black)
+    const a2StartX = wristbandStartX + a1Width;
     
-    // Use drawRect function for second rectangle
+    // Calculate when the youngest son will reach age_holyday_alone
+    const children = Object.values(config.family);
+    let youngestSonAge = 0;
+    if (children.length > 0) {
+        const youngestSon = children.reduce((youngest, child) => {
+            return child.born_year > youngest.born_year ? child : youngest;
+        });
+        const yearWhenYoungestReachesAge = youngestSon.born_year + config.age_holyday_alone;
+        youngestSonAge = yearWhenYoungestReachesAge - config.me.born_year;
+    } else {
+        // If no children, use 60 as fallback
+        youngestSonAge = 60;
+    }
+    
+    const a2EndAge = Math.min(60, youngestSonAge); // Don't go beyond 60
+    const a2Width = (a2EndAge / 100) * rectWidth - a1Width;
+    
+    if (a2Width > 0) {
+        drawRect(
+            a2StartX,
+            meRectY - meRectHeight / 2,
+            a2Width,
+            meRectHeight,
+            palette.me_color, // Black color
+            'diagonal_lines', // Diagonal lines pattern
+            scale
+        );
+    }
+    
+    // B1: From youngest son reaches age_holyday_alone until 60 years old
+    // Only draw B1 if the youngest son reaches age_holyday_alone before me turns 60
+    if (a2EndAge < 60) {
+        const b1StartX = wristbandStartX + (a2EndAge / 100) * rectWidth;
+        const b1EndX = wristbandStartX + (60 / 100) * rectWidth;
+        const b1Width = b1EndX - b1StartX;
+        
+        if (b1Width > 0) {
+            drawRect(
+                b1StartX,
+                meRectY - meRectHeight / 2,
+                b1Width,
+                meRectHeight,
+                palette.me_color
+            );
+        }
+    }
+    
+    // B2: From 60 to 100 years (unchanged)
+    const b2StartX = wristbandStartX + (60 / 100) * rectWidth;
+    const b2Width = rectWidth * 0.4; // 40% of wristband width
+    
     drawRect(
-        meRect2StartX,
+        b2StartX,
         meRectY - meRectHeight / 2,
-        meRect2Width,
+        b2Width,
         meRectHeight,
         palette.me_old_color
     );
+}
+
+function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, scale) {
+    const palette = getPalette(config.palette_id);
+    
+    // Calculate the position and dimensions relative to the wristband
+    const wristbandStartX = centerX - rectWidth / 2;
+    const wristbandStartY = centerY - rectHeight / 2;
+    
+    // Calculate the height of the "me" rectangles to cover the printable area
+    const totalHeightMm = config.fabric_height;
+    const printableHeightMm = config.fabric_printable_height;
+    const printableHeightRatio = printableHeightMm / totalHeightMm; // 12/15 = 0.8
+    const meRectHeight = rectHeight * printableHeightRatio;
+    
+    // Partner rectangle height is half of the me rectangle height
+    const partnerRectHeight = meRectHeight / 2;
+    const partnerRectY = centerY; // Center vertically on the wristband
+    
+    // Calculate when partner was met (my age when partner was met)
+    const meBornYear = config.me.born_year;
+    const metPartnerYear = config.me.met_partner_year;
+    const myAgeWhenMetPartner = metPartnerYear - meBornYear;
+    
+    // Calculate partner rectangle position and width
+    const partnerStartAge = Math.max(0, myAgeWhenMetPartner); // Don't start before 0
+    const partnerEndAge = 100; // Goes until the end
+    
+    const partnerStartX = wristbandStartX + (partnerStartAge / 100) * rectWidth;
+    const partnerWidth = ((partnerEndAge - partnerStartAge) / 100) * rectWidth;
+    
+    // Only draw if the partner rectangle has a valid width
+    if (partnerWidth > 0) {
+        drawRect(
+            partnerStartX,
+            partnerRectY - partnerRectHeight / 2,
+            partnerWidth,
+            partnerRectHeight,
+            palette.partner_color
+        );
+    }
 }
 
 

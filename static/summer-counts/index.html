@@ -18,30 +18,94 @@
         <main>
             <div class="design-tool">
                 <canvas id="wristband-canvas" resize></canvas>
+                <button id="export-button" class="export-button">Export</button>
             </div>
             <div class="controls-panel">
                 <form id="wristband-form">
-                    <div class="form-group">
-                        <label for="palette-select">Palette:</label>
-                        <select id="palette-select" name="palette">
-                            <option value="coral_sunset">Coral Sunset</option>
-                            <option value="ocean_depths">Ocean Depths</option>
-                            <option value="lavender_dreams">Lavender Dreams</option>
-                            <option value="earthy_warmth">Earthy Warmth</option>
-                            <option value="mint_fresh">Mint Fresh</option>
-                            <option value="sage_garden">Sage Garden</option>
-                        </select>
+                    <!-- Style Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Style</h3>
+                        <div class="form-group">
+                            <label for="palette-select">Palette:</label>
+                            <select id="palette-select" name="palette">
+                                <option value="coral_sunset">Coral Sunset</option>
+                                <option value="ocean_depths">Ocean Depths</option>
+                                <option value="lavender_dreams">Lavender Dreams</option>
+                                <option value="earthy_warmth">Earthy Warmth</option>
+                                <option value="mint_fresh">Mint Fresh</option>
+                                <option value="sage_garden">Sage Garden</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="children-patterns-select">Patterns:</label>
+                            <select id="children-patterns-select" name="children-patterns">
+                                <option value="fill">Fill</option>
+                                <option value="dots">Dots</option>
+                                <option value="circle">Circles</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="random-button">Random</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="show-counter-checkbox">
+                                <input type="checkbox" id="show-counter-checkbox" name="show-counter" checked>
+                                Show Counter
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="children-patterns-select">Children Patterns:</label>
-                        <select id="children-patterns-select" name="children-patterns">
-                            <option value="fill">Fill</option>
-                            <option value="dots">Dots</option>
-                            <option value="circle">Circles</option>
-                        </select>
+
+                    <!-- Me Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Me</h3>
+                        <div class="form-group">
+                            <label for="me-born-year">Born Year:</label>
+                            <select id="me-born-year" name="me-born-year">
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="me-met-partner-year">Partner met in:</label>
+                            <select id="me-met-partner-year" name="me-met-partner-year">
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button type="button" id="random-button">Random</button>
+
+                    <!-- Children Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Children</h3>
+                        <div class="form-group">
+                            <label for="age-holiday-alone">Age Holiday alone:</label>
+                            <select id="age-holiday-alone" name="age-holiday-alone">
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Children Management -->
+                        <div class="children-management">
+                            <div id="children-list" class="children-list">
+                                <!-- Children forms will be dynamically added here -->
+                                <button type="button" id="add-child-button" class="add-child-btn">+ Add Child</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Partner Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Partner</h3>
+                        <div class="form-group">
+                            <label for="partner-born-year">Born Year:</label>
+                            <select id="partner-born-year" name="partner-born-year">
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>

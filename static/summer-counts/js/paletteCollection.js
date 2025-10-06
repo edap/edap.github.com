@@ -27,60 +27,78 @@ const basePalettes = {
         name: "Coral Sunset",
         bg_color: "#F7EFE8",        // Light beige
         me_color: "#FC6454",        // Coral
+        partner_color: "#2E8B57",   // Sea green (complementary to coral, distinct from sons)
         son_1_color: "#BAF5D9",     // Light mint
         son_2_color: "#F3E16B",     // Light yellow
+        son_3_color: "#E6B8FF",     // Light purple (complementary to coral)
         son_1_pattern: "dots",
-        son_2_pattern: "circle"
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
     },
     
     ocean_depths: {
         name: "Ocean Depths",
         bg_color: "#EEEEEE",        // Light gray
         me_color: "#1E517B",        // Dark blue
+        partner_color: "#8B4513",   // Saddle brown (warm earth tone, distinct from cool blues)
         son_1_color: "#FD9B7B",     // Coral
         son_2_color: "#7DFEE3",     // Light turquoise
+        son_3_color: "#FFE4B5",     // Light peach (warm complement to cool blues)
         son_1_pattern: "circle",
-        son_2_pattern: "dots"
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
     },
     
     lavender_dreams: {
         name: "Lavender Dreams",
         bg_color: "#FFE2C4",        // Cream peach
         me_color: "#9588E8",        // Soft lavender
+        partner_color: "#D2691E",   // Chocolate (warm earth tone, distinct from cool purples)
         son_1_color: "#F375F9",     // Bright pink
         son_2_color: "#A6C3ED",     // Light blue
+        son_3_color: "#98FB98",     // Light green (complementary to purple)
         son_1_pattern: "dots",
-        son_2_pattern: "circle"
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
     },
     
     earthy_warmth: {
         name: "Earthy Warmth",
         bg_color: "#F49A5F",        // Light orange
         me_color: "#EE6C3C",        // Vibrant orange
+        partner_color: "#4B0082",   // Indigo (complementary to orange, distinct from sons)
         son_1_color: "#87CEEB",     // Sky blue
         son_2_color: "#FFD700",     // Gold yellow
+        son_3_color: "#DDA0DD",     // Plum (complementary to orange)
         son_1_pattern: "circle",
-        son_2_pattern: "dots"
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
     },
     
     mint_fresh: {
         name: "Mint Fresh",
         bg_color: "#FFB5B5",        // Light pink
         me_color: "#F10479",        // Bright fuchsia
+        partner_color: "#228B22",   // Forest green (complementary to fuchsia, distinct from sons)
         son_1_color: "#E9F9FF",     // Very light blue
         son_2_color: "#90EE90",     // Light green
+        son_3_color: "#FFE4B5",     // Light peach (complementary to fuchsia)
         son_1_pattern: "dots",
-        son_2_pattern: "circle"
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
     },
     
     sage_garden: {
         name: "Sage Garden",
         bg_color: "#F0EAD6",        // Light khaki
         me_color: "#6B8E23",        // Olive drab
+        partner_color: "#8B0000",   // Dark red (complementary to green, distinct from sons)
         son_1_color: "#8FBC8F",     // Dark sea green
         son_2_color: "#DDA0DD",     // Plum
+        son_3_color: "#FFB6C1",     // Light pink (complementary to green)
         son_1_pattern: "circle",
-        son_2_pattern: "dots"
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
     }
 };
 
@@ -93,6 +111,7 @@ for (const [id, basePalette] of Object.entries(basePalettes)) {
         me_old_color: darkenColor(basePalette.me_color, 25),
         son_1_a16_color: darkenColor(basePalette.son_1_color, 25),
         son_2_a16_color: darkenColor(basePalette.son_2_color, 25),
+        son_3_a16_color: darkenColor(basePalette.son_3_color, 25),
         text_color: getContrastTextColor(basePalette.me_color)
     };
 }
