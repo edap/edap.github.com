@@ -43,6 +43,7 @@ function setupFormControls() {
     const exportButton = document.getElementById('export-button');
     const addChildButton = document.getElementById('add-child-button');
     const childrenList = document.getElementById('children-list');
+    const fontSelect = document.getElementById('font-select');
     
     // Populate year selectors
     populateYearSelectors();
@@ -202,6 +203,22 @@ function setupFormControls() {
     if (addChildButton) {
         addChildButton.addEventListener('click', function() {
             addChild();
+        });
+    }
+
+    if (fontSelect) {
+        const config = getWristbandConfig();
+        // If current config font isn't in options, fall back to Arial
+        const options = Array.from(fontSelect.options).map(o => o.value);
+        const initialFont = options.includes(config.font) ? config.font : 'Arial, sans-serif';
+        fontSelect.value = initialFont;
+        if (initialFont !== config.font) {
+            updateWristbandConfig({ font: initialFont });
+        }
+        fontSelect.addEventListener('change', function() {
+            const newFont = this.value;
+            updateWristbandConfig({ font: newFont });
+            drawWristband(DEFAULT_SCALE);
         });
     }
     

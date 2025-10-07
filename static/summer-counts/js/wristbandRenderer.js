@@ -3,19 +3,15 @@ import { mmToPixels } from './helpers/measure.js';
 import { drawRect } from './helpers/drawing.js';
 import { getWristbandConfig } from './wristbandConfig.js';
 import { getPalette } from './paletteCollection.js';
-import { createSonsRectangles } from './helpers/sons.js';
+import { createSonsRectangles, getOldestReachesAgeRelativeToMe} from './helpers/sons.js';
 import { drawCounter } from './helpers/counter.js';
+import { createRuler } from './helpers/ruler.js';
 import { DEFAULT_SCALE } from './index.js';
 
 // Constants
 const ME_RECT_HEIGHT_RATIO = 0.6; // Height of "me" rectangles as ratio of wristband height
 export const OLDER_ME = 0.6;
 
-/**
- * Calculate wristband dimensions and positioning
- * @param {number} scale - Scale factor for the wristband (default: 1)
- * @returns {Object} Object containing all calculated dimensions
- */
 function calculateWristBandDimension(scale = 1) {
     // Get current configuration
     const config = getWristbandConfig();
@@ -60,10 +56,6 @@ function calculateWristBandDimension(scale = 1) {
     };
 }
 
-/**
- * Draw the wristband rectangle with correct proportions
- * @param {number} scale - Scale factor for the wristband (default: 1)
- */
 export function drawWristband(scale = 1) {
     // Clear the canvas
     paper.project.clear();
@@ -90,16 +82,10 @@ export function drawWristband(scale = 1) {
     
 }
 
-/**
- * Handle canvas resize
- */
 export function onResize() {
     drawWristband(2); // Default scale of 1
 }
 
-/**
- * Initialize the renderer
- */
 export function onFrame() {
     // This runs every frame, but we only need to draw once
     if (paper.project.activeLayer.children.length === 0) {
@@ -107,14 +93,6 @@ export function onFrame() {
     }
 }
 
-/**
- * Create the wristband rectangle
- * @param {number} centerX - Center X coordinate
- * @param {number} centerY - Center Y coordinate
- * @param {number} rectWidth - Rectangle width in pixels
- * @param {number} rectHeight - Rectangle height in pixels
- * @param {Object} config - Wristband configuration
- */
 function createWristbandRectangle(centerX, centerY, rectWidth, rectHeight, config) {
     // Create the wristband rectangle
     const wristbandRect = new paper.Rectangle(
@@ -129,68 +107,12 @@ function createWristbandRectangle(centerX, centerY, rectWidth, rectHeight, confi
     // Create the path and set its properties
     const wristband = new paper.Path.Rectangle(wristbandRect);
     wristband.fillColor = palette.bg_color;
-    wristband.strokeColor = '#333';
+    //wristband.strokeColor = '#333';
     wristband.strokeWidth = 1;
 }
 
-/**
- * Create a ruler at the bottom of the wristband
- * @param {number} centerX - Center X coordinate
- * @param {number} centerY - Center Y coordinate
- * @param {number} rectWidth - Rectangle width in pixels
- * @param {number} rectHeight - Rectangle height in pixels
- */
-function createRuler(centerX, centerY, rectWidth, rectHeight, scale, config) {
-    // Calculate the printable area offset
-    // If fabric_height is 15mm and fabric_printable_height is 12mm, 
-    // there's a 3mm difference (1.5mm on each side)
+// removed: inlined ruler creation moved to helpers/ruler.js
 
-    // Create the ruler
-    const palette = getPalette(config.palette_id);
-    const textColor = palette.text_color;
-    const totalHeightMm = config.fabric_height;
-    const printableHeightMm = config.fabric_printable_height;
-    const nonPrintableMarginMm = (totalHeightMm - printableHeightMm) / 2; // 1.5mm on each side
-    
-    // Convert margin to pixels and adjust ruler position
-    const marginPx = mmToPixels(nonPrintableMarginMm) * scale;
-    const rulerY = centerY + rectHeight / 2 - marginPx - 2; // Position within printable area
-    const rulerStartX = centerX - rectWidth / 2;
-    const rulerEndX = centerX + rectWidth / 2;
-    const rulerLength = rulerEndX - rulerStartX;
-    
-    // Create tick marks and labels (0 to 90, every 10)
-    for (let i = 0; i < 100; i += 10) {
-        const tickX = rulerStartX + (i / 100) * rulerLength;
-        
-        // Create tick mark
-        const tickMark = new paper.Path.Line(
-            new paper.Point(tickX, rulerY - 3),
-            new paper.Point(tickX, rulerY + 2)
-        );
-        tickMark.strokeColor = textColor;
-        tickMark.strokeWidth = 1 * scale;
-        
-        // Add label for multiples of 10
-        const label = new paper.PointText({
-            point: [tickX + 3, rulerY],
-            content: i.toString(),
-            justification: 'left',
-            fontSize: 7 * scale,
-            fillColor: textColor
-        });
-    }
-}
-
-/**
- * Create the "me" rectangles representing a person's life
- * @param {number} centerX - Center X coordinate
- * @param {number} centerY - Center Y coordinate
- * @param {number} rectWidth - Rectangle width in pixels
- * @param {number} rectHeight - Rectangle height in pixels
- * @param {Object} config - Wristband configuration
- * @param {number} scale - Scale factor
- */
 function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scale) {
     const palette = getPalette(config.palette_id);
     
@@ -222,21 +144,14 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     // A2: From current age until youngest son reaches age_holyday_alone (black)
     const a2StartX = wristbandStartX + a1Width;
     
-    // Calculate when the youngest son will reach age_holyday_alone
-    const children = Object.values(config.family);
-    let youngestSonAge = 0;
-    if (children.length > 0) {
-        const youngestSon = children.reduce((youngest, child) => {
-            return child.born_year > youngest.born_year ? child : youngest;
-        });
-        const yearWhenYoungestReachesAge = youngestSon.born_year + config.age_holyday_alone;
-        youngestSonAge = yearWhenYoungestReachesAge - config.me.born_year;
-    } else {
-        // If no children, use 60 as fallback
-        youngestSonAge = 60;
-    }
+    // Calculate when the oldest son will reach age_holyday_alone (relative to me)
+    const oldestSonAge = getOldestReachesAgeRelativeToMe(
+        config.me.born_year,
+        config.family,
+        config.age_holyday_alone
+    );
     
-    const a2EndAge = Math.min(60, youngestSonAge); // Don't go beyond 60
+    const a2EndAge = Math.min(60, oldestSonAge); // Don't go beyond 60
     const a2Width = (a2EndAge / 100) * rectWidth - a1Width;
     
     if (a2Width > 0) {
@@ -296,7 +211,7 @@ function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, s
     const meRectHeight = rectHeight * printableHeightRatio;
     
     // Partner rectangle height is half of the me rectangle height
-    const partnerRectHeight = meRectHeight / 2;
+    const partnerRectHeight = meRectHeight / 5;
     const partnerRectY = centerY; // Center vertically on the wristband
     
     // Calculate when partner was met (my age when partner was met)

@@ -32,6 +32,13 @@ function createPattern(patternType, x, y, width, height, fillColor, scale) {
             return createDotsPattern(x, y, width, height, fillColor, scale);
         case 'diagonal_lines':
             return createDiagonalLinesPattern(x, y, width, height, fillColor, scale);
+        case 'line':
+            const halfHeight = height/2;
+            const line = new paper.Path.Rectangle(x, y+halfHeight/2, width, halfHeight);
+            line.fillColor = fillColor;
+            const lineGroup = new paper.Group();
+            lineGroup.addChild(line);
+            return lineGroup;
         default:
             // Fallback to solid color if pattern not recognized
             const rect = new paper.Path.Rectangle(x, y, width, height);

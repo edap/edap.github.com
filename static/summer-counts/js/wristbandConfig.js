@@ -10,6 +10,7 @@ export const defaultWristbandConfig = {
     fabric_padding_right: 70, // mm
     son_padding: 1, // mm - vertical padding between sons and me rectangle
     draw_counter: true,
+    font: "Arial, sans-serif",
     palette_id: "coral_sunset",    // Default palette
     me:{born_year: 1983, met_partner_year: 2010},
     partner:{born_year: 1983},

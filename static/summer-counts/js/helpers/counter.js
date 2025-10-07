@@ -5,7 +5,6 @@ import { OLDER_ME } from '../wristbandRenderer.js';
 
 // Constants
 export const COUNTER_TEXT_SIZE = 10;
-export const COUNTER_FONT = 'Arial, sans-serif';
 const COUNTER_LEFT_PADDING = 40; // mm - padding from the left edge of the printable area
 
 export function drawCounter(centerX, centerY, rectWidth, rectHeight, config, scale) {
@@ -49,6 +48,7 @@ export function drawCounter(centerX, centerY, rectWidth, rectHeight, config, sca
     ];
     
     // Draw each line
+    const font = config.font;
     lines.forEach((line, index) => {
         const lineY = textY + (index - 1) * lineSpacing; // Center the middle line at textY
         
@@ -56,7 +56,7 @@ export function drawCounter(centerX, centerY, rectWidth, rectHeight, config, sca
         text.content = line;
         text.fillColor = palette.text_color;
         text.fontSize = fontSize;
-        text.fontFamily = COUNTER_FONT;
+        text.fontFamily = font;
         text.justification = 'left';
     });
 }
