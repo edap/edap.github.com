@@ -44,6 +44,7 @@ function setupFormControls() {
     const addChildButton = document.getElementById('add-child-button');
     const childrenList = document.getElementById('children-list');
     const fontSelect = document.getElementById('font-select');
+    const showPartnerCheckbox = document.getElementById('show-partner-checkbox');
     
     // Populate year selectors
     populateYearSelectors();
@@ -232,6 +233,16 @@ function setupFormControls() {
         // Add event listener for checkbox changes
         showCounterCheckbox.addEventListener('change', function() {
             updateWristbandConfig({ draw_counter: this.checked });
+            drawWristband(DEFAULT_SCALE);
+        });
+    }
+
+    // Show Partner checkbox
+    if (showPartnerCheckbox) {
+        const config = getWristbandConfig();
+        showPartnerCheckbox.checked = config.draw_partner;
+        showPartnerCheckbox.addEventListener('change', function() {
+            updateWristbandConfig({ draw_partner: this.checked });
             drawWristband(DEFAULT_SCALE);
         });
     }

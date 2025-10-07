@@ -198,6 +198,10 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
 }
 
 function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, scale) {
+    // Respect visibility flag
+    if (!config.draw_partner) {
+        return;
+    }
     const palette = getPalette(config.palette_id);
     
     // Calculate the position and dimensions relative to the wristband
