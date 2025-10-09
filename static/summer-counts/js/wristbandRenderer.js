@@ -208,6 +208,8 @@ function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, s
     const wristbandStartX = centerX - rectWidth / 2;
     const wristbandStartY = centerY - rectHeight / 2;
     
+
+
     // Calculate the height of the "me" rectangles to cover the printable area
     const totalHeightMm = config.fabric_height;
     const printableHeightMm = config.fabric_printable_height;
@@ -216,7 +218,12 @@ function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, s
     
     // Partner rectangle height is half of the me rectangle height
     const partnerRectHeight = meRectHeight / 5;
-    const partnerRectY = centerY; // Center vertically on the wristband
+
+    // position to the top
+    const partnerRectY = centerY - rectHeight / 2 + partnerRectHeight;
+    //const partnerRectY = centerY; // Center vertically on the wristband
+
+
     
     // Calculate when partner was met (my age when partner was met)
     const meBornYear = config.me.born_year;
@@ -232,13 +239,23 @@ function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, s
     
     // Only draw if the partner rectangle has a valid width
     if (partnerWidth > 0) {
+
+        const h = 3;
         drawRect(
             partnerStartX,
-            partnerRectY - partnerRectHeight / 2,
+            partnerRectY - h / 2,
             partnerWidth,
-            partnerRectHeight,
-            palette.partner_color
+            h,
+            'black'
         );
+
+        // drawRect(
+        //     partnerStartX,
+        //     partnerRectY - partnerRectHeight / 2,
+        //     partnerWidth,
+        //     partnerRectHeight,
+        //     palette.partner_color
+        // );
     }
 }
 

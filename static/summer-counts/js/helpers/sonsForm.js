@@ -7,7 +7,7 @@ export const DEFAULT_SCALE = 1.1;
 
 // Constants for children management
 export const MAX_CHILDREN = 3;
-export const MIN_CHILDREN = 1;
+export const MIN_CHILDREN = 0;
 
 let childrenCount = 0;
 
@@ -121,7 +121,7 @@ export function addChild(bornYear = null, name = '', pattern = 'fill') {
  * Remove a specific child by index
  */
 export function removeSpecificChild(childIndex) {
-    if (childrenCount <= MIN_CHILDREN) {
+    if (childrenCount < MIN_CHILDREN) {
         alert(`Minimum ${MIN_CHILDREN} child required`);
         return;
     }
