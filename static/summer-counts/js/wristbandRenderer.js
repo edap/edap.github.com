@@ -80,6 +80,9 @@ export function drawWristband(scale = 1) {
     
     createRuler(centerX, centerY, rectWidth, rectHeight, finalScale, config);
     
+    // Draw cover borders
+    coverBorder(centerX, centerY, rectWidth, rectHeight, config, finalScale);
+    
 }
 
 export function onResize() {
@@ -106,6 +109,7 @@ function createWristbandRectangle(centerX, centerY, rectWidth, rectHeight, confi
     
     // Create the path and set its properties
     const wristband = new paper.Path.Rectangle(wristbandRect);
+    //wristband.fillColor = palette.me_color;
     wristband.fillColor = palette.bg_color;
     //wristband.strokeColor = '#333';
     wristband.strokeWidth = 1;
@@ -257,6 +261,38 @@ function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, s
         //     palette.partner_color
         // );
     }
+}
+
+function coverBorder(centerX, centerY, rectWidth, rectHeight, config, scale) {
+    const palette = getPalette(config.palette_id);
+    
+    // Calculate border height: (fabric_height - fabric_printable_height) / 2
+    const borderHeightMm = (config.fabric_height - config.fabric_printable_height) / 2;
+    const borderHeightPx = mmToPixels(borderHeightMm) * scale;
+    
+    // Calculate positions
+    const wristbandStartX = centerX - rectWidth / 2;
+    const wristbandStartY = centerY - rectHeight / 2;
+    
+    // Top border rectangle
+    const topBorderY = wristbandStartY;
+    drawRect(
+        wristbandStartX,
+        topBorderY,
+        rectWidth,
+        borderHeightPx,
+        palette.me_color
+    );
+    
+    // Bottom border rectangle
+    const bottomBorderY = wristbandStartY + rectHeight - borderHeightPx;
+    drawRect(
+        wristbandStartX,
+        bottomBorderY,
+        rectWidth,
+        borderHeightPx,
+        palette.me_color
+    );
 }
 
 
