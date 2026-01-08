@@ -15,9 +15,11 @@ export function createRuler(centerX, centerY, rectWidth, rectHeight, scale, conf
     const rulerLength = rulerEndX - rulerStartX;
 
     const font = config.font;
+    const expectedLife = config.expected_life || 100;
+    const step = Math.max(10, Math.floor(expectedLife / 10));
 
-    for (let i = 0; i < 100; i += 10) {
-        const tickX = rulerStartX + (i / 100) * rulerLength;
+    for (let i = 0; i <= expectedLife; i += step) {
+        const tickX = rulerStartX + (i / expectedLife) * rulerLength;
 
         const tickMark = new paper.Path.Line(
             new paper.Point(tickX, rulerY - 3),

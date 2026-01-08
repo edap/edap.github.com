@@ -39,6 +39,12 @@ function createPattern(patternType, x, y, width, height, fillColor, scale) {
             const lineGroup = new paper.Group();
             lineGroup.addChild(line);
             return lineGroup;
+        case 'solid':
+            const solidRect = new paper.Path.Rectangle(x, y, width, height);
+            solidRect.fillColor = fillColor;
+            const solidGroup = new paper.Group();
+            solidGroup.addChild(solidRect);
+            return solidGroup;
         default:
             // Fallback to solid color if pattern not recognized
             const rect = new paper.Path.Rectangle(x, y, width, height);

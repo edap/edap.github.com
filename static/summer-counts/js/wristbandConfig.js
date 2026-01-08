@@ -2,7 +2,7 @@
 
 // Default wristband configuration JSON object
 export const defaultWristbandConfig = {
-    fabric_width: 255,        // mm
+    fabric_width: 210,        // mm
     fabric_height: 15,        // mm
     fabric_printable_height: 12,  // mm
     fabric_padding_left: 20,  // mm
@@ -10,12 +10,13 @@ export const defaultWristbandConfig = {
     fabric_padding_right: 70, // mm
     son_padding: 1, // mm - vertical padding between sons and me rectangle
     draw_counter: true,
-    draw_partner: true,
+    draw_partner: false,
     font: "Arial, sans-serif",
     palette_id: "coral_sunset",    // Default palette
     me:{born_year: 1983, met_partner_year: 2010},
     partner:{born_year: 1983},
     age_holyday_alone: 16,
+    expected_life: 100,
     family: {
         son_1: {born_year: 2021, name:"Milo", pattern:"dots"},
         son_2: {born_year: 2024, name:"Nika", pattern:"circle"},

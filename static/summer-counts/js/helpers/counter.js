@@ -7,6 +7,10 @@ import { OLDER_ME } from '../wristbandRenderer.js';
 export const COUNTER_TEXT_SIZE = 10;
 const COUNTER_LEFT_PADDING = 40; // mm - padding from the left edge of the printable area
 
+function truncateToOneDecimal(value) {
+    return Math.floor(value * 10) / 10;
+}
+
 export function drawCounter(centerX, centerY, rectWidth, rectHeight, config, scale) {
     // Check if counter should be drawn
     if (!config.draw_counter) {
@@ -37,14 +41,14 @@ export function drawCounter(centerX, centerY, rectWidth, rectHeight, config, sca
     
     // Calculate the three lines of text
     const familyCount = calculateFamilyCount(config.family, config.age_holyday_alone);
-    const quality = calculateQuality(config.me);
-    const total = calculateTotal(config.me);
+    const quality = calculateQuality(config.me, config.expected_life);
+    const total = calculateTotal(config.me, config.expected_life);
     
-    // Create the three lines of text
+    // Create the three lines of text (truncate to one decimal place)
     const lines = [
-        `Family: ${familyCount}`,
-        `Quality: ${quality}`,
-        `Total: ${total}`
+        `Family: ${truncateToOneDecimal(familyCount)}`,
+        `Quality: ${truncateToOneDecimal(quality)}`,
+        `Total: ${truncateToOneDecimal(total)}`
     ];
     
     // Draw each line
@@ -81,17 +85,17 @@ function calculateFamilyCount(family, ageHolidayAlone) {
     return Math.max(0, yearWhenOldestReachesAge - currentYear);
 }
 
-function calculateQuality(me) {
+function calculateQuality(me, expectedLife) {
     const currentYear = new Date().getFullYear();
     const myAge = currentYear - me.born_year;
-    const targetAge = 100 * OLDER_ME; // 100 * OLDER_ME
+    const targetAge = expectedLife * OLDER_ME;
     
     return Math.max(0, targetAge - myAge);
 }
 
-function calculateTotal(me) {
+function calculateTotal(me, expectedLife) {
     const currentYear = new Date().getFullYear();
     const myAge = currentYear - me.born_year;
     
-    return Math.max(0, 100 - myAge);
+    return Math.max(0, expectedLife - myAge);
 }

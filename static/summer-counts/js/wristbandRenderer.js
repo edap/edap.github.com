@@ -136,7 +136,7 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     const myAge = currentYear - config.me.born_year;
     
     // A1: From 0 to current age
-    const a1Width = (myAge / 100) * rectWidth;
+    const a1Width = (myAge / config.expected_life) * rectWidth;
     drawRect(
         wristbandStartX,
         meRectY - meRectHeight / 2,
@@ -156,7 +156,7 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     );
     
     const a2EndAge = Math.min(60, oldestSonAge); // Don't go beyond 60
-    const a2Width = (a2EndAge / 100) * rectWidth - a1Width;
+    const a2Width = (a2EndAge / config.expected_life) * rectWidth - a1Width;
     
     if (a2Width > 0) {
         drawRect(
@@ -164,8 +164,8 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
             meRectY - meRectHeight / 2,
             a2Width,
             meRectHeight,
-            palette.me_color, // Black color
-            'diagonal_lines', // Diagonal lines pattern
+            palette.partner_color, // we sue the partner color for the focus area. This need to be renamed.
+            'solid',
             scale
         );
     }
@@ -173,8 +173,8 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     // B1: From youngest son reaches age_holyday_alone until 60 years old
     // Only draw B1 if the youngest son reaches age_holyday_alone before me turns 60
     if (a2EndAge < 60) {
-        const b1StartX = wristbandStartX + (a2EndAge / 100) * rectWidth;
-        const b1EndX = wristbandStartX + (60 / 100) * rectWidth;
+        const b1StartX = wristbandStartX + (a2EndAge / config.expected_life) * rectWidth;
+        const b1EndX = wristbandStartX + (60 / config.expected_life) * rectWidth;
         const b1Width = b1EndX - b1StartX;
         
         if (b1Width > 0) {
@@ -188,9 +188,9 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
         }
     }
     
-    // B2: From 60 to 100 years (unchanged)
-    const b2StartX = wristbandStartX + (60 / 100) * rectWidth;
-    const b2Width = rectWidth * 0.4; // 40% of wristband width
+    // B2: From 60 to expected_life years
+    const b2StartX = wristbandStartX + (60 / config.expected_life) * rectWidth;
+    const b2Width = ((config.expected_life - 60) / config.expected_life) * rectWidth;
     
     drawRect(
         b2StartX,
@@ -236,10 +236,10 @@ function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, s
     
     // Calculate partner rectangle position and width
     const partnerStartAge = Math.max(0, myAgeWhenMetPartner); // Don't start before 0
-    const partnerEndAge = 100; // Goes until the end
+    const partnerEndAge = config.expected_life; // Goes until the end
     
-    const partnerStartX = wristbandStartX + (partnerStartAge / 100) * rectWidth;
-    const partnerWidth = ((partnerEndAge - partnerStartAge) / 100) * rectWidth;
+    const partnerStartX = wristbandStartX + (partnerStartAge / config.expected_life) * rectWidth;
+    const partnerWidth = ((partnerEndAge - partnerStartAge) / config.expected_life) * rectWidth;
     
     // Only draw if the partner rectangle has a valid width
     if (partnerWidth > 0) {

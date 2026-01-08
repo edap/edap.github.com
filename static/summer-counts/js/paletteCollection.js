@@ -99,6 +99,162 @@ const basePalettes = {
         son_1_pattern: "circle",
         son_2_pattern: "dots",
         son_3_pattern: "fill"
+    },
+    
+    spring_bloom: {
+        name: "Spring Bloom",
+        bg_color: "#F0EFFE",        // Grayish white
+        me_color: "#98DBC6",        // Aquamarine
+        partner_color: "#5BC8AC",    // Turquoise (distinct from me)
+        son_1_color: "#E6D72A",     // Canary yellow
+        son_2_color: "#F18D9E",     // Pink tulip
+        son_3_color: "#FFE4B5",     // Light peach (complementary to aqua)
+        son_1_pattern: "circle",
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
+    },
+    
+    coastal_breeze: {
+        name: "Coastal Breeze",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#20948B",        // Sea teal
+        partner_color: "#DE7A22",   // Burnt orange (complementary to teal)
+        son_1_color: "#F4CC70",     // Sandstone yellow
+        son_2_color: "#6AB187",     // Lagoon green
+        son_3_color: "#FFB6C1",     // Light pink (complementary to teal)
+        son_1_pattern: "dots",
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
+    },
+    
+    alpine_lake: {
+        name: "Alpine Lake",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#4CB5F5",        // Blue sky
+        partner_color: "#34675C",   // Pine green (complementary to blue)
+        son_1_color: "#B3C100",     // Fields yellow-green
+        son_2_color: "#B7B8B6",    // Granite gray (lightened)
+        son_3_color: "#FFD700",     // Gold (complementary to blue)
+        son_1_pattern: "circle",
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
+    },
+    
+    autumn_forest: {
+        name: "Autumn Forest",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#8D230F",        // Crimson red
+        partner_color: "#1E434C",   // Forest teal (complementary to red)
+        son_1_color: "#C99E10",     // Gold yellow
+        son_2_color: "#9B4F0F",     // Rust orange (lightened)
+        son_3_color: "#E6B8FF",     // Light purple (complementary to red)
+        son_1_pattern: "dots",
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
+    },
+    
+    tropical_vibes: {
+        name: "Tropical Vibes",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#4897D8",        // Electric blue
+        partner_color: "#FA6E59",   // Watermelon red (complementary to blue)
+        son_1_color: "#FFDB5C",     // Banana yellow
+        son_2_color: "#F8A055",     // Canteloupe orange
+        son_3_color: "#98FB98",     // Light green (complementary to blue)
+        son_1_pattern: "circle",
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
+    },
+    
+    apple_orchard: {
+        name: "Apple Orchard",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#E73F0B",        // Ripe apple red
+        partner_color: "#BBCF4A",   // Granny smith green (complementary to red)
+        son_1_color: "#F4EC6A",     // Golden delicious yellow
+        son_2_color: "#A11F0C",     // Red delicious (lightened)
+        son_3_color: "#E6B8FF",     // Light purple (complementary to red)
+        son_1_pattern: "dots",
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
+    },
+    
+    mediterranean_sun: {
+        name: "Mediterranean Sun",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#D24136",        // Terracotta red
+        partner_color: "#785A46",   // Stone brown (complementary to terracotta)
+        son_1_color: "#EB8A3E",     // Honey orange
+        son_2_color: "#EBB582",     // Biscotti beige
+        son_3_color: "#B0E0E6",     // Light blue (complementary to orange)
+        son_1_pattern: "circle",
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
+    },
+    
+    urban_energy: {
+        name: "Urban Energy",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#008DCB",        // Blue raspberry
+        partner_color: "#E1315B",   // Fuschia (complementary to blue)
+        son_1_color: "#FFEC5C",     // Lemon drop yellow
+        son_2_color: "#F47D4A",     // Orange (lightened)
+        son_3_color: "#98FB98",     // Light green (complementary to blue)
+        son_1_pattern: "dots",
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
+    },
+    
+    golden_gate: {
+        name: "Golden Gate",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#16253D",        // Midnight blue
+        partner_color: "#EFB509",   // Golden (complementary to blue)
+        son_1_color: "#002C54",     // Dusk blue (lightened)
+        son_2_color: "#CD7213",     // Bronze (lightened)
+        son_3_color: "#FFB6C1",     // Light pink (complementary to blue)
+        son_1_pattern: "circle",
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
+    },
+    
+    street_lights: {
+        name: "Street Lights",
+        bg_color: "#F0EFFE",        // Light neutral
+        me_color: "#0205A9",        // Blue (very dark, will need light text)
+        partner_color: "#00CFFA",   // Cyan (bright, distinct from black)
+        son_1_color: "#FF0038",     // Magenta (lightened)
+        son_2_color: "#FFCE38",     // Yellow
+        son_3_color: "#E6B8FF",     // Light purple (complementary to yellow)
+        son_1_pattern: "dots",
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
+    },
+    
+    bicycle_wings: {
+        name: "Bicycle Wings",
+        bg_color: "#F0EFFE",        // Grayish white (from image)
+        me_color: "#31A2AC",        // Turquoise
+        partner_color: "#AF1C1C",   // Lipstick red (complementary to turquoise)
+        son_1_color: "#FFD700",     // Gold (complementary to turquoise)
+        son_2_color: "#98FB98",     // Light green (complementary to red)
+        son_3_color: "#FFB6C1",     // Light pink (complementary to turquoise)
+        son_1_pattern: "circle",
+        son_2_pattern: "dots",
+        son_3_pattern: "fill"
+    },
+    
+    basketball_court: {
+        name: "Basketball Court",
+        bg_color: "#D5C9B1",        // Oatmeal (from image)
+        me_color: "#5F968E",       // Blue green
+        partner_color: "#E05858",   // Faded red (complementary to blue-green)
+        son_1_color: "#BFDCCF",    // Minty (from image)
+        son_2_color: "#FFD700",     // Gold (complementary to blue-green)
+        son_3_color: "#FFB6C1",    // Light pink (complementary to blue-green)
+        son_1_pattern: "dots",
+        son_2_pattern: "circle",
+        son_3_pattern: "fill"
     }
 };
 

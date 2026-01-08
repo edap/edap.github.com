@@ -45,6 +45,8 @@ function setupFormControls() {
     const childrenList = document.getElementById('children-list');
     const fontSelect = document.getElementById('font-select');
     const showPartnerCheckbox = document.getElementById('show-partner-checkbox');
+    const expectedLifeSlider = document.getElementById('expected-life-slider');
+    const expectedLifeValue = document.getElementById('expected-life-value');
     
     // Populate year selectors
     populateYearSelectors();
@@ -245,6 +247,29 @@ function setupFormControls() {
             updateWristbandConfig({ draw_partner: this.checked });
             drawWristband(DEFAULT_SCALE);
         });
+    }
+    
+    // Expected Life slider
+    if (expectedLifeSlider) {
+        // Set initial value from config
+        const config = getWristbandConfig();
+        expectedLifeSlider.value = config.expected_life || 100;
+        if (expectedLifeValue) {
+            expectedLifeValue.textContent = expectedLifeSlider.value;
+        }
+        
+        // Add event listener for slider changes (input for real-time, change for final value)
+        const updateExpectedLifeValue = function() {
+            const newExpectedLife = parseInt(expectedLifeSlider.value);
+            if (expectedLifeValue) {
+                expectedLifeValue.textContent = newExpectedLife;
+            }
+            updateWristbandConfig({ expected_life: newExpectedLife });
+            drawWristband(DEFAULT_SCALE);
+        };
+        
+        expectedLifeSlider.addEventListener('input', updateExpectedLifeValue);
+        expectedLifeSlider.addEventListener('change', updateExpectedLifeValue);
     }
 }
 

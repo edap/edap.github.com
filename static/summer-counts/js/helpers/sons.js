@@ -33,14 +33,14 @@ export function getOldestReachesAgeRelativeToMe(meBornYear, family, ageHolydayAl
  * @param {number} scale - Scale factor for patterns
  * @param {string} name - Son's name
  */
-export function createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, palette, ageHolydayAlone, pattern=null, scale=1, name='', font='Arial, sans-serif') {
+export function createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, palette, ageHolydayAlone, pattern=null, scale=1, name='', font='Arial, sans-serif', expectedLife=100) {
     // First rectangle: from birth to age 16
     const startAge = Math.max(0, myAgeWhenSonBorn); // Don't start before 0
-    const endAge = Math.min(100, myAgeWhenSonBorn + ageHolydayAlone); // Don't go beyond 100
+    const endAge = Math.min(expectedLife, myAgeWhenSonBorn + ageHolydayAlone); // Don't go beyond expectedLife
     
     if (startAge < endAge) {
-        const rect1StartX = wristbandStartX + (startAge / 100) * rectWidth;
-        const rect1Width = ((endAge - startAge) / 100) * rectWidth;
+        const rect1StartX = wristbandStartX + (startAge / expectedLife) * rectWidth;
+        const rect1Width = ((endAge - startAge) / expectedLife) * rectWidth;
         
         // Use drawRect function for first son rectangle
         const colorKey = sonKey + '_color';
@@ -55,13 +55,13 @@ export function createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectW
         );
     }
     
-    // Second rectangle: from age 16 to end (100)
+    // Second rectangle: from age 16 to end (expectedLife)
     const startAge2 = Math.max(0, myAgeWhenSonBorn + ageHolydayAlone);
-    const endAge2 = 100;
+    const endAge2 = expectedLife;
     
     if (startAge2 < endAge2) {
-        const rect2StartX = wristbandStartX + (startAge2 / 100) * rectWidth;
-        const rect2Width = ((endAge2 - startAge2) / 100) * rectWidth;
+        const rect2StartX = wristbandStartX + (startAge2 / expectedLife) * rectWidth;
+        const rect2Width = ((endAge2 - startAge2) / expectedLife) * rectWidth;
         
         // Use drawRect function for second son rectangle
         const colorKey2 = sonKey + '_a16_color';
@@ -78,7 +78,7 @@ export function createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectW
     
     // Write son name on the left side of the stripe
     if (name) {
-        writeSonName(name, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, palette.text_color, scale, font);
+        writeSonName(name, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, palette.text_color, scale, font, expectedLife);
     }
 }
 
@@ -93,10 +93,10 @@ export function createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectW
  * @param {string} textColor - Text color
  * @param {number} scale - Scale factor
  */
-function writeSonName(name, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, textColor, scale, font) {
+function writeSonName(name, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, textColor, scale, font, expectedLife=100) {
     // Calculate where the son stripe actually starts
     const startAge = Math.max(0, myAgeWhenSonBorn);
-    const sonStripeStartX = wristbandStartX + (startAge / 100) * rectWidth;
+    const sonStripeStartX = wristbandStartX + (startAge / expectedLife) * rectWidth;
     
     // Calculate text position: CHILDREN_NAME_PADDING from the left side of the son stripe
     const textOffsetPx = mmToPixels(CHILDREN_NAME_PADDING) * scale;
@@ -173,6 +173,6 @@ export function createSonsRectangles(centerX, centerY, rectWidth, rectHeight, co
         const sonRectY = meRectTop + sonPaddingPx + index * (sonRectHeightPx + sonPaddingPx);
         const pattern = config.family[sonKey].pattern;
         // Create the son stripe (both rectangles)
-        createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, palette, ageHolydayAlone, pattern, scale, sonName, config.font);
+        createSonStripe(sonKey, myAgeWhenSonBorn, wristbandStartX, rectWidth, sonRectY, sonRectHeightPx, palette, ageHolydayAlone, pattern, scale, sonName, config.font, config.expected_life);
     });
 }
