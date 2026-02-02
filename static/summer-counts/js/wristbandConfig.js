@@ -11,13 +11,16 @@ export const defaultWristbandConfig = {
     son_padding: 1, // mm - vertical padding between sons and me rectangle
     draw_counter: true,
     draw_partner: false,
-    font: "Arial, sans-serif",
+    font: "Verdana, Geneva, sans-serif",
+    pattern: "line",
     palette_id: "coral_sunset",    // Default palette
     me:{born_year: 1983, met_partner_year: 2010},
     partner:{born_year: 1983},
     age_holyday_alone: 16,
     expected_life: 100,
+    end_quality_life: 60,
     family: {
+        partner:{born_year: 1983},
         son_1: {born_year: 2021, name:"Milo", pattern:"dots"},
         son_2: {born_year: 2024, name:"Nika", pattern:"circle"},
     }
@@ -40,6 +43,6 @@ export function getWristbandConfig() {
  */
 export function updateWristbandConfig(newConfig) {
     currentConfig = { ...currentConfig, ...newConfig };
-    console.log('Updated wristband configuration:', currentConfig);
+    //console.log('Updated wristband configuration:', currentConfig);
     return currentConfig;
 }

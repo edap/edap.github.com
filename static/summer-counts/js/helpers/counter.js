@@ -1,11 +1,11 @@
 // Counter display utilities for the wristband
 import { mmToPixels } from './measure.js';
 import { getPalette } from '../paletteCollection.js';
-import { OLDER_ME } from '../wristbandRenderer.js';
 
 // Constants
 export const COUNTER_TEXT_SIZE = 10;
-const COUNTER_LEFT_PADDING = 40; // mm - padding from the left edge of the printable area
+const COUNTER_LEFT_PADDING = 30; // mm - padding from the left edge of the printable area
+const COUNTER_LABEL_WIDTH = 50; // pixels - width offset for label before numbers align
 
 function truncateToOneDecimal(value) {
     return Math.floor(value * 10) / 10;
@@ -39,29 +39,62 @@ export function drawCounter(centerX, centerY, rectWidth, rectHeight, config, sca
     // Calculate line spacing
     const lineSpacing = fontSize * 1.2; // 20% spacing between lines
     
-    // Calculate the three lines of text
-    const familyCount = calculateFamilyCount(config.family, config.age_holyday_alone);
-    const quality = calculateQuality(config.me, config.expected_life);
+    // Check if there are any sons in the family object
+    const hasSons = Object.keys(config.family || {}).some(key => key.startsWith('son_'));
+    
+    // Calculate the values
+    const quality = calculateQuality(config.me, config.end_quality_life);
     const total = calculateTotal(config.me, config.expected_life);
     
-    // Create the three lines of text (truncate to one decimal place)
-    const lines = [
-        `Family: ${truncateToOneDecimal(familyCount)}`,
-        `Quality: ${truncateToOneDecimal(quality)}`,
-        `Total: ${truncateToOneDecimal(total)}`
-    ];
+    // Format values
+    const qualityValue = Math.ceil(quality);
+    const totalValue = truncateToOneDecimal(total);
     
-    // Draw each line
+    // Create labels and values (conditionally include Family)
+    const labels = [];
+    const values = [];
+    
+    if (hasSons) {
+        const familyCount = calculateFamilyCount(config.family, config.age_holyday_alone);
+        const familyValue = truncateToOneDecimal(familyCount);
+        labels.push('Family:');
+        values.push(familyValue);
+    }
+    
+    labels.push('Quality:', 'Total:');
+    values.push(qualityValue, totalValue);
+    
+    // Calculate reference position for numbers (using constant for manual adjustment)
+    const numberX = textX + (COUNTER_LABEL_WIDTH * scale); // X position where numbers should align
+    
+    // Draw each line with right-aligned numbers
     const font = config.font;
-    lines.forEach((line, index) => {
-        const lineY = textY + (index - 1) * lineSpacing; // Center the middle line at textY
+    labels.forEach((label, index) => {
+        // Adjust line positioning: if Family is shown, center Quality; otherwise center Total
+        let lineY;
+        if (hasSons) {
+            // Three lines: center the middle one (Quality)
+            lineY = textY + (index - 1) * lineSpacing;
+        } else {
+            // Two lines: center between them
+            lineY = textY + (index - 0.5) * lineSpacing;
+        }
         
-        const text = new paper.PointText(new paper.Point(textX, lineY));
-        text.content = line;
-        text.fillColor = palette.text_color;
-        text.fontSize = fontSize;
-        text.fontFamily = font;
-        text.justification = 'left';
+        // Draw label
+        const labelText = new paper.PointText(new paper.Point(textX, lineY));
+        labelText.content = label;
+        labelText.fillColor = palette.text_color;
+        labelText.fontSize = fontSize;
+        labelText.fontFamily = font;
+        labelText.justification = 'left';
+        
+        // Draw number (right-aligned to reference position)
+        const valueText = new paper.PointText(new paper.Point(numberX, lineY));
+        valueText.content = String(values[index]);
+        valueText.fillColor = palette.text_color;
+        valueText.fontSize = fontSize;
+        valueText.fontFamily = font;
+        valueText.justification = 'right';
     });
 }
 
@@ -85,10 +118,10 @@ function calculateFamilyCount(family, ageHolidayAlone) {
     return Math.max(0, yearWhenOldestReachesAge - currentYear);
 }
 
-function calculateQuality(me, expectedLife) {
+function calculateQuality(me, endQualityLife) {
     const currentYear = new Date().getFullYear();
     const myAge = currentYear - me.born_year;
-    const targetAge = expectedLife * OLDER_ME;
+    const targetAge = endQualityLife;
     
     return Math.max(0, targetAge - myAge);
 }

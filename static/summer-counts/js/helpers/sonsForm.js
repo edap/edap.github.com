@@ -6,10 +6,19 @@ import { drawWristband } from '../wristbandRenderer.js';
 export const DEFAULT_SCALE = 1.1;
 
 // Constants for children management
-export const MAX_CHILDREN = 3;
+export const MAX_CHILDREN = 4;
 export const MIN_CHILDREN = 0;
+const MAX_CHILDREN_WITH_PARTNER = 3; // Max children when partner is shown
 
 let childrenCount = 0;
+
+/**
+ * Get the effective maximum number of children based on partner visibility
+ */
+function getEffectiveMaxChildren() {
+    const config = getWristbandConfig();
+    return config.draw_partner ? MAX_CHILDREN_WITH_PARTNER : MAX_CHILDREN;
+}
 
 /**
  * Initialize children management system
@@ -27,22 +36,32 @@ export function initializeChildrenManagement() {
     }
     childrenCount = 0;
     
-    // Add existing children from config
-    Object.keys(family).forEach(childKey => {
-        const child = family[childKey];
-        addChild(child.born_year, child.name, child.pattern);
-    });
+    // Add existing children from config (only those with keys starting with "son_")
+    const defaultPattern = config.pattern || 'line';
+    Object.keys(family)
+        .filter(childKey => childKey.startsWith('son_'))
+        .forEach(childKey => {
+            const child = family[childKey];
+            addChild(child.born_year, child.name, child.pattern || defaultPattern);
+        });
     
     updateChildrenControls();
     updateRemoveButtonsVisibility();
+    updatePartnerCheckboxState();
 }
 
 /**
  * Add a new child form
  */
-export function addChild(bornYear = null, name = '', pattern = 'fill') {
-    if (childrenCount >= MAX_CHILDREN) {
-        alert(`Maximum ${MAX_CHILDREN} children allowed`);
+export function addChild(bornYear = null, name = '', pattern = null) {
+    // Get default pattern from config if not provided
+    if (pattern === null) {
+        const config = getWristbandConfig();
+        pattern = config.pattern || 'line';
+    }
+    const effectiveMax = getEffectiveMaxChildren();
+    if (childrenCount >= effectiveMax) {
+        alert(`Maximum ${effectiveMax} children allowed${getWristbandConfig().draw_partner ? ' when partner is shown' : ''}`);
         return;
     }
     
@@ -63,14 +82,6 @@ export function addChild(bornYear = null, name = '', pattern = 'fill') {
         <div class="form-group">
             <label for="child-${childIndex}-name">Name:</label>
             <input type="text" id="child-${childIndex}-name" name="child-${childIndex}-name" value="${name}" placeholder="Enter child's name">
-        </div>
-        <div class="form-group">
-            <label for="child-${childIndex}-pattern">Pattern:</label>
-            <select id="child-${childIndex}-pattern" name="child-${childIndex}-pattern">
-                <option value="fill">Fill</option>
-                <option value="dots">Dots</option>
-                <option value="circle">Circles</option>
-            </select>
         </div>
         <button type="button" class="child-remove-btn" data-child-index="${childIndex}">Remove Child</button>
     `;
@@ -103,17 +114,12 @@ export function addChild(bornYear = null, name = '', pattern = 'fill') {
         }
     }
     
-    // Set pattern
-    const patternSelect = document.getElementById(`child-${childIndex}-pattern`);
-    if (patternSelect) {
-        patternSelect.value = pattern;
-    }
-    
     // Add event listeners
     addChildEventListeners(childIndex);
     
     updateChildrenControls();
     updateRemoveButtonsVisibility();
+    updatePartnerCheckboxState();
     updateFamilyConfig();
 }
 
@@ -136,6 +142,7 @@ export function removeSpecificChild(childIndex) {
         renumberChildren();
         updateChildrenControls();
         updateRemoveButtonsVisibility();
+        updatePartnerCheckboxState();
         updateFamilyConfig();
     }
 }
@@ -146,7 +153,6 @@ export function removeSpecificChild(childIndex) {
 function addChildEventListeners(childIndex) {
     const bornYearSelect = document.getElementById(`child-${childIndex}-born-year`);
     const nameInput = document.getElementById(`child-${childIndex}-name`);
-    const patternSelect = document.getElementById(`child-${childIndex}-pattern`);
     const removeButton = document.querySelector(`[data-child-index="${childIndex}"]`);
     
     if (bornYearSelect) {
@@ -155,10 +161,6 @@ function addChildEventListeners(childIndex) {
     
     if (nameInput) {
         nameInput.addEventListener('input', updateFamilyConfig);
-    }
-    
-    if (patternSelect) {
-        patternSelect.addEventListener('change', updateFamilyConfig);
     }
     
     if (removeButton) {
@@ -190,7 +192,6 @@ function renumberChildren() {
         // Update form field IDs and names
         const bornYearSelect = form.querySelector('select[id*="born-year"]');
         const nameInput = form.querySelector('input[id*="name"]');
-        const patternSelect = form.querySelector('select[id*="pattern"]');
         
         if (bornYearSelect) {
             bornYearSelect.id = `child-${newIndex}-born-year`;
@@ -199,10 +200,6 @@ function renumberChildren() {
         if (nameInput) {
             nameInput.id = `child-${newIndex}-name`;
             nameInput.name = `child-${newIndex}-name`;
-        }
-        if (patternSelect) {
-            patternSelect.id = `child-${newIndex}-pattern`;
-            patternSelect.name = `child-${newIndex}-pattern`;
         }
         
         // Update labels
@@ -225,12 +222,28 @@ function renumberChildren() {
  */
 export function updateChildrenControls() {
     const addButton = document.getElementById('add-child-button');
+    const effectiveMax = getEffectiveMaxChildren();
     
     if (addButton) {
-        if (childrenCount >= MAX_CHILDREN) {
+        if (childrenCount >= effectiveMax) {
             addButton.style.display = 'none';
         } else {
             addButton.style.display = 'inline-block';
+        }
+    }
+    
+    // If partner is shown and there are 4 children, remove the 4th child
+    const config = getWristbandConfig();
+    if (config.draw_partner && childrenCount > MAX_CHILDREN_WITH_PARTNER) {
+        // Remove the 4th child
+        const childForms = document.querySelectorAll('.child-form');
+        if (childForms.length > 0) {
+            const lastChildForm = childForms[childForms.length - 1];
+            const removeButton = lastChildForm.querySelector('.child-remove-btn');
+            if (removeButton) {
+                const childIndex = parseInt(removeButton.getAttribute('data-child-index'));
+                removeSpecificChild(childIndex);
+            }
         }
     }
 }
@@ -251,21 +264,50 @@ export function updateRemoveButtonsVisibility() {
 }
 
 /**
+ * Update partner checkbox state based on children count
+ * Disable when there are 4 children, enable otherwise
+ */
+export function updatePartnerCheckboxState() {
+    const showPartnerCheckbox = document.getElementById('show-partner-checkbox');
+    if (showPartnerCheckbox) {
+        if (childrenCount >= MAX_CHILDREN) {
+            showPartnerCheckbox.disabled = true;
+            // Uncheck and update config when disabled
+            showPartnerCheckbox.checked = false;
+            updateWristbandConfig({ draw_partner: false });
+            drawWristband(DEFAULT_SCALE);
+        } else {
+            showPartnerCheckbox.disabled = false;
+        }
+    }
+    // Update children controls to reflect the new max children limit
+    updateChildrenControls();
+}
+
+/**
  * Update family configuration based on current children forms
  */
 export function updateFamilyConfig() {
     const family = {};
     
+    const config = getWristbandConfig();
+    const defaultPattern = config.pattern;
+    
+    // Preserve partner entry if it exists in the current config
+    if (config.family && config.family.partner) {
+        family.partner = config.family.partner;
+    }
+    
+    // Add/update sons from the forms
     for (let i = 1; i <= childrenCount; i++) {
         const bornYearSelect = document.getElementById(`child-${i}-born-year`);
         const nameInput = document.getElementById(`child-${i}-name`);
-        const patternSelect = document.getElementById(`child-${i}-pattern`);
         
-        if (bornYearSelect && nameInput && patternSelect) {
+        if (bornYearSelect && nameInput) {
             family[`son_${i}`] = {
                 born_year: parseInt(bornYearSelect.value),
                 name: nameInput.value || `Child ${i}`,
-                pattern: patternSelect.value
+                pattern: defaultPattern
             };
         }
     }

@@ -3,7 +3,8 @@ import { drawWristband, onResize, onFrame } from './wristbandRenderer.js';
 import { getWristbandConfig, updateWristbandConfig } from './wristbandConfig.js';
 import { getAllPalettes } from './paletteCollection.js';
 import { exportAsSVG } from './helpers/export.js';
-import { initializeChildrenManagement, addChild, removeSpecificChild, updateChildrenControls, updateFamilyConfig } from './helpers/sonsForm.js';
+import { initializeChildrenManagement, addChild, removeSpecificChild, updateChildrenControls, updateFamilyConfig, updatePartnerCheckboxState } from './helpers/sonsForm.js';
+import { updateExpectedLifeValue, updateEndQualityLifeValue, updateEndQualityLifeIfNeeded, updateExpectedLifeIfNeeded } from './helpers/life_expectations.js';
 export const DEFAULT_SCALE = 1.1;
 
 // Wait for Paper.js to be available
@@ -34,19 +35,19 @@ document.addEventListener('DOMContentLoaded', function() {
 // Set up form controls and event listeners
 function setupFormControls() {
     const paletteSelect = document.getElementById('palette-select');
-    const childrenPatternsSelect = document.getElementById('children-patterns-select');
     const randomButton = document.getElementById('random-button');
     const meBornYearSelect = document.getElementById('me-born-year');
     const meMetPartnerYearSelect = document.getElementById('me-met-partner-year');
     const ageHolidayAloneSelect = document.getElementById('age-holiday-alone');
-    const partnerBornYearSelect = document.getElementById('partner-born-year');
+    const partnerMeetYearSelect = document.getElementById('partner-meet-year');
     const exportButton = document.getElementById('export-button');
     const addChildButton = document.getElementById('add-child-button');
     const childrenList = document.getElementById('children-list');
-    const fontSelect = document.getElementById('font-select');
     const showPartnerCheckbox = document.getElementById('show-partner-checkbox');
     const expectedLifeSlider = document.getElementById('expected-life-slider');
     const expectedLifeValue = document.getElementById('expected-life-value');
+    const endQualityLifeSlider = document.getElementById('end-quality-life-slider');
+    const endQualityLifeValue = document.getElementById('end-quality-life-value');
     
     // Populate year selectors
     populateYearSelectors();
@@ -69,27 +70,6 @@ function setupFormControls() {
         paletteSelect.addEventListener('change', function() {
             const newPaletteId = this.value;
             updateWristbandConfig({ palette_id: newPaletteId });
-            drawWristband(DEFAULT_SCALE);
-        });
-    }
-    
-    if (childrenPatternsSelect) {
-        // Set initial value from config (use son_1 pattern as default)
-        const config = getWristbandConfig();
-        childrenPatternsSelect.value = config.family.son_1.pattern;
-        
-        // Add event listener for children patterns changes
-        childrenPatternsSelect.addEventListener('change', function() {
-            const newPattern = this.value;
-            const config = getWristbandConfig();
-            
-            // Update both sons with the same pattern
-            const updatedFamily = {
-                son_1: { ...config.family.son_1, pattern: newPattern },
-                son_2: { ...config.family.son_2, pattern: newPattern }
-            };
-            
-            updateWristbandConfig({ family: updatedFamily });
             drawWristband(DEFAULT_SCALE);
         });
     }
@@ -127,9 +107,6 @@ function setupFormControls() {
             // Update form controls to reflect new values
             if (paletteSelect) {
                 paletteSelect.value = randomPaletteId;
-            }
-            if (childrenPatternsSelect) {
-                childrenPatternsSelect.value = randomPattern;
             }
             
             drawWristband(DEFAULT_SCALE);
@@ -181,16 +158,16 @@ function setupFormControls() {
         });
     }
     
-    if (partnerBornYearSelect) {
+    if (partnerMeetYearSelect) {
         // Set initial value from config
         const config = getWristbandConfig();
-        partnerBornYearSelect.value = config.partner.born_year;
+        partnerMeetYearSelect.value = config.me.met_partner_year;
         
-        // Add event listener for partner born year changes
-        partnerBornYearSelect.addEventListener('change', function() {
-            const newBornYear = parseInt(this.value);
+        // Add event listener for partner meet year changes
+        partnerMeetYearSelect.addEventListener('change', function() {
+            const newMeetYear = parseInt(this.value);
             updateWristbandConfig({ 
-                partner: { ...getWristbandConfig().partner, born_year: newBornYear }
+                me: { ...getWristbandConfig().me, met_partner_year: newMeetYear }
             });
             drawWristband(DEFAULT_SCALE);
         });
@@ -209,22 +186,6 @@ function setupFormControls() {
         });
     }
 
-    if (fontSelect) {
-        const config = getWristbandConfig();
-        // If current config font isn't in options, fall back to Arial
-        const options = Array.from(fontSelect.options).map(o => o.value);
-        const initialFont = options.includes(config.font) ? config.font : 'Arial, sans-serif';
-        fontSelect.value = initialFont;
-        if (initialFont !== config.font) {
-            updateWristbandConfig({ font: initialFont });
-        }
-        fontSelect.addEventListener('change', function() {
-            const newFont = this.value;
-            updateWristbandConfig({ font: newFont });
-            drawWristband(DEFAULT_SCALE);
-        });
-    }
-    
     // Show Counter checkbox
     const showCounterCheckbox = document.getElementById('show-counter-checkbox');
     if (showCounterCheckbox) {
@@ -245,6 +206,10 @@ function setupFormControls() {
         showPartnerCheckbox.checked = config.draw_partner;
         showPartnerCheckbox.addEventListener('change', function() {
             updateWristbandConfig({ draw_partner: this.checked });
+            // Update children controls to enforce max children limit
+            updateChildrenControls();
+            // Update family config to include/exclude partner
+            updateFamilyConfig();
             drawWristband(DEFAULT_SCALE);
         });
     }
@@ -258,18 +223,29 @@ function setupFormControls() {
             expectedLifeValue.textContent = expectedLifeSlider.value;
         }
         
-        // Add event listener for slider changes (input for real-time, change for final value)
-        const updateExpectedLifeValue = function() {
-            const newExpectedLife = parseInt(expectedLifeSlider.value);
-            if (expectedLifeValue) {
-                expectedLifeValue.textContent = newExpectedLife;
-            }
-            updateWristbandConfig({ expected_life: newExpectedLife });
-            drawWristband(DEFAULT_SCALE);
-        };
+        expectedLifeSlider.addEventListener('input', () => updateExpectedLifeValue(expectedLifeSlider, expectedLifeValue, endQualityLifeSlider, endQualityLifeValue));
+        expectedLifeSlider.addEventListener('change', () => updateExpectedLifeValue(expectedLifeSlider, expectedLifeValue, endQualityLifeSlider, endQualityLifeValue));
+    }
+    
+    // End Quality Life slider
+    if (endQualityLifeSlider) {
+        // Set initial value from config
+        const config = getWristbandConfig();
+        const initialExpectedLife = config.expected_life;
+        endQualityLifeSlider.max = initialExpectedLife - 1;
+        endQualityLifeSlider.value = config.end_quality_life;
         
-        expectedLifeSlider.addEventListener('input', updateExpectedLifeValue);
-        expectedLifeSlider.addEventListener('change', updateExpectedLifeValue);
+        // Ensure initial value doesn't exceed max
+        if (parseInt(endQualityLifeSlider.value) > parseInt(endQualityLifeSlider.max)) {
+            endQualityLifeSlider.value = endQualityLifeSlider.max;
+        }
+        
+        if (endQualityLifeValue) {
+            endQualityLifeValue.textContent = endQualityLifeSlider.value;
+        }
+        
+        endQualityLifeSlider.addEventListener('input', () => updateEndQualityLifeValue(endQualityLifeSlider, endQualityLifeValue, expectedLifeSlider, expectedLifeValue));
+        endQualityLifeSlider.addEventListener('change', () => updateEndQualityLifeValue(endQualityLifeSlider, endQualityLifeValue, expectedLifeSlider, expectedLifeValue));
     }
 }
 
@@ -280,7 +256,7 @@ function populateYearSelectors() {
     
     const meBornYearSelect = document.getElementById('me-born-year');
     const meMetPartnerYearSelect = document.getElementById('me-met-partner-year');
-    const partnerBornYearSelect = document.getElementById('partner-born-year');
+    const partnerMeetYearSelect = document.getElementById('partner-meet-year');
     
     // Populate me born year selector
     if (meBornYearSelect) {
@@ -304,14 +280,14 @@ function populateYearSelectors() {
         }
     }
     
-    // Populate partner born year selector
-    if (partnerBornYearSelect) {
-        partnerBornYearSelect.innerHTML = '';
+    // Populate partner meet year selector
+    if (partnerMeetYearSelect) {
+        partnerMeetYearSelect.innerHTML = '';
         for (let year = currentYear; year >= startYear; year--) {
             const option = document.createElement('option');
             option.value = year;
             option.textContent = year;
-            partnerBornYearSelect.appendChild(option);
+            partnerMeetYearSelect.appendChild(option);
         }
     }
 }

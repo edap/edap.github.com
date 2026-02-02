@@ -1,31 +1,23 @@
-// Wristband renderer module using Paper.js
+
 import { mmToPixels } from './helpers/measure.js';
 import { drawRect } from './helpers/drawing.js';
 import { getWristbandConfig } from './wristbandConfig.js';
 import { getPalette } from './paletteCollection.js';
-import { createSonsRectangles, getOldestReachesAgeRelativeToMe} from './helpers/sons.js';
+import { createFamilyMemberRectangles, getOldestReachesAgeRelativeToMe} from './helpers/family.js';
 import { drawCounter } from './helpers/counter.js';
 import { createRuler } from './helpers/ruler.js';
-import { DEFAULT_SCALE } from './index.js';
 
-// Constants
-const ME_RECT_HEIGHT_RATIO = 0.6; // Height of "me" rectangles as ratio of wristband height
-export const OLDER_ME = 0.6;
 
 function calculateWristBandDimension(scale = 1) {
-    // Get current configuration
     const config = getWristbandConfig();
     
-    // Get canvas dimensions
     const canvasWidth = paper.view.size.width;
     const canvasHeight = paper.view.size.height;
     
-    // Convert fabric dimensions to pixels
     const fabricWidthPx = mmToPixels(config.fabric_width);
     const fabricHeightPx = mmToPixels(config.fabric_height);
     
-    // Calculate base scale to fit the canvas properly
-    // We want the wristband to take up most of the canvas width
+
     const targetWidth = canvasWidth * 0.9; // Use 90% of canvas width
     const baseScale = targetWidth / fabricWidthPx;
     
@@ -67,13 +59,11 @@ export function drawWristband(scale = 1) {
     // Create the wristband rectangle
     createWristbandRectangle(centerX, centerY, rectWidth, rectHeight, config);
     
-    // Create the "me" rectangles (life from 0-60 and 60-100)
+    // Create the "me" rectangles (life from 0 to end_quality_life and end_quality_life to expected_life)
     createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, finalScale);
     
-    drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, finalScale);
-    
     // Create the sons' rectangles
-    createSonsRectangles(centerX, centerY, rectWidth, rectHeight, config, finalScale);
+    createFamilyMemberRectangles(centerX, centerY, rectWidth, rectHeight, config, finalScale);
     
     // Draw counter text
     drawCounter(centerX, centerY, rectWidth, rectHeight, config, finalScale);
@@ -82,6 +72,9 @@ export function drawWristband(scale = 1) {
     
     // Draw cover borders
     coverBorder(centerX, centerY, rectWidth, rectHeight, config, finalScale);
+    
+    // Draw focus rectangle on top of everything
+    drawFocusRectangle(centerX, centerY, rectWidth, rectHeight, config, finalScale);
     
 }
 
@@ -152,10 +145,11 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     const oldestSonAge = getOldestReachesAgeRelativeToMe(
         config.me.born_year,
         config.family,
-        config.age_holyday_alone
+        config.age_holyday_alone,
+        config.end_quality_life
     );
     
-    const a2EndAge = Math.min(60, oldestSonAge); // Don't go beyond 60
+    const a2EndAge = Math.min(config.end_quality_life, oldestSonAge);
     const a2Width = (a2EndAge / config.expected_life) * rectWidth - a1Width;
     
     if (a2Width > 0) {
@@ -170,11 +164,11 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
         );
     }
     
-    // B1: From youngest son reaches age_holyday_alone until 60 years old
-    // Only draw B1 if the youngest son reaches age_holyday_alone before me turns 60
-    if (a2EndAge < 60) {
+    // B1: From youngest son reaches age_holyday_alone until end_quality_life years old
+    // Only draw B1 if the youngest son reaches age_holyday_alone before me turns end_quality_life
+    if (a2EndAge < config.end_quality_life) {
         const b1StartX = wristbandStartX + (a2EndAge / config.expected_life) * rectWidth;
-        const b1EndX = wristbandStartX + (60 / config.expected_life) * rectWidth;
+        const b1EndX = wristbandStartX + (config.end_quality_life / config.expected_life) * rectWidth;
         const b1Width = b1EndX - b1StartX;
         
         if (b1Width > 0) {
@@ -188,9 +182,9 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
         }
     }
     
-    // B2: From 60 to expected_life years
-    const b2StartX = wristbandStartX + (60 / config.expected_life) * rectWidth;
-    const b2Width = ((config.expected_life - 60) / config.expected_life) * rectWidth;
+    // B2: From end_quality_life to expected_life years
+    const b2StartX = wristbandStartX + (config.end_quality_life / config.expected_life) * rectWidth;
+    const b2Width = ((config.expected_life - config.end_quality_life) / config.expected_life) * rectWidth;
     
     drawRect(
         b2StartX,
@@ -201,67 +195,6 @@ function createMeRectangle(centerX, centerY, rectWidth, rectHeight, config, scal
     );
 }
 
-function drawPartnerRectangle(centerX, centerY, rectWidth, rectHeight, config, scale) {
-    // Respect visibility flag
-    if (!config.draw_partner) {
-        return;
-    }
-    const palette = getPalette(config.palette_id);
-    
-    // Calculate the position and dimensions relative to the wristband
-    const wristbandStartX = centerX - rectWidth / 2;
-    const wristbandStartY = centerY - rectHeight / 2;
-    
-
-
-    // Calculate the height of the "me" rectangles to cover the printable area
-    const totalHeightMm = config.fabric_height;
-    const printableHeightMm = config.fabric_printable_height;
-    const printableHeightRatio = printableHeightMm / totalHeightMm; // 12/15 = 0.8
-    const meRectHeight = rectHeight * printableHeightRatio;
-    
-    // Partner rectangle height is half of the me rectangle height
-    const partnerRectHeight = meRectHeight / 5;
-
-    // position to the top
-    const partnerRectY = centerY - rectHeight / 2 + partnerRectHeight;
-    //const partnerRectY = centerY; // Center vertically on the wristband
-
-
-    
-    // Calculate when partner was met (my age when partner was met)
-    const meBornYear = config.me.born_year;
-    const metPartnerYear = config.me.met_partner_year;
-    const myAgeWhenMetPartner = metPartnerYear - meBornYear;
-    
-    // Calculate partner rectangle position and width
-    const partnerStartAge = Math.max(0, myAgeWhenMetPartner); // Don't start before 0
-    const partnerEndAge = config.expected_life; // Goes until the end
-    
-    const partnerStartX = wristbandStartX + (partnerStartAge / config.expected_life) * rectWidth;
-    const partnerWidth = ((partnerEndAge - partnerStartAge) / config.expected_life) * rectWidth;
-    
-    // Only draw if the partner rectangle has a valid width
-    if (partnerWidth > 0) {
-
-        const h = 3;
-        drawRect(
-            partnerStartX,
-            partnerRectY - h / 2,
-            partnerWidth,
-            h,
-            'black'
-        );
-
-        // drawRect(
-        //     partnerStartX,
-        //     partnerRectY - partnerRectHeight / 2,
-        //     partnerWidth,
-        //     partnerRectHeight,
-        //     palette.partner_color
-        // );
-    }
-}
 
 function coverBorder(centerX, centerY, rectWidth, rectHeight, config, scale) {
     const palette = getPalette(config.palette_id);
@@ -293,6 +226,73 @@ function coverBorder(centerX, centerY, rectWidth, rectHeight, config, scale) {
         borderHeightPx,
         palette.me_color
     );
+}
+
+function drawFocusRectangle(centerX, centerY, rectWidth, rectHeight, config, scale) {
+    const palette = getPalette(config.palette_id);
+    
+    // Calculate positions
+    const wristbandStartX = centerX - rectWidth / 2;
+    
+    // Calculate printable area height
+    const totalHeightMm = config.fabric_height;
+    const printableHeightMm = config.fabric_printable_height;
+    const printableHeightRatio = printableHeightMm / totalHeightMm;
+    const meRectHeight = rectHeight * printableHeightRatio;
+    const meRectY = centerY;
+    
+    // Calculate current age
+    const currentYear = new Date().getFullYear();
+    const myAge = currentYear - config.me.born_year;
+    
+    // Calculate the first vertical line starting from the left
+    const a1Width = (myAge / config.expected_life) * rectWidth;
+    const a2StartX = wristbandStartX + a1Width;
+    const leftX = a2StartX ;
+
+    
+    
+    // Calculate rectangle boundaries
+    const rectTop = meRectY - meRectHeight / 2;
+    const rectBottom = meRectY + meRectHeight / 2;
+    
+    // Draw four lines to form a rectangle border using focus_color from palette
+    const lineColor = palette.focus_color;
+    const lineWidth = 1 * scale;
+    
+
+    const leftLine = new paper.Path.Line(
+        new paper.Point(leftX, rectTop),
+        new paper.Point(leftX, rectBottom)
+    );
+    leftLine.strokeColor = lineColor;
+    leftLine.strokeWidth = lineWidth * 3;
+
+    // second vertical line
+    const b1EndX = wristbandStartX + (config.end_quality_life / config.expected_life) * rectWidth;
+    const rightLine = new paper.Path.Line(
+        new paper.Point(b1EndX, rectTop),
+        new paper.Point(b1EndX, rectBottom)
+    );
+    rightLine.strokeColor = lineColor;
+    rightLine.strokeWidth = lineWidth;
+
+    // first horizontal line
+    const topLine = new paper.Path.Line(
+        new paper.Point(leftX, rectTop),
+        new paper.Point(b1EndX, rectTop)
+    );
+    topLine.strokeColor = lineColor;
+    topLine.strokeWidth = lineWidth;
+
+    // second horizontal line
+    const bottomLine = new paper.Path.Line(
+        new paper.Point(leftX, rectBottom),
+        new paper.Point(b1EndX, rectBottom)
+    );
+    bottomLine.strokeColor = lineColor;
+    bottomLine.strokeWidth = lineWidth;
+    
 }
 
 

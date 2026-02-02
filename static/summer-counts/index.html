@@ -46,24 +46,6 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="children-patterns-select">Patterns:</label>
-                            <select id="children-patterns-select" name="children-patterns">
-                                <option value="fill">Fill</option>
-                                <option value="line">Line</option>
-                                <option value="dots">Dots</option>
-                                <option value="circle">Circles</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="font-select">Font:</label>
-                            <select id="font-select" name="font-select">
-                                <option value="Arial, sans-serif">Arial, sans-serif</option>
-                                <option value="Helvetica, Arial, sans-serif">Helvetica, Arial, sans-serif</option>
-                                <option value="Verdana, Geneva, sans-serif">Verdana, Geneva, sans-serif</option>
-                                <option value="Tahoma, Geneva, sans-serif">Tahoma, Geneva, sans-serif</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <button type="button" id="random-button">Random</button>
                         </div>
                         <div class="form-group">
@@ -99,6 +81,10 @@
                             <label for="expected-life-slider">Expected Life: <span id="expected-life-value">100</span></label>
                             <input type="range" id="expected-life-slider" name="expected-life" min="50" max="100" value="100">
                         </div>
+                        <div class="form-group">
+                            <label for="end-quality-life-slider">End quality life: <span id="end-quality-life-value">60</span></label>
+                            <input type="range" id="end-quality-life-slider" name="end-quality-life" min="49" max="99" value="60">
+                        </div>
                     </div>
 
                     <!-- Children Section -->
@@ -130,8 +116,8 @@
                     <div class="form-section">
                         <h3 class="section-title">Partner</h3>
                         <div class="form-group">
-                            <label for="partner-born-year">Born Year:</label>
-                            <select id="partner-born-year" name="partner-born-year">
+                            <label for="partner-meet-year">Partner met in:</label>
+                            <select id="partner-meet-year" name="partner-meet-year">
                                 <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
