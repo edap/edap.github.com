@@ -1,28 +1,20 @@
-// Drawing utilities for creating shapes and patterns
 import { createCirclePattern, createDotsPattern, createDiagonalLinesPattern } from './patterns.js';
 
-/**
- * Draw a rectangle with optional pattern support
- */
 export function drawRect(x, y, width, height, fillColor, pattern = null, scale = 1) {
-    // Create the rectangle
     const rect = new paper.Rectangle(x, y, width, height);
     const rectPath = new paper.Path.Rectangle(rect);
-    
-    // Set fill color or pattern
+
     if (pattern) {
-        // Create pattern - all patterns overlay on the underlying layer
         const patternGroup = createPattern(pattern, x, y, width, height, fillColor, scale);
         return patternGroup;
     } else {
-        // Set solid fill color
         rectPath.fillColor = fillColor;
         return rectPath;
     }
 }
 
 /**
- * Create a pattern based on the pattern type
+ * This is not used at the moment.I left it here for future reference, in case patterns are needed in the future.
  */
 function createPattern(patternType, x, y, width, height, fillColor, scale) {
     switch (patternType) {
@@ -46,7 +38,6 @@ function createPattern(patternType, x, y, width, height, fillColor, scale) {
             solidGroup.addChild(solidRect);
             return solidGroup;
         default:
-            // Fallback to solid color if pattern not recognized
             const rect = new paper.Path.Rectangle(x, y, width, height);
             rect.fillColor = fillColor;
             const group = new paper.Group();

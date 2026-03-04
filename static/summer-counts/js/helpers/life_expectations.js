@@ -30,8 +30,7 @@ export const updateExpectedLifeValue = (expectedLifeSlider, expectedLifeValue, e
     if (expectedLifeValue) {
         expectedLifeValue.textContent = newExpectedLife;
     }
-    
-    // Update end-quality-life only if Expected Life is dragged below (end-quality-life + 1)
+
     updateEndQualityLifeIfNeeded(newExpectedLife, endQualityLifeSlider, endQualityLifeValue);
     
     updateWristbandConfig({ expected_life: newExpectedLife });

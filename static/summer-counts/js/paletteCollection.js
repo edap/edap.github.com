@@ -1,6 +1,3 @@
-// Palette collection for wristband design tool
-
-// Helper function to darken a hex color by a percentage
 function darkenColor(hex, percent) {
     const num = parseInt(hex.replace("#", ""), 16);
     const amt = Math.round(2.55 * percent);
@@ -12,7 +9,6 @@ function darkenColor(hex, percent) {
         (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
 }
 
-// Helper function to get contrasting text color (white or black)
 function getContrastTextColor(hexColor) {
     const r = parseInt(hexColor.slice(1, 3), 16);
     const g = parseInt(hexColor.slice(3, 5), 16);
@@ -21,7 +17,6 @@ function getContrastTextColor(hexColor) {
     return luminance > 0.5 ? "#000000" : "#FFFFFF";
 }
 
-// Base palettes with only 4 colors each
 const basePalettes = {
     coral_sunset: {
         name: "Coral Sunset",
@@ -294,7 +289,6 @@ const basePalettes = {
     }
 };
 
-// Generate full palettes with derived colors
 export const paletteCollection = {};
 
 for (const [id, basePalette] of Object.entries(basePalettes)) {
@@ -309,27 +303,14 @@ for (const [id, basePalette] of Object.entries(basePalettes)) {
     };
 }
 
-/**
- * Get a specific palette by ID
- * @param {string} paletteId - The palette identifier
- * @returns {Object|null} The palette object or null if not found
- */
 export function getPalette(paletteId) {
     return paletteCollection[paletteId] || null;
 }
 
-/**
- * Get all available palettes
- * @returns {Object} All palettes
- */
 export function getAllPalettes() {
     return paletteCollection;
 }
 
-/**
- * Get palette names for dropdown options
- * @returns {Array} Array of {value, text} objects
- */
 export function getPaletteOptions() {
     return Object.entries(paletteCollection).map(([id, palette]) => ({
         value: id,
