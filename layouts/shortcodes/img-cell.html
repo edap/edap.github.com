@@ -1,2 +1,8 @@
-
-<img src = "{{ .Get "src" }}" class = "grid {{ .Get "width" }}">
+{{ $src := .Get "src" }}
+{{ if or (strings.HasSuffix $src ".mp4") (strings.HasSuffix $src ".webm") }}
+  <video class="grid {{ .Get "width" }}" autoplay muted loop playsinline>
+    <source src="{{ $src }}">
+  </video>
+{{ else }}
+  <img src="{{ $src }}" class="grid {{ .Get "width" }}">
+{{ end }}

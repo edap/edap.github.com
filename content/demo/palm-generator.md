@@ -5,7 +5,6 @@ tags:
 - WebGL
 - Three.js
 - React
-- Procedural Content Creation
 - Javascript
 
 title: "The Palm Generator"

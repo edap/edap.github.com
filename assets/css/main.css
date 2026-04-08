@@ -113,6 +113,13 @@ figure {
     width: 99.222%;
 }
 
+/*.grid video,
+video.grid {
+    width: 100%;
+    height: auto;
+    display: block;
+}*/
+
 /* Navigation */
 
 nav {
