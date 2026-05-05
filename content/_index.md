@@ -5,9 +5,9 @@ layout: single-medium-column
 ---
 
 
-<!--{{< video-4-3 url="https://player.vimeo.com/video/128782688">}}-->
+{{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
-I am a software developer based in Berlin.
+I am an artist and software developer based in Berlin.
 I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
 
 <!-- I design and build immersive 3D web experiences, focusing on clarity, performance, and long-term maintainability for both the visual layers and the underlying infrastructure.
