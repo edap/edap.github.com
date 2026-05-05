@@ -1,0 +1,992 @@
+{
+  "Fabric_Playing6": {
+    "folders": {
+      "Animation": {
+        "controllers": {
+          "end frame": 225,
+          "start frame": 161
+        }
+      },
+      "Background": {
+        "controllers": {
+          "blur": 0.5,
+          "hue": 0,
+          "image": "Paper",
+          "intensity": 0.73,
+          "offset X": 0,
+          "offset Y": 0,
+          "saturation": 0.82,
+          "visible": true,
+          "zoom": 1
+        }
+      },
+      "Bloom": {
+        "controllers": {
+          "radius": 0.4,
+          "skip bloom": true,
+          "strength": 0.2,
+          "threshold": 0.6
+        }
+      },
+      "Directional Light": {
+        "controllers": {
+          "color": "#ffffff",
+          "distance": 0,
+          "intensity": 0,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "show helper": false
+        }
+      },
+      "HDR": {
+        "controllers": {
+          "blurriness": 0,
+          "hue": 0,
+          "intensity": 1.23,
+          "mix": 2,
+          "rotation (X)": 5.38,
+          "rotation (Y)": 4.82,
+          "rotation (Z)": 0,
+          "saturation": 0
+        }
+      },
+      "Model": {
+        "controllers": {
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0,
+          "show dots": false
+        }
+      },
+      "Tone Mapping": {
+        "controllers": {
+          "exposure": 1,
+          "tone mapping": "ACESFilmic"
+        }
+      },
+      "Utilities": {
+        "controllers": {
+          "Camera HUD": false,
+          "Presets": "— none —"
+        },
+        "folders": {
+          "Camera Start": {
+            "controllers": {
+              "X": 0.0044495345207118875,
+              "Y": 0.4576949485942977,
+              "Z": -0.22440584826883805,
+              "Zoom": 0.509767053724978
+            }
+          }
+        }
+      },
+      "Voronoi": {
+        "controllers": {
+          "border": 0,
+          "brightness": 1,
+          "cell radius": 0.9,
+          "cell size": 256,
+          "contrast": 0.1,
+          "feather": 0.9,
+          "flash speed": 1,
+          "radial fade": 0.9,
+          "speed": 0.1
+        }
+      },
+      "Wave": {
+        "controllers": {
+          "base radius": 0.35,
+          "center X": 0.5,
+          "center Y": 0.5,
+          "falloff": 0.4,
+          "preview X": 0,
+          "preview Y": 0,
+          "preview Z": 0,
+          "preview texture": false,
+          "pulse amount": 0.1,
+          "speed": 1
+        },
+        "folders": {
+          "Color 1": {
+            "controllers": {
+              "H": 281,
+              "HEX": "#834c94",
+              "L": 0.18,
+              "S": 0.61,
+              "preset": ""
+            }
+          },
+          "Color 2": {
+            "controllers": {
+              "H": 281,
+              "HEX": "#834c94",
+              "L": 0.18,
+              "S": 0.61,
+              "preset": ""
+            }
+          },
+          "Wave Pulse": {
+            "controllers": {
+              "amplitude": 0.15,
+              "color — H": 330,
+              "color — L": 0.71,
+              "color — S": 1,
+              "frequency": 10,
+              "speed": 2
+            }
+          }
+        }
+      },
+      "Weather": {
+        "controllers": {
+          "drop count": 5000,
+          "rain": false,
+          "snow": false,
+          "snow X": 0,
+          "snow Y": 0,
+          "snow Z": 0,
+          "snow count": 10000
+        },
+        "folders": {
+          "Bokeh Background": {
+            "controllers": {
+              "color 1": "#6d4862",
+              "color 2": "#fd826c",
+              "color 3": "#22ccc1",
+              "count": 150,
+              "enabled": false,
+              "opacity": 0.6,
+              "size": 0.5,
+              "speed": 1
+            }
+          },
+          "Dust": {
+            "controllers": {
+              "brightness": 1,
+              "color": "#e8d5b0",
+              "dust": false,
+              "mote count": 1500,
+              "opacity": 0.55,
+              "position X": 0,
+              "position Y": 0,
+              "position Z": 0,
+              "size": 0.04,
+              "speed": 1
+            }
+          },
+          "Godray": {
+            "controllers": {
+              "visible": false
+            },
+            "folders": {
+              "Geometry": {
+                "controllers": {
+                  "bottom radius": 2,
+                  "height": 14.5,
+                  "top radius": 1.7
+                }
+              },
+              "Position": {
+                "controllers": {
+                  "X": 0.3,
+                  "Y": 4.9,
+                  "Z": -6.7
+                }
+              },
+              "Rotation": {
+                "controllers": {
+                  "X": -0.678,
+                  "Y": 0,
+                  "Z": 0
+                }
+              },
+              "Shader": {
+                "controllers": {
+                  "color": "#c7b99c",
+                  "fresnel power": 2.9,
+                  "noise scale": 4.4,
+                  "smooth bottom": 0.332,
+                  "smooth top": 0.574,
+                  "time speed": 0.08
+                }
+              }
+            }
+          }
+        }
+      },
+      "Wing Material": {
+        "folders": {
+          "Alpha map": {
+            "controllers": {
+              "alpha map": "Silk_alpha.png",
+              "alpha test": 0.5
+            }
+          },
+          "Base": {
+            "controllers": {
+              "AO intensity": 1,
+              "Base Normal map": "Silk_normal_1k.png",
+              "Thread Normal map": "Knit_Jersey_TM.png",
+              "base normal scale": 1,
+              "base normal tile": 1,
+              "color": "#ffffff",
+              "combine normal maps": false,
+              "diff map": "__wave__",
+              "diff map tile": 1,
+              "double side": false,
+              "emissive": "#ffffff",
+              "emissive intensity": 20,
+              "fuzz map intensity": 1,
+              "fuzz map tile": 1,
+              "ior": 1.3,
+              "metalness": 0.2,
+              "normal map tile": 1,
+              "normal scale": 2.3,
+              "roughness": 1,
+              "skip diff map": false,
+              "skip emission": true,
+              "specular color": "#ffffff",
+              "specular intensity": 0.3,
+              "use FuzzMap": false,
+              "use thread map": false,
+              "use wave texture": false
+            }
+          },
+          "Clearcoat": {
+            "controllers": {
+              "clearcoat": 0,
+              "clearcoat roughness": 0,
+              "skip clearcoat": true
+            }
+          },
+          "Dots": {
+            "controllers": {
+              "dot brightness": 1,
+              "dot color": "#ffffff",
+              "show dots": false
+            },
+            "folders": {
+              "Dot 1": {
+                "controllers": {
+                  "UV X": 0.148,
+                  "UV Y": 0.119,
+                  "radius": 0.04
+                }
+              },
+              "Dot 2": {
+                "controllers": {
+                  "UV X": 0.235,
+                  "UV Y": 0.163,
+                  "radius": 0.028
+                }
+              },
+              "Dot 3": {
+                "controllers": {
+                  "UV X": 0.294,
+                  "UV Y": 0.206,
+                  "radius": 0.019
+                }
+              }
+            }
+          },
+          "Fresnel": {
+            "controllers": {
+              "color": "#ffffff",
+              "intensity": 0,
+              "power": 3,
+              "use wave texture": false
+            }
+          },
+          "Iridescence": {
+            "controllers": {
+              "iridescence": 0.3,
+              "iridescence IOR": 1.3,
+              "skip iridescence": true,
+              "thickness max": 1000,
+              "thickness min": 100
+            }
+          },
+          "Sheen": {
+            "controllers": {
+              "sheen": 0,
+              "sheen color": "#ffffff",
+              "sheen roughness": 1,
+              "skip sheen": true,
+              "use wave texture": true
+            }
+          },
+          "Transmission": {
+            "controllers": {
+              "attenuation color": "#ffffff",
+              "attenuation distance": 0.5,
+              "dispersion": 5,
+              "skip dispersion": true,
+              "skip transmission": true,
+              "thickness": 100,
+              "transmission": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "FracGlass_GlassFadeV7_HDR1_sketch1": {
+    "folders": {
+      "Animation": {
+        "controllers": {
+          "end frame": 225,
+          "start frame": 161
+        }
+      },
+      "Background": {
+        "controllers": {
+          "blur": 0,
+          "hue": 0,
+          "image": "Glass",
+          "intensity": 0.9,
+          "offset X": 0,
+          "offset Y": 0,
+          "saturation": 1,
+          "visible": true,
+          "zoom": 1
+        }
+      },
+      "Bloom": {
+        "controllers": {
+          "radius": 1,
+          "skip bloom": true,
+          "strength": 0.46,
+          "threshold": 1
+        }
+      },
+      "Directional Light": {
+        "controllers": {
+          "color": "#ffffff",
+          "distance": 0,
+          "intensity": 0,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "show helper": false
+        }
+      },
+      "HDR": {
+        "controllers": {
+          "blurriness": 0,
+          "hue": 0,
+          "intensity": 0.6,
+          "mix": -1,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0,
+          "saturation": 1.36
+        }
+      },
+      "Model": {
+        "controllers": {
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0,
+          "show dots": false
+        }
+      },
+      "Tone Mapping": {
+        "controllers": {
+          "exposure": 1.22,
+          "tone mapping": "ACESFilmic"
+        }
+      },
+      "Utilities": {
+        "controllers": {
+          "Camera HUD": false,
+          "Presets": "— none —"
+        },
+        "folders": {
+          "Camera Start": {
+            "controllers": {
+              "X": 0.0044495345207118875,
+              "Y": 0.4576949485942977,
+              "Z": -0.22440584826883805,
+              "Zoom": 0.509767053724978
+            }
+          }
+        }
+      },
+      "Voronoi": {
+        "controllers": {
+          "border": 0,
+          "brightness": 1,
+          "cell radius": 0.9,
+          "cell size": 256,
+          "contrast": 0.1,
+          "feather": 0.9,
+          "flash speed": 1,
+          "radial fade": 0.9,
+          "speed": 0.1
+        }
+      },
+      "Wave": {
+        "controllers": {
+          "base radius": 0.35,
+          "center X": 0.5,
+          "center Y": 0.5,
+          "falloff": 0.4,
+          "preview X": 0,
+          "preview Y": 0,
+          "preview Z": 0,
+          "preview texture": false,
+          "pulse amount": 0.1,
+          "speed": 1
+        },
+        "folders": {
+          "Color 1": {
+            "controllers": {
+              "H": 281,
+              "HEX": "#834c94",
+              "L": 0.18,
+              "S": 0.61,
+              "preset": ""
+            }
+          },
+          "Color 2": {
+            "controllers": {
+              "H": 281,
+              "HEX": "#834c94",
+              "L": 0.18,
+              "S": 0.61,
+              "preset": ""
+            }
+          },
+          "Wave Pulse": {
+            "controllers": {
+              "amplitude": 0.15,
+              "color — H": 330,
+              "color — L": 0.71,
+              "color — S": 1,
+              "frequency": 10,
+              "speed": 2
+            }
+          }
+        }
+      },
+      "Weather": {
+        "controllers": {
+          "drop count": 5000,
+          "rain": false,
+          "snow": false,
+          "snow X": 0,
+          "snow Y": 0,
+          "snow Z": 0,
+          "snow count": 10000
+        },
+        "folders": {
+          "Bokeh Background": {
+            "controllers": {
+              "color 1": "#ff80d9",
+              "color 2": "#ff6c52",
+              "color 3": "#006eff",
+              "count": 300,
+              "enabled": true,
+              "opacity": 0.54,
+              "size": 0.05,
+              "speed": 5
+            }
+          },
+          "Dust": {
+            "controllers": {
+              "brightness": 1,
+              "color": "#e8d5b0",
+              "dust": false,
+              "mote count": 1500,
+              "opacity": 0.55,
+              "position X": 0,
+              "position Y": 0,
+              "position Z": 0,
+              "size": 0.04,
+              "speed": 1
+            }
+          },
+          "Godray": {
+            "controllers": {
+              "visible": true
+            },
+            "folders": {
+              "Geometry": {
+                "controllers": {
+                  "bottom radius": 1.4,
+                  "height": 14.5,
+                  "top radius": 1.3
+                }
+              },
+              "Position": {
+                "controllers": {
+                  "X": 1,
+                  "Y": 0,
+                  "Z": 3
+                }
+              },
+              "Rotation": {
+                "controllers": {
+                  "X": 0.162,
+                  "Y": -1.297,
+                  "Z": -0.476
+                }
+              },
+              "Shader": {
+                "controllers": {
+                  "color": "#fffde5",
+                  "fresnel power": 6.6,
+                  "noise scale": 4.4,
+                  "smooth bottom": 0.497,
+                  "smooth top": 0,
+                  "time speed": 0.08
+                }
+              }
+            }
+          }
+        }
+      },
+      "Wing Material": {
+        "folders": {
+          "Alpha map": {
+            "controllers": {
+              "alpha map": "FracturedGlass_alpha.png",
+              "alpha test": 0.5
+            }
+          },
+          "Base": {
+            "controllers": {
+              "AO intensity": 1,
+              "Base Normal map": "FracturedGlass_normal_1k.png",
+              "Thread Normal map": "Knit_Jersey_TM.png",
+              "base normal scale": 1,
+              "base normal tile": 1,
+              "color": "#ffffff",
+              "combine normal maps": false,
+              "diff map": "__wave__",
+              "diff map tile": 1,
+              "double side": false,
+              "emissive": "#ffffff",
+              "emissive intensity": 20,
+              "fuzz map intensity": 1,
+              "fuzz map tile": 1,
+              "ior": 2.33,
+              "metalness": 0,
+              "normal map tile": 1,
+              "normal scale": 6.9,
+              "roughness": 0,
+              "skip diff map": false,
+              "skip emission": true,
+              "specular color": "#ffffff",
+              "specular intensity": 1,
+              "use FuzzMap": false,
+              "use thread map": false,
+              "use wave texture": true
+            }
+          },
+          "Clearcoat": {
+            "controllers": {
+              "clearcoat": 0,
+              "clearcoat roughness": 0,
+              "skip clearcoat": true
+            }
+          },
+          "Dots": {
+            "controllers": {
+              "dot brightness": 1,
+              "dot color": "#ffffff",
+              "show dots": false
+            },
+            "folders": {
+              "Dot 1": {
+                "controllers": {
+                  "UV X": 0.148,
+                  "UV Y": 0.119,
+                  "radius": 0.04
+                }
+              },
+              "Dot 2": {
+                "controllers": {
+                  "UV X": 0.235,
+                  "UV Y": 0.163,
+                  "radius": 0.028
+                }
+              },
+              "Dot 3": {
+                "controllers": {
+                  "UV X": 0.294,
+                  "UV Y": 0.206,
+                  "radius": 0.019
+                }
+              }
+            }
+          },
+          "Fresnel": {
+            "controllers": {
+              "color": "#ffffff",
+              "intensity": 8.83,
+              "power": 3.2,
+              "use wave texture": true
+            }
+          },
+          "Iridescence": {
+            "controllers": {
+              "iridescence": 0.3,
+              "iridescence IOR": 1.3,
+              "skip iridescence": true,
+              "thickness max": 1000,
+              "thickness min": 100
+            }
+          },
+          "Sheen": {
+            "controllers": {
+              "sheen": 0,
+              "sheen color": "#ffffff",
+              "sheen roughness": 1,
+              "skip sheen": true,
+              "use wave texture": true
+            }
+          },
+          "Transmission": {
+            "controllers": {
+              "attenuation color": "#ffffff",
+              "attenuation distance": 0.5,
+              "dispersion": 5,
+              "skip dispersion": true,
+              "skip transmission": false,
+              "thickness": 500,
+              "transmission": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "HSL_Glow5_Blue": {
+    "folders": {
+      "Animation": {
+        "controllers": {
+          "end frame": 225,
+          "start frame": 160
+        }
+      },
+      "Background": {
+        "controllers": {
+          "blur": 0,
+          "hue": 0,
+          "image": "Glow",
+          "intensity": 0.9,
+          "offset X": 0,
+          "offset Y": 0,
+          "saturation": 1,
+          "visible": true,
+          "zoom": 1
+        }
+      },
+      "Bloom": {
+        "controllers": {
+          "radius": 1,
+          "skip bloom": false,
+          "strength": 0.5,
+          "threshold": 1
+        }
+      },
+      "Directional Light": {
+        "controllers": {
+          "color": "#ffffff",
+          "distance": 0,
+          "intensity": 0,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "show helper": false
+        }
+      },
+      "HDR": {
+        "controllers": {
+          "blurriness": 0,
+          "hue": 5.59,
+          "intensity": 5,
+          "mix": -1,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0,
+          "saturation": 2
+        }
+      },
+      "Model": {
+        "controllers": {
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0,
+          "show dots": false
+        }
+      },
+      "Tone Mapping": {
+        "controllers": {
+          "exposure": 0.77,
+          "tone mapping": "ACESFilmic"
+        }
+      },
+      "Utilities": {
+        "controllers": {
+          "Camera HUD": false,
+          "Presets": "— none —"
+        },
+        "folders": {
+          "Camera Start": {
+            "controllers": {
+              "X": 0.0044495345207118875,
+              "Y": 0.4576949485942977,
+              "Z": -0.22440584826883805,
+              "Zoom": 0.509767053724978
+            }
+          }
+        }
+      },
+      "Voronoi": {
+        "controllers": {
+          "border": 0,
+          "brightness": 1,
+          "cell radius": 0.9,
+          "cell size": 256,
+          "contrast": 0.1,
+          "feather": 0.9,
+          "flash speed": 1,
+          "radial fade": 0.9,
+          "speed": 0.1
+        }
+      },
+      "Wave": {
+        "controllers": {
+          "base radius": 0.24,
+          "center X": 0.63,
+          "center Y": 0.48,
+          "falloff": 0.63,
+          "preview X": 0,
+          "preview Y": 0,
+          "preview Z": 0,
+          "preview texture": false,
+          "pulse amount": 0.1,
+          "speed": 1
+        },
+        "folders": {
+          "Color 1": {
+            "controllers": {
+              "H": 222,
+              "HEX": "#0094fd",
+              "L": 0.49,
+              "S": 1
+            }
+          },
+          "Color 2": {
+            "controllers": {
+              "H": 222,
+              "HEX": "#0094fd",
+              "L": 0.49,
+              "S": 1
+            }
+          },
+          "Wave Pulse": {
+            "controllers": {
+              "amplitude": 0.15,
+              "color — H": 330,
+              "color — L": 0.71,
+              "color — S": 1,
+              "frequency": 10,
+              "speed": 2
+            }
+          }
+        }
+      },
+      "Weather": {
+        "controllers": {
+          "drop count": 5000,
+          "rain": false,
+          "snow": false,
+          "snow X": 0,
+          "snow Y": 0,
+          "snow Z": 0,
+          "snow count": 10000
+        },
+        "folders": {
+          "Bokeh Background": {
+            "controllers": {
+              "color 1": "#6d4862",
+              "color 2": "#fd826c",
+              "color 3": "#22ccc1",
+              "count": 150,
+              "enabled": false,
+              "opacity": 0.6,
+              "size": 0.5,
+              "speed": 1
+            }
+          },
+          "Dust": {
+            "controllers": {
+              "brightness": 2.5,
+              "color": "#14ffd8",
+              "dust": true,
+              "mote count": 1500,
+              "opacity": 1,
+              "position X": 0,
+              "position Y": 0,
+              "position Z": 0,
+              "size": 0.01,
+              "speed": 1
+            }
+          },
+          "Godray": {
+            "controllers": {
+              "visible": false
+            },
+            "folders": {
+              "Geometry": {
+                "controllers": {
+                  "bottom radius": 2,
+                  "height": 14.5,
+                  "top radius": 1.7
+                }
+              },
+              "Position": {
+                "controllers": {
+                  "X": 0.3,
+                  "Y": 4.9,
+                  "Z": -6.7
+                }
+              },
+              "Rotation": {
+                "controllers": {
+                  "X": -0.678,
+                  "Y": 0,
+                  "Z": 0
+                }
+              },
+              "Shader": {
+                "controllers": {
+                  "color": "#c7b99c",
+                  "fresnel power": 2.9,
+                  "noise scale": 4.4,
+                  "smooth bottom": 0.332,
+                  "smooth top": 0.574,
+                  "time speed": 0.08
+                }
+              }
+            }
+          }
+        }
+      },
+      "Wing Material": {
+        "folders": {
+          "Alpha map": {
+            "controllers": {
+              "alpha map": "Glass_alpha.png",
+              "alpha test": 0.5
+            }
+          },
+          "Base": {
+            "controllers": {
+              "AO intensity": 1,
+              "Base Normal map": "Glass_normal_1k.png",
+              "Thread Normal map": "Knit_Jersey_TM.png",
+              "base normal scale": 1,
+              "base normal tile": 1,
+              "color": "#ffffff",
+              "combine normal maps": false,
+              "diff map": "__wave__",
+              "diff map tile": 1,
+              "double side": false,
+              "emissive": "#ffffff",
+              "emissive intensity": 0.1,
+              "fuzz map intensity": 1,
+              "fuzz map tile": 1,
+              "ior": 1.6,
+              "metalness": 0,
+              "normal map tile": 1,
+              "normal scale": 10,
+              "roughness": 0,
+              "skip diff map": false,
+              "skip emission": true,
+              "specular color": "#ffffff",
+              "specular intensity": 0.3,
+              "use FuzzMap": false,
+              "use thread map": false
+            }
+          },
+          "Clearcoat": {
+            "controllers": {
+              "clearcoat": 0,
+              "clearcoat roughness": 0,
+              "skip clearcoat": true
+            }
+          },
+          "Dots": {
+            "controllers": {
+              "dot brightness": 6,
+              "dot color": "#0094fd",
+              "show dots": true
+            },
+            "folders": {
+              "Dot 1": {
+                "controllers": {
+                  "UV X": 0.148,
+                  "UV Y": 0.119,
+                  "radius": 0.04
+                }
+              },
+              "Dot 2": {
+                "controllers": {
+                  "UV X": 0.235,
+                  "UV Y": 0.163,
+                  "radius": 0.028
+                }
+              },
+              "Dot 3": {
+                "controllers": {
+                  "UV X": 0.294,
+                  "UV Y": 0.206,
+                  "radius": 0.019
+                }
+              }
+            }
+          },
+          "Fresnel": {
+            "controllers": {
+              "color": "#7aff8a",
+              "intensity": 3.14,
+              "power": 1.6,
+              "use wave texture": true
+            }
+          },
+          "Iridescence": {
+            "controllers": {
+              "iridescence": 0.3,
+              "iridescence IOR": 1.3,
+              "skip iridescence": true,
+              "thickness max": 1000,
+              "thickness min": 100
+            }
+          },
+          "Sheen": {
+            "controllers": {
+              "sheen": 0,
+              "sheen color": "#ffffff",
+              "sheen roughness": 1,
+              "skip sheen": true,
+              "use wave texture": true
+            }
+          },
+          "Transmission": {
+            "controllers": {
+              "attenuation color": "#ffffff",
+              "attenuation distance": 0.67,
+              "dispersion": 5,
+              "skip dispersion": true,
+              "skip transmission": false,
+              "thickness": 279,
+              "transmission": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}
