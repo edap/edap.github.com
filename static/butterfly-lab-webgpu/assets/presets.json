@@ -64,20 +64,11 @@
           "tone mapping": "ACESFilmic"
         }
       },
+      "Camera": { "controllers": { "zoom": 0.9 } },
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
           "Presets": "— none —"
-        },
-        "folders": {
-          "Camera Start": {
-            "controllers": {
-              "X": 0.0044495345207118875,
-              "Y": 0.4576949485942977,
-              "Z": -0.22440584826883805,
-              "Zoom": 0.509767053724978
-            }
-          }
         }
       },
       "Voronoi": {
@@ -239,14 +230,12 @@
               "fuzz map intensity": 1,
               "fuzz map tile": 1,
               "ior": 1.3,
-              "metalness": 0.2,
+              "metalness": 0.0,
               "normal map tile": 1,
               "normal scale": 2.3,
               "roughness": 1,
               "skip diff map": false,
               "skip emission": true,
-              "specular color": "#ffffff",
-              "specular intensity": 0.3,
               "use FuzzMap": false,
               "use thread map": false,
               "use wave texture": false
@@ -395,20 +384,11 @@
           "tone mapping": "ACESFilmic"
         }
       },
+      "Camera": { "controllers": { "zoom": 0.9 } },
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
           "Presets": "— none —"
-        },
-        "folders": {
-          "Camera Start": {
-            "controllers": {
-              "X": 0.0044495345207118875,
-              "Y": 0.4576949485942977,
-              "Z": -0.22440584826883805,
-              "Zoom": 0.509767053724978
-            }
-          }
         }
       },
       "Voronoi": {
@@ -570,14 +550,12 @@
               "fuzz map intensity": 1,
               "fuzz map tile": 1,
               "ior": 2.33,
-              "metalness": 0,
+              "metalness": 0.9,
               "normal map tile": 1,
               "normal scale": 6.9,
               "roughness": 0,
               "skip diff map": false,
               "skip emission": true,
-              "specular color": "#ffffff",
-              "specular intensity": 1,
               "use FuzzMap": false,
               "use thread map": false,
               "use wave texture": true
@@ -726,20 +704,11 @@
           "tone mapping": "ACESFilmic"
         }
       },
+      "Camera": { "controllers": { "zoom": 0.9 } },
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
           "Presets": "— none —"
-        },
-        "folders": {
-          "Camera Start": {
-            "controllers": {
-              "X": 0.0044495345207118875,
-              "Y": 0.4576949485942977,
-              "Z": -0.22440584826883805,
-              "Zoom": 0.509767053724978
-            }
-          }
         }
       },
       "Voronoi": {
@@ -899,14 +868,12 @@
               "fuzz map intensity": 1,
               "fuzz map tile": 1,
               "ior": 1.6,
-              "metalness": 0,
+              "metalness": 0.9,
               "normal map tile": 1,
               "normal scale": 10,
               "roughness": 0,
               "skip diff map": false,
               "skip emission": true,
-              "specular color": "#ffffff",
-              "specular intensity": 0.3,
               "use FuzzMap": false,
               "use thread map": false
             }
