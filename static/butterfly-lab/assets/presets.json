@@ -54,8 +54,7 @@
         "controllers": {
           "rotation (X)": 0,
           "rotation (Y)": 0,
-          "rotation (Z)": 0,
-          "show dots": false
+          "rotation (Z)": 0
         }
       },
       "Tone Mapping": {
@@ -351,8 +350,7 @@
         "controllers": {
           "rotation (X)": 0,
           "rotation (Y)": 0,
-          "rotation (Z)": 0,
-          "show dots": false
+          "rotation (Z)": 0
         }
       },
       "Tone Mapping": {
@@ -648,8 +646,7 @@
         "controllers": {
           "rotation (X)": 0,
           "rotation (Y)": 0,
-          "rotation (Z)": 0,
-          "show dots": false
+          "rotation (Z)": 0
         }
       },
       "Tone Mapping": {
