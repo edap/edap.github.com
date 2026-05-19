@@ -11,7 +11,7 @@
         "controllers": {
           "blur": 0.5,
           "hue": 0,
-          "image": "Paper",
+          "image": "PaperV2.png",
           "intensity": 0.73,
           "offset X": 0,
           "offset Y": 0,
@@ -307,7 +307,7 @@
         "controllers": {
           "blur": 0,
           "hue": 0,
-          "image": "Glass",
+          "image": "Glass.png",
           "intensity": 0.9,
           "offset X": 0,
           "offset Y": 0,
@@ -603,7 +603,7 @@
         "controllers": {
           "blur": 0,
           "hue": 0,
-          "image": "Glow",
+          "image": "Glow.png",
           "intensity": 0.9,
           "offset X": 0,
           "offset Y": 0,
@@ -615,7 +615,7 @@
       "Bloom": {
         "controllers": {
           "radius": 1,
-          "skip bloom": false,
+          "skip bloom": true,
           "strength": 0.5,
           "threshold": 1
         }
