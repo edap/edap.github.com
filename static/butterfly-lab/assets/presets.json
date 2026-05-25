@@ -63,11 +63,15 @@
           "tone mapping": "ACESFilmic"
         }
       },
-      "Camera": { "controllers": { "zoom": 0.9 } },
+      "Camera": {
+        "controllers": {
+          "zoom": 0.9
+        }
+      },
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
-          "Presets": "— none —"
+          "Presets": "\u2014 none \u2014"
         }
       },
       "Voronoi": {
@@ -85,14 +89,8 @@
       },
       "Wave": {
         "controllers": {
-          "base radius": 0.35,
           "center X": 0.5,
           "center Y": 0.5,
-          "falloff": 0.4,
-          "preview X": 0,
-          "preview Y": 0,
-          "preview Z": 0,
-          "preview texture": false,
           "pulse amount": 0.1,
           "speed": 1
         },
@@ -118,9 +116,9 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
-              "color — H": 330,
-              "color — L": 0.71,
-              "color — S": 1,
+              "color \u2014 H": 330,
+              "color \u2014 L": 0.71,
+              "color \u2014 S": 1,
               "frequency": 10,
               "speed": 2
             }
@@ -221,7 +219,7 @@
               "base normal tile": 1,
               "color": "#ffffff",
               "combine normal maps": false,
-              "diff map": "__wave__",
+              "diff map": "gradient.png",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
@@ -359,11 +357,15 @@
           "tone mapping": "ACESFilmic"
         }
       },
-      "Camera": { "controllers": { "zoom": 0.9 } },
+      "Camera": {
+        "controllers": {
+          "zoom": 0.9
+        }
+      },
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
-          "Presets": "— none —"
+          "Presets": "\u2014 none \u2014"
         }
       },
       "Voronoi": {
@@ -381,14 +383,8 @@
       },
       "Wave": {
         "controllers": {
-          "base radius": 0.35,
           "center X": 0.5,
           "center Y": 0.5,
-          "falloff": 0.4,
-          "preview X": 0,
-          "preview Y": 0,
-          "preview Z": 0,
-          "preview texture": false,
           "pulse amount": 0.1,
           "speed": 1
         },
@@ -414,9 +410,9 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
-              "color — H": 330,
-              "color — L": 0.71,
-              "color — S": 1,
+              "color \u2014 H": 330,
+              "color \u2014 L": 0.71,
+              "color \u2014 S": 1,
               "frequency": 10,
               "speed": 2
             }
@@ -517,7 +513,7 @@
               "base normal tile": 1,
               "color": "#ffffff",
               "combine normal maps": false,
-              "diff map": "__wave__",
+              "diff map": "gradient.png",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
@@ -655,11 +651,15 @@
           "tone mapping": "ACESFilmic"
         }
       },
-      "Camera": { "controllers": { "zoom": 0.9 } },
+      "Camera": {
+        "controllers": {
+          "zoom": 0.9
+        }
+      },
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
-          "Presets": "— none —"
+          "Presets": "\u2014 none \u2014"
         }
       },
       "Voronoi": {
@@ -677,14 +677,8 @@
       },
       "Wave": {
         "controllers": {
-          "base radius": 0.24,
           "center X": 0.63,
           "center Y": 0.48,
-          "falloff": 0.63,
-          "preview X": 0,
-          "preview Y": 0,
-          "preview Z": 0,
-          "preview texture": false,
           "pulse amount": 0.1,
           "speed": 1
         },
@@ -708,9 +702,9 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
-              "color — H": 330,
-              "color — L": 0.71,
-              "color — S": 1,
+              "color \u2014 H": 330,
+              "color \u2014 L": 0.71,
+              "color \u2014 S": 1,
               "frequency": 10,
               "speed": 2
             }
@@ -811,7 +805,7 @@
               "base normal tile": 1,
               "color": "#ffffff",
               "combine normal maps": false,
-              "diff map": "__wave__",
+              "diff map": "gradient.png",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
