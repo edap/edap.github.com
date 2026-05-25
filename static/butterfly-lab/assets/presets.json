@@ -71,7 +71,7 @@
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
-          "Presets": "\u2014 none \u2014"
+          "Presets": "none"
         }
       },
       "Voronoi": {
@@ -116,11 +116,11 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
-              "color \u2014 H": 330,
-              "color \u2014 L": 0.71,
-              "color \u2014 S": 1,
               "frequency": 10,
-              "speed": 2
+              "speed": 2,
+              "color H": 330,
+              "color L": 0.71,
+              "color S": 1
             }
           }
         }
@@ -274,8 +274,7 @@
             "controllers": {
               "color": "#ffffff",
               "intensity": 0,
-              "power": 3,
-              "use wave texture": false
+              "power": 3
             }
           },
           "Transmission": {
@@ -365,7 +364,7 @@
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
-          "Presets": "\u2014 none \u2014"
+          "Presets": "none"
         }
       },
       "Voronoi": {
@@ -410,11 +409,11 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
-              "color \u2014 H": 330,
-              "color \u2014 L": 0.71,
-              "color \u2014 S": 1,
               "frequency": 10,
-              "speed": 2
+              "speed": 2,
+              "color H": 330,
+              "color L": 0.71,
+              "color S": 1
             }
           }
         }
@@ -566,10 +565,9 @@
           },
           "Fresnel": {
             "controllers": {
-              "color": "#ffffff",
+              "color": "#dc8add",
               "intensity": 8.83,
-              "power": 3.2,
-              "use wave texture": true
+              "power": 3.2
             }
           },
           "Transmission": {
@@ -659,7 +657,7 @@
       "Utilities": {
         "controllers": {
           "Camera HUD": false,
-          "Presets": "\u2014 none \u2014"
+          "Presets": "none"
         }
       },
       "Voronoi": {
@@ -702,11 +700,11 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
-              "color \u2014 H": 330,
-              "color \u2014 L": 0.71,
-              "color \u2014 S": 1,
               "frequency": 10,
-              "speed": 2
+              "speed": 2,
+              "color H": 330,
+              "color L": 0.71,
+              "color S": 1
             }
           }
         }
@@ -859,8 +857,7 @@
             "controllers": {
               "color": "#7aff8a",
               "intensity": 3.14,
-              "power": 1.6,
-              "use wave texture": true
+              "power": 1.6
             }
           },
           "Transmission": {
