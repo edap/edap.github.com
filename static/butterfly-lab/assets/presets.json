@@ -89,28 +89,209 @@
       },
       "Wave": {
         "controllers": {
+          "season": "Spring1",
           "center X": 0.5,
           "center Y": 0.5,
           "pulse amount": 0.1,
           "speed": 1
         },
         "folders": {
-          "Color 1": {
-            "controllers": {
-              "H": 281,
-              "HEX": "#834c94",
-              "L": 0.18,
-              "S": 0.61,
-              "preset": ""
+          "Spring1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
             }
           },
-          "Color 2": {
-            "controllers": {
-              "H": 281,
-              "HEX": "#834c94",
-              "L": 0.18,
-              "S": 0.61,
-              "preset": ""
+          "Spring2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Summer1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Summer2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 288,
+                  "HEX": "#8c4898",
+                  "L": 0.19,
+                  "S": 0.66,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn3": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Winter1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Winter2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
             }
           },
           "Wave Pulse": {
@@ -382,28 +563,209 @@
       },
       "Wave": {
         "controllers": {
+          "season": "Spring1",
           "center X": 0.5,
           "center Y": 0.5,
           "pulse amount": 0.1,
           "speed": 1
         },
         "folders": {
-          "Color 1": {
-            "controllers": {
-              "H": 281,
-              "HEX": "#834c94",
-              "L": 0.18,
-              "S": 0.61,
-              "preset": ""
+          "Spring1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
             }
           },
-          "Color 2": {
-            "controllers": {
-              "H": 281,
-              "HEX": "#834c94",
-              "L": 0.18,
-              "S": 0.61,
-              "preset": ""
+          "Spring2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Summer1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Summer2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 288,
+                  "HEX": "#8c4898",
+                  "L": 0.19,
+                  "S": 0.66,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn3": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Winter1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Winter2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
             }
           },
           "Wave Pulse": {
@@ -675,26 +1037,209 @@
       },
       "Wave": {
         "controllers": {
+          "season": "Spring1",
           "center X": 0.63,
           "center Y": 0.48,
           "pulse amount": 0.1,
           "speed": 1
         },
         "folders": {
-          "Color 1": {
-            "controllers": {
-              "H": 222,
-              "HEX": "#0094fd",
-              "L": 0.49,
-              "S": 1
+          "Spring1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
             }
           },
-          "Color 2": {
-            "controllers": {
-              "H": 222,
-              "HEX": "#0094fd",
-              "L": 0.49,
-              "S": 1
+          "Spring2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Summer1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Summer2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 288,
+                  "HEX": "#8c4898",
+                  "L": 0.19,
+                  "S": 0.66,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Autumn3": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Winter1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
+            }
+          },
+          "Winter2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1,
+                  "preset": ""
+                }
+              }
             }
           },
           "Wave Pulse": {
