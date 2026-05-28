@@ -387,14 +387,14 @@
         "folders": {
           "Alpha map": {
             "controllers": {
-              "alpha map": "Silk_alpha.png",
+              "alpha map": "Paper_alpha.png",
               "alpha test": 0.5
             }
           },
           "Base": {
             "controllers": {
               "AO intensity": 1,
-              "Base Normal map": "Silk_normal_1k.png",
+              "Base Normal map": "Paper_normal_1k.png",
               "Thread Normal map": "Knit_Jersey_TM.png",
               "base normal scale": 1,
               "base normal tile": 1,
