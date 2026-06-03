@@ -1,5 +1,6 @@
 {
   "Home": {
+    "id": "set-001",
     "folders": {
       "Animation": {
         "controllers": {
@@ -439,6 +440,7 @@
     }
   },
   "Zen": {
+    "id": "set-003",
     "folders": {
       "Animation": {
         "controllers": {
@@ -878,6 +880,7 @@
     }
   },
   "Neon": {
+    "id": "set-002",
     "folders": {
       "Animation": {
         "controllers": {
@@ -1309,6 +1312,447 @@
               "intensity": 3.14,
               "power": 1.6,
               "useWaveTexture": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "Velvet": {
+    "id": "set-004",
+    "folders": {
+      "Animation": {
+        "controllers": {
+          "end frame": 225,
+          "start frame": 160
+        }
+      },
+      "Background": {
+        "controllers": {
+          "blur": 0,
+          "hue": 0,
+          "image": "Calm.png",
+          "intensity": 1,
+          "offset X": 0,
+          "offset Y": 0,
+          "saturation": 1,
+          "visible": true,
+          "zoom": 1
+        }
+      },
+      "Bloom": {
+        "controllers": {
+          "radius": 0.4,
+          "skip bloom": true,
+          "strength": 0.2,
+          "threshold": 0.6
+        }
+      },
+      "Camera": {
+        "controllers": {
+          "zoom": 0.9
+        }
+      },
+      "Directional Light": {
+        "controllers": {
+          "color": "#ffffff",
+          "distance": 0,
+          "intensity": 0,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "show helper": false
+        }
+      },
+      "HDR": {
+        "controllers": {
+          "blurriness": 0,
+          "hue": 0,
+          "intensity": 1,
+          "mix": -1,
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0,
+          "saturation": 0
+        }
+      },
+      "Model": {
+        "controllers": {
+          "rotation (X)": 0,
+          "rotation (Y)": 0,
+          "rotation (Z)": 0
+        }
+      },
+      "Tone Mapping": {
+        "controllers": {
+          "exposure": 1,
+          "tone mapping": "ACESFilmic"
+        }
+      },
+      "Utilities": {
+        "controllers": {
+          "Camera HUD": false,
+          "Presets": "none"
+        }
+      },
+      "Voronoi": {
+        "controllers": {
+          "border": 0,
+          "brightness": 1,
+          "cell radius": 0.9,
+          "cell size": 256,
+          "contrast": 0.1,
+          "feather": 0.9,
+          "flash speed": 1,
+          "radial fade": 0.9,
+          "speed": 0.1
+        }
+      },
+      "Wave": {
+        "controllers": {
+          "season": "Spring1",
+          "base radius": 0.35,
+          "center X": 0.5,
+          "center Y": 0.5,
+          "falloff": 0.4,
+          "pulse amount": 0.1,
+          "speed": 1
+        },
+        "folders": {
+          "Spring1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Spring2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Summer1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Summer2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Autumn1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Autumn3": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Winter1": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Winter2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 181,
+                  "HEX": "#4e999a",
+                  "L": 0.2,
+                  "S": 0.62
+                }
+              }
+            }
+          },
+          "Wave Pulse": {
+            "controllers": {
+              "amplitude": 0,
+              "color H": 330,
+              "color L": 0.71,
+              "color S": 1,
+              "frequency": 10,
+              "speed": 2
+            }
+          }
+        }
+      },
+      "Weather": {
+        "controllers": {
+          "drop count": 5000,
+          "rain": false,
+          "snow": false,
+          "snow X": 0,
+          "snow Y": 0,
+          "snow Z": 0,
+          "snow count": 10000
+        },
+        "folders": {
+          "Bokeh Background": {
+            "controllers": {
+              "color 1": "#6d4862",
+              "color 2": "#fd826c",
+              "color 3": "#22ccc1",
+              "count": 150,
+              "enabled": false,
+              "opacity": 0.6,
+              "size": 0.5,
+              "speed": 1
+            }
+          },
+          "Dust": {
+            "controllers": {
+              "brightness": 1,
+              "color": "#e8d5b0",
+              "dust": false,
+              "mote count": 1500,
+              "opacity": 0.55,
+              "position X": 0,
+              "position Y": 0,
+              "position Z": 0,
+              "size": 0.04,
+              "speed": 1
+            }
+          },
+          "Godray": {
+            "controllers": {
+              "visible": false
+            },
+            "folders": {
+              "Geometry": {
+                "controllers": {
+                  "bottom radius": 2,
+                  "height": 14.5,
+                  "top radius": 1.7
+                }
+              },
+              "Position": {
+                "controllers": {
+                  "X": 0.3,
+                  "Y": 4.9,
+                  "Z": -6.7
+                }
+              },
+              "Rotation": {
+                "controllers": {
+                  "X": -0.678,
+                  "Y": 0,
+                  "Z": 0
+                }
+              },
+              "Shader": {
+                "controllers": {
+                  "color": "#c7b99c",
+                  "fresnel power": 2.9,
+                  "noise scale": 4.4,
+                  "smooth bottom": 0.332,
+                  "smooth top": 0.574,
+                  "time speed": 0.08
+                }
+              }
+            }
+          }
+        }
+      },
+      "Wing Material": {
+        "folders": {
+          "Alpha map": {
+            "controllers": {
+              "alpha map": "Paper_alpha.png",
+              "alpha test": 0
+            }
+          },
+          "Base": {
+            "controllers": {
+              "AO intensity": 0,
+              "Base Normal map": "Velvet_normal_1k.png",
+              "Thread Normal map": "GlamVelvetSofa_ThreadMap.png",
+              "base normal scale": 1.4,
+              "base normal tile": 1,
+              "cavity map": "Velvet_CavityMap.png",
+              "color": "#ffffff",
+              "combine normal maps": true,
+              "diff map": "__wave__",
+              "diff map tile": 1,
+              "double side": false,
+              "emissive": "#ffffff",
+              "emissive intensity": 0,
+              "metalness": 0,
+              "normal map tile": 1,
+              "normal scale": 1.4,
+              "roughness": 0.9,
+              "use wave texture": true
+            }
+          },
+          "Dots": {
+            "controllers": {
+              "dot brightness": 1,
+              "dot color": "#ffffff",
+              "show dots": false
+            },
+            "folders": {
+              "Dot 1": {
+                "controllers": {
+                  "UV X": 0.148,
+                  "UV Y": 0.119,
+                  "radius": 0.04
+                }
+              },
+              "Dot 2": {
+                "controllers": {
+                  "UV X": 0.235,
+                  "UV Y": 0.163,
+                  "radius": 0.028
+                }
+              },
+              "Dot 3": {
+                "controllers": {
+                  "UV X": 0.294,
+                  "UV Y": 0.206,
+                  "radius": 0.019
+                }
+              }
+            }
+          },
+          "Fresnel": {
+            "controllers": {
+              "color": "#ffffff",
+              "intensity": 1.11,
+              "power": 0.7,
+              "useWaveTexture": true
             }
           }
         }
