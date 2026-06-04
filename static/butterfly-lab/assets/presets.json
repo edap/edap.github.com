@@ -378,7 +378,6 @@
             "controllers": {
               "AO intensity": 1,
               "Base Normal map": "Paper_normal_1k.png",
-              "Thread Normal map": "Knit_Jersey_TM.png",
               "base normal scale": 1,
               "base normal tile": 1,
               "color": "#ffffff",
@@ -818,7 +817,6 @@
             "controllers": {
               "AO intensity": 1,
               "Base Normal map": "FracturedGlass_normal_1k.png",
-              "Thread Normal map": "Knit_Jersey_TM.png",
               "base normal scale": 1,
               "base normal tile": 1,
               "color": "#ffffff",
@@ -1258,7 +1256,6 @@
             "controllers": {
               "AO intensity": 1,
               "Base Normal map": "Glass_normal_1k.png",
-              "Thread Normal map": "Knit_Jersey_TM.png",
               "base normal scale": 1,
               "base normal tile": 1,
               "color": "#ffffff",
@@ -1422,18 +1419,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1
                 }
               }
             }
@@ -1442,18 +1439,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               }
             }
@@ -1462,18 +1459,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               }
             }
@@ -1482,18 +1479,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 288,
+                  "HEX": "#8c4898",
+                  "L": 0.19,
+                  "S": 0.66
                 }
               }
             }
@@ -1502,18 +1499,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               }
             }
@@ -1522,18 +1519,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               }
             }
@@ -1542,18 +1539,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 232,
+                  "HEX": "#3673ff",
+                  "L": 0.52,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1
                 }
               }
             }
@@ -1562,18 +1559,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1
                 }
               }
             }
@@ -1582,18 +1579,18 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 351,
+                  "HEX": "#f10266",
+                  "L": 0.44,
+                  "S": 1
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 181,
-                  "HEX": "#4e999a",
-                  "L": 0.2,
-                  "S": 0.62
+                  "H": 163,
+                  "HEX": "#02b99f",
+                  "L": 0.24,
+                  "S": 1
                 }
               }
             }
@@ -1699,13 +1696,12 @@
             "controllers": {
               "AO intensity": 0,
               "Base Normal map": "Velvet_normal_1k.png",
-              "Thread Normal map": "GlamVelvetSofa_ThreadMap.png",
               "base normal scale": 1.4,
               "base normal tile": 1,
               "cavity map": "Velvet_CavityMap.png",
               "color": "#ffffff",
               "combine normal maps": true,
-              "diff map": "__wave__",
+              "diff map": "gradient.png",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
