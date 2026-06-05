@@ -1407,10 +1407,8 @@
       "Wave": {
         "controllers": {
           "season": "Spring1",
-          "base radius": 0.35,
           "center X": 0.5,
           "center Y": 0.5,
-          "falloff": 0.4,
           "pulse amount": 0.1,
           "speed": 1
         },
