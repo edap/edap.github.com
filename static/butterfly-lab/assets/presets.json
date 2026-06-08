@@ -32,11 +32,10 @@
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
-          "distance": 0,
-          "intensity": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "show helper": false
+          "intensity": 1.5,
+          "positionX": 2.5,
+          "positionY": 2,
+          "positionZ": 4
         }
       },
       "HDR": {
@@ -471,11 +470,10 @@
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
-          "distance": 0,
-          "intensity": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "show helper": false
+          "intensity": 1.5,
+          "positionX": 2.5,
+          "positionY": 2,
+          "positionZ": 4
         }
       },
       "HDR": {
@@ -910,11 +908,10 @@
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
-          "distance": 0,
-          "intensity": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "show helper": false
+          "intensity": 1.5,
+          "positionX": 2.5,
+          "positionY": 2,
+          "positionZ": 4
         }
       },
       "HDR": {
@@ -1353,11 +1350,10 @@
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
-          "distance": 0,
-          "intensity": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "show helper": false
+          "intensity": 1.5,
+          "positionX": 2.5,
+          "positionY": 2,
+          "positionZ": 4
         }
       },
       "HDR": {
