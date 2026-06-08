@@ -494,6 +494,14 @@
           "zoom": 1
         }
       },
+      "Bloom": {
+        "controllers": {
+          "radius": 0.4,
+          "skip bloom": true,
+          "strength": 0.2,
+          "threshold": 0.6
+        }
+      },
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
