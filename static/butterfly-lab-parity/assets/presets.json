@@ -1380,10 +1380,10 @@
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
-              "emissive intensity": 0.05,
+              "emissive intensity": 0,
               "fuzz map intensity": 0,
               "fuzz map tile": 1,
-              "metalness": 0.9,
+              "metalness": 0.8,
               "normal map tile": 1,
               "normal scale": 10,
               "roughness": 0
