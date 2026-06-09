@@ -494,14 +494,6 @@
           "zoom": 1
         }
       },
-      "Bloom": {
-        "controllers": {
-          "radius": 0.4,
-          "skip bloom": true,
-          "strength": 0.2,
-          "threshold": 0.6
-        }
-      },
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
@@ -961,24 +953,6 @@
               "intensity": 8.83,
               "power": 3.2
             }
-          },
-          "Iridescence": {
-            "controllers": {
-              "iridescence": 0.3,
-              "iridescence IOR": 1.3,
-              "skip iridescence": true,
-              "thickness max": 1000,
-              "thickness min": 100
-            }
-          },
-          "Sheen": {
-            "controllers": {
-              "sheen": 0,
-              "sheen color": "#ffffff",
-              "sheen roughness": 1,
-              "skip sheen": true,
-              "use wave texture": true
-            }
           }
         }
       }
@@ -1406,10 +1380,10 @@
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
-              "emissive intensity": 0.2,
+              "emissive intensity": 0,
               "fuzz map intensity": 0,
               "fuzz map tile": 1,
-              "metalness": 0.9,
+              "metalness": 0.8,
               "normal map tile": 1,
               "normal scale": 10,
               "roughness": 0
