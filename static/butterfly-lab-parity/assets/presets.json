@@ -494,14 +494,6 @@
           "zoom": 1
         }
       },
-      "Bloom": {
-        "controllers": {
-          "radius": 0.4,
-          "skip bloom": true,
-          "strength": 0.2,
-          "threshold": 0.6
-        }
-      },
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
@@ -960,24 +952,6 @@
               "color": "#dc8add",
               "intensity": 8.83,
               "power": 3.2
-            }
-          },
-          "Iridescence": {
-            "controllers": {
-              "iridescence": 0.3,
-              "iridescence IOR": 1.3,
-              "skip iridescence": true,
-              "thickness max": 1000,
-              "thickness min": 100
-            }
-          },
-          "Sheen": {
-            "controllers": {
-              "sheen": 0,
-              "sheen color": "#ffffff",
-              "sheen roughness": 1,
-              "skip sheen": true,
-              "use wave texture": true
             }
           }
         }
