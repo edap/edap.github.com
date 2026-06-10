@@ -389,7 +389,6 @@
         "controllers": {
           "blur": 0,
           "hue": 0,
-          "image": "Neon.png",
           "intensity": 1,
           "offset X": 0,
           "offset Y": 0,
@@ -401,7 +400,7 @@
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
-          "intensity": 10,
+          "intensity": 50,
           "positionX": 0.5,
           "positionY": 0.5,
           "positionZ": 4
@@ -429,7 +428,7 @@
       },
       "Tone Mapping": {
         "controllers": {
-          "exposure": 4
+          "exposure": 1
         }
       },
       "Camera": {
@@ -715,7 +714,7 @@
               "emissive intensity": 0,
               "fuzz map intensity": 0,
               "fuzz map tile": 1,
-              "metalness": 0.95,
+              "metalness": 0.96,
               "normal map tile": 1,
               "normal scale": 6.5,
               "roughness": 0.1,
@@ -729,7 +728,7 @@
           },
           "Dots": {
             "controllers": {
-              "show dots": true
+              "show dots": false
             },
             "folders": {
               "Dot 1": {
@@ -759,7 +758,7 @@
             "controllers": {
               "color": "#49264a",
               "intensity": 10,
-              "power": 2.88,
+              "power": 1.6,
               "useWaveTexture": true
             }
           }
