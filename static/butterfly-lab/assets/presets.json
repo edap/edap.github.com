@@ -759,7 +759,8 @@
             "controllers": {
               "color": "#dc8add",
               "intensity": 8.83,
-              "power": 3.2
+              "power": 3.2,
+              "useWaveTexture": false
             }
           }
         }
