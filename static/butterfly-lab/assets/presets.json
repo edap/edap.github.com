@@ -382,15 +382,15 @@
       "Animation": {
         "controllers": {
           "end frame": 225,
-          "start frame": 161
+          "start frame": 160
         }
       },
       "Background": {
         "controllers": {
           "blur": 0,
           "hue": 0,
-          "image": "Zen.png",
-          "intensity": 0.9,
+          "image": "Neon.png",
+          "intensity": 1,
           "offset X": 0,
           "offset Y": 0,
           "saturation": 1,
@@ -401,9 +401,9 @@
       "Directional Light": {
         "controllers": {
           "color": "#ffffff",
-          "intensity": 1.5,
-          "positionX": 2.5,
-          "positionY": 2,
+          "intensity": 10,
+          "positionX": 0.5,
+          "positionY": 0.5,
           "positionZ": 4
         }
       },
@@ -411,12 +411,12 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 0.6,
+          "intensity": 0,
           "mix": -1,
           "rotation (X)": 0,
           "rotation (Y)": 0,
           "rotation (Z)": 0,
-          "saturation": 1.36
+          "saturation": 0
         }
       },
       "Model": {
@@ -429,7 +429,7 @@
       },
       "Tone Mapping": {
         "controllers": {
-          "exposure": 1.22
+          "exposure": 4
         }
       },
       "Camera": {
@@ -441,27 +441,28 @@
         "controllers": {
           "center X": 0.5,
           "center Y": 0.5,
-          "pulse amount": 0.1,
-          "speed": 1
+          "pulse amount": 0.8,
+          "speed": 1,
+          "season": "Spring1"
         },
         "folders": {
           "Spring1": {
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 163,
-                  "HEX": "#02b99f",
-                  "L": 0.24,
-                  "S": 1,
+                  "H": 165,
+                  "HEX": "#2bab98",
+                  "L": 0.22,
+                  "S": 0.89,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 163,
-                  "HEX": "#02b99f",
-                  "L": 0.24,
-                  "S": 1,
+                  "H": 165,
+                  "HEX": "#2bab98",
+                  "L": 0.22,
+                  "S": 0.89,
                   "preset": ""
                 }
               }
@@ -475,17 +476,17 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 163,
-                  "HEX": "#02b99f",
-                  "L": 0.24,
-                  "S": 1,
+                  "H": 165,
+                  "HEX": "#2bab98",
+                  "L": 0.22,
+                  "S": 0.89,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
+                  "H": 231,
+                  "HEX": "#3d77ff",
                   "L": 0.52,
                   "S": 1,
                   "preset": ""
@@ -501,8 +502,8 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
+                  "H": 231,
+                  "HEX": "#3d77ff",
                   "L": 0.52,
                   "S": 1,
                   "preset": ""
@@ -510,8 +511,8 @@
               },
               "Color 2": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
+                  "H": 231,
+                  "HEX": "#3d77ff",
                   "L": 0.52,
                   "S": 1,
                   "preset": ""
@@ -527,8 +528,8 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
+                  "H": 231,
+                  "HEX": "#3d77ff",
                   "L": 0.52,
                   "S": 1,
                   "preset": ""
@@ -537,9 +538,9 @@
               "Color 2": {
                 "controllers": {
                   "H": 288,
-                  "HEX": "#8c4898",
-                  "L": 0.19,
-                  "S": 0.66,
+                  "HEX": "#a55cb2",
+                  "L": 0.28,
+                  "S": 0.61,
                   "preset": ""
                 }
               }
@@ -553,97 +554,97 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
-                  "L": 0.52,
-                  "S": 1,
+                  "H": 288,
+                  "HEX": "#a55cb2",
+                  "L": 0.28,
+                  "S": 0.61,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
-                  "L": 0.52,
-                  "S": 1,
+                  "H": 288,
+                  "HEX": "#a55cb2",
+                  "L": 0.28,
+                  "S": 0.61,
                   "preset": ""
                 }
               }
             },
             "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
+              "dot color": "#e866ff",
+              "dot brightness": 3
             }
           },
           "Autumn2": {
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 351,
-                  "HEX": "#f10266",
-                  "L": 0.44,
-                  "S": 1,
+                  "H": 343,
+                  "HEX": "#d35a8c",
+                  "L": 0.38,
+                  "S": 0.73,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
-                  "L": 0.52,
-                  "S": 1,
+                  "H": 288,
+                  "HEX": "#a55cb2",
+                  "L": 0.28,
+                  "S": 0.61,
                   "preset": ""
                 }
               }
             },
             "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
+              "dot color": "#e866ff",
+              "dot brightness": 3
             }
           },
           "Autumn3": {
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 232,
-                  "HEX": "#3673ff",
-                  "L": 0.52,
-                  "S": 1,
+                  "H": 288,
+                  "HEX": "#a55cb2",
+                  "L": 0.28,
+                  "S": 0.61,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 351,
-                  "HEX": "#f10266",
-                  "L": 0.44,
-                  "S": 1,
+                  "H": 343,
+                  "HEX": "#d35a8c",
+                  "L": 0.38,
+                  "S": 0.73,
                   "preset": ""
                 }
               }
             },
             "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
+              "dot color": "#e866ff",
+              "dot brightness": 3
             }
           },
           "Winter1": {
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 351,
-                  "HEX": "#f10266",
-                  "L": 0.44,
-                  "S": 1,
+                  "H": 343,
+                  "HEX": "#d35a8c",
+                  "L": 0.38,
+                  "S": 0.73,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 351,
-                  "HEX": "#f10266",
-                  "L": 0.44,
-                  "S": 1,
+                  "H": 343,
+                  "HEX": "#d35a8c",
+                  "L": 0.38,
+                  "S": 0.73,
                   "preset": ""
                 }
               }
@@ -657,19 +658,19 @@
             "folders": {
               "Color 1": {
                 "controllers": {
-                  "H": 351,
-                  "HEX": "#f10266",
-                  "L": 0.44,
-                  "S": 1,
+                  "H": 343,
+                  "HEX": "#d35a8c",
+                  "L": 0.38,
+                  "S": 0.73,
                   "preset": ""
                 }
               },
               "Color 2": {
                 "controllers": {
-                  "H": 163,
-                  "HEX": "#02b99f",
-                  "L": 0.24,
-                  "S": 1,
+                  "H": 165,
+                  "HEX": "#2bab98",
+                  "L": 0.22,
+                  "S": 0.89,
                   "preset": ""
                 }
               }
@@ -701,7 +702,7 @@
           },
           "Base": {
             "controllers": {
-              "AO intensity": 1,
+              "AO intensity": 0,
               "Base Normal map": "FracturedGlass_normal_1k.png",
               "base normal scale": 1,
               "base normal tile": 1,
@@ -712,15 +713,15 @@
               "double side": false,
               "emissive": "#ffffff",
               "emissive intensity": 0,
-              "fuzz map intensity": 1,
+              "fuzz map intensity": 0,
               "fuzz map tile": 1,
-              "metalness": 0.9,
+              "metalness": 0.95,
               "normal map tile": 1,
-              "normal scale": 6.9,
-              "roughness": 0,
+              "normal scale": 6.5,
+              "roughness": 0.1,
               "skip diff map": false,
               "specular color": "#ffffff",
-              "specular intensity": 1,
+              "specular intensity": 0,
               "use FuzzMap": false,
               "use thread map": false,
               "use wave texture": true
@@ -728,28 +729,27 @@
           },
           "Dots": {
             "controllers": {
-              "show dots": false,
-              "dot count": 3
+              "show dots": true
             },
             "folders": {
               "Dot 1": {
                 "controllers": {
-                  "UV X": 0.148,
-                  "UV Y": 0.119,
+                  "UV X": 0.156,
+                  "UV Y": 0.147,
                   "radius": 0.04
                 }
               },
               "Dot 2": {
                 "controllers": {
-                  "UV X": 0.235,
-                  "UV Y": 0.163,
+                  "UV X": 0.239,
+                  "UV Y": 0.18,
                   "radius": 0.028
                 }
               },
               "Dot 3": {
                 "controllers": {
-                  "UV X": 0.294,
-                  "UV Y": 0.206,
+                  "UV X": 0.302,
+                  "UV Y": 0.216,
                   "radius": 0.019
                 }
               }
@@ -757,10 +757,10 @@
           },
           "Fresnel": {
             "controllers": {
-              "color": "#dc8add",
-              "intensity": 8.83,
-              "power": 3.2,
-              "useWaveTexture": false
+              "color": "#49264a",
+              "intensity": 10,
+              "power": 2.88,
+              "useWaveTexture": true
             }
           }
         }
