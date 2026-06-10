@@ -389,6 +389,7 @@
         "controllers": {
           "blur": 0,
           "hue": 0,
+          "image": "Neon.png",
           "intensity": 1,
           "offset X": 0,
           "offset Y": 0,
