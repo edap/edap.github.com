@@ -197,30 +197,6 @@
               "dot brightness": 1.7
             }
           },
-          "Autumn3": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 283,
-                  "HEX": "#8d5f9b",
-                  "L": 0.22,
-                  "S": 0.48
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 345,
-                  "HEX": "#9d586e",
-                  "L": 0.22,
-                  "S": 0.55
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#e380ff",
-              "dot brightness": 1.7
-            }
-          },
           "Winter1": {
             "folders": {
               "Color 1": {
@@ -277,6 +253,30 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 283,
+                  "HEX": "#8d5f9b",
+                  "L": 0.22,
+                  "S": 0.48
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 345,
+                  "HEX": "#9d586e",
+                  "L": 0.22,
+                  "S": 0.55
+                }
+              }
+            },
+            "controllers": {
+              "dot color": "#e380ff",
+              "dot brightness": 1.7
             }
           }
         }
@@ -552,30 +552,6 @@
               "dot brightness": 10
             }
           },
-          "Autumn3": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 289,
-                  "HEX": "#ac7eb4",
-                  "L": 0.33,
-                  "S": 0.37
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#ea90af",
-                  "L": 0.55,
-                  "S": 0.61
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#d900ff",
-              "dot brightness": 10
-            }
-          },
           "Winter1": {
             "folders": {
               "Color 1": {
@@ -632,6 +608,30 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 289,
+                  "HEX": "#ac7eb4",
+                  "L": 0.33,
+                  "S": 0.37
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 343,
+                  "HEX": "#ea90af",
+                  "L": 0.55,
+                  "S": 0.61
+                }
+              }
+            },
+            "controllers": {
+              "dot color": "#d900ff",
+              "dot brightness": 10
             }
           }
         }
@@ -908,32 +908,6 @@
               "dot brightness": 3
             }
           },
-          "Autumn3": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 288,
-                  "HEX": "#a55cb2",
-                  "L": 0.28,
-                  "S": 0.61,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#d35a8c",
-                  "L": 0.38,
-                  "S": 0.73,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#e866ff",
-              "dot brightness": 3
-            }
-          },
           "Winter1": {
             "folders": {
               "Color 1": {
@@ -994,6 +968,32 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 288,
+                  "HEX": "#a55cb2",
+                  "L": 0.28,
+                  "S": 0.61,
+                  "preset": ""
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 343,
+                  "HEX": "#d35a8c",
+                  "L": 0.38,
+                  "S": 0.73,
+                  "preset": ""
+                }
+              }
+            },
+            "controllers": {
+              "dot color": "#e866ff",
+              "dot brightness": 3
             }
           }
         }
@@ -1273,30 +1273,6 @@
               "dot brightness": 1.5
             }
           },
-          "Autumn3": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 306,
-                  "HEX": "#ad8aaa",
-                  "L": 0.34,
-                  "S": 0.24
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 341,
-                  "HEX": "#c987a0",
-                  "L": 0.41,
-                  "S": 0.41
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ff80f4",
-              "dot brightness": 1.5
-            }
-          },
           "Winter1": {
             "folders": {
               "Color 1": {
@@ -1353,6 +1329,30 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
+            }
+          },
+          "Autumn2": {
+            "folders": {
+              "Color 1": {
+                "controllers": {
+                  "H": 306,
+                  "HEX": "#ad8aaa",
+                  "L": 0.34,
+                  "S": 0.24
+                }
+              },
+              "Color 2": {
+                "controllers": {
+                  "H": 341,
+                  "HEX": "#c987a0",
+                  "L": 0.41,
+                  "S": 0.41
+                }
+              }
+            },
+            "controllers": {
+              "dot color": "#ff80f4",
+              "dot brightness": 1.5
             }
           }
         }
