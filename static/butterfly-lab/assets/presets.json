@@ -42,11 +42,11 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 0,
+          "intensity": 1,
           "mix": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "rotation (Z)": 0,
+          "rotation (X)": 0.2,
+          "rotation (Y)": -1.35,
+          "rotation (Z)": -2.13,
           "saturation": 0
         }
       },
@@ -397,11 +397,11 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 0,
+          "intensity": 1,
           "mix": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "rotation (Z)": 0,
+          "rotation (X)": 0.2,
+          "rotation (Y)": -1.35,
+          "rotation (Z)": -2.13,
           "saturation": 0
         }
       },
@@ -743,11 +743,11 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 0,
+          "intensity": 1,
           "mix": -1,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "rotation (Z)": 0,
+          "rotation (X)": 0.2,
+          "rotation (Y)": -1.35,
+          "rotation (Z)": -2.13,
           "saturation": 0
         }
       },
@@ -1123,11 +1123,11 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 0,
+          "intensity": 1,
           "mix": 0,
-          "rotation (X)": 0,
-          "rotation (Y)": 0,
-          "rotation (Z)": 0,
+          "rotation (X)": 0.2,
+          "rotation (Y)": -1.35,
+          "rotation (Z)": -2.13,
           "saturation": 0
         }
       },
