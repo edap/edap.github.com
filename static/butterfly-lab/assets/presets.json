@@ -70,181 +70,12 @@
       },
       "Wave": {
         "controllers": {
-          "season": "Autumn1",
           "center X": 0.5,
           "center Y": 0.5,
           "pulse amount": 0.8,
           "speed": 1
         },
         "folders": {
-          "Spring1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 169,
-                  "HEX": "#56867f",
-                  "L": 0.17,
-                  "S": 0.44
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 169,
-                  "HEX": "#56867f",
-                  "L": 0.17,
-                  "S": 0.44
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Spring2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 169,
-                  "HEX": "#56867f",
-                  "L": 0.17,
-                  "S": 0.44
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 228,
-                  "HEX": "#6d7eb0",
-                  "L": 0.29,
-                  "S": 0.48
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 228,
-                  "HEX": "#6d7eb0",
-                  "L": 0.29,
-                  "S": 0.48
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 228,
-                  "HEX": "#6d7eb0",
-                  "L": 0.29,
-                  "S": 0.48
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 228,
-                  "HEX": "#6d7eb0",
-                  "L": 0.29,
-                  "S": 0.48
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 283,
-                  "HEX": "#8d5f9b",
-                  "L": 0.22,
-                  "S": 0.48
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Autumn1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 283,
-                  "HEX": "#8d5f9b",
-                  "L": 0.22,
-                  "S": 0.48
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 283,
-                  "HEX": "#8d5f9b",
-                  "L": 0.22,
-                  "S": 0.48
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#e380ff",
-              "dot brightness": 1.7
-            }
-          },
-          "Winter1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 345,
-                  "HEX": "#9d586e",
-                  "L": 0.22,
-                  "S": 0.55
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 345,
-                  "HEX": "#9d586e",
-                  "L": 0.22,
-                  "S": 0.55
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Winter2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 347,
-                  "HEX": "#a34d68",
-                  "L": 0.22,
-                  "S": 0.66
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 169,
-                  "HEX": "#56867f",
-                  "L": 0.17,
-                  "S": 0.44
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
@@ -253,30 +84,6 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
-            }
-          },
-          "Autumn2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 283,
-                  "HEX": "#8d5f9b",
-                  "L": 0.22,
-                  "S": 0.48
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 345,
-                  "HEX": "#9d586e",
-                  "L": 0.22,
-                  "S": 0.55
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#e380ff",
-              "dot brightness": 1.7
             }
           }
         }
@@ -348,6 +155,47 @@
               "intensity": 1.54,
               "power": 2.29,
               "useWaveTexture": true
+            }
+          }
+        }
+      },
+      "Cycle": {
+        "folders": {
+          "colours": {
+            "controllers": {},
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "H": 345,
+                  "S": 0.55,
+                  "L": 0.22,
+                  "HEX": "#9d586e"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "H": 169,
+                  "S": 0.44,
+                  "L": 0.17,
+                  "HEX": "#56867f"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "H": 228,
+                  "S": 0.48,
+                  "L": 0.29,
+                  "HEX": "#6d7eb0"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "H": 283,
+                  "S": 0.48,
+                  "L": 0.22,
+                  "HEX": "#8d5f9b"
+                }
+              }
             }
           }
         }
@@ -425,181 +273,12 @@
       },
       "Wave": {
         "controllers": {
-          "season": "Autumn1",
           "center X": 0.5,
           "center Y": 0.5,
           "pulse amount": 0.8,
           "speed": 1
         },
         "folders": {
-          "Spring1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 166,
-                  "HEX": "#3cb4a2",
-                  "L": 0.25,
-                  "S": 0.82
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 166,
-                  "HEX": "#3cb4a2",
-                  "L": 0.25,
-                  "S": 0.82
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Spring2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 166,
-                  "HEX": "#3cb4a2",
-                  "L": 0.25,
-                  "S": 0.82
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 229,
-                  "HEX": "#6291fe",
-                  "L": 0.56,
-                  "S": 0.98
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 229,
-                  "HEX": "#6291fe",
-                  "L": 0.56,
-                  "S": 0.98
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 229,
-                  "HEX": "#6291fe",
-                  "L": 0.56,
-                  "S": 0.98
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 229,
-                  "HEX": "#6291fe",
-                  "L": 0.56,
-                  "S": 0.98
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 289,
-                  "HEX": "#ac7eb4",
-                  "L": 0.33,
-                  "S": 0.37
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Autumn1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 289,
-                  "HEX": "#ac7eb4",
-                  "L": 0.33,
-                  "S": 0.37
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 289,
-                  "HEX": "#ac7eb4",
-                  "L": 0.33,
-                  "S": 0.37
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#d900ff",
-              "dot brightness": 10
-            }
-          },
-          "Winter1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#ea90af",
-                  "L": 0.55,
-                  "S": 0.61
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#ea90af",
-                  "L": 0.55,
-                  "S": 0.61
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Winter2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#ea90af",
-                  "L": 0.55,
-                  "S": 0.61
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 166,
-                  "HEX": "#3cb4a2",
-                  "L": 0.25,
-                  "S": 0.82
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
@@ -608,30 +287,6 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
-            }
-          },
-          "Autumn2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 289,
-                  "HEX": "#ac7eb4",
-                  "L": 0.33,
-                  "S": 0.37
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#ea90af",
-                  "L": 0.55,
-                  "S": 0.61
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#d900ff",
-              "dot brightness": 10
             }
           }
         }
@@ -705,6 +360,47 @@
             }
           }
         }
+      },
+      "Cycle": {
+        "folders": {
+          "colours": {
+            "controllers": {},
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "H": 343,
+                  "S": 0.61,
+                  "L": 0.55,
+                  "HEX": "#ea90af"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "H": 166,
+                  "S": 0.82,
+                  "L": 0.25,
+                  "HEX": "#3cb4a2"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "H": 229,
+                  "S": 0.98,
+                  "L": 0.56,
+                  "HEX": "#6291fe"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "H": 289,
+                  "S": 0.37,
+                  "L": 0.33,
+                  "HEX": "#ac7eb4"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -774,192 +470,9 @@
           "center X": 0.5,
           "center Y": 0.5,
           "pulse amount": 0.8,
-          "speed": 1,
-          "season": "Spring1"
+          "speed": 1
         },
         "folders": {
-          "Spring1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 165,
-                  "HEX": "#2bab98",
-                  "L": 0.22,
-                  "S": 0.89,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 165,
-                  "HEX": "#2bab98",
-                  "L": 0.22,
-                  "S": 0.89,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Spring2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 165,
-                  "HEX": "#2bab98",
-                  "L": 0.22,
-                  "S": 0.89,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 231,
-                  "HEX": "#3d77ff",
-                  "L": 0.52,
-                  "S": 1,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 231,
-                  "HEX": "#3d77ff",
-                  "L": 0.52,
-                  "S": 1,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 231,
-                  "HEX": "#3d77ff",
-                  "L": 0.52,
-                  "S": 1,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 231,
-                  "HEX": "#3d77ff",
-                  "L": 0.52,
-                  "S": 1,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 288,
-                  "HEX": "#a55cb2",
-                  "L": 0.28,
-                  "S": 0.61,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Autumn1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 288,
-                  "HEX": "#a55cb2",
-                  "L": 0.28,
-                  "S": 0.61,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 288,
-                  "HEX": "#a55cb2",
-                  "L": 0.28,
-                  "S": 0.61,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#e866ff",
-              "dot brightness": 3
-            }
-          },
-          "Winter1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#d35a8c",
-                  "L": 0.38,
-                  "S": 0.73,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#d35a8c",
-                  "L": 0.38,
-                  "S": 0.73,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Winter2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#d35a8c",
-                  "L": 0.38,
-                  "S": 0.73,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 165,
-                  "HEX": "#2bab98",
-                  "L": 0.22,
-                  "S": 0.89,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0.15,
@@ -968,32 +481,6 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
-            }
-          },
-          "Autumn2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 288,
-                  "HEX": "#a55cb2",
-                  "L": 0.28,
-                  "S": 0.61,
-                  "preset": ""
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 343,
-                  "HEX": "#d35a8c",
-                  "L": 0.38,
-                  "S": 0.73,
-                  "preset": ""
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#e866ff",
-              "dot brightness": 3
             }
           }
         }
@@ -1072,6 +559,47 @@
             }
           }
         }
+      },
+      "Cycle": {
+        "folders": {
+          "colours": {
+            "controllers": {},
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "H": 343,
+                  "S": 0.73,
+                  "L": 0.38,
+                  "HEX": "#d35a8c"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "H": 165,
+                  "S": 0.89,
+                  "L": 0.22,
+                  "HEX": "#2bab98"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "H": 231,
+                  "S": 1,
+                  "L": 0.52,
+                  "HEX": "#3d77ff"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "H": 288,
+                  "S": 0.61,
+                  "L": 0.28,
+                  "HEX": "#a55cb2"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -1146,181 +674,12 @@
       },
       "Wave": {
         "controllers": {
-          "season": "Spring1",
           "center X": 0.5,
           "center Y": 0.5,
           "pulse amount": 0.8,
           "speed": 1
         },
         "folders": {
-          "Spring1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 181,
-                  "HEX": "#6fb7b8",
-                  "L": 0.32,
-                  "S": 0.5
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 181,
-                  "HEX": "#6fb7b8",
-                  "L": 0.32,
-                  "S": 0.5
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Spring2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 181,
-                  "HEX": "#6fb7b8",
-                  "L": 0.32,
-                  "S": 0.5
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 215,
-                  "HEX": "#7fb0e1",
-                  "L": 0.48,
-                  "S": 0.56
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 215,
-                  "HEX": "#7fb0e1",
-                  "L": 0.48,
-                  "S": 0.56
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 215,
-                  "HEX": "#7fb0e1",
-                  "L": 0.48,
-                  "S": 0.56
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Summer2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 215,
-                  "HEX": "#7fb0e1",
-                  "L": 0.48,
-                  "S": 0.56
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 306,
-                  "HEX": "#ad8aaa",
-                  "L": 0.34,
-                  "S": 0.24
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Autumn1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 306,
-                  "HEX": "#ad8aaa",
-                  "L": 0.34,
-                  "S": 0.24
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 306,
-                  "HEX": "#ad8aaa",
-                  "L": 0.34,
-                  "S": 0.24
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ff80f4",
-              "dot brightness": 1.5
-            }
-          },
-          "Winter1": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 341,
-                  "HEX": "#c987a0",
-                  "L": 0.41,
-                  "S": 0.41
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 341,
-                  "HEX": "#c987a0",
-                  "L": 0.41,
-                  "S": 0.41
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
-          "Winter2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 341,
-                  "HEX": "#c987a0",
-                  "L": 0.41,
-                  "S": 0.41
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 181,
-                  "HEX": "#6fb7b8",
-                  "L": 0.32,
-                  "S": 0.5
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ffffff",
-              "dot brightness": 1
-            }
-          },
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0,
@@ -1329,30 +688,6 @@
               "color H": 330,
               "color L": 0.71,
               "color S": 1
-            }
-          },
-          "Autumn2": {
-            "folders": {
-              "Color 1": {
-                "controllers": {
-                  "H": 306,
-                  "HEX": "#ad8aaa",
-                  "L": 0.34,
-                  "S": 0.24
-                }
-              },
-              "Color 2": {
-                "controllers": {
-                  "H": 341,
-                  "HEX": "#c987a0",
-                  "L": 0.41,
-                  "S": 0.41
-                }
-              }
-            },
-            "controllers": {
-              "dot color": "#ff80f4",
-              "dot brightness": 1.5
             }
           }
         }
@@ -1422,6 +757,47 @@
               "intensity": 2.32,
               "power": 0.77,
               "useWaveTexture": true
+            }
+          }
+        }
+      },
+      "Cycle": {
+        "folders": {
+          "colours": {
+            "controllers": {},
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "H": 341,
+                  "S": 0.41,
+                  "L": 0.41,
+                  "HEX": "#c987a0"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "H": 181,
+                  "S": 0.5,
+                  "L": 0.32,
+                  "HEX": "#6fb7b8"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "H": 215,
+                  "S": 0.56,
+                  "L": 0.48,
+                  "HEX": "#7fb0e1"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "H": 306,
+                  "S": 0.24,
+                  "L": 0.34,
+                  "HEX": "#ad8aaa"
+                }
+              }
             }
           }
         }
