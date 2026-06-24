@@ -103,7 +103,7 @@
               "base normal scale": 0,
               "base normal tile": 1,
               "cavity map": "",
-              "cavity_intensity": 1.0,
+              "cavity_intensity": 1,
               "color": "#ffffff",
               "combine normal maps": false,
               "diff map": "gradient.png",
@@ -123,7 +123,9 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot count": 3
+              "dot count": 3,
+              "dot color": "#e380ff",
+              "dot brightness": 1.7
             },
             "folders": {
               "Dot 1": {
@@ -161,41 +163,36 @@
       },
       "Cycle": {
         "folders": {
-          "colours": {
-            "controllers": {},
-            "folders": {
-              "menstruation": {
-                "controllers": {
-                  "H": 345,
-                  "S": 0.55,
-                  "L": 0.22,
-                  "HEX": "#9d586e"
-                }
-              },
-              "follicular": {
-                "controllers": {
-                  "H": 169,
-                  "S": 0.44,
-                  "L": 0.17,
-                  "HEX": "#56867f"
-                }
-              },
-              "earlyLuteal": {
-                "controllers": {
-                  "H": 228,
-                  "S": 0.48,
-                  "L": 0.29,
-                  "HEX": "#6d7eb0"
-                }
-              },
-              "lateLuteal": {
-                "controllers": {
-                  "H": 283,
-                  "S": 0.48,
-                  "L": 0.22,
-                  "HEX": "#8d5f9b"
-                }
-              }
+          "menstruation": {
+            "controllers": {
+              "H": 345,
+              "S": 0.55,
+              "L": 0.22,
+              "HEX": "#9d586e"
+            }
+          },
+          "follicular": {
+            "controllers": {
+              "H": 169,
+              "S": 0.44,
+              "L": 0.17,
+              "HEX": "#56867f"
+            }
+          },
+          "earlyLuteal": {
+            "controllers": {
+              "H": 228,
+              "S": 0.48,
+              "L": 0.29,
+              "HEX": "#6d7eb0"
+            }
+          },
+          "lateLuteal": {
+            "controllers": {
+              "H": 283,
+              "S": 0.48,
+              "L": 0.22,
+              "HEX": "#8d5f9b"
             }
           }
         }
@@ -306,7 +303,7 @@
               "base normal scale": 0,
               "base normal tile": 1,
               "cavity map": "",
-              "cavity_intensity": 1.0,
+              "cavity_intensity": 1,
               "color": "#ffffff",
               "combine normal maps": false,
               "diff map": "gradient.png",
@@ -325,7 +322,9 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot count": 3
+              "dot count": 3,
+              "dot color": "#d900ff",
+              "dot brightness": 10
             },
             "folders": {
               "Dot 1": {
@@ -363,41 +362,36 @@
       },
       "Cycle": {
         "folders": {
-          "colours": {
-            "controllers": {},
-            "folders": {
-              "menstruation": {
-                "controllers": {
-                  "H": 343,
-                  "S": 0.61,
-                  "L": 0.55,
-                  "HEX": "#ea90af"
-                }
-              },
-              "follicular": {
-                "controllers": {
-                  "H": 166,
-                  "S": 0.82,
-                  "L": 0.25,
-                  "HEX": "#3cb4a2"
-                }
-              },
-              "earlyLuteal": {
-                "controllers": {
-                  "H": 229,
-                  "S": 0.98,
-                  "L": 0.56,
-                  "HEX": "#6291fe"
-                }
-              },
-              "lateLuteal": {
-                "controllers": {
-                  "H": 289,
-                  "S": 0.37,
-                  "L": 0.33,
-                  "HEX": "#ac7eb4"
-                }
-              }
+          "menstruation": {
+            "controllers": {
+              "H": 343,
+              "S": 0.61,
+              "L": 0.55,
+              "HEX": "#ea90af"
+            }
+          },
+          "follicular": {
+            "controllers": {
+              "H": 166,
+              "S": 0.82,
+              "L": 0.25,
+              "HEX": "#3cb4a2"
+            }
+          },
+          "earlyLuteal": {
+            "controllers": {
+              "H": 229,
+              "S": 0.98,
+              "L": 0.56,
+              "HEX": "#6291fe"
+            }
+          },
+          "lateLuteal": {
+            "controllers": {
+              "H": 289,
+              "S": 0.37,
+              "L": 0.33,
+              "HEX": "#ac7eb4"
             }
           }
         }
@@ -500,7 +494,7 @@
               "base normal scale": 1,
               "base normal tile": 1,
               "cavity map": "",
-              "cavity_intensity": 1.0,
+              "cavity_intensity": 1,
               "color": "#ffffff",
               "combine normal maps": false,
               "diff map": "gradient.png",
@@ -524,7 +518,9 @@
           },
           "Dots": {
             "controllers": {
-              "show dots": false
+              "show dots": false,
+              "dot color": "#e866ff",
+              "dot brightness": 3
             },
             "folders": {
               "Dot 1": {
@@ -562,41 +558,36 @@
       },
       "Cycle": {
         "folders": {
-          "colours": {
-            "controllers": {},
-            "folders": {
-              "menstruation": {
-                "controllers": {
-                  "H": 343,
-                  "S": 0.73,
-                  "L": 0.38,
-                  "HEX": "#d35a8c"
-                }
-              },
-              "follicular": {
-                "controllers": {
-                  "H": 165,
-                  "S": 0.89,
-                  "L": 0.22,
-                  "HEX": "#2bab98"
-                }
-              },
-              "earlyLuteal": {
-                "controllers": {
-                  "H": 231,
-                  "S": 1,
-                  "L": 0.52,
-                  "HEX": "#3d77ff"
-                }
-              },
-              "lateLuteal": {
-                "controllers": {
-                  "H": 288,
-                  "S": 0.61,
-                  "L": 0.28,
-                  "HEX": "#a55cb2"
-                }
-              }
+          "menstruation": {
+            "controllers": {
+              "H": 343,
+              "S": 0.73,
+              "L": 0.38,
+              "HEX": "#d35a8c"
+            }
+          },
+          "follicular": {
+            "controllers": {
+              "H": 165,
+              "S": 0.89,
+              "L": 0.22,
+              "HEX": "#2bab98"
+            }
+          },
+          "earlyLuteal": {
+            "controllers": {
+              "H": 231,
+              "S": 1,
+              "L": 0.52,
+              "HEX": "#3d77ff"
+            }
+          },
+          "lateLuteal": {
+            "controllers": {
+              "H": 288,
+              "S": 0.61,
+              "L": 0.28,
+              "HEX": "#a55cb2"
             }
           }
         }
@@ -707,7 +698,7 @@
               "base normal scale": 0,
               "base normal tile": 1,
               "cavity map": "Velvet_CavityMap.png",
-              "cavity_intensity": 1.0,
+              "cavity_intensity": 1,
               "color": "#ffffff",
               "combine normal maps": true,
               "diff map": "gradient.png",
@@ -725,7 +716,9 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot count": 3
+              "dot count": 3,
+              "dot color": "#ff80f4",
+              "dot brightness": 1.5
             },
             "folders": {
               "Dot 1": {
@@ -763,41 +756,36 @@
       },
       "Cycle": {
         "folders": {
-          "colours": {
-            "controllers": {},
-            "folders": {
-              "menstruation": {
-                "controllers": {
-                  "H": 341,
-                  "S": 0.41,
-                  "L": 0.41,
-                  "HEX": "#c987a0"
-                }
-              },
-              "follicular": {
-                "controllers": {
-                  "H": 181,
-                  "S": 0.5,
-                  "L": 0.32,
-                  "HEX": "#6fb7b8"
-                }
-              },
-              "earlyLuteal": {
-                "controllers": {
-                  "H": 215,
-                  "S": 0.56,
-                  "L": 0.48,
-                  "HEX": "#7fb0e1"
-                }
-              },
-              "lateLuteal": {
-                "controllers": {
-                  "H": 306,
-                  "S": 0.24,
-                  "L": 0.34,
-                  "HEX": "#ad8aaa"
-                }
-              }
+          "menstruation": {
+            "controllers": {
+              "H": 341,
+              "S": 0.41,
+              "L": 0.41,
+              "HEX": "#c987a0"
+            }
+          },
+          "follicular": {
+            "controllers": {
+              "H": 181,
+              "S": 0.5,
+              "L": 0.32,
+              "HEX": "#6fb7b8"
+            }
+          },
+          "earlyLuteal": {
+            "controllers": {
+              "H": 215,
+              "S": 0.56,
+              "L": 0.48,
+              "HEX": "#7fb0e1"
+            }
+          },
+          "lateLuteal": {
+            "controllers": {
+              "H": 306,
+              "S": 0.24,
+              "L": 0.34,
+              "HEX": "#ad8aaa"
             }
           }
         }
