@@ -4,8 +4,8 @@
     "folders": {
       "Animation": {
         "controllers": {
-          "end frame": 225,
-          "start frame": 161
+          "end frame": 280,
+          "start frame": 200
         }
       },
       "Background": {
@@ -115,7 +115,7 @@
               "fuzz map tile": 1,
               "metalness": 0,
               "normal map tile": 1,
-              "normal scale": 1.4,
+              "normal scale": 1.1,
               "roughness": 0.9,
               "use wave texture": false
             }
@@ -123,7 +123,6 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot count": 3,
               "dot color": "#e380ff",
               "dot brightness": 1.7
             },
@@ -168,7 +167,7 @@
               "H": 345,
               "S": 0.55,
               "L": 0.22,
-              "HEX": "#9d586e"
+              "HEX": "#571929"
             }
           },
           "follicular": {
@@ -176,7 +175,7 @@
               "H": 169,
               "S": 0.44,
               "L": 0.17,
-              "HEX": "#56867f"
+              "HEX": "#183e37"
             }
           },
           "earlyLuteal": {
@@ -184,7 +183,7 @@
               "H": 228,
               "S": 0.48,
               "L": 0.29,
-              "HEX": "#6d7eb0"
+              "HEX": "#26356d"
             }
           },
           "lateLuteal": {
@@ -192,7 +191,7 @@
               "H": 283,
               "S": 0.48,
               "L": 0.22,
-              "HEX": "#8d5f9b"
+              "HEX": "#441d53"
             }
           }
         }
@@ -322,7 +321,6 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot count": 3,
               "dot color": "#d900ff",
               "dot brightness": 10
             },
@@ -403,8 +401,8 @@
     "folders": {
       "Animation": {
         "controllers": {
-          "end frame": 225,
-          "start frame": 160
+          "end frame": 280,
+          "start frame": 200
         }
       },
       "Background": {
@@ -469,12 +467,12 @@
         "folders": {
           "Wave Pulse": {
             "controllers": {
-              "amplitude": 0.15,
-              "frequency": 10,
-              "speed": 2,
-              "color H": 330,
-              "color L": 0.71,
-              "color S": 1
+              "amplitude": 0,
+              "frequency": 0,
+              "speed": 0,
+              "color H": 0,
+              "color L": 0,
+              "color S": 0
             }
           }
         }
@@ -504,10 +502,10 @@
               "emissive intensity": 0,
               "fuzz map intensity": 0,
               "fuzz map tile": 1,
-              "metalness": 0.96,
+              "metalness": 1,
               "normal map tile": 1,
-              "normal scale": 6.5,
-              "roughness": 0.1,
+              "normal scale": 8,
+              "roughness": 0,
               "skip diff map": false,
               "specular color": "#ffffff",
               "specular intensity": 0,
@@ -561,33 +559,33 @@
           "menstruation": {
             "controllers": {
               "H": 343,
-              "S": 0.73,
-              "L": 0.38,
-              "HEX": "#d35a8c"
+              "S": 0.7,
+              "L": 0.39,
+              "HEX": "#a91e45"
             }
           },
           "follicular": {
             "controllers": {
-              "H": 165,
-              "S": 0.89,
-              "L": 0.22,
-              "HEX": "#2bab98"
+              "H": 170,
+              "S": 0.97,
+              "L": 0.24,
+              "HEX": "#027965"
             }
           },
           "earlyLuteal": {
             "controllers": {
-              "H": 231,
-              "S": 1,
-              "L": 0.52,
-              "HEX": "#3d77ff"
+              "H": 230,
+              "S": 0.6,
+              "L": 0.32,
+              "HEX": "#213183"
             }
           },
           "lateLuteal": {
             "controllers": {
               "H": 288,
-              "S": 0.61,
-              "L": 0.28,
-              "HEX": "#a55cb2"
+              "S": 0.51,
+              "L": 0.35,
+              "HEX": "#752c87"
             }
           }
         }
@@ -599,8 +597,8 @@
     "folders": {
       "Animation": {
         "controllers": {
-          "end frame": 225,
-          "start frame": 161
+          "end frame": 280,
+          "start frame": 200
         }
       },
       "Background": {
@@ -674,11 +672,11 @@
           "Wave Pulse": {
             "controllers": {
               "amplitude": 0,
-              "frequency": 10,
-              "speed": 2,
-              "color H": 330,
-              "color L": 0.71,
-              "color S": 1
+              "frequency": 0,
+              "speed": 0,
+              "color H": 0,
+              "color L": 0,
+              "color S": 0
             }
           }
         }
@@ -706,7 +704,7 @@
               "double side": false,
               "emissive": "#ffffff",
               "emissive intensity": 0,
-              "metalness": 0,
+              "metalness": 1,
               "normal map tile": 1,
               "normal scale": 1.4,
               "roughness": 0.9,
@@ -716,7 +714,6 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot count": 3,
               "dot color": "#ff80f4",
               "dot brightness": 1.5
             },
@@ -747,7 +744,7 @@
           "Fresnel": {
             "controllers": {
               "color": "#ffffff",
-              "intensity": 2.32,
+              "intensity": 4,
               "power": 0.77,
               "useWaveTexture": true
             }
@@ -758,34 +755,34 @@
         "folders": {
           "menstruation": {
             "controllers": {
-              "H": 341,
-              "S": 0.41,
-              "L": 0.41,
-              "HEX": "#c987a0"
+              "H": 340,
+              "S": 0.34,
+              "L": 0.37,
+              "HEX": "#7e3e54"
             }
           },
           "follicular": {
             "controllers": {
               "H": 181,
-              "S": 0.5,
-              "L": 0.32,
-              "HEX": "#6fb7b8"
+              "S": 0.36,
+              "L": 0.3,
+              "HEX": "#316768"
             }
           },
           "earlyLuteal": {
             "controllers": {
               "H": 215,
-              "S": 0.56,
-              "L": 0.48,
-              "HEX": "#7fb0e1"
+              "S": 0.51,
+              "L": 0.34,
+              "HEX": "#2a4f83"
             }
           },
           "lateLuteal": {
             "controllers": {
-              "H": 306,
-              "S": 0.24,
-              "L": 0.34,
-              "HEX": "#ad8aaa"
+              "H": 307,
+              "S": 0.23,
+              "L": 0.3,
+              "HEX": "#5e3b5a"
             }
           }
         }
