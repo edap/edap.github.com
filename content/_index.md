@@ -7,8 +7,8 @@ layout: single-medium-column
 
 {{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
-I am an artist and software developer based in Berlin.
-I have been [lecturing](/teaching) at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department and I have co-founded in 2006 the [IOCOSE](http://iocose.org) art collective.
+I am an artist and software developer based in Berlin. I co-founded the [IOCOSE](http://iocose.org) art collective and lectured at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department.
+
 
 <!-- I design and build immersive 3D web experiences, focusing on clarity, performance, and long-term maintainability for both the visual layers and the underlying infrastructure.
 
@@ -28,9 +28,11 @@ I currently offer two core freelance services:
 
  -->
 
+I work with product companies, design studios, and artists to ship real-time 3D experiences for the web.
+
 If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com
 
-Past collaborations include software companies, design studios, artists and public institutions such as:
+Past collaborations:
 
 - [Volkswagen Future Center](https://schiffbauergasse.de/poi/vw-group-future-center-europe)
 - [HERE Technologies](https://www.here.com/)
