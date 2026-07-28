@@ -125,7 +125,10 @@
               "show dots": true,
               "dot color": "#c590da",
               "dot brightness": 1.7,
-              "dot opacity": 0.07
+              "dot opacity": 0.07,
+              "noise strength": 0,
+              "noise scale": 1,
+              "noise channel": 0
             },
             "folders": {
               "Dot 1": {
@@ -323,7 +326,10 @@
             "controllers": {
               "show dots": true,
               "dot color": "#d900ff",
-              "dot brightness": 10
+              "dot brightness": 10,
+              "noise strength": 0,
+              "noise scale": 1,
+              "noise channel": 0
             },
             "folders": {
               "Dot 1": {
@@ -510,7 +516,6 @@
               "skip diff map": false,
               "specular color": "#ffffff",
               "specular intensity": 0,
-              "use FuzzMap": false,
               "use thread map": false,
               "use wave texture": true
             }
@@ -520,7 +525,10 @@
               "show dots": true,
               "dot color": "#ed85ff",
               "dot brightness": 10.4,
-              "dot opacity": 0.5
+              "dot opacity": 0.5,
+              "noise strength": 0,
+              "noise scale": 1,
+              "noise channel": 0
             },
             "folders": {
               "Dot 1": {
@@ -718,7 +726,10 @@
               "show dots": true,
               "dot color": "#5e3b5a",
               "dot brightness": 5.1,
-              "dot opacity": 0.5
+              "dot opacity": 0.5,
+              "noise strength": 0,
+              "noise scale": 1,
+              "noise channel": 0
             },
             "folders": {
               "Dot 1": {
