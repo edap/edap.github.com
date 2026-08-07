@@ -22,13 +22,13 @@ I currently offer two core freelance services:
 
 ### Backend Infrastructure, APIs & CLI Tools
 
-- I build fast, secure backend systems and custom CLI tools using Ruby and Rust — with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications — from internal dev tools to user-facing services.
+- I build fast, secure backend systems and custom CLI tools using Ruby and Rust, with production experience across PostgreSQL, MySQL, MongoDB, Docker, and modern API design. I focus on crafting robust, maintainable REST APIs, automating development workflows, and building tools that are easy to deploy and operate on Linux servers. With a pragmatic approach and 20 years of experience, I deliver backend code that’s clean, testable, and built to support real-world applications, from internal dev tools to user-facing services.
 
 {{< separator >}}
 
  -->
 
-I work with product companies, design studios, and artists to ship real-time 3D experiences for the web.
+I work with product companies, design studios, universities and artists to ship real-time 3D experiences for the web.
 
 If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com
 
