@@ -126,8 +126,8 @@
               "dot color": "#c590da",
               "dot brightness": 1.7,
               "dot opacity": 0.07,
-              "noise strength": 0,
-              "noise scale": 1,
+              "noise strength": 0.015,
+              "noise scale": 1.4,
               "noise channel": 0
             },
             "folders": {
@@ -750,8 +750,8 @@
               "dot color": "#ed85ff",
               "dot brightness": 10.4,
               "dot opacity": 0.5,
-              "noise strength": 0,
-              "noise scale": 1,
+              "noise strength": 0.015,
+              "noise scale": 1.4,
               "noise channel": 0
             },
             "folders": {
@@ -1060,9 +1060,9 @@
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot color": "#5e3b5a",
-              "dot brightness": 5.1,
-              "dot opacity": 0.5,
+              "dot color": "#c590da",
+              "dot brightness": 1.7,
+              "dot opacity": 0.07,
               "noise strength": 0,
               "noise scale": 1,
               "noise channel": 0
