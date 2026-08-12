@@ -104,8 +104,10 @@
               "base normal tile": 1,
               "cavity map": "",
               "cavity_intensity": 1,
+              "gradient map": "gradient.png",
+              "stencil map": "",
               "color": "#ffffff",
-              "diff map": "gradient.png",
+              "diff map": "",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
@@ -113,8 +115,7 @@
               "metalness": 0,
               "normal map tile": 1,
               "normal scale": 1.1,
-              "roughness": 0.9,
-              "use wave texture": false
+              "roughness": 0.9
             }
           },
           "Dots": {
@@ -416,8 +417,10 @@
               "base normal tile": 1,
               "cavity map": "",
               "cavity_intensity": 1,
+              "gradient map": "gradient.png",
+              "stencil map": "",
               "color": "#ffffff",
-              "diff map": "gradient.png",
+              "diff map": "",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
@@ -717,8 +720,10 @@
               "base normal tile": 1,
               "cavity map": "",
               "cavity_intensity": 1,
+              "gradient map": "gradient.png",
+              "stencil map": "",
               "color": "#ffffff",
-              "diff map": "gradient.png",
+              "diff map": "",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
@@ -729,9 +734,7 @@
               "roughness": 0,
               "skip diff map": false,
               "specular color": "#ffffff",
-              "specular intensity": 0,
-              "use thread map": false,
-              "use wave texture": true
+              "specular intensity": 0
             }
           },
           "Dots": {
@@ -1033,8 +1036,10 @@
               "base normal tile": 1,
               "cavity map": "Velvet_CavityMap.png",
               "cavity_intensity": 1,
+              "gradient map": "gradient.png",
+              "stencil map": "",
               "color": "#ffffff",
-              "diff map": "gradient.png",
+              "diff map": "",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
@@ -1042,8 +1047,7 @@
               "metalness": 1,
               "normal map tile": 1,
               "normal scale": 1.4,
-              "roughness": 0.9,
-              "use wave texture": true
+              "roughness": 0.9
             }
           },
           "Dots": {
@@ -1345,6 +1349,8 @@
               "base normal tile": 1,
               "cavity map": "",
               "cavity_intensity": 1,
+              "gradient map": "gradient.png",
+              "stencil map": "StencilMap.png",
               "color": "#ffffff",
               "diff map": "Netball_Diff_test4.png",
               "diff map tile": 1,
@@ -1354,8 +1360,7 @@
               "metalness": 0,
               "normal map tile": 1,
               "normal scale": 1.1,
-              "roughness": 0.9,
-              "use wave texture": false
+              "roughness": 0.9
             }
           },
           "Dots": {
