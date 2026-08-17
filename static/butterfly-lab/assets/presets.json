@@ -1552,6 +1552,42 @@
                 }
               }
             }
+          },
+          "Pitch.png": {
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "H": 345,
+                  "S": 0.55,
+                  "L": 0.22,
+                  "HEX": "#571929"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "H": 169,
+                  "S": 0.44,
+                  "L": 0.17,
+                  "HEX": "#183e37"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "H": 228,
+                  "S": 0.48,
+                  "L": 0.29,
+                  "HEX": "#26356d"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "H": 283,
+                  "S": 0.48,
+                  "L": 0.22,
+                  "HEX": "#441d53"
+                }
+              }
+            }
           }
         }
       }
