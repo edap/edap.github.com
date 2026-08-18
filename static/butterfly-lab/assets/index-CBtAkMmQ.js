@@ -4274,7 +4274,7 @@ uniform vec2 uDiffMapCenter;
 if (uDiffMapMixActive > 0.5) {
   float zoom = 1.0 + sin(uDiffMapTime * uDiffMapSpeed) * uDiffMapPulseAmount;
   vec2 animUv = uvOffsetZoom(vRawUv, uDiffMapCenter, zoom);
-  float diffMix = texture2D(uDiffMap, animUv).r;
+  float diffMix = smoothstep(0.08, 0.5, texture2D(uDiffMap, animUv).r);
   diffuseColor.rgb = mix(uDiffMapColor1, uDiffMapColor2, diffMix);
 }
 `;function fH(){return{uDiffMap:{value:null},uDiffMapColor1:{value:new et(1,1,1)},uDiffMapColor2:{value:new et(1,1,1)},uDiffMapMixActive:{value:0},uDiffMapTime:{value:0},uDiffMapPulseAmount:{value:0},uDiffMapSpeed:{value:1},uDiffMapCenter:{value:new Be(.5,.5)}}}function hH(i,e,t){i.uDiffMapColor1.value.setStyle(e,Wt),i.uDiffMapColor2.value.setStyle(t,Wt)}const dH=`
