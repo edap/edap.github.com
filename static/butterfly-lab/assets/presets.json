@@ -1255,13 +1255,13 @@
       },
       "Background": {
         "controllers": {
-          "blur": 0.5,
+          "blur": 0,
           "hue": 0,
           "image": "Pitch.png",
-          "intensity": 0.73,
+          "intensity": 1,
           "offset X": 0,
           "offset Y": 0,
-          "saturation": 0.82,
+          "saturation": 1,
           "visible": true,
           "zoom": 1
         }
@@ -1317,17 +1317,17 @@
         "controllers": {
           "center X": 0.5,
           "center Y": 0.5,
-          "pulse amount": 0.8,
+          "pulse amount": 0.9,
           "speed": 1
         },
         "folders": {
           "Wave Pulse": {
             "controllers": {
-              "amplitude": 0.15,
-              "frequency": 10,
-              "speed": 2,
-              "color H": 330,
-              "color L": 0.71,
+              "amplitude": 0,
+              "frequency": 0,
+              "speed": 0,
+              "color H": 0,
+              "color L": 0,
               "color S": 1
             }
           }
@@ -1337,21 +1337,21 @@
         "folders": {
           "Alpha map": {
             "controllers": {
-              "alpha map": "Netball_Alpha_test1.png",
+              "alpha map": "Netball_alpha.png",
               "alpha test": 0.5
             }
           },
           "Base": {
             "controllers": {
               "AO intensity": 0,
-              "Base Normal map": "Netball_normal.png",
+              "Base Normal map": "Netball_normal_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
               "cavity map": "",
-              "cavity_intensity": 1,
+              "cavity_intensity": 0,
               "gradient map": "gradient.png",
               "stencil map": "StencilMap.png",
-              "color": "#ffffff",
+              "color": "#e9e4dd",
               "diff map": "Netball_Diff.png",
               "diff map tile": 1,
               "double side": false,
@@ -1359,40 +1359,40 @@
               "emissive intensity": 0,
               "metalness": 0,
               "normal map tile": 1,
-              "normal scale": 1.1,
-              "roughness": 0.9
+              "normal scale": 0.9,
+              "roughness": 1
             }
           },
           "Dots": {
             "controllers": {
               "show dots": true,
-              "dot color": "#c590da",
-              "dot brightness": 1.7,
+              "dot color": "#eec2ff",
+              "dot brightness": 20,
               "dot opacity": 0.07,
-              "noise strength": 0.015,
+              "noise strength": 0.011,
               "noise scale": 1.4,
               "noise channel": 0
             },
             "folders": {
               "Dot 1": {
                 "controllers": {
-                  "UV X": 0.124,
-                  "UV Y": 0.1,
-                  "radius": 0.04
+                  "UV X": 0.11,
+                  "UV Y": 0.092,
+                  "radius": 0.038
                 }
               },
               "Dot 2": {
                 "controllers": {
-                  "UV X": 0.21,
-                  "UV Y": 0.132,
-                  "radius": 0.028
+                  "UV X": 0.177,
+                  "UV Y": 0.16,
+                  "radius": 0.026
                 }
               },
               "Dot 3": {
                 "controllers": {
-                  "UV X": 0.276,
-                  "UV Y": 0.17,
-                  "radius": 0.019
+                  "UV X": 0.245,
+                  "UV Y": 0.205,
+                  "radius": 0.017
                 }
               }
             }
@@ -1400,8 +1400,8 @@
           "Fresnel": {
             "controllers": {
               "color": "#ffffff",
-              "intensity": 1.54,
-              "power": 2.29,
+              "intensity": 2,
+              "power": 5,
               "useWaveTexture": true
             }
           }
@@ -1557,34 +1557,34 @@
             "folders": {
               "menstruation": {
                 "controllers": {
-                  "H": 345,
-                  "S": 0.55,
-                  "L": 0.22,
-                  "HEX": "#571929"
+                  "H": 0,
+                  "S": 0.49,
+                  "L": 0.52,
+                  "HEX": "#c14a4a"
                 }
               },
               "follicular": {
                 "controllers": {
-                  "H": 169,
-                  "S": 0.44,
+                  "H": 165,
+                  "S": 1,
                   "L": 0.17,
-                  "HEX": "#183e37"
+                  "HEX": "#005943"
                 }
               },
               "earlyLuteal": {
                 "controllers": {
-                  "H": 228,
-                  "S": 0.48,
-                  "L": 0.29,
-                  "HEX": "#26356d"
+                  "H": 221,
+                  "S": 0.82,
+                  "L": 0.58,
+                  "HEX": "#3b74ec"
                 }
               },
               "lateLuteal": {
                 "controllers": {
                   "H": 283,
-                  "S": 0.48,
-                  "L": 0.22,
-                  "HEX": "#441d53"
+                  "S": 0.3,
+                  "L": 0.24,
+                  "HEX": "#442a4e"
                 }
               }
             }
