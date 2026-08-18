@@ -1344,7 +1344,7 @@
           "Base": {
             "controllers": {
               "AO intensity": 0,
-              "Base Normal map": "Netball_Nrm_test6.png",
+              "Base Normal map": "Netball_normal.png",
               "base normal scale": 0,
               "base normal tile": 1,
               "cavity map": "",
@@ -1352,7 +1352,7 @@
               "gradient map": "gradient.png",
               "stencil map": "StencilMap.png",
               "color": "#ffffff",
-              "diff map": "Netball_Diff_test4.png",
+              "diff map": "Netball_Diff.png",
               "diff map tile": 1,
               "double side": false,
               "emissive": "#ffffff",
