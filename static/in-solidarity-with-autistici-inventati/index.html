@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>In solidarity with A/I</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="description" content="We can build the internet that doesn’t yet exist together. Server by server, connection by connection.">
+<style>
+  @font-face {
+    font-family: 'American Typewriter';
+    src: url('./assets/AmericanTypewriterBold.ttf') format('truetype');
+    font-weight: bold;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  #scene {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    touch-action: none;
+  }
+  .corner {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+  .corner-text {
+    margin: 0;
+    padding: 0 0.5em;
+    font-family: 'American Typewriter', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1;
+    color: #ffffff;
+  }
+  .corner-mark {
+    padding: 0.2em 0.35em;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .corner-mark img {
+    display: block;
+    width: 1em;
+    height: 1em;
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./js/vendor/three.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="corner">
+  <p class="corner-text">in solidarity with A/I</p>
+  <a class="corner-mark" href="http://inventati.org"><img src="./assets/red-star.png" alt="inventati.org"></a>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { FontLoader } from './js/vendor/three/addons/loaders/FontLoader.js';
+import { TextGeometry } from './js/vendor/three/addons/geometries/TextGeometry.js';
+
+const FONT_URL = './assets/AmericanTypewriter_Bold.json';
+
+const IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+// Mobile-only downscale for the 3D-text and diffusion render targets (the display canvas stays full-res). Try 0.4-0.65.
+const RENDER_SCALE = 0.5;
+
+const PAR = [
+  ['We can build','the internet'],
+  ['that doesn\'t yet exist'], ['together'],
+  ['Server by server'],
+  ['connection','by connection.']
+]
+
+const TEXT_WIDTH_RATIO = 0.6;
+const LINE_SPACING = 1.15;
+const CAMERA_Z = 8;
+const PARALLAX_X = 1.4;
+const PARALLAX_Y = 0.9;
+const CAMERA_EASE = 0.06;
+const FIELD_RESOLUTION = 400;
+const PHRASE_INTERVAL_MS = 4000;
+const LAST_PHRASE_INTERVAL_MS = 20000;
+const PAINT_RADIUS_PX = 3.75;
+const PAINT_RING_THICKNESS_PX = 0.67;
+const NOISE_URL = './assets/noise.png';
+const TEXT_EXTRUDE_SETTINGS = {
+  size: 1,
+  depth: 0.15,
+  curveSegments: 6,
+  bevelEnabled: true,
+  bevelThickness: 0.02,
+  bevelSize: 0.015,
+  bevelSegments: 3,
+};
+
+const canvas = document.getElementById('scene');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0a);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, CAMERA_Z);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !IS_MOBILE });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.autoClear = false;
+
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+const keyLight = new THREE.DirectionalLight(0xffffff, 4);
+keyLight.position.set(2, 3, 4);
+scene.add(keyLight);
+
+const textGroup = new THREE.Group();
+scene.add(textGroup);
+
+const textMaterials = [
+  new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }),
+  new THREE.MeshPhongMaterial({ color: 0xdddddd }),
+];
+
+function loadFont() {
+  const fontLoader = new FontLoader();
+  return new Promise((resolve) => fontLoader.load(FONT_URL, resolve));
+}
+
+function buildTextGroup(font, lines) {
+  textGroup.children.forEach((mesh) => mesh.geometry.dispose());
+  textGroup.clear();
+  lines.forEach((line, i) => {
+    const geometry = new TextGeometry(line, { font, ...TEXT_EXTRUDE_SETTINGS });
+    geometry.center();
+    const mesh = new THREE.Mesh(geometry, textMaterials);
+    mesh.position.y = ((lines.length - 1) / 2 - i) * LINE_SPACING;
+    textGroup.add(mesh);
+  });
+}
+
+let baseWidth = 1;
+
+function getFrustumWidthAtZ(zPlane) {
+  const distance = camera.position.z - zPlane;
+  const vFov = THREE.MathUtils.degToRad(camera.fov);
+  const height = 2 * Math.tan(vFov / 2) * distance;
+  return height * camera.aspect;
+}
+
+function fitTextToViewport() {
+  const targetWidth = getFrustumWidthAtZ(0) * TEXT_WIDTH_RATIO;
+  const scale = targetWidth / baseWidth;
+  textGroup.scale.setScalar(scale);
+}
+
+const pointerTarget = new THREE.Vector2(0, 0);
+const pointerCurrent = new THREE.Vector2(0, 0);
+const pointerUv = new THREE.Vector2(0.5, 0.5);
+let pointerDown = false;
+
+function setPointer(clientX, clientY) {
+  pointerTarget.x = (clientX / window.innerWidth) * 2 - 1;
+  pointerTarget.y = (clientY / window.innerHeight) * 2 - 1;
+  pointerUv.x = clientX / window.innerWidth;
+  pointerUv.y = 1 - clientY / window.innerHeight;
+}
+
+window.addEventListener('mousemove', (e) => setPointer(e.clientX, e.clientY));
+window.addEventListener('mousedown', (e) => {
+  setPointer(e.clientX, e.clientY);
+  pointerDown = true;
+});
+window.addEventListener('mouseup', () => {
+  pointerDown = false;
+});
+window.addEventListener('touchstart', (e) => {
+  const touch = e.touches[0];
+  if (touch) setPointer(touch.clientX, touch.clientY);
+  pointerDown = true;
+}, { passive: true });
+window.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  if (touch) setPointer(touch.clientX, touch.clientY);
+}, { passive: true });
+window.addEventListener('touchend', () => {
+  pointerDown = false;
+}, { passive: true });
+
+const noiseTexture = new THREE.TextureLoader().load(NOISE_URL);
+
+function createRenderTarget() {
+  return new THREE.WebGLRenderTarget(1, 1, {
+    minFilter: THREE.LinearFilter,
+    magFilter: THREE.LinearFilter,
+    format: THREE.RGBAFormat,
+  });
+}
+
+function createBufferTarget() {
+  return new THREE.WebGLRenderTarget(1, 1, {
+    type: THREE.HalfFloatType,
+    format: THREE.RGBAFormat,
+    minFilter: THREE.LinearFilter,
+    magFilter: THREE.LinearFilter,
+  });
+}
+
+// Buffer B (imageTargets) is always clamped to [0, 1], so on mobile it can use
+// the default 8-bit format, which is cheaper to sample/write than HalfFloat.
+function createImageTarget() {
+  return new THREE.WebGLRenderTarget(1, 1, {
+    type: IS_MOBILE ? THREE.UnsignedByteType : THREE.HalfFloatType,
+    format: THREE.RGBAFormat,
+    minFilter: THREE.LinearFilter,
+    magFilter: THREE.LinearFilter,
+  });
+}
+
+const sceneTarget = createRenderTarget();
+
+const imageTargets = [createImageTarget(), createImageTarget()];
+let imageReadIndex = 0;
+
+const fieldTargets = [createBufferTarget(), createBufferTarget()];
+let fieldReadIndex = 0;
+let fieldWidth = 1;
+let fieldHeight = 1;
+
+const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+const FULLSCREEN_VERTEX_SHADER = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position.xy, 0.0, 1.0);
+  }
+`;
+
+let framesSinceSeed = 0;
+
+// Reaction-diffusion technique based on the work of cornusammonis
+// https://www.shadertoy.com/view/Msd3W2
+const fieldMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    tSelf: { value: null },
+    tImage: { value: null },
+    tNoise: { value: noiseTexture },
+    uTexel: { value: new THREE.Vector2(1, 1) },
+    uFrame: { value: 0 },
+  },
+  vertexShader: FULLSCREEN_VERTEX_SHADER,
+  fragmentShader: `
+    varying vec2 vUv;
+    uniform sampler2D tSelf;
+    uniform sampler2D tImage;
+    uniform sampler2D tNoise;
+    uniform vec2 uTexel;
+    uniform float uFrame;
+
+    void main() {
+      const float _K0 = -20.0 / 6.0;
+      const float _K1 = 4.0 / 6.0;
+      const float _K2 = 1.0 / 6.0;
+      const float cs = -0.1;
+      const float ls = 0.3;
+      const float ps = -0.05;
+      const float ds = 0.05;
+      const float is = 0.01;
+      const float pwr = 1.0;
+      const float amp = 1.0;
+      const float sq2 = 0.7;
+
+      vec2 n = vec2(0.0, uTexel.y);
+      vec2 ne = vec2(uTexel.x, uTexel.y);
+      vec2 e = vec2(uTexel.x, 0.0);
+      vec2 se = vec2(uTexel.x, -uTexel.y);
+      vec2 s = vec2(0.0, -uTexel.y);
+      vec2 sw = vec2(-uTexel.x, -uTexel.y);
+      vec2 w = vec2(-uTexel.x, 0.0);
+      vec2 nw = vec2(-uTexel.x, uTexel.y);
+
+      vec3 im = texture2D(tImage, vUv).xyz;
+      vec3 im_n = texture2D(tImage, vUv + n).xyz;
+      vec3 im_e = texture2D(tImage, vUv + e).xyz;
+      vec3 im_s = texture2D(tImage, vUv + s).xyz;
+      vec3 im_w = texture2D(tImage, vUv + w).xyz;
+      vec3 im_nw = texture2D(tImage, vUv + nw).xyz;
+      vec3 im_sw = texture2D(tImage, vUv + sw).xyz;
+      vec3 im_ne = texture2D(tImage, vUv + ne).xyz;
+      vec3 im_se = texture2D(tImage, vUv + se).xyz;
+
+      float dx = 3.0 * (length(im_e) - length(im_w)) + (length(im_ne) + length(im_se) - length(im_sw) - length(im_nw));
+      float dy = 3.0 * (length(im_n) - length(im_s)) + (length(im_nw) + length(im_ne) - length(im_se) - length(im_sw));
+
+      vec3 uv0 = texture2D(tSelf, vUv).xyz;
+      vec3 uv_n = texture2D(tSelf, vUv + n).xyz;
+      vec3 uv_e = texture2D(tSelf, vUv + e).xyz;
+      vec3 uv_s = texture2D(tSelf, vUv + s).xyz;
+      vec3 uv_w = texture2D(tSelf, vUv + w).xyz;
+      vec3 uv_nw = texture2D(tSelf, vUv + nw).xyz;
+      vec3 uv_sw = texture2D(tSelf, vUv + sw).xyz;
+      vec3 uv_ne = texture2D(tSelf, vUv + ne).xyz;
+      vec3 uv_se = texture2D(tSelf, vUv + se).xyz;
+
+      vec3 lapl = _K0 * uv0 + _K1 * (uv_n + uv_e + uv_w + uv_s) + _K2 * (uv_nw + uv_sw + uv_ne + uv_se);
+      float sp = ps * lapl.z;
+
+      float curl = uv_n.x - uv_s.x - uv_e.y + uv_w.y + sq2 * (uv_nw.x + uv_nw.y + uv_ne.x - uv_ne.y + uv_sw.y - uv_sw.x - uv_se.y - uv_se.x);
+      float sc = cs * sign(curl) * pow(abs(curl), pwr);
+
+      float div = uv_s.y - uv_n.y - uv_e.x + uv_w.x + sq2 * (uv_nw.x - uv_nw.y - uv_ne.x - uv_ne.y + uv_sw.x + uv_sw.y + uv_se.y - uv_se.x);
+      float sd = ds * div;
+
+      vec2 norm = normalize(uv0.xy);
+
+      float ta = amp * uv0.x + ls * lapl.x + norm.x * sp + uv0.x * sd + is * dx;
+      float tb = amp * uv0.y + ls * lapl.y + norm.y * sp + uv0.y * sd + is * dy;
+
+      float a = ta * cos(sc) - tb * sin(sc);
+      float b = ta * sin(sc) + tb * cos(sc);
+
+      if (uFrame < 10.0) {
+        gl_FragColor = vec4(-0.5) + texture2D(tNoise, vUv);
+      } else {
+        gl_FragColor = clamp(vec4(a, b, div, 1.0), -1.0, 1.0);
+      }
+    }
+  `,
+  depthTest: false,
+  depthWrite: false,
+});
+const fieldScene = new THREE.Scene();
+fieldScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), fieldMaterial));
+
+const imageMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    tText: { value: null },
+    tSelf: { value: null },
+    tField: { value: null },
+    uTexel: { value: new THREE.Vector2(1, 1) },
+    uFrame: { value: 0 },
+    uPointerPx: { value: new THREE.Vector2(0, 0) },
+    uPointerActive: { value: 0 },
+    uBrushRadius: { value: PAINT_RADIUS_PX },
+    uRingThickness: { value: PAINT_RING_THICKNESS_PX },
+  },
+  vertexShader: FULLSCREEN_VERTEX_SHADER,
+  fragmentShader: `
+    varying vec2 vUv;
+    uniform sampler2D tText;
+    uniform sampler2D tSelf;
+    uniform sampler2D tField;
+    uniform vec2 uTexel;
+    uniform float uFrame;
+    uniform vec2 uPointerPx;
+    uniform float uPointerActive;
+    uniform float uBrushRadius;
+    uniform float uRingThickness;
+
+    void main() {
+      // diffusion rate: questo cambia quanto melt e' applicato, era  0.4)
+      // 0.18 lo rallenta un po.
+      const float ds = 0.18;
+      const float darken = 0.01;
+      const float D1 = 0.2;
+      const float D2 = 0.05;
+
+      vec2 n = vec2(0.0, uTexel.y);
+      vec2 ne = vec2(uTexel.x, uTexel.y);
+      vec2 e = vec2(uTexel.x, 0.0);
+      vec2 se = vec2(uTexel.x, -uTexel.y);
+      vec2 s = vec2(0.0, -uTexel.y);
+      vec2 sw = vec2(-uTexel.x, -uTexel.y);
+      vec2 w = vec2(-uTexel.x, 0.0);
+      vec2 nw = vec2(-uTexel.x, uTexel.y);
+
+      vec3 components = texture2D(tField, vUv).xyz;
+      float a = components.x;
+      float b = components.y;
+
+      vec3 im = texture2D(tSelf, vUv).xyz;
+      vec3 im_n = texture2D(tSelf, vUv + n).xyz;
+      vec3 im_e = texture2D(tSelf, vUv + e).xyz;
+      vec3 im_s = texture2D(tSelf, vUv + s).xyz;
+      vec3 im_w = texture2D(tSelf, vUv + w).xyz;
+      vec3 im_nw = texture2D(tSelf, vUv + nw).xyz;
+      vec3 im_sw = texture2D(tSelf, vUv + sw).xyz;
+      vec3 im_ne = texture2D(tSelf, vUv + ne).xyz;
+      vec3 im_se = texture2D(tSelf, vUv + se).xyz;
+
+      float D1_e = D1 * a;
+      float D1_w = D1 * -a;
+      float D1_n = D1 * b;
+      float D1_s = D1 * -b;
+      float D2_ne = D2 * (b + a);
+      float D2_nw = D2 * (b - a);
+      float D2_se = D2 * (a - b);
+      float D2_sw = D2 * (-a - b);
+
+      vec3 diffusion_im = -darken * length(vec2(a, b)) * im + im_n * D1_n + im_ne * D2_ne + im_e * D1_e + im_se * D2_se + im_s * D1_s + im_sw * D2_sw + im_w * D1_w + im_nw * D2_nw;
+
+      if (uFrame < 10.0) {
+        gl_FragColor = texture2D(tText, vUv);
+      } else {
+        vec3 result = clamp(im + ds * diffusion_im, 0.0, 1.0);
+        if (uPointerActive > 0.5) {
+          vec2 fragPx = vUv / uTexel;
+          float d = distance(fragPx, uPointerPx);
+          float paint = 1.0 - smoothstep(0.0, uRingThickness, abs(d - uBrushRadius));
+          result = max(result, vec3(paint));
+        }
+        gl_FragColor = vec4(result, 0.0);
+      }
+    }
+  `,
+  depthTest: false,
+  depthWrite: false,
+});
+const imageScene = new THREE.Scene();
+imageScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), imageMaterial));
+
+const displayMaterial = new THREE.MeshBasicMaterial({ map: null });
+const displayScene = new THREE.Scene();
+displayScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), displayMaterial));
+
+function resizeRenderTargets() {
+  const pixelRatio = renderer.getPixelRatio();
+  const renderScale = IS_MOBILE ? RENDER_SCALE : 1;
+  const width = Math.max(1, Math.floor(window.innerWidth * pixelRatio * renderScale));
+  const height = Math.max(1, Math.floor(window.innerHeight * pixelRatio * renderScale));
+  sceneTarget.setSize(width, height);
+  imageTargets[0].setSize(width, height);
+  imageTargets[1].setSize(width, height);
+  imageMaterial.uniforms.uTexel.value.set(1 / width, 1 / height);
+  imageMaterial.uniforms.uBrushRadius.value = PAINT_RADIUS_PX * pixelRatio * renderScale;
+  imageMaterial.uniforms.uRingThickness.value = PAINT_RING_THICKNESS_PX * pixelRatio * renderScale;
+  imageTargets.forEach((target) => {
+    renderer.setRenderTarget(target);
+    renderer.clear();
+  });
+  renderer.setRenderTarget(null);
+}
+
+function resizeFieldTargets() {
+  fieldWidth = Math.max(2, Math.round(FIELD_RESOLUTION * camera.aspect));
+  fieldHeight = FIELD_RESOLUTION;
+  fieldTargets[0].setSize(fieldWidth, fieldHeight);
+  fieldTargets[1].setSize(fieldWidth, fieldHeight);
+  fieldMaterial.uniforms.uTexel.value.set(1 / fieldWidth, 1 / fieldHeight);
+  fieldTargets.forEach((target) => {
+    renderer.setRenderTarget(target);
+    renderer.clear();
+  });
+  renderer.setRenderTarget(null);
+}
+
+let loadedFont = null;
+let phraseIndex = 0;
+
+function showPhrase(index) {
+  buildTextGroup(loadedFont, PAR[index]);
+  textGroup.scale.set(1, 1, 1);
+  const box = new THREE.Box3().setFromObject(textGroup);
+  baseWidth = box.max.x - box.min.x;
+  fitTextToViewport();
+
+  renderer.setRenderTarget(sceneTarget);
+  renderer.clear();
+  renderer.render(scene, camera);
+
+  framesSinceSeed = 0;
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  resizeRenderTargets();
+  resizeFieldTargets();
+  if (loadedFont) showPhrase(phraseIndex);
+}
+
+window.addEventListener('resize', onWindowResize);
+window.addEventListener('orientationchange', onWindowResize);
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  pointerCurrent.x += (pointerTarget.x - pointerCurrent.x) * CAMERA_EASE;
+  pointerCurrent.y += (pointerTarget.y - pointerCurrent.y) * CAMERA_EASE;
+
+  camera.position.x = pointerCurrent.x * PARALLAX_X;
+  camera.position.y = -pointerCurrent.y * PARALLAX_Y;
+  camera.position.z = CAMERA_Z;
+  camera.lookAt(0, 0, 0);
+
+  framesSinceSeed += 1;
+
+  const fieldWriteIndex = 1 - fieldReadIndex;
+  fieldMaterial.uniforms.tSelf.value = fieldTargets[fieldReadIndex].texture;
+  fieldMaterial.uniforms.tImage.value = imageTargets[imageReadIndex].texture;
+  fieldMaterial.uniforms.uFrame.value = framesSinceSeed;
+
+  renderer.setRenderTarget(fieldTargets[fieldWriteIndex]);
+  renderer.clear();
+  renderer.render(fieldScene, orthoCamera);
+  fieldReadIndex = fieldWriteIndex;
+
+  const imageWriteIndex = 1 - imageReadIndex;
+  imageMaterial.uniforms.tText.value = sceneTarget.texture;
+  imageMaterial.uniforms.tSelf.value = imageTargets[imageReadIndex].texture;
+  imageMaterial.uniforms.tField.value = fieldTargets[fieldReadIndex].texture;
+  imageMaterial.uniforms.uFrame.value = framesSinceSeed;
+  imageMaterial.uniforms.uPointerActive.value = pointerDown ? 1 : 0;
+  imageMaterial.uniforms.uPointerPx.value.set(
+    pointerUv.x / imageMaterial.uniforms.uTexel.value.x,
+    pointerUv.y / imageMaterial.uniforms.uTexel.value.y
+  );
+
+  renderer.setRenderTarget(imageTargets[imageWriteIndex]);
+  renderer.clear();
+  renderer.render(imageScene, orthoCamera);
+  imageReadIndex = imageWriteIndex;
+
+  displayMaterial.map = imageTargets[imageReadIndex].texture;
+  renderer.setRenderTarget(null);
+  renderer.clear();
+  renderer.render(displayScene, orthoCamera);
+}
+
+function scheduleNextPhrase() {
+  const isLastPhrase = phraseIndex === PAR.length - 1;
+  const delay = isLastPhrase ? LAST_PHRASE_INTERVAL_MS : PHRASE_INTERVAL_MS;
+  setTimeout(() => {
+    phraseIndex = (phraseIndex + 1) % PAR.length;
+    showPhrase(phraseIndex);
+    scheduleNextPhrase();
+  }, delay);
+}
+
+loadFont().then((font) => {
+  loadedFont = font;
+  resizeRenderTargets();
+  resizeFieldTargets();
+  showPhrase(phraseIndex);
+  animate();
+  scheduleNextPhrase();
+});
+</script>
+</body>
+</html>
