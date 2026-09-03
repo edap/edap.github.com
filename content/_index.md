@@ -30,7 +30,11 @@ I currently offer two core freelance services:
 
 I work with product companies, design studios, universities and artists to ship real-time 3D experiences for the web.
 
-If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com
+I work with associations, NGOs and universities to make websites, archive old works, online courses and manage servers.
+
+I stand for a [free internet](https://keepitfree.ai/) and for open source software.
+
+If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com.
 
 Past collaborations:
 
@@ -52,6 +56,5 @@ Past collaborations:
 - [Mechatronica](https://mechatronica.bandcamp.com/)
 
 
-Social profiles: [![Mastodon](/img/social/mastodon.png)](https://chaos.social/@edapx) [![Codeberg](/img/social/codeberg.png)](https://codeberg.org/edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap) [![Bluesky](/img/social/bluesky.png)](https://bsky.app/profile/edapx.bsky.social)
-
+Social profiles: [![Mastodon](/img/social/mastodon.png)](https://chaos.social/@edapx) [![Codeberg](/img/social/codeberg.png)](https://codeberg.org/edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap) 
 ---
