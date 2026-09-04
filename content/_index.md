@@ -30,7 +30,7 @@ I currently offer two core freelance services:
 
 I work with product companies, design studios, universities and artists to ship real-time 3D experiences for the web.
 
-I work with associations, NGOs and universities to make websites, archive old works, online courses and manage servers.
+I work with associations, NGOs and universities to make websites, to prepare interactive online courses and to manage servers.
 
 I stand for a [free internet](https://keepitfree.ai/) and for open source software.
 
