@@ -4,6 +4,7 @@ layout: single-medium-column
 
 ---
 
+{{< keepitfree >}}
 
 {{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
@@ -36,8 +37,10 @@ I stand for a [free internet](https://keepitfree.ai/) and for open source softwa
 
 If you're interested in hiring me for freelance work get in touch at info (at) davideprati (dot) com.
 
-Past collaborations:
+<!--
 
+Past collaborations:
+ 
 - [Volkswagen Future Center](https://schiffbauergasse.de/poi/vw-group-future-center-europe)
 - [HERE Technologies](https://www.here.com/)
 - [Tomás Saraceno Studio](https://studiotomassaraceno.org/)
@@ -53,7 +56,7 @@ Past collaborations:
 - [Heiner Franzen](https://www.heinerfranzen.de/)
 - [Annika Larsson](https://en.wikipedia.org/wiki/Annika_Larsson)
 - [Citizer Art Days](http://www.citizenartdays.de/)
-- [Mechatronica](https://mechatronica.bandcamp.com/)
+- [Mechatronica](https://mechatronica.bandcamp.com/) -->
 
 
 Social profiles: [![Mastodon](/img/social/mastodon.png)](https://chaos.social/@edapx) [![Codeberg](/img/social/codeberg.png)](https://codeberg.org/edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap) 
