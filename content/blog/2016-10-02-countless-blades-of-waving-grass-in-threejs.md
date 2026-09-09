@@ -1,6 +1,7 @@
 ---
 title: "Countless Blades of Waving Grass in Three.js"
 layout: blog-post
+date: "2016-10-02"
 category: 
 tags:
 - Shaders
@@ -189,8 +190,6 @@ void main() {
 ```
 
 And this is the final [result](/demo/grass)
-
-![grass](/demo/grass/images/grass-small.png)
 
 
 

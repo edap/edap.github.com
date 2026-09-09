@@ -2,6 +2,7 @@
 jsxgraphcore: true
 title: "Drawing a leaf with the parabola equation"
 layout: blog-post
+date: "2017-04-30"
 category: 
 tags:
 - Javascript

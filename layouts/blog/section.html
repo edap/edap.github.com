@@ -1,0 +1,15 @@
+{{ define "main" }}
+    <div class="container">
+        <div class="single-medium-column">
+            <h1>{{ .Title }}</h1>
+            {{ .Content }}
+            <ul>
+                {{ range .RegularPages.ByDate.Reverse }}
+                    <li>
+                        <a href="{{ .Permalink }}">{{ .Title }}</a> &mdash; {{ .Date.Format "2 January 2006" }}
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </div>
+{{ end }}

@@ -1,8 +1,10 @@
 {{ if .IsPage }}
-    {{ $defaultSection := "demo" }}
     {{ $currentSection := .Section }}
     {{ $pages := where site.RegularPages "Section" $currentSection }}
     {{ $sortedPages := $pages.ByParam "order" }}
+    {{ if eq $currentSection "blog" }}
+        {{ $sortedPages = $pages.ByDate }}
+    {{ end }}
 
     {{ $currentPage := . }}
     {{ $currentIndex := -1 }}
