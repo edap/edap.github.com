@@ -3,7 +3,7 @@ layout: blog-post
 date: "2016-04-01"
 title: "L System addons"
 category:
-tags: [openFrameworks, addon, generative design, L-System, c++, 3D Turtle]
+tags: [openFrameworks, c++]
 description: "I've published two openFrameworks addons to generate L-System plants and fractals with openFrameworks."
 ---
 

@@ -27,6 +27,14 @@
                     </a>
                   {{ end }}
                 {{ end }}
+
+                {{ range .RegularPages }}
+                  {{ if not .Params.cover }}
+                  <a href="{{ .Permalink }}" class="grid l2-12 post-card">
+                      <span class="post-card-title">{{ .Title }}</span>
+                  </a>
+                  {{ end }}
+                {{ end }}
             </div>
         </div>     
 

@@ -3,7 +3,7 @@ layout: blog-post
 date: "2015-05-25"
 title: "FaceTracker sketch"
 category:
-tags: [openFrameworks, FaceTracker, Box2D, OpenCV, interactive installation]
+tags: [openFrameworks, OpenCV]
 description: "OpenFrameworks sketch mixing ofxFaceTracker, ofxBox2D and the audio input."
 ---
 
@@ -110,6 +110,10 @@ void BallsGenerator::blow(float blowPower){
     }
 }
 ```
+
+And this is the result:
+
+{{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
 
 

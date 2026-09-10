@@ -85,8 +85,6 @@ We can plot the last equation on the x and z axis, and use the y and x axis to p
 As we did before, we calculate first the position of the point \\(x_0,z_0\\) that allow us to calculate the coordinates of the points in two dimensions. Then we calculate the position of the point \\(x_0,y_0\\) that allow us to know the height on the y axis of each point.
 
 
-![palm leaf examples](/img/posts/parabola-leaf/palm3.jpg)
-
 ### Examples
 
 Here some examples obtained with the method just described. I've added some other parameters, like the width and the length of the stem, and an offset value that moves the points a little bit more forward on the x axis, but the main part of the program that creates this meshes is that one just explained.

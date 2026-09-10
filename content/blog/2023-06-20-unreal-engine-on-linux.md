@@ -3,7 +3,7 @@ layout: blog-post
 date: "2023-06-20"
 title: "Unreal Engine on Linux"
 category: 
-tags: []
+tags: [c++, UnrealEngine]
 ---
 
 Here you can find information about how to setup a working enviroment to develop Unreal Engines projects on Linux, specifically Ubuntu and others Linux distros based on Ubuntu. Those instructions have been tested on PopOS 22.04 and Ubuntu 22.04.
@@ -23,9 +23,9 @@ If you are just developing Unreal Engine using blueprints, you are ready to get 
 - For Visual Studio Code, install it and then be sure to have clang installed (`apt-get install clang`), install the *CodeLLDB* extension then in the UE editor, go to "Edit -> Editor Preferences -> General -> Source Code" and select "Visual Studio Code".
 - For [Rider](https://www.jetbrains.com/rider/) (and for a much more integrated developer experience), install Rider. After opening rider, select an Unreal Project previously created. Rider recognize that it is an Unreal project and ask you to install the plugin "Rider Live" either in UE or in Rider, I choose the option to install it in Unreal Engine and I've never had a problem. Then go into the UE editor "Edit -> Editor preferences -> General -> Source Code", there is no option for rider, select "Visual Studio Code", it will work the same way. To add the launcher icon to your desktop, go to "Tools -> Create Desktop Entry".
 - To compile the code, compile it from the Unreal Engine editor, clicking on the small icon on the bottom right corner of your screen that looks like a tetris.
-![compile UE](/assets/media/posts/compile-ue.png)
+![compile UE](/img/posts/linux-unreal/compile-ue.png)
 This action actually does not recompile the entire project, it performs what is called *hot reloading*. It is faster then recompiling everything, but once in a while remember to recompile the whole project, as it may happens that some edit in the c++ classes are not visible in the blueprints. To do so, in Rider, click on the "build" action on the top bar, and select the name of your project.
 
-### Troubleshotting
+### Troubleshooting
 
 Sometime you may receive the error "try rebuild from source manually". In this case close the UE editor and delete the folders Saved,Intermediate,Binaries and DerivedDataCache. Re-open the editor, it will ask you to recompile it, say yes. When it is finished reopen Rider.

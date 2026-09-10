@@ -4,7 +4,7 @@ date: "2015-11-03"
 title: "Keyboard Karaoke"
 category:
 published: false
-tags: [openFrameworks, karaoke, keyboard, interactive installation]
+tags: [openFrameworks]
 description: "openFrameworks keyboard karaoke"
 ---
 The Keyboard Karaoke is an application to sing and type your favourite songs. The code is available at [https://github.com/edap/KeyboardKaraoke](https://github.com/edap/KeyboardKaraoke)
