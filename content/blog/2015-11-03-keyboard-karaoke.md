@@ -3,7 +3,7 @@ layout: blog-post
 date: "2015-11-03"
 title: "Keyboard Karaoke"
 category:
-published: false
+published: true
 tags: [openFrameworks]
 description: "openFrameworks keyboard karaoke"
 ---
@@ -11,12 +11,12 @@ The Keyboard Karaoke is an application to sing and type your favourite songs. Th
 <div class="sixteen-nine">
 <iframe src="https://player.vimeo.com/video/144209588" width="745" height="466" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 </div>
-![particle1](/assets/media/keyboard-karaoke/menu.png)
+![particle1](/img/posts/keyboard-karaoke/menu.png)
 
-![particle2](/assets/media/keyboard-karaoke/bicycle.png)
+![particle2](/img/posts/keyboard-karaoke/bicycle.png)
 
-![particle3](/assets/media/keyboard-karaoke/belzebu.png)
+![particle3](/img/posts/keyboard-karaoke/belzebu.png)
 
-![particle4](/assets/media/keyboard-karaoke/killer.png)
+![particle4](/img/posts/keyboard-karaoke/killer.png)
 
-![particle6](/assets/media/keyboard-karaoke/end.png)
+![particle6](/img/posts/keyboard-karaoke/end.png)
