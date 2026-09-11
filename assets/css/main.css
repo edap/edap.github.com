@@ -75,6 +75,26 @@ pre code {
     border-radius: 0;
 }
 
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+th, td {
+    padding: 0.5em 0.8em;
+    border: 1px solid var(--background-color);
+    text-align: left;
+}
+
+th {
+    font-family: 'Iosevka', sans-serif;
+    font-weight: bold;
+}
+
 /* images*/
 
 figure {
