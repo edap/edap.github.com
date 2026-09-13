@@ -45,7 +45,7 @@ fn main() -> io::Result<()> {
 }
 ```
 
-It works right? no, we have this error:
+It works, right? No. We have this error:
 
 ```rust
 error[E0596]: cannot borrow `stdout` as mutable, as it is a captured variable in a `Fn` closure
@@ -77,7 +77,8 @@ The second problem is more complex and it is related to how this closure capture
 
 Closures can capture variables in 3 different ways:
 
-- immutable borrow: `&T` -> `Fn`. When a closure only needs to read a captured value, it can capture it through an immutable borrow.
+- immutable borrow: `&T`. 
+    When a closure only needs to read a captured value, it can capture it through an immutable borrow.
 
     ```rust
     let name = String::from("Davide");
@@ -87,7 +88,8 @@ Closures can capture variables in 3 different ways:
     ```
     This type of closure can implement Fn, meaning it can be called multiple times without mutating its captured environment.
 
-- Mutable borrow: &mut T -> `FnMut`. When a closure needs to modify a captured value, it captures it through a mutable borrow.
+- Mutable borrow: `&mut T`.
+    When a closure needs to modify a captured value, it captures it through a mutable borrow.
 
     ```rust
     let mut counter = 0;
@@ -104,7 +106,8 @@ Closures can capture variables in 3 different ways:
     ```
     This closure requires FnMut because calling it mutates its captured environment.
 
-- Taking ownership: `T` -> `FnOnce`. When a closure consumes a captured value, it takes ownership of it.
+- Taking ownership: `T`
+    . When a closure consumes a captured value, it takes ownership of it.
 
     ```rust
     let name = String::from("Davide");
@@ -113,7 +116,7 @@ Closures can capture variables in 3 different ways:
     };
     ```
 
-    This closure implements FnOnce because it consumes name and can therefore only be called once.
+    This closure implements `FnOnce` because it consumes name and can therefore only be called once.
 
 This is a useful mental model, although technically Fn, FnMut, and FnOnce are closure traits, while &T, &mut T, and T describe how a value is captured.
 
@@ -123,6 +126,13 @@ This is a useful mental model, although technically Fn, FnMut, and FnOnce are cl
 | &mut T          | FnMut           |
 | T               | FnOnce          |
 
+Let's look at the closure again and at the error `cannot borrow stdout as mutable, as it is a captured variable in a Fn closure`
+
+```rust
+|task| {
+    writeln!(stdout, "{}", task);
+}
+```
 
 The closure uses `stdout`, therefore, it should capture it. The question is, how does it capture it? `Fn`, `FnMut` or`FnOnce` ? Let's have a look at the `writeln!` macro. It implements the Write trait `fn write(&mut self, buf: &[u8]) -> Result<usize>;`.Writing therefore requires mutable access to the writer. So, because `stdout` is declared outside the closure and the closure needs mutable access to it, the closure captures stdout through a mutable borrow. 
 
@@ -130,16 +140,14 @@ But the `ParallelIterator::for_each` requires a closure that is safe to call thr
 
 In Rust there is a concept called "interior mutability", and it is used to relax a bit the rigid rules of immutability. It basically allows the programmer to introduce a little bit of mutable data inside an immutable value. The Rust book focuses on [RfCell](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html) but in this case, interior mutability is provided by a `Mutex`.
 
-I created a struct called StreamWriter containing a Mutex. The closure passed to Rayon only needs shared access to StreamWriter, so it can satisfy Rayon's requirement for an Fn closure. Then, when a thread needs to write data, `write_line()` calls `self.writer.lock()`. This returns a `MutexGuard`. The guard provides exclusive access to the value stored inside the mutex and behaves like a mutable reference to it. When the MutexGuard goes out of scope, the lock is automatically released..
-
-This is how interior mutability solves the problem.
+I created a struct called `StreamWriter` containing a Mutex. The closure passed to Rayon only needs shared access to `StreamWriter`, so it can satisfy Rayon's requirement for an `Fn` closure. Then, when a thread needs to write data, `write_line()` calls `self.writer.lock()`. This returns a `MutexGuard`. The guard provides exclusive access to the value stored inside the mutex and behaves like a mutable reference to it. When the MutexGuard goes out of scope, the lock is automatically released.
 
 This is how interior mutability solved my problem, all the pieces of my programs are now happy:
 
-- The closure only needs shared access to StreamWriter.
-- Multiple threads can share &StreamWriter.
-- The `Mutex` provides exclusive access to the writer
-- Only one thread gets mutable access to `Write` at a time.
+- The closure only needs shared access to `StreamWriter`.
+- Multiple threads can share `&StreamWriter`.
+- The `Mutex` provides exclusive access to the writer.like a single key to a room. Multiple threads may want to write at the same time, but only one thread can acquire the lock at a time. 
+- Only one thread gets mutable access to `Write` at a time. The mutex ensures that only one thread grabs the "lock" at a time, writes its line, and then hands the key to the next thread.
 
 This is the working code.
 
@@ -154,6 +162,9 @@ pub struct StreamWriter {
 }
 
 impl StreamWriter {
+    // dyn Write makes the writer universal. Because it accepts any type that implements Rust's 
+    // `Write` trait, the struct doesn't just work for `io::stdout()`, it can also write 
+    // to a local log file or an in-memory test buffer without changing the logic of the program.
     pub fn new(writer: Box<dyn Write + Send>) -> Self {
         Self {
             writer: Mutex::new(writer),
@@ -168,7 +179,8 @@ impl StreamWriter {
 }
 
 fn main() -> io::Result<()> {
-    //dyn Write is a trait object and therefore has no known size at compile time.
+    // We need to box the writer
+    // dyn Write is a trait object and therefore has no known size at compile time.
     // Box stores the actual writer on the heap and keeps a fixed-size pointer to it.
     let writer = StreamWriter::new(Box::new(io::stdout()));
 
@@ -190,7 +202,7 @@ fn main() -> io::Result<()> {
 
 **Why This Data Structure Works**
 
-* **`Mutex<T>` :** like a single key to a room. Multiple threads may want to write at the same time, but only one thread can acquire the lock at a time. The mutex ensures that only one thread grabs the "lock" at a time, writes its line, and then hands the key to the next thread.
+* **`Mutex<T>` :** 
 * **`Box<dyn Write + Send>` :**
 * **`dyn Write`:** This makes the writer universal. Because it accepts *any* type that implements Rust's `Write` trait, the struct doesn't just work for `io::stdout()`, it can also write to a local log file or an in-memory test buffer without changing the logic of the program.
 * **`Send`:** tells the Rust compiler that ownership of the writer can safely be transferred between threads.
