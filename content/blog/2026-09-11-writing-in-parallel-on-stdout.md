@@ -86,7 +86,7 @@ Closures can capture variables in 3 different ways:
         println!("{}", name);
     };
     ```
-    This type of closure can implement Fn, meaning it can be called multiple times without mutating its captured environment.
+    This type of closure can implement `Fn`, meaning it can be called multiple times without mutating its captured environment.
 
 - Mutable borrow: `&mut T`.
     When a closure needs to modify a captured value, it captures it through a mutable borrow.
@@ -104,7 +104,7 @@ Closures can capture variables in 3 different ways:
     increment();
     // counter is now == 3
     ```
-    This closure requires FnMut because calling it mutates its captured environment.
+    This closure requires `FnMut` because calling it mutates its captured environment.
 
 - Taking ownership: `T`
     . When a closure consumes a captured value, it takes ownership of it.
