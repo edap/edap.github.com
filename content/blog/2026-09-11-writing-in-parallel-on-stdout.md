@@ -140,7 +140,7 @@ But the `ParallelIterator::for_each` requires a closure that is safe to call thr
 
 In Rust there is a concept called "interior mutability", and it is used to relax a bit the rigid rules of immutability. It basically allows the programmer to introduce a little bit of mutable data inside an immutable value. The Rust book focuses on [RfCell](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html) but in this case, interior mutability is provided by a `Mutex`.
 
-I created a struct called `StreamWriter` containing a Mutex. The closure passed to Rayon only needs shared access to `StreamWriter`, so it can satisfy Rayon's requirement for an `Fn` closure. Then, when a thread needs to write data, `write_line()` calls `self.writer.lock()`. This returns a `MutexGuard`. The guard provides exclusive access to the value stored inside the mutex and behaves like a mutable reference to it. When the MutexGuard goes out of scope, the lock is automatically released.
+I created a struct called `StreamWriter` containing a Mutex. The closure passed to Rayon only needs shared access to `StreamWriter`, so it can satisfy Rayon's requirement for an `Fn` closure. Then, when a thread needs to write data, `write_line()` calls `self.writer.lock()`. This returns a `MutexGuard`. The guard provides exclusive access to the value stored inside the mutex and behaves like a mutable reference to it. As the [doc](https://doc.rust-lang.org/std/sync/struct.MutexGuard.html) says " When this structure is dropped (falls out of scope), the lock will be unlocked.".
 
 This is how interior mutability solved my problem, all the pieces of my programs are now happy:
 
@@ -198,17 +198,7 @@ fn main() -> io::Result<()> {
 
 ```
 
-
-
-**Why This Data Structure Works**
-
-* **`Mutex<T>` :** 
-* **`Box<dyn Write + Send>` :**
-* **`dyn Write`:** This makes the writer universal. Because it accepts *any* type that implements Rust's `Write` trait, the struct doesn't just work for `io::stdout()`, it can also write to a local log file or an in-memory test buffer without changing the logic of the program.
-* **`Send`:** tells the Rust compiler that ownership of the writer can safely be transferred between threads.
-
-
-Because the tasks are processed in parallel, the order of the output is not guaranteed. You may have results like this:
+Note that now that multiple threads can access the StreamWriter in parallel, the order of the output is not guaranteed. You may have results like this:
 
 ```
 Processing file 3
