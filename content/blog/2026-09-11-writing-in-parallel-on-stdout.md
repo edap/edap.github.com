@@ -144,10 +144,9 @@ I created a struct called `StreamWriter` containing a Mutex. The closure passed 
 
 This is how interior mutability solved my problem, all the pieces of my programs are now happy:
 
-- The closure only needs shared access to `StreamWriter`.
+- The closure only needs shared access to `&StreamWriter`.
 - Multiple threads can share `&StreamWriter`.
-- The `Mutex` provides exclusive access to the writer.like a single key to a room. Multiple threads may want to write at the same time, but only one thread can acquire the lock at a time. 
-- Only one thread gets mutable access to `Write` at a time. The mutex ensures that only one thread grabs the "lock" at a time, writes its line, and then hands the key to the next thread.
+- The `Mutex` provides exclusive access to the writer, like a single key to a room. Multiple threads may want to write at the same time, but only one thread acquires the lock at a time, gets mutable access to `Write`, writes its line, and then hands the key to the next thread.
 
 This is the working code.
 
