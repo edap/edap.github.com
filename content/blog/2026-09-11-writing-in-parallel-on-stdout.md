@@ -206,12 +206,12 @@ Processing file 4
 Processing file 2
 ```
 
-P.S.
+### Post Scriptum
 
 A user on the Rust forum pointed out that I could use `Stdout::lock`, and simply:
 
 
-```
+```rust
 use rayon::prelude::*;
 use std::io::{self, Write};
 
@@ -231,6 +231,6 @@ fn main() -> io::Result<()> {
 }
 ```
 
-And this is probably what you want, but it does not fit my needs. I need a custom struct because I need to handle the initizialization of the format, at the moment i support json and csv. For example, if I output `json`, the list of what eacj of my task is reporting should start with `[`.
+And this is probably what you want, but it does not fit my needs. I need a custom struct because I need to handle the initizialization of the format, at the moment i support json and csv. For example, if I output `json`, the list of what each of my task is reporting should start with `[`, end with `]` and the first entry should not start with a leading `,`.
 
-Also, as `StreaWriter` accepts `Box<dyn Write + Send>`, I could switch between the standard output or a log file.
+Also, as `StreaWriter` accepts `Box<dyn Write + Send>`, I could switch between the standard output, a log file or a custom buffer to add tests for my formatting logic.

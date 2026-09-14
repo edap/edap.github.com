@@ -3,7 +3,6 @@ title: About
 layout: single-medium-column
 
 ---
-
 {{< keepitfree >}}
 
 {{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
