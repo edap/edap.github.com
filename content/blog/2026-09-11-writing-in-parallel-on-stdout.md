@@ -205,3 +205,32 @@ Processing file 1
 Processing file 4
 Processing file 2
 ```
+
+P.S.
+
+A user on the Rust forum pointed out that I could use `Stdout::lock`, and simply:
+
+
+```
+use rayon::prelude::*;
+use std::io::{self, Write};
+
+fn main() -> io::Result<()> {
+    let tasks = vec!["Task 1", "Task 2", "Task 3", "Task 4"];
+
+    tasks.par_iter().for_each(|task| {
+        // Locks the global stdout handle for this thread, writes to the MutexGuard 
+        // and automatically unlocks when the guard goes out of scope.
+        let mut stdout = io::stdout().lock();
+        if let Err(e) = writeln!(stdout, "{}", task) {
+            eprintln!("Error writing output: {}", e);
+        }
+    });
+
+    Ok(())
+}
+```
+
+And this is probably what you want, but it does not fit my needs. I need a custom struct because I need to handle the initizialization of the format, at the moment i support json and csv. For example, if I output `json`, the list of what eacj of my task is reporting should start with `[`.
+
+Also, as `StreaWriter` accepts `Box<dyn Write + Send>`, I could switch between the standard output or a log file.
