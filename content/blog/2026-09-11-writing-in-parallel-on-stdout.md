@@ -232,13 +232,15 @@ fn main() -> io::Result<()> {
 }
 ```
 
-The reason is that the custom writer also gives `pardi` a place to handle output formatting. For example, JSON Lines output can serialize each result directly to the stream:
+The `StreamWriter` is not strictly necessary for writing the output. Its main purpose is to encapsulate the synchronization and provide a single interface for the different output formats used by pardi (CSV and JSON at the moment).
+
+For example, the JSON formatter can be kept inside the writer:
 
 ```rust
-serde_json::to_writer(&mut writer, &result)?;
+writer.write_json(&result)?;
 ```
 
-This means StreamWriter is not just a synchronized wrapper around Write: it can also provide a common interface for the different output formats supported by pardi.
+rather than exposing the locking and serialization details to the caller.
 
-The same abstraction can also support different output formats and different destinations, such as standard output, a file, or an in-memory buffer for tests.
+Also, the same abstraction can support different output formats and different destinations, such as standard output, a file, or an in-memory buffer for tests.
 
