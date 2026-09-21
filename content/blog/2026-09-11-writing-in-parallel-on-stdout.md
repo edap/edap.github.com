@@ -206,9 +206,10 @@ Processing file 4
 Processing file 2
 ```
 
-### Post Scriptum
 
-A user on the Rust forum pointed out that I could use `Stdout::lock`, and simply:
+### Why use a custom writer?
+
+At this point, you might reasonably ask why I need a StreamWriter at all. If all I want is to write lines to standard output, Stdout::lock() is enough.
 
 
 ```rust
@@ -231,6 +232,13 @@ fn main() -> io::Result<()> {
 }
 ```
 
-And this is probably what you want, but it does not fit my needs. I need a custom struct because I need to handle the initizialization of the format, at the moment i support json and csv. For example, if I output `json`, the list of what each of my task is reporting should start with `[`, end with `]` and the first entry should not start with a leading `,`.
+The reason is that the custom writer also gives `pardi` a place to handle output formatting. For example, JSON Lines output can serialize each result directly to the stream:
 
-Also, as `StreaWriter` accepts `Box<dyn Write + Send>`, I could switch between the standard output, a log file or a custom buffer to add tests for my formatting logic.
+```rust
+serde_json::to_writer(&mut writer, &result)?;
+```
+
+This means StreamWriter is not just a synchronized wrapper around Write: it can also provide a common interface for the different output formats supported by pardi.
+
+The same abstraction can also support different output formats and different destinations, such as standard output, a file, or an in-memory buffer for tests.
+

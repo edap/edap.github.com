@@ -3,7 +3,7 @@ title: About
 layout: single-medium-column
 
 ---
-{{< keepitfree >}}
+<!-- {{< keepitfree >}} -->
 
 {{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
 
@@ -60,5 +60,6 @@ Past collaborations:
 - [Mechatronica](https://mechatronica.bandcamp.com/) -->
 
 
-Social profiles: [![Mastodon](/img/social/mastodon.png)](https://chaos.social/@edapx) [![Codeberg](/img/social/codeberg.png)](https://codeberg.org/edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap) 
+<!-- [![Mastodon](/img/social/mastodon.png)](https://chaos.social/@edapx) -->
+Social profiles: [![Codeberg](/img/social/codeberg.png)](https://codeberg.org/edapx)  [![Github](/img/social/github.png)](https://www.github.com/edap) 
 ---
