@@ -102,8 +102,6 @@
               "Base Normal map": "Paper_normal_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
-              "cavity map": "",
-              "cavity_intensity": 1,
               "gradient map": "gradient.png",
               "stencil map": "",
               "color": "#ffffff",
@@ -116,6 +114,11 @@
               "normal map tile": 1,
               "normal scale": 1.1,
               "roughness": 0.9
+            }
+          },
+          "Highlights": {
+            "controllers": {
+              "map": ""
             }
           },
           "Dots": {
@@ -415,8 +418,6 @@
               "Base Normal map": "Glass_normal_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
-              "cavity map": "",
-              "cavity_intensity": 1,
               "gradient map": "gradient.png",
               "stencil map": "",
               "color": "#ffffff",
@@ -429,6 +430,11 @@
               "normal map tile": 1,
               "normal scale": 10,
               "roughness": 0
+            }
+          },
+          "Highlights": {
+            "controllers": {
+              "map": ""
             }
           },
           "Dots": {
@@ -718,8 +724,6 @@
               "Base Normal map": "FracturedGlass_normal_1k.png",
               "base normal scale": 1,
               "base normal tile": 1,
-              "cavity map": "",
-              "cavity_intensity": 1,
               "gradient map": "gradient.png",
               "stencil map": "",
               "color": "#ffffff",
@@ -736,6 +740,12 @@
               "specular color": "#ffffff",
               "specular intensity": 0
             }
+          },
+          "Highlights": {
+            "controllers": {
+              "map": ""
+            },
+            "folders": {}
           },
           "Dots": {
             "controllers": {
@@ -926,6 +936,30 @@
                 }
               }
             }
+          },
+          "Pitch.png": {
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              }
+            }
           }
         }
       }
@@ -1034,8 +1068,6 @@
               "Base Normal map": "Velvet_normal_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
-              "cavity map": "Velvet_CavityMap.png",
-              "cavity_intensity": 1,
               "gradient map": "gradient.png",
               "stencil map": "",
               "color": "#ffffff",
@@ -1048,6 +1080,20 @@
               "normal map tile": 1,
               "normal scale": 1.4,
               "roughness": 0.9
+            }
+          },
+          "Highlights": {
+            "controllers": {
+              "map": "Velvet_HighlightsMap.png"
+            },
+            "folders": {
+              "Cavity": {
+                "controllers": {
+                  "intensity": 1,
+                  "diffuse": 1,
+                  "specular": 1
+                }
+              }
             }
           },
           "Dots": {
@@ -1347,8 +1393,6 @@
               "Base Normal map": "Netball_normal_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
-              "cavity map": "",
-              "cavity_intensity": 0,
               "gradient map": "gradient.png",
               "stencil map": "StencilMap.png",
               "color": "#e9e4dd",
@@ -1361,6 +1405,11 @@
               "normal map tile": 1,
               "normal scale": 0.9,
               "roughness": 1
+            }
+          },
+          "Highlights": {
+            "controllers": {
+              "map": ""
             }
           },
           "Dots": {
