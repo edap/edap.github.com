@@ -99,7 +99,7 @@
           "Base": {
             "controllers": {
               "AO intensity": 0,
-              "Base Normal map": "Paper_normal_v2_1k.png",
+              "Base Normal map": "Paper_normal_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
               "gradient map": "gradient.png",
