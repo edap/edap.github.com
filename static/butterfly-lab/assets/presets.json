@@ -42,7 +42,7 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 1,
+          "intensity": 0.35,
           "mix": 0,
           "rotation (X)": 0.2,
           "rotation (Y)": -1.35,
@@ -99,7 +99,7 @@
           "Base": {
             "controllers": {
               "AO intensity": 0,
-              "Base Normal map": "Paper_normal_1k.png",
+              "Base Normal map": "Paper_normal_v2_1k.png",
               "base normal scale": 0,
               "base normal tile": 1,
               "gradient map": "gradient.png",
@@ -111,19 +111,32 @@
               "emissive": "#ffffff",
               "emissive intensity": 0,
               "metalness": 0,
+              "ior": 1,
               "normal map tile": 1,
-              "normal scale": 1.1,
-              "roughness": 0.9
+              "normal scale": 1,
+              "roughness": 1
             }
           },
           "Highlights": {
             "controllers": {
-              "map": ""
+              "map": "Paper_HighlightsMap.png"
+            },
+            "folders": {
+              "Lightening": {
+                "controllers": {
+                  "intensity": 0.43
+                }
+              },
+              "AO": {
+                "controllers": {
+                  "intensity": 1
+                }
+              }
             }
           },
           "Dots": {
             "controllers": {
-              "show dots": true,
+              "show dots": false,
               "dot color": "#c590da",
               "dot brightness": 1.7,
               "dot opacity": 0.07,
@@ -158,7 +171,7 @@
           "Fresnel": {
             "controllers": {
               "color": "#ffffff",
-              "intensity": 1.54,
+              "intensity": 0,
               "power": 2.29,
               "useWaveTexture": true
             }
@@ -207,10 +220,10 @@
             "folders": {
               "menstruation": {
                 "controllers": {
-                  "H": 345,
-                  "S": 0.55,
-                  "L": 0.22,
-                  "HEX": "#571929"
+                  "H": 0,
+                  "S": 0.74,
+                  "L": 0.68,
+                  "HEX": "#ea7171"
                 }
               },
               "follicular": {
