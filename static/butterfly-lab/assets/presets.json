@@ -111,7 +111,6 @@
               "emissive": "#ffffff",
               "emissive intensity": 0,
               "metalness": 0,
-              "ior": 1,
               "normal map tile": 1,
               "normal scale": 1,
               "roughness": 1
