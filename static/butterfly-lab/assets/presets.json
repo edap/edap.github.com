@@ -42,7 +42,7 @@
         "controllers": {
           "blurriness": 0,
           "hue": 0,
-          "intensity": 0.35,
+          "intensity": 0.3,
           "mix": 0,
           "rotation (X)": 0.2,
           "rotation (Y)": -1.35,
@@ -219,34 +219,34 @@
             "folders": {
               "menstruation": {
                 "controllers": {
-                  "H": 0,
-                  "S": 0.74,
-                  "L": 0.68,
-                  "HEX": "#ea7171"
+                  "H": 345,
+                  "S": 0.55,
+                  "L": 0.61,
+                  "HEX": "#d26580"
                 }
               },
               "follicular": {
                 "controllers": {
-                  "H": 169,
-                  "S": 0.44,
-                  "L": 0.17,
-                  "HEX": "#183e37"
+                  "H": 158,
+                  "S": 0.23,
+                  "L": 0.51,
+                  "HEX": "#659f8a"
                 }
               },
               "earlyLuteal": {
                 "controllers": {
-                  "H": 228,
-                  "S": 0.48,
-                  "L": 0.29,
-                  "HEX": "#26356d"
+                  "H": 230,
+                  "S": 1,
+                  "L": 0.71,
+                  "HEX": "#6b84ff"
                 }
               },
               "lateLuteal": {
                 "controllers": {
                   "H": 283,
-                  "S": 0.48,
-                  "L": 0.22,
-                  "HEX": "#441d53"
+                  "S": 0.34,
+                  "L": 0.6,
+                  "HEX": "#a876bc"
                 }
               }
             }
@@ -319,6 +319,30 @@
                   "S": 0.48,
                   "L": 0.22,
                   "HEX": "#441d53"
+                }
+              }
+            }
+          },
+          "Pitch.png": {
+            "folders": {
+              "menstruation": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              },
+              "follicular": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              },
+              "earlyLuteal": {
+                "controllers": {
+                  "HEX": "#08eb00"
+                }
+              },
+              "lateLuteal": {
+                "controllers": {
+                  "HEX": "#08eb00"
                 }
               }
             }
