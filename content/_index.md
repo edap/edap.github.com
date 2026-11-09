@@ -5,7 +5,7 @@ layout: single-medium-column
 ---
 <!-- {{< keepitfree >}} -->
 
-{{< video-4-3 url="https://player.vimeo.com/video/128782688">}}
+<!-- {{< video-4-3 url="https://player.vimeo.com/video/128782688">}} -->
 
 I am a software developer and and artist based in Berlin. I co-founded the [IOCOSE](http://iocose.org) art collective and lectured at Universität der Künste in the [New Media](https://newmedia.udk-berlin.de/about) department.
 
@@ -29,10 +29,10 @@ I currently offer two core freelance services:
 
  -->
 
-I work with product companies, design studios, universities and artists to ship real-time 3D experiences for the web.
 
-I work with associations, NGOs and universities to make websites, to prepare interactive online courses and to manage servers.
+I work with companies, organisations, universities and creative studios to design, build and maintain web applications, backend services and Linux-based infrastructure.
 
+I help teams develop interactive software, APIs and data-driven applications, deploy and operate their systems, and create specialised 3D and geospatial experiences for the web.
 
 I stand for a [free internet](https://keepitfree.ai/) and for open source software.
 
