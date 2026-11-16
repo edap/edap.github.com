@@ -9,9 +9,9 @@ tags: [WebGL, glTF, KTX2, Podman]
 When you inspect a 3D scene in the browser, the textures are often the heaviest asset. A `.glb` file with 3 2k textures can already be a few megabyte on the disk. For which you also have to consider the time that the user is waiting to download them. The model that we are going to test, for example, contains 5 textures and each texture takes 22MB of video memory, meaning 100MB for a single model. Once they are downloaded, the browser has to decode the JPG/PNG file and upload it to the GPU uncompressed.
 
 [KTX2](https://www.khronos.org/ktx/) with [Basis Universal](https://github.com/BinomialLLC/basis_universal) compression it is what you should use when dealing with models in the browsers.
-A KTX2 texture it is small like a JPG, and it can be transcoded at runtime to a format that a GPU can understand. So, basically is like uploading compressed texture to the GPU that can stay compressed.
+A KTX2 texture it is like a small JPG, and it can be transcoded at runtime to a format that a GPU can understand. So, basically is like uploading a compressed texture to the GPU and that texture can stay compressed.
 
-But there is an intermediate step in between. The format `Basis Universal` can not be read by the GPU directly, it needs to be converted by the format that the physical GPU supports:
+Actually, at a more closer level, there is an intermediate step in between. The format `Basis Universal` can not be read by the GPU directly, it needs to be converted by the format that the physical GPU supports, and that format depends by the device:
 
 | Device    | Compressed format   |
 | --------        | -------       |
@@ -19,19 +19,21 @@ But there is an intermediate step in between. The format `Basis Universal` can n
 | Android         | ETC2          |
 | iOS             | ASTC          |
 
-In `three.js`, `KTX2Loader` is responsible for converting from Basis Universal to the compressed format supported by the user's GPU. This works only if the extension `KHR_texture_basisu` is supported, which is true for all the modern brwoser, but not for the old ones.
 
+3D libraries and framework have their own solution to match the right compressed format for the right device. In `three.js`, `KTX2Loader` is the piece of code responsible of this.
+
+So, converting our textures to the `Basis Universal` format solves a lot of problems. How do we apply this conversion?
 
 ### The problem: installing the tools
 
-The best tool to compress texture, but also to compress 3D meshes, is [glTF-Transform](https://gltf-transform.dev/). It is a CLI tool that can convert images to KTX2, and can also prune, resize, depublicate and compress meshes with Draco. It is really the swiss knife for 3D asset compression. The problem is that if you want to run it locally you need to install CMake, Ninja, etc..., it adds a lot of software that you are probably going to use just for this goal. Then you need Node.js for glTF-Transform, and then they need to work together.
+The best tool to compress texture, but also to compress 3D meshes, is [glTF-Transform](https://gltf-transform.dev/). It is a CLI tool that can convert images to KTX2, and can also prune, resize, depublicate and compress meshes with Draco. It is really the swiss knife for 3D asset compression. The problem is that if you want to run it locally you need to install first [ktx](https://github.com/khronosgroup/ktx-software), that requires CMake, Ninja, etc..., and then you need Node.js for `glTF-Transform`. And the 2 need to work together.
 
 Some months ago I have packaged the tool in a container image [edap/gltf-transform-ktx2](https://hub.docker.com/r/edap/gltf-transform-ktx2) ready to use, to save me some time the next time that I need to optimize some assets. It is built on `node:20-slim` and contains:
 
 - `gltf-transform` 4.3.0
 - `ktx` v4.4.2, compiled from source
 
-Here below I explain how to use it
+Here below I explain how to use it.
 
 ### Pull the image with Podman
 
@@ -52,7 +54,7 @@ podman run --rm docker.io/edap/gltf-transform-ktx2:v1.0.0 gltf-transform --versi
 # 4.3.0
 ```
 
-Now you can run the tools on some of the assets. In order to do so, the container needs access to the assets. You have to mount the current folder into `/workspace`, and use this one as your working directory. Here below I assume that the current directory is where you assets are
+Now you can run the tools on some of your assets. In order to do so, the container needs access to them. You have to mount the current folder into `/workspace`, and use this one as your working directory. Here below I assume that the current directory is where you assets are
 
 
 ```bash
@@ -91,11 +93,11 @@ gltfktx ktx create \
 - `--encode basis-lz`: use ETC1S compression, which gives very small files. The alternative is `uastc`, which has better quality but produces bigger files.
 - `--generate-mipmap`: generate the mipmaps now, so they don't have to be generated at runtime.
 
-You can now load `example.ktx2` in Three.js with the `KTX2Loader`. And more in general, you can use this command to get KTX2 texture whenever you need them. 
+You now have your `example.ktx2` texture ready to use. 
 
 ### Compress a mesh
 
-When compressing a `.glb` mesh that contains materials with texture, `gltf-transform` convert to KTX2 the texture contained in the material.
+When compressing a `.glb` mesh that contains materials with textures, `gltf-transform` convert to KTX2 the textures contained in the material.
 
 
 This is the chain of commands that I use in my conversion script:
@@ -118,7 +120,7 @@ Here we run `sh -c` inside the container, so the whole chain runs in a single co
 - `resize` limits the textures to 1024x1024, keeping the aspect ratio. It never upscales.
 - `etc1s` converts all the textures to KTX2 with ETC1S compression. `--quality` is the same as `--qlevel` above, from 1 to 255. glTF-Transform also has a `uastc` command, if you need higher quality. With `--verbose` you see the `ktx create` commands that it runs for each texture.
 
-In my personal experience, sometime models brakes when they are complex, with a lot of materials and when I try to compress them too much. My suggestion is to start with a `quality` parameter to 80, and then decrease until it brakes.
+In my personal experience, sometime models brakes when they are complex, with a lot of materials and when I try to compress them too much. My suggestion is to do this optimization iteratively. Start by using only etc1s, than add the rest. The `weld` option is that one that in my personal experience, caused more trouble.
 
 Once we are done, we can also compress the mesh using Google's Draco:
 
@@ -136,20 +138,43 @@ These are the results for the helmet:
 | + KTX2 (ETC1S)       | 1.00 MB   | 0.70 MB                |
 | + Draco              | 0.53 MB   | 0.70 MB                |
 
-As you see, the file is 7 times smaller, and the VRAM usage goes fomr ~112MB to 3.5 MB.
+As you see, the file is 7 times smaller, and the VRAM usage goes fomr ~112MB to 3.5 MB. In my opinion, there is no need to use Draco for small meshes, that's why I have put Draco compression as optional.
 
 It is possible to inspect the textures of a glb file with `gltfktx gltf-transform inspect out.glb`.
 
+### Additional steps when loading the compressed assets in three.js
 
-Draco is cool and makes the mesh much smaller, but there is an additional step for the browser, that has to decode it, and for that it needs the Draco decoder (in Three.js, the `DRACOLoader`).In my opinion, there is no need to use Draco for small meshes, that's why I have put Draco compression as optional.
+To load an asset with KTX2 compressed texture in Three.js, we have to pass the `KTX2Loader` to the `GLTFLoader`.
 
-Now, if you want to load these files in Three.js, set up the `KTX2Loader` (and the `DRACOLoader`, if you use Draco) on the `GLTFLoader`:
 
 ```js
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+
 const ktx2Loader = new KTX2Loader()
   .setTranscoderPath('three/examples/jsm/libs/basis/')
   .detectSupport(renderer);
 
 const loader = new GLTFLoader().setKTX2Loader(ktx2Loader);
 ```
+
+If the assets has also been compressed with draco, you need to pass the `DRACOLoader`
+
+```js
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+
+const dracoLoader = new DRACOLoader()
+  .setDecoderPath('three/examples/jsm/libs/draco/');
+
+const ktx2Loader = new KTX2Loader()
+  .setTranscoderPath('three/examples/jsm/libs/basis/')
+  .detectSupport(renderer);
+
+const loader = new GLTFLoader()
+  .setDRACOLoader(dracoLoader)
+  .setKTX2Loader(ktx2Loader);
+```
+
 
