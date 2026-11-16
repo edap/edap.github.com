@@ -11,7 +11,7 @@ When you inspect a 3D scene in the browser, the textures are often the heaviest 
 [KTX2](https://www.khronos.org/ktx/) with [Basis Universal](https://github.com/BinomialLLC/basis_universal) compression it is what you should use when dealing with models in the browsers.
 A KTX2 texture it is like a small JPG, and it can be transcoded at runtime to a format that a GPU can understand. So, basically is like uploading a compressed texture to the GPU and that texture can stay compressed.
 
-Actually, at a more closer level, there is an intermediate step in between. The format `Basis Universal` can not be read by the GPU directly, it needs to be converted by the format that the physical GPU supports, and that format depends by the device:
+Actually, at a more closer level, there is an intermediate step in between. The `Basis Universal` format cannot be read by the GPU directly; it needs to be converted to the format that the physical GPU supports, and that format depends on the device:
 
 | Device    | Compressed format   |
 | --------        | -------       |
